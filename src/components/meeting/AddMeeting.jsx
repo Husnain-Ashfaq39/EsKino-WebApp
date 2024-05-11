@@ -4,11 +4,12 @@ import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { DatePicker, TimePicker } from "antd";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { addDocument } from "../../services/dbService";
 
 const AddMeeting = () => {
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, setValue, getValues ,reset} = useForm({
     defaultValues: {
       title: "",
@@ -49,6 +50,7 @@ const AddMeeting = () => {
       setEndDate(null);
       setStartTime(null);
       setEndTime(null);
+      navigate("/meetinglist");
     } catch (error) {
       console.error("Error adding document: ", error);
     }finally {
@@ -85,14 +87,14 @@ const AddMeeting = () => {
             <div className="row">
               <div className="col-12">
                 <div className="form-group">
-                  <label>Title <span className="login-danger">*</span></label>
+                  <label className="text-dark">Title <span className="login-danger">*</span></label>
                   <input className="form-control" {...register("title", { required: "This field is required" })} />
                   {errors.title && <div className="error text-danger">{errors.title.message}</div>}
                 </div>
               </div>
               <div className="col-12 col-md-4">
                 <div className="form-group">
-                  <label>Start Date <span className="login-danger">*</span></label>
+                  <label className="text-dark">Start Date <span className="login-danger">*</span></label>
                   <DatePicker
                     className="form-control"
                     onChange={ (date)=> {setStartDate(date); setValue('startDate', date);} }
@@ -103,7 +105,7 @@ const AddMeeting = () => {
               </div>
               <div className="col-12 col-md-4">
                 <div className="form-group">
-                  <label>End Date <span className="login-danger">*</span></label>
+                  <label className="text-dark">End Date <span className="login-danger">*</span></label>
                   <DatePicker
                     className="form-control"
                     onChange={ (date)=> {setEndDate(date); setValue('endDate', date);} }
@@ -114,7 +116,7 @@ const AddMeeting = () => {
               </div>
               <div className="col-12 col-md-4">
                 <div className="form-group">
-                  <label>Start Time <span className="login-danger">*</span></label>
+                  <label className="text-dark">Start Time <span className="login-danger">*</span></label>
                   <TimePicker
                     className="form-control"
                     use12Hours
@@ -127,7 +129,7 @@ const AddMeeting = () => {
               </div>
               <div className="col-12 col-md-4">
                 <div className="form-group">
-                  <label>End Time <span className="login-danger">*</span></label>
+                  <label className="text-dark">End Time <span className="login-danger">*</span></label>
                   <TimePicker
                     className="form-control"
                     use12Hours
@@ -140,28 +142,28 @@ const AddMeeting = () => {
               </div>
               <div className="col-12">
                 <div className="form-group">
-                  <label>House Owner <span className="login-danger">*</span></label>
+                  <label className="text-dark">House Owner <span className="login-danger">*</span></label>
                   <input className="form-control" {...register("houseOwner", { required: "This field is required" })} />
                   {errors.houseOwner && <div className="error text-danger">{errors.houseOwner.message}</div>}
                 </div>
               </div>
               <div className="col-12">
                 <div className="form-group">
-                  <label>Street Address <span className="login-danger">*</span></label>
+                  <label className="text-dark">Street Address <span className="login-danger">*</span></label>
                   <input className="form-control" {...register("streetAddress", { required: "This field is required" })} />
                   {errors.streetAddress && <div className="error text-danger">{errors.streetAddress.message}</div>}
                 </div>
               </div>
               <div className="col-12 col-md-6">
                 <div className="form-group">
-                  <label>ZIP Code <span className="login-danger">*</span></label>
+                  <label className="text-dark">ZIP Code <span className="login-danger">*</span></label>
                   <input className="form-control" {...register("zipCode", { required: "This field is required" })} />
                   {errors.zipCode && <div className="error text-danger">{errors.zipCode.message}</div>}
                 </div>
               </div>
               <div className="col-12 col-md-6">
                 <div className="form-group">
-                  <label>Capacity <span className="login-danger">*</span></label>
+                  <label className="text-dark">Capacity <span className="login-danger">*</span></label>
                   <input className="form-control" type="number" {...register("capacity", { required: "This field is required" })} />
                   {errors.capacity && <div className="error text-danger">{errors.capacity.message}</div>}
                 </div>

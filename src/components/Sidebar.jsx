@@ -148,18 +148,7 @@ const Sidebar = (props) => {
                         Add Meeting
                       </Link>
                     </li>
-                    <li>
-                      <Link
-                        className={
-                          props?.activeClassName === "edit-doctor"
-                            ? "active"
-                            : ""
-                        }
-                        to="/editmeeting"
-                      >
-                        Edit Meeting
-                      </Link>
-                    </li>
+                    
                   </ul>
                 </li>
                 <li className="submenu">

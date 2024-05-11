@@ -8,10 +8,10 @@ import {
   plusicon,
   refreshicon,
   searchnormal,
-  blogimg2,
 } from "../imagepath";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { getAllDocuments } from '../../services/dbService';
+import { deleteDoc, doc } from "firebase/firestore";
 
 
 
@@ -40,6 +40,7 @@ const MeetingList = () => {
     const date = timestamp.toDate();
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   };
+  
 
   const convertTime = (timestamp) => {
     if (!timestamp) return '';
@@ -318,3 +319,4 @@ const MeetingList = () => {
 };
 
 export default MeetingList;
+

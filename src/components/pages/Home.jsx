@@ -105,14 +105,7 @@ export default function Home() {
     <SectionHeading title="Upcoming Training Sessions" center={true} />
     <Spacing md="72" lg="50" />
     <SessionCard  />
-    <Spacing md="72" lg="50" />
-    <Spacing md="72" lg="50" />
-    <SessionCard  />
-    <Spacing md="72" lg="50" />
-    <Spacing md="72" lg="50" />
-    <SessionCard  />
-    <Spacing md="72" lg="50" />
-    <Spacing md="72" lg="50" />
+   
 
     {/* Button */}
     <div className="cs_hero_info_col flex flex-col items-center justify-center">
