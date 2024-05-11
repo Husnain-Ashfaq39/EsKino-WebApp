@@ -27,7 +27,7 @@ export default function Hero({
             </p>
             
           </div>
-          <img src={heroimgPng2} alt="Hero" className="cs_hero_img" style={{bottom: '150px' }} />
+          <img src={heroimgPng2} alt="Hero" className="cs_hero_img" style={{bottom: '190px' }} />
        
          
         </div>
