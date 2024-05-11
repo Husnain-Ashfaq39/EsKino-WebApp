@@ -124,7 +124,10 @@ export default function Header2({ logoSrc, variant }) {
             <img src={closeSvg} alt="Close" />
           </button>
           <div className="cs_logo_box">
-            <img src={logoSvg} alt="Logo" />
+            <div className="account-logo" style={{ display: 'flex', alignItems: 'center' }}>
+              <img src={logo2Png} alt="Eskino" style={{ width: '50px', height: 'auto' }} />
+              <h3 style={{ marginLeft: '10px', marginTop: '25px' }}>Eskino</h3>
+            </div>            
             <div className="cs_height_15" />
             <h3 className="cs_fs_24 cs_semibold mb-0">
               Your Partner in Health and Wellness
@@ -141,7 +144,7 @@ export default function Header2({ logoSrc, variant }) {
           <Spacing md="30" lg="30" xl="30" />
           <IconBoxStyle11
             title="Email"
-            subTitle="hellocallcenter@gmail.com"
+            subTitle="eskino@gmail.com"
             iconSrc="/images/contact/icon_2.svg"
           />
           <Spacing md="30" lg="30" xl="30" />
