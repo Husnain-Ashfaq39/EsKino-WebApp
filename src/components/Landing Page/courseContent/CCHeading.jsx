@@ -1,18 +1,18 @@
 /* eslint-disable no-unused-vars */
 import React,{ useState } from 'react'
 import { Table } from "antd";
-import Header from '../Header';
-import Sidebar from '../Sidebar';
+import Header from '../../Header';
+import Sidebar from '../../Sidebar';
 import { blogimg10, imagesend, pdficon, pdficon3, pdficon4, plusicon, refreshicon, searchnormal, blogimg12,
      blogimg2, blogimg4, blogimg6, blogimg8,
-     backgroundImg} from '../imagepath';
-import {onShowSizeChange,itemRender}from  '../Pagination'
+     backgroundImg} from '../../imagepath';
+import {onShowSizeChange,itemRender}from  '../../Pagination'
 import { Link } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
-import CENabBar from './CENavBar';
+import CCNavBar from './CCNavbar';
 
 
-const CEHeader = () => {
+const CCHeading = () => {
 
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
@@ -29,55 +29,84 @@ const CEHeader = () => {
     const datasource = [
         {
             id:"1",
+            image: backgroundImg,
             title: "This is a title",
+            subtitle: "This is a Subtitle",
+            description: "THis is a Description"
         },
     ]
 
 
     const columns = [
-      {
-        title: "S/N",
-        dataIndex: "serialNumber",
-        key: "serialNumber",
-        render: (text, record, index) => index + 1
-    },
-    {
-      title: "Title",
-      dataIndex: "title",
-      key: "title",
-      render: (text) => <div className={text.length > 20 ? "multiline-text" : ""}>{text}</div>
-  },
         {
-          title: "",
-          dataIndex: "FIELD8",
-          render: (text, record) => (
-            <>
-              <div className="text-end">
-                <div className="dropdown dropdown-action">
-                  <Link
-                    to="#"
-                    className="action-icon dropdown-toggle"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    <i className="fas fa-ellipsis-v" />
-                  </Link>
-                  <div className="dropdown-menu dropdown-menu-end">
-                    <Link className="dropdown-item" to="/landingpage/editchildemergencyheader">
-                      <i className="far fa-edit me-2" />
-                      Edit
-                    </Link>
-                    <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#delete_patient">
-                    <i className="fa fa-trash-alt m-r-5"></i> Delete</Link>
-                  </div>
-                </div>
-              </div>
-            </>
-          ),
+            title: "S/N",
+            dataIndex: "serialNumber",
+            key: "serialNumber",
+            render: (text, record, index) => index + 1
         },
-
-    ]
-
+        {
+            title: "Image",
+            dataIndex: "image",
+            key: "image",
+            render: (text, record) => (
+                <div style={{ width: "100px", height: "50px", overflow: "hidden", borderRadius: "8px" }}>
+                    <img
+                        src={record.image}
+                        alt="Image"
+                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                </div>
+            )
+        },
+        {
+            title: "Title",
+            dataIndex: "title",
+            key: "title",
+            render: (text) => <div className={text.length > 20 ? "multiline-text" : ""}>{text}</div>
+        },
+        {
+            title: "Subtitle",
+            dataIndex: "subtitle",
+            key: "subtitle",
+            render: (text) => <div className={text.length > 20 ? "multiline-text" : ""}>{text}</div>
+        },
+        {
+            title: "Description",
+            dataIndex: "description",
+            key: "description",
+            render: (text) => <div className={text.length > 20 ? "multiline-text" : ""}>{text}</div>
+        },
+        {
+            title: "",
+            dataIndex: "FIELD8",
+            render: (text, record) => (
+                <>
+                    <div className="text-end">
+                        <div className="dropdown dropdown-action">
+                            <Link
+                                to="#"
+                                className="action-icon dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                <i className="fas fa-ellipsis-v" />
+                            </Link>
+                            <div className="dropdown-menu dropdown-menu-end">
+                                <Link className="dropdown-item" to="/landingpage/coursecontentheading/editcoursecontentheading">
+                                    <i className="far fa-edit me-2" />
+                                    Edit
+                                </Link>
+                                <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#delete_patient">
+                                    <i className="fa fa-trash-alt m-r-5"></i> Delete
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            ),
+        },
+    ];
+    
 
   return (
     <>
@@ -92,13 +121,13 @@ const CEHeader = () => {
     <ul className="nav nav-tabs menu-tabs">
       
       <li className="nav-item active">
-        <Link className="nav-link" to="/landingpage/childemergencyheader">
-          Child Emergency Heading 
+        <Link className="nav-link" to="/landingpage/coursecontentheading">
+          Course Content Heading 
         </Link>
       </li>
-      <li className="nav-item">
-        <Link className="nav-link" to="/landingpage/childemergencybody">
-        Child Emergency Body
+      <li className="nav-item ">
+        <Link className="nav-link" to="/landingpage/coursecontentbody">
+        Course Content Body
         </Link>
       </li>
 
@@ -111,14 +140,14 @@ const CEHeader = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-               <Link to="/landingpage/childemergencyheader">Landing Page</Link>
+               <Link to="/landingpage/coursecontentheading">Landing Page</Link>
               </li>
               <li className="breadcrumb-item">
                 <i className="feather-chevron-right">
                   <FeatherIcon icon="chevron-right"/>
                 </i>
               </li>
-              <li className="breadcrumb-item active">Child Emergency Heading</li>
+              <li className="breadcrumb-item active">Course Content Heading</li>
             </ul>
           </div>
         </div>
@@ -218,5 +247,5 @@ const CEHeader = () => {
   )
 }
 
-export default CEHeader;
+export default CCHeading;
 

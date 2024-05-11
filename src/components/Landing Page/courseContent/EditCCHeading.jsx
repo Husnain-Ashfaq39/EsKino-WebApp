@@ -1,14 +1,14 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import Header from "../Header";
-import Sidebar from "../Sidebar";
-import { favicon, imagesend } from "../imagepath";
+import Header from "../../Header";
+import Sidebar from "../../Sidebar";
+import { favicon, imagesend } from "../../imagepath";
 import { DatePicker} from "antd";
 import FeatherIcon from "feather-icons-react";
 import { Link } from "react-router-dom";
 
-const EditOMBody = () => {
+const EditCCHeading = () => {
     const [show, setShow] = useState(false); // Define show state variable
 
     const onChange = (date, dateString) => {
@@ -35,22 +35,22 @@ const EditOMBody = () => {
                 <div className="col-sm-12">
                   <ul className="breadcrumb">
                     <li className="breadcrumb-item">
-                      <Link to="/landingpage/organizationmattersbody">Landing Page </Link>
+                      <Link to="/landingpage/coursecontentheading">Landing Page </Link>
                     </li>
                     <li className="breadcrumb-item">
                       <i className="feather-chevron-right">
                         <FeatherIcon icon="chevron-right" />
                       </i>
                     </li>
-                    <li className="breadcrumb-item">
-                      <Link to="/landingpage/organizationmattersbody">Organization Matters Body</Link>
+                    <li className="breadcrumb-item active">
+                      <Link to="/landingpage/coursecontentheading">Course Content Heading</Link>
                     </li>
                     <li className="breadcrumb-item">
                       <i className="feather-chevron-right">
                         <FeatherIcon icon="chevron-right" />
                       </i>
                     </li>
-                    <li className="breadcrumb-item active">Edit Organization Matters Body</li>
+                    <li className="breadcrumb-item active">Edit Course Content Heading</li>
                   </ul>
                 </div>
               </div>
@@ -64,11 +64,11 @@ const EditOMBody = () => {
                       <div className="row">
                         <div className="col-12">
                           <div className="form-heading">
-                            <h4>Organization Matters Body Details</h4>
+                            <h4>Course Content Heading Details</h4>
                           </div>
                         </div>
   {/* Title */}
-                     <div className="col-12 col-md-6 col-xl-12">
+                     <div className="col-12 col-md-6 col-xl-6">
                           <div className="form-group local-forms">
                             <label>
                               Title <span className="login-danger">*</span>
@@ -80,6 +80,21 @@ const EditOMBody = () => {
                             />
                           </div>
                           </div>
+                        {/* SubTitle */}
+
+                      
+                        <div className="col-12 col-md-6 col-xl-6">
+                          <div className="form-group local-forms">
+                            <label>
+                              Subtitle <span className="login-danger">*</span>
+                            </label>
+                            <input
+                              className="form-control"
+                              type="text"
+                              defaultValue="Bruklin"
+                            />
+                          </div>
+                        </div>
                         </div>
                      
                      
@@ -100,7 +115,42 @@ const EditOMBody = () => {
                           </div>
                         </div>
 
-                       
+                        {/* Image Upload */}
+                        <div className="col-12 col-md-6 col-xl-6">
+                          <div className="form-group local-top-form">
+                            <label className="local-top">
+                              Image <span className="login-danger">*</span>
+                            </label>
+                            <div className="settings-btn upload-files-avator">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                name="image"
+                                id="file"
+                                onChange={loadFile}
+                                className="hide-input"
+                              />
+                                 <label htmlFor="file" className="upload">
+                                Choose File
+                              </label>
+                            </div>
+                            <div
+                              className="upload-images upload-sizee"
+                              style={{ display: show ? "none" : "block" }}
+                            >
+                              <img src={favicon} alt="Image" />
+                              <Link to="#" className="btn-icon logo-hide-btn">
+                                <i
+                                  className="feather-x-circle"
+                                  onClick={() => setShow((s) => !s)}
+                                >
+                                  <FeatherIcon icon="x-circle" />
+                                </i>
+                              </Link>
+                            </div>
+                          </div>
+                          </div>
+
 {/* Submit and Cancel Button Button */}
                         <div className="col-12">
                           <div className="doctor-submit text-end">
@@ -127,9 +177,10 @@ const EditOMBody = () => {
           </div>
          
         </div>
+       
       </>
     </div>
   );
 };
 
-export default EditOMBody;
+export default EditCCHeading;

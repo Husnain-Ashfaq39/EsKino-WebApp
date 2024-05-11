@@ -1,18 +1,17 @@
 /* eslint-disable no-unused-vars */
 import React,{ useState } from 'react'
 import { Table } from "antd";
-import Header from '../Header';
-import Sidebar from '../Sidebar';
+import Header from '../../Header';
+import Sidebar from '../../Sidebar';
 import { blogimg10, imagesend, pdficon, pdficon3, pdficon4, plusicon, refreshicon, searchnormal, blogimg12,
      blogimg2, blogimg4, blogimg6, blogimg8,
-     backgroundImg} from '../imagepath';
-import {onShowSizeChange,itemRender}from  '../Pagination'
+     backgroundImg} from '../../imagepath';
+import {onShowSizeChange,itemRender}from  '../../Pagination'
 import { Link } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
-import CCNavBar from './CCNavbar';
 
 
-const CCHeading = () => {
+const OMBody = () => {
 
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
@@ -29,9 +28,7 @@ const CCHeading = () => {
     const datasource = [
         {
             id:"1",
-            image: backgroundImg,
             title: "This is a title",
-            subtitle: "This is a Subtitle",
             description: "THis is a Description"
         },
     ]
@@ -44,32 +41,14 @@ const CCHeading = () => {
             key: "serialNumber",
             render: (text, record, index) => index + 1
         },
-        {
-            title: "Image",
-            dataIndex: "image",
-            key: "image",
-            render: (text, record) => (
-                <div style={{ width: "100px", height: "50px", overflow: "hidden", borderRadius: "8px" }}>
-                    <img
-                        src={record.image}
-                        alt="Image"
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    />
-                </div>
-            )
-        },
+     
         {
             title: "Title",
             dataIndex: "title",
             key: "title",
             render: (text) => <div className={text.length > 20 ? "multiline-text" : ""}>{text}</div>
         },
-        {
-            title: "Subtitle",
-            dataIndex: "subtitle",
-            key: "subtitle",
-            render: (text) => <div className={text.length > 20 ? "multiline-text" : ""}>{text}</div>
-        },
+     
         {
             title: "Description",
             dataIndex: "description",
@@ -92,7 +71,7 @@ const CCHeading = () => {
                                 <i className="fas fa-ellipsis-v" />
                             </Link>
                             <div className="dropdown-menu dropdown-menu-end">
-                                <Link className="dropdown-item" to="/landingpage/coursecontentheading/editcoursecontentheading">
+                                <Link className="dropdown-item" to="/landingpage/organizationmattersbody/editorganizationmattersbody">
                                     <i className="far fa-edit me-2" />
                                     Edit
                                 </Link>
@@ -120,14 +99,14 @@ const CCHeading = () => {
   <div className="settings-menu-links">
     <ul className="nav nav-tabs menu-tabs">
       
-      <li className="nav-item active">
-        <Link className="nav-link" to="/landingpage/coursecontentheading">
-          Course Content Heading 
+      <li className="nav-item ">
+        <Link className="nav-link" to="/landingpage/organizationmattersheading">
+          Organization Matters Heading 
         </Link>
       </li>
-      <li className="nav-item ">
-        <Link className="nav-link" to="/landingpage/coursecontentbody">
-        Course Content Body
+      <li className="nav-item active">
+        <Link className="nav-link" to="/landingpage/organizationmattersbody">
+        Organization Matters Body
         </Link>
       </li>
 
@@ -140,14 +119,14 @@ const CCHeading = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-               <Link to="/landingpage/coursecontentheading">Landing Page</Link>
+               <Link to="/landingpage/organizationmattersbody">Landing Page</Link>
               </li>
               <li className="breadcrumb-item">
                 <i className="feather-chevron-right">
                   <FeatherIcon icon="chevron-right"/>
                 </i>
               </li>
-              <li className="breadcrumb-item active">Course Content Heading</li>
+              <li className="breadcrumb-item active">Organization Matters Body</li>
             </ul>
           </div>
         </div>
@@ -162,10 +141,39 @@ const CCHeading = () => {
                 <div className="row align-items-center">
                   <div className="col">
                     <div className="doctor-table-blk">
-                      <h3>Child Emergency Heading</h3>
+                      <h3>Organization Matters Body</h3>
                       <div className="doctor-search-blk">
-                       
-                       
+
+                        {/* Search Organization Matters */}
+                        <div className="top-nav-search table-search-blk">
+                          <form>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Search here"
+                            />
+                           <Link className="btn">
+                              <img
+                                src={searchnormal}
+                               alt="#"
+                              />
+                            </Link>
+                          </form>
+                        </div>
+                        {/* Add Organization Matters */}
+                        <div className="add-group">
+                          <Link to="/landingpage/organizationmattersbody/addorganizationmattersbody"
+                            className="btn btn-primary add-pluss ms-2"
+                          >
+                            <img src={plusicon}alt="#" />
+                          </Link>
+                         <Link
+                            to="#"
+                            className="btn btn-primary doctor-refresh ms-2"
+                          >
+                            <img src={refreshicon}alt="#" />
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -195,25 +203,9 @@ const CCHeading = () => {
         </div>
       </div>
     </div>
-  </div>
-  <div id="delete_patient" className="modal fade delete-modal" role="dialog">
-    <div className="modal-dialog modal-dialog-centered">
-      <div className="modal-content">
-        <div className="modal-body text-center">
-          <img src={imagesend}alt="#" width={50} height={46} />
-          <h3>Are you sure want to delete this ?</h3>
-          <div className="m-t-20">
-            {" "}
-           <Link to="#" className="btn btn-white me-2" data-bs-dismiss="modal">
-              Close
-            </Link>
-            <button type="submit" className="btn btn-danger">
-              Delete
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+ 
+
+ {/* Delete Organization Matters Heading */}
     <div id="delete_patient" className="modal fade delete-modal" role="dialog">
     <div className="modal-dialog modal-dialog-centered">
       <div className="modal-content">
@@ -247,5 +239,5 @@ const CCHeading = () => {
   )
 }
 
-export default CCHeading;
+export default OMBody;
 

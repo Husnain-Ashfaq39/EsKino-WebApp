@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import Header from "../Header";
-import Sidebar from "../Sidebar";
-import { favicon, imagesend } from "../imagepath";
+import Header from "../../Header";
+import Sidebar from "../../Sidebar";
+import { favicon, imagesend } from "../../imagepath";
 import { DatePicker} from "antd";
 import FeatherIcon from "feather-icons-react";
 import { Link } from "react-router-dom";

@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import Header from "../Header";
-import Sidebar from "../Sidebar";
+import Header from "../../Header";
+import Sidebar from "../../Sidebar";
 import { DatePicker, Space } from "antd";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import Select from "react-select";

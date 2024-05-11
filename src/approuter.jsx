@@ -48,21 +48,21 @@ import BlogDetail from './components/pages/BlogDetails';
 import Appointments from './components/pages/Appointments';
 
 // Landing Page
-import CEHeader from "./components/ChildEmergency/CEHeader";
-import EditCEHeader from "./components/ChildEmergency/EditCEHeader";
-import CEBody from "./components/ChildEmergency/CEBody";
-import AddCEBody from "./components/ChildEmergency/AddCEBody";
-import EditCEBody from "./components/ChildEmergency/EditCEBody";
-import CCHeading from "./components/courseContent/CCHeading";
-import CCBody from "./components/courseContent/CCBody";
-import EditCCBody from "./components/courseContent/EditCCBody";
-import EditCCHeading from "./components/courseContent/EditCCHeading";
-import AddCCBody from "./components/courseContent/AddCCBody";
-import OMHeading from "./components/organizationMatters/OMHeading";
-import EditOMHeading from "./components/organizationMatters/EditOMHeading";
-import OMBody from "./components/organizationMatters/OMBody";
-import EditOMBody from "./components/organizationMatters/EditOMBody";
-import AddOMBody from "./components/organizationMatters/AddOMBody";
+import CEHeader from "./components/Landing Page/ChildEmergency/CEHeader";
+import EditCEHeader from "./components/Landing Page/ChildEmergency/EditCEHeader";
+import CEBody from "./components/Landing Page/ChildEmergency/CEBody";
+import AddCEBody from "./components/Landing Page/ChildEmergency/AddCEBody";
+import EditCEBody from "./components/Landing Page/ChildEmergency/EditCEBody";
+import CCHeading from "./components/Landing Page/courseContent/CCHeading";
+import CCBody from "./components/Landing Page/courseContent/CCBody";
+import EditCCBody from "./components/Landing Page/courseContent/EditCCBody";
+import EditCCHeading from "./components/Landing Page/courseContent/EditCCHeading";
+import AddCCBody from "./components/Landing Page/courseContent/AddCCBody";
+import OMHeading from "./components/Landing Page/organizationMatters/OMHeading";
+import EditOMHeading from "./components/Landing Page/organizationMatters/EditOMHeading";
+import OMBody from "./components/Landing Page/organizationMatters/OMBody";
+import EditOMBody from "./components/Landing Page/organizationMatters/EditOMBody";
+import AddOMBody from "./components/Landing Page/organizationMatters/AddOMBody";
 
 
 

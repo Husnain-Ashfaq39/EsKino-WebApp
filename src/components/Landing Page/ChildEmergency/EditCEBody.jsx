@@ -1,17 +1,16 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import Header from "../Header";
-import Sidebar from "../Sidebar";
-import { favicon, imagesend } from "../imagepath";
+import Header from "../../Header";
+import Sidebar from "../../Sidebar";
+import { favicon, imagesend } from "../../imagepath";
 import { DatePicker} from "antd";
 import FeatherIcon from "feather-icons-react";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import { TextField } from "@mui/material";
 
-const AddCCBody = () => {
-    const [show, setShow] = useState(false); // Define show state variable
+const EditCEBody = () => {
   
   const onChange = (date, dateString) => {
     // console.log(date, dateString);
@@ -37,7 +36,7 @@ const AddCCBody = () => {
                 <div className="col-sm-12">
                   <ul className="breadcrumb">
                     <li className="breadcrumb-item">
-                      <Link to="/landingpage/coursecontentbody">Landing Page </Link>
+                      <Link to="/landingpage/childemergencyheader">Landing Page</Link>
                     </li>
                     <li className="breadcrumb-item">
                       <i className="feather-chevron-right">
@@ -45,14 +44,14 @@ const AddCCBody = () => {
                       </i>
                     </li>
                     <li className="breadcrumb-item active">
-                      <Link to="/landingpage/coursecontentbody">Course Content Body </Link>
+                      <Link to="/landingpage/childemergencybody">Child Emergency Body</Link>
                     </li>
                     <li className="breadcrumb-item">
                       <i className="feather-chevron-right">
                         <FeatherIcon icon="chevron-right" />
                       </i>
                     </li>
-                    <li className="breadcrumb-item active">Add Course Content Body</li>
+                    <li className="breadcrumb-item active">Edit Child Emergency Body</li>
                   </ul>
                 </div>
               </div>
@@ -66,7 +65,7 @@ const AddCCBody = () => {
                       <div className="row">
                         <div className="col-12">
                           <div className="form-heading">
-                            <h4>Add Course Content Body</h4>
+                            <h4>Child Emergency Body</h4>
                           </div>
                         </div>
 
@@ -83,13 +82,13 @@ const AddCCBody = () => {
                             />
                           </div>
 
-                        {/* Qoute */}
+                        {/* Title */}
 
                         </div>
                         <div className="col-12 col-md-6 col-xl-6">
                           <div className="form-group local-forms">
                             <label>
-                            Qoute <span className="login-danger">*</span>
+                              Subtitle <span className="login-danger">*</span>
                             </label>
                             <input
                               className="form-control"
@@ -99,11 +98,10 @@ const AddCCBody = () => {
                           </div>
                         </div>
                      
-                     {/* Description */}
                         <div className="col-12 col-sm-12">
                           <div className="form-group local-forms">
                             <label>
-                            Description <span className="login-danger">*</span>
+                              Address <span className="login-danger">*</span>
                             </label>
                             <textarea
                               className="form-control"
@@ -113,42 +111,6 @@ const AddCCBody = () => {
                                 "101, Elanxa Apartments, 340 N Madison Avenue"
                               }
                             />
-                          </div>
-                        </div>
-
-                        {/* Image Upload */}
-                        <div className="col-12 col-md-6 col-xl-6">
-                          <div className="form-group local-top-form">
-                            <label className="local-top">
-                              Image <span className="login-danger">*</span>
-                            </label>
-                            <div className="settings-btn upload-files-avator">
-                              <input
-                                type="file"
-                                accept="image/*"
-                                name="image"
-                                id="file"
-                                onChange={loadFile}
-                                className="hide-input"
-                              />
-                                 <label htmlFor="file" className="upload">
-                                Choose File
-                              </label>
-                            </div>
-                            <div
-                              className="upload-images upload-sizee"
-                              style={{ display: show ? "none" : "block" }}
-                            >
-                              <img src={favicon} alt="Image" />
-                              <Link to="#" className="btn-icon logo-hide-btn">
-                                <i
-                                  className="feather-x-circle"
-                                  onClick={() => setShow((s) => !s)}
-                                >
-                                  <FeatherIcon icon="x-circle" />
-                                </i>
-                              </Link>
-                            </div>
                           </div>
                         </div>
                       
@@ -177,11 +139,10 @@ const AddCCBody = () => {
           </div>
          
         </div>
-        
-       
+      
       </>
     </div>
   );
 };
 
-export default AddCCBody;
+export default EditCEBody;

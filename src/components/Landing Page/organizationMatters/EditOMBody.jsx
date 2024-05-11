@@ -1,23 +1,22 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import Header from "../Header";
-import Sidebar from "../Sidebar";
-import { favicon, imagesend } from "../imagepath";
+import Header from "../../Header";
+import Sidebar from "../../Sidebar";
+import { favicon, imagesend } from "../../imagepath";
 import { DatePicker} from "antd";
 import FeatherIcon from "feather-icons-react";
 import { Link } from "react-router-dom";
-import Select from "react-select";
-import { TextField } from "@mui/material";
 
-const EditCEBody = () => {
-  
-  const onChange = (date, dateString) => {
-    // console.log(date, dateString);
-  };
-  const loadFile = (event) => {
-    // Handle file loading logic here
-  };
+const EditOMBody = () => {
+    const [show, setShow] = useState(false); // Define show state variable
+
+    const onChange = (date, dateString) => {
+        // console.log(date, dateString);
+      };
+      const loadFile = (event) => {
+        // Handle file loading logic here
+      };
 
   return (
     <div>
@@ -25,7 +24,7 @@ const EditCEBody = () => {
       <Sidebar
         id="menu-item4"
         id1="menu-items4"
-        activeClassName="edit-appoinment"
+        activeClassName="edit-heroSection"
       />
       <>
         <div className="page-wrapper">
@@ -36,22 +35,22 @@ const EditCEBody = () => {
                 <div className="col-sm-12">
                   <ul className="breadcrumb">
                     <li className="breadcrumb-item">
-                      <Link to="/landingpage/childemergencyheader">Landing Page</Link>
+                      <Link to="/landingpage/organizationmattersbody">Landing Page </Link>
                     </li>
                     <li className="breadcrumb-item">
                       <i className="feather-chevron-right">
                         <FeatherIcon icon="chevron-right" />
                       </i>
                     </li>
-                    <li className="breadcrumb-item active">
-                      <Link to="/landingpage/childemergencybody">Child Emergency Body</Link>
+                    <li className="breadcrumb-item">
+                      <Link to="/landingpage/organizationmattersbody">Organization Matters Body</Link>
                     </li>
                     <li className="breadcrumb-item">
                       <i className="feather-chevron-right">
                         <FeatherIcon icon="chevron-right" />
                       </i>
                     </li>
-                    <li className="breadcrumb-item active">Edit Child Emergency Body</li>
+                    <li className="breadcrumb-item active">Edit Organization Matters Body</li>
                   </ul>
                 </div>
               </div>
@@ -65,12 +64,11 @@ const EditCEBody = () => {
                       <div className="row">
                         <div className="col-12">
                           <div className="form-heading">
-                            <h4>Child Emergency Body</h4>
+                            <h4>Organization Matters Body Details</h4>
                           </div>
                         </div>
-
-                        {/* Title */}
-                        <div className="col-12 col-md-6 col-xl-6">
+  {/* Title */}
+                     <div className="col-12 col-md-6 col-xl-12">
                           <div className="form-group local-forms">
                             <label>
                               Title <span className="login-danger">*</span>
@@ -81,27 +79,15 @@ const EditCEBody = () => {
                               defaultValue="Stephen"
                             />
                           </div>
-
-                        {/* Title */}
-
-                        </div>
-                        <div className="col-12 col-md-6 col-xl-6">
-                          <div className="form-group local-forms">
-                            <label>
-                              Subtitle <span className="login-danger">*</span>
-                            </label>
-                            <input
-                              className="form-control"
-                              type="text"
-                              defaultValue="Bruklin"
-                            />
                           </div>
                         </div>
                      
+                     
+                     {/* Description */}
                         <div className="col-12 col-sm-12">
                           <div className="form-group local-forms">
                             <label>
-                              Address <span className="login-danger">*</span>
+                            Description <span className="login-danger">*</span>
                             </label>
                             <textarea
                               className="form-control"
@@ -113,7 +99,9 @@ const EditCEBody = () => {
                             />
                           </div>
                         </div>
-                      
+
+                       
+{/* Submit and Cancel Button Button */}
                         <div className="col-12">
                           <div className="doctor-submit text-end">
                             <button
@@ -128,7 +116,7 @@ const EditCEBody = () => {
                             >
                               Cancel
                             </button>
-                          </div>
+                         
                         </div>
                       </div>
                     </form>
@@ -139,10 +127,9 @@ const EditCEBody = () => {
           </div>
          
         </div>
-      
       </>
     </div>
   );
 };
 
-export default EditCEBody;
+export default EditOMBody;

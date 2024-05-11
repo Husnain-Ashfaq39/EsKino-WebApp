@@ -1,18 +1,18 @@
 /* eslint-disable no-unused-vars */
 import React,{ useState } from 'react'
 import { Table } from "antd";
-import Header from '../Header';
-import Sidebar from '../Sidebar';
+import Header from '../../Header';
+import Sidebar from '../../Sidebar';
 import { blogimg10, imagesend, pdficon, pdficon3, pdficon4, plusicon, refreshicon, searchnormal, blogimg12,
      blogimg2, blogimg4, blogimg6, blogimg8,
-     backgroundImg} from '../imagepath';
-import {onShowSizeChange,itemRender}from  '../Pagination'
+     backgroundImg} from '../../imagepath';
+import {onShowSizeChange,itemRender}from  '../../Pagination'
 import { Link } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
-import CCNavBar from './CCNavbar';
+import CENabBar from './CENavBar';
 
 
-const CCBody = () => {
+const CEBody = () => {
 
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
@@ -44,28 +44,22 @@ const CCBody = () => {
             render: (text, record, index) => index + 1
         },
         {
-            title: "Image",
-            dataIndex: "image",
-            key: "image",
-            render: (text) => <img src={text} alt="Image" className="image-column" />
-        },
-        {
             title: "Title",
             dataIndex: "title",
             key: "title",
-            render: (text) => <div className={text && text.length > 20 ? "multiline-text" : ""}>{text}</div>
+            render: (text) => <div className={text.length > 20 ? "multiline-text" : ""}>{text}</div>
+        },
+        {
+            title: "Subtitle",
+            dataIndex: "subtitle",
+            key: "subtitle",
+            render: (text) => <div className={text.length > 20 ? "multiline-text" : ""}>{text}</div>
         },
         {
             title: "Description",
             dataIndex: "description",
             key: "description",
-            render: (text) => <div className={text && text.length > 20 ? "multiline-text" : ""}>{text}</div>
-        },
-        {
-            title: "Quote",
-            dataIndex: "quote",
-            key: "quote",
-            render: (text) =><div className={text && text.length > 20 ? "multiline-text" : ""}>{text}</div>
+            render: (text) => <div className={text.length > 20 ? "multiline-text" : ""}>{text}</div>
         },
         {
             title: "",
@@ -83,7 +77,7 @@ const CCBody = () => {
                                 <i className="fas fa-ellipsis-v" />
                             </Link>
                             <div className="dropdown-menu dropdown-menu-end">
-                                <Link className="dropdown-item" to="/landingpage/coursecontentbody/editcoursecontentbody">
+                                <Link className="dropdown-item" to="/landingpage/childemergencybody/editchildemergencybody">
                                     <i className="far fa-edit me-2" />
                                     Edit
                                 </Link>
@@ -97,7 +91,6 @@ const CCBody = () => {
             ),
         },
     ];
-    
     
 
 
@@ -114,13 +107,13 @@ const CCBody = () => {
     <ul className="nav nav-tabs menu-tabs">
       
       <li className="nav-item ">
-        <Link className="nav-link" to="/landingpage/coursecontentheading">
-          Course Content Heading 
+        <Link className="nav-link" to="/landingpage/childemergencyheader">
+          Child Emergency Heading 
         </Link>
       </li>
-      <li className="nav-item active">
-        <Link className="nav-link" to="/landingpage/coursecontentbody">
-        Course Content Body
+      <li className="nav-item  active">
+        <Link className="nav-link" to="/landingpage/childemergencybody">
+        Child Emergency Body
         </Link>
       </li>
 
@@ -155,7 +148,7 @@ const CCBody = () => {
                 <div className="row align-items-center">
                   <div className="col">
                     <div className="doctor-table-blk">
-                      <h3>Course Content Section</h3>
+                      <h3>Child Emergency Body</h3>
                       <div className="doctor-search-blk">
                         <div className="top-nav-search table-search-blk">
                           <form>
@@ -173,7 +166,7 @@ const CCBody = () => {
                           </form>
                         </div>
                         <div className="add-group">
-                          <Link to="/landingpage/coursecontentbody/addcoursecontentbody"
+                          <Link to="/landingpage/childemergencybody/addchildemergencybody"
                             className="btn btn-primary add-pluss ms-2"
                           >
                             <img src={plusicon}alt="#" />
@@ -267,5 +260,5 @@ const CCBody = () => {
   )
 }
 
-export default CCBody;
+export default CEBody;
 

@@ -1,14 +1,14 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import Header from "../Header";
-import Sidebar from "../Sidebar";
-import { favicon, imagesend } from "../imagepath";
+import Header from "../../Header";
+import Sidebar from "../../Sidebar";
+import { favicon, imagesend } from "../../imagepath";
 import { DatePicker} from "antd";
 import FeatherIcon from "feather-icons-react";
 import { Link } from "react-router-dom";
 
-const EditOMHeading = () => {
+const AddOMBody = () => {
     const [show, setShow] = useState(false); // Define show state variable
 
     const onChange = (date, dateString) => {
@@ -35,22 +35,22 @@ const EditOMHeading = () => {
                 <div className="col-sm-12">
                   <ul className="breadcrumb">
                     <li className="breadcrumb-item">
-                      <Link to="/landingpage/organizationmattersheading">Landing Page </Link>
+                      <Link to="/landingpage/organizationmattersbody">Landing Page </Link>
                     </li>
                     <li className="breadcrumb-item">
                       <i className="feather-chevron-right">
                         <FeatherIcon icon="chevron-right" />
                       </i>
                     </li>
-                    <li className="breadcrumb-item active" >
-                      <Link to="/landingpage/organizationmattersheading">Organization Matters Heading</Link>
+                    <li className="breadcrumb-item">
+                      <Link to="/landingpage/organizationmattersbody">Organization Matters Body</Link>
                     </li>
                     <li className="breadcrumb-item">
                       <i className="feather-chevron-right">
                         <FeatherIcon icon="chevron-right" />
                       </i>
                     </li>
-                    <li className="breadcrumb-item active">Edit Organization Matters Heading</li>
+                    <li className="breadcrumb-item active">Add Organization Matters Body</li>
                   </ul>
                 </div>
               </div>
@@ -64,7 +64,7 @@ const EditOMHeading = () => {
                       <div className="row">
                         <div className="col-12">
                           <div className="form-heading">
-                            <h4>Organization Matters Heading Details</h4>
+                            <h4>Organization Matters Body Details</h4>
                           </div>
                         </div>
   {/* Title */}
@@ -132,4 +132,4 @@ const EditOMHeading = () => {
   );
 };
 
-export default EditOMHeading;
+export default AddOMBody;
