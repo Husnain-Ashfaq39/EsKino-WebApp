@@ -21,8 +21,8 @@ const DonutChart = () => {
         dataLabels: {
           enabled: false,
         },
-        series: [44, 55, 41, 17],
-        labels: ['Neurology', 'Dental Care', 'Gynocology', 'Orthopedic'],
+        series: [44, 55, 41],
+        labels: ['Active', 'Close', 'Timeout'],
         responsive: [
           {
             breakpoint: 480,

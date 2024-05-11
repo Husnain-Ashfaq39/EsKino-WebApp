@@ -12,11 +12,25 @@ import {
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { getAllDocuments } from '../../services/dbService';
 import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "../../config/firebase";
 
 
 
 const MeetingList = () => {
-  const [meetings, setMeetings] = useState([])
+  const [meetings, setMeetings] = useState([]);
+
+  const handleDelete = async (meetingId) => {
+    const docRef = doc(db, "meetings", meetingId);
+    try {
+        await deleteDoc(docRef);
+        setMeetings(prevMeetings => prevMeetings.filter(meeting => meeting.id !== meetingId));
+        // Optionally close the modal after deleting
+        // $('#delete_patient').modal('hide');
+    } catch (error) {
+        console.error("Error deleting document: ", error);
+    }
+};
+
   useEffect(() => {
     getAllDocuments('meetings')
       .then(querySnapshot => {
@@ -294,11 +308,13 @@ const MeetingList = () => {
                                       Close
                                     </Link>
                                     <button
-                                      type="submit"
-                                      className="btn btn-danger"
-                                    >
-                                      Delete
-                                    </button>
+    type="button"
+    className="btn btn-danger"
+    onClick={() => handleDelete(selectedMeeting.id)}
+>
+    Delete
+</button>
+
                                   </div>
                                 </div>
                               </div>

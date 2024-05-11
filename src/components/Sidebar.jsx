@@ -282,7 +282,7 @@ const Sidebar = (props) => {
                     <span> Blog</span> <span className="menu-arrow" />
                   </Link>
                   <ul style={{ display: "none" }} className="menu-items11">
-                    <li>
+                    {/* <li>
                       <Link
                         className={
                           props?.activeClassName === "blog-grid" ? "active" : ""
@@ -291,8 +291,8 @@ const Sidebar = (props) => {
                       >
                         Blog
                       </Link>
-                    </li>
-                    <li>
+                    </li> */}
+                    {/* <li>
                       <Link
                         className={
                           props?.activeClassName === "blog-details"
@@ -303,7 +303,7 @@ const Sidebar = (props) => {
                       >
                         Blog View
                       </Link>
-                    </li>
+                    </li> */}
                     <li>
                       <Link
                         className={

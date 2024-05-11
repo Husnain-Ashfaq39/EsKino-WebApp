@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect,useState } from "react";
 import { Link } from "react-router-dom";
-import { getCurrentUser } from "../services/authService";
+import { getCurrentUser, signOutUser } from "../services/authService";
 import {
   logo,
   baricon,
@@ -111,16 +111,16 @@ const Header = () => {
               </span>
             </Link>
             <div className="dropdown-menu">
-              <Link className="dropdown-item" to="/profile">
+              <Link className="dropdown-item" to="/admin-dashboard">
                 My Profile
               </Link>
-              <Link className="dropdown-item" to="/edit-profile">
+              <Link className="dropdown-item" to="/admin-dashboard">
                 Edit Profile
               </Link>
               <Link className="dropdown-item" to="/settingschangepassword">
                 Change Password
               </Link>
-              <Link className="dropdown-item" to="/login">
+              <Link onClick={()=> {signOutUser()}} className="dropdown-item" to="/login">
                 Logout
               </Link>
             </div>

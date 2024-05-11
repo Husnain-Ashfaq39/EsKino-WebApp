@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signIn } from "../../../services/authService";
-import { login02, loginlogo, loginicon01, loginicon02, loginicon03 } from "../../imagepath";
+import { login02, loginlogo, loginicon01, loginicon02, loginicon03, logo2Png, logoSvg } from "../../imagepath";
 import { Eye, EyeOff } from "feather-icons-react";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
@@ -46,7 +46,10 @@ const Login = () => {
                   <div className="login-right-wrap">
                     <div className="account-logo">
                       <Link to="/admin-dashboard">
-                        <img src={loginlogo} alt="#" />
+                      <div className="account-logo" style={{ display: 'flex', alignItems: 'center' }}>
+                      <img src={logo2Png} alt="Eskino" style={{ width: '50px', height: 'auto' }} />
+                      <h3 style={{ marginLeft: '10px', marginTop:'25px' }}>Eskino</h3>
+                    </div>
                       </Link>
                     </div>
                     <h2>Login</h2>
@@ -67,12 +70,7 @@ const Login = () => {
                         <button type="submit" className="btn btn-primary btn-block">Login</button>
                       </div>
                     </form>
-                    <p className="account-subtitle">Need an account? <Link to="/signup">Sign Up</Link></p>
-                    <div className="social-login">
-                      <Link to="#"><img src={loginicon01} alt="#"/></Link>
-                      <Link to="#"><img src={loginicon02} alt="#" /></Link>
-                      <Link to="#"><img src={loginicon03} alt="#" /></Link>
-                    </div>
+                    
                   </div>
                 </div>
               </div>
