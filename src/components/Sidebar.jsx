@@ -251,20 +251,24 @@ const Sidebar = (props) => {
                       >
                 Hero Section 
                       </Link>
+
+                  {/* Child Emergency */}
+                    <li>
+                      <Link className={props?.activeClassName === 'shedule-list' ? 'active' : ''} to="/landingpage/childemergencyheader">Child Emergency</Link>
+                    </li>
+
+                  {/* Course Content */}
+                    <li>
+                      <Link className={props?.activeClassName === 'shedule-list' ? 'active' : ''} to="/landingpage/coursecontentheading">Course Content</Link>
+                    </li>
+                  
+                  {/* Organization Matters*/}
+                    <li>
+                      <Link className={props?.activeClassName === 'shedule-list' ? 'active' : ''} to="/landingpage/organizationmattersheading">Organization Matters</Link>
+                    </li>
                     </li>
                     
-                    <li>
-                      <Link
-                        className={
-                          props?.activeClassName === "edit-heroSection"
-                            ? "active"
-                            : ""
-                        }
-                        to="/editherosection"
-                      >
-                        Edit Hero Section
-                      </Link>
-                    </li>
+                    
                   </ul>
                 </li>
 
