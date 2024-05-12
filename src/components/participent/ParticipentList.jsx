@@ -152,7 +152,7 @@ const ParticipantList = () => {
               <div className="col-sm-12">
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <Link to="#">Participants</Link>
+                    <Link to="/meetinglist">Meeting</Link>
                   </li>
                   <li className="breadcrumb-item">
                     <i className="feather-chevron-right">
