@@ -8,19 +8,19 @@ export default function AppointmentForm({sectionId}) {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = async data => {
-    data.id = sectionId;
+    data.sectionId = sectionId;
     console.log(data);
 
     // Fetch the meeting document to update capacity
     try {
-      const doc = await getDocument('meetings', data.id);
+      const doc = await getDocument('meetings', data.sectionId);
       if (doc.exists()) {
         const meetingData = doc.data();
         // Check if enough capacity remains
         if (meetingData.capacity >= parseInt(data.persons, 10)) {
           // Update the capacity
           const updatedCapacity = meetingData.capacity - parseInt(data.persons, 10);
-          await updateDocument('meetings', data.id, { capacity: updatedCapacity });
+          await updateDocument('meetings', data.sectionId, { capacity: updatedCapacity });
 
           // Submit the participant's data
           await addDocument('participants', data);

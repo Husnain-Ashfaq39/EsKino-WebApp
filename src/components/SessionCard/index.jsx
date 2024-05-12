@@ -5,7 +5,7 @@ import { arrowWhiteSvg, date_timeSvg, pinSvg, titleIconsSvg } from '../imagepath
 import { getAllDocuments } from '../../services/dbService';
 
 function SessionCard({limit}) {
-  const btnText = "Book Now";
+ 
   const [isOpen, setIsOpen] = useState(false);
   const [sections, setSections] = useState([]);
   const [selectedSectionId, setSelectedSectionId] = useState(null);
@@ -14,10 +14,7 @@ function SessionCard({limit}) {
     setIsOpen(true);
     setSelectedSectionId(sectionId); // Set the selected section ID
   };
-  const handleClose = () => {
-    setIsOpen(false);
-    console.log("modal is turning off");
-  };
+  
 
   useEffect(() => {
     getAllDocuments('meetings')
@@ -99,10 +96,16 @@ function SessionCard({limit}) {
               <p className="cs_hero_info_subtitle cs_fs_12">zip code: {section.zipCode}</p>
             </div>
           </div>
-      <div onClick={()=>{handleOpen(section.id)}} className="cs_btn cs_style_1" style={{ cursor: 'pointer', margin: '20px' }}>
-        <span>{btnText}</span>
-        <i><img src={arrowWhiteSvg} alt="Icon" /></i>
-      </div>
+          <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null} 
+         className="cs_btn cs_style_1" 
+         style={{ 
+           cursor: section.capacity > 0 ? 'pointer' : 'default', 
+           margin: '20px', 
+           backgroundColor: section.capacity === 0 ? 'red' : '' 
+         }}>
+      <span>Book Now</span>
+      <i><img src={arrowWhiteSvg} alt="Icon" /></i>
+    </div>
         </div>
       ))}
       {isOpen && (
