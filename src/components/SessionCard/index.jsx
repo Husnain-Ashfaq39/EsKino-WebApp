@@ -4,8 +4,8 @@ import AppointmentSection from '../Section/AppointmentSection';
 import { arrowWhiteSvg, date_timeSvg, pinSvg, titleIconsSvg } from '../imagepath';
 import { getAllDocuments } from '../../services/dbService';
 
-function SessionCard({limit}) {
- 
+function SessionCard({ limit }) {
+
   const [isOpen, setIsOpen] = useState(false);
   const [sections, setSections] = useState([]);
   const [selectedSectionId, setSelectedSectionId] = useState(null);
@@ -14,7 +14,7 @@ function SessionCard({limit}) {
     setIsOpen(true);
     setSelectedSectionId(sectionId); // Set the selected section ID
   };
-  
+
 
   useEffect(() => {
     getAllDocuments('meetings')
@@ -65,7 +65,7 @@ function SessionCard({limit}) {
   return (
     <div>
       {sections.slice(0, limit ? 3 : sections.length).map(section => (
-        <div key={section.id} className="cs_hero_info_wrap cs_shadow_1 cs_white_bg cs_radius_15" style={{ margin: '10px',marginBottom:'25px', padding: '20px' }}>
+        <div key={section.id} className="cs_hero_info_wrap cs_shadow_1 cs_white_bg cs_radius_15" style={{ margin: '10px', marginBottom: '25px', padding: '20px' }}>
           {/* First Section */}
           <div className="cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
             <div className="cs_hero_info_icon cs_center rounded-circle cs_accent_bg">
@@ -96,22 +96,28 @@ function SessionCard({limit}) {
               <p className="cs_hero_info_subtitle cs_fs_12">zip code: {section.zipCode}</p>
             </div>
           </div>
-          <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null} 
-         className="cs_btn cs_style_1" 
-         style={{ 
-           cursor: section.capacity > 0 ? 'pointer' : 'default', 
-           margin: '20px', 
-           backgroundColor: section.capacity === 0 ? 'red' : '' 
-         }}>
-      <span>Book Now</span>
-      <i><img src={arrowWhiteSvg} alt="Icon" /></i>
-    </div>
+          <div  style={{
+              cursor: section.capacity > 0 ? 'pointer' : 'default',
+              margin: '20px',
+              
+           
+              pointerEvents: section.capacity === 0 ? 'none' : 'auto', // Optionally disabling pointer events
+            }}>
+
+          <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null}
+           
+            className="cs_btn cs_style_1"
+            >
+            <span>{section.capacity==0?"Closed":"Book Now"}</span>
+            <i><img src={arrowWhiteSvg} alt="Icon" /></i>
+          </div>
+            </div>
         </div>
       ))}
       {isOpen && (
         <ModalComponent isOpen={isOpen} setIsOpen={setIsOpen}>
           <AppointmentSection
-            
+
             sectionId={selectedSectionId}
           />
         </ModalComponent>
