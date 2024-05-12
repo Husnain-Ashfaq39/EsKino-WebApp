@@ -21,7 +21,7 @@ import ParticipentList from "./components/participent/ParticipentList";
 import HeroSection from "./components/Landing Page/Hero Section/HeroSection";
 import EditHeroSection from "./components/Landing Page/Hero Section/EditHeroSection";
 
-import EditParticipent from "./components/participent/EditParticipent"
+import EditParticipent from "./components/participent/EditParticipent";
 
 import AddAdmin from "./components/Admin/Add-Admin";
 import AdminList from "./components/Admin/AdminList";
@@ -40,12 +40,11 @@ import Profile from "./components/pages/login/Profile";
 import Register from "./components/pages/login/Register";
 import ServerError from "./components/pages/login/ServerError";
 
-
-import Layout from './components/Layout';
-import Home from './components/pages/Home';
-import Blog from './components/pages/Blog';
-import BlogDetail from './components/pages/BlogDetails';
-import Appointments from './components/pages/Appointments';
+import Layout from "./components/Layout";
+import Home from "./components/pages/Home";
+import Blog from "./components/pages/Blog";
+import BlogDetail from "./components/pages/BlogDetails";
+import Appointments from "./components/pages/Appointments";
 
 // Landing Page
 import CEHeader from "./components/Landing Page/ChildEmergency/CEHeader";
@@ -64,15 +63,12 @@ import OMBody from "./components/Landing Page/organizationMatters/OMBody";
 import EditOMBody from "./components/Landing Page/organizationMatters/EditOMBody";
 import AddOMBody from "./components/Landing Page/organizationMatters/AddOMBody";
 
+import Contact from "./components/pages/Contact";
 
-
-import Contact from './components/pages/Contact';
-
-import ErrorPage from './components/pages/ErrorPage';
+import ErrorPage from "./components/pages/ErrorPage";
 
 //Accounts
 const Approuter = () => {
-
   return (
     <>
       <BrowserRouter>
@@ -105,39 +101,81 @@ const Approuter = () => {
           <Route path="/editmeeting" element={<EditMeeting />} />
 
           {/* Participent */}
-          <Route path="/participentlist" element={<ParticipentList />} />
-          <Route path="/editparticipent" element={<EditParticipent />} />
+          <Route
+            path="/meetinglist/participentlist"
+            element={<ParticipentList />}
+          />
+          <Route
+            path="/meetinglist/participentlist/edit"
+            element={<EditParticipent />}
+          />
           {/* Hero Section */}
           <Route path="/herosection" element={<HeroSection />} />
           <Route path="/editherosection" element={<EditHeroSection />} />
           {/* <Route path="/editappoinments" element={<EditAppoinments />} /> */}
 
-          
-{/* Child Emergency */}
-<Route path="/landingpage/childemergencyheader" element={<CEHeader/>} />
-<Route path="/landingpage/editchildemergencyheader" element={<EditCEHeader/>} />
+          {/* Child Emergency */}
+          <Route
+            path="/landingpage/childemergencyheader"
+            element={<CEHeader />}
+          />
+          <Route
+            path="/landingpage/editchildemergencyheader"
+            element={<EditCEHeader />}
+          />
 
-<Route path="/landingpage/childemergencybody" element={<CEBody />} />
-<Route path="/landingpage/childemergencybody/addchildemergencybody" element={<AddCEBody />} />
-<Route path="/landingpage/childemergencybody/editchildemergencybody" element={<EditCEBody/>} />
+          <Route path="/landingpage/childemergencybody" element={<CEBody />} />
+          <Route
+            path="/landingpage/childemergencybody/addchildemergencybody"
+            element={<AddCEBody />}
+          />
+          <Route
+            path="/landingpage/childemergencybody/editchildemergencybody"
+            element={<EditCEBody />}
+          />
 
-{/* CCourse Content */}
-<Route path="/landingpage/coursecontentheading" element={<CCHeading/>} />
-<Route path="/landingpage/coursecontentheading/editcoursecontentheading" element={<EditCCHeading/>} />
+          {/* CCourse Content */}
+          <Route
+            path="/landingpage/coursecontentheading"
+            element={<CCHeading />}
+          />
+          <Route
+            path="/landingpage/coursecontentheading/editcoursecontentheading"
+            element={<EditCCHeading />}
+          />
 
+          <Route path="/landingpage/coursecontentbody" element={<CCBody />} />
+          <Route
+            path="/landingpage/coursecontentbody/editcoursecontentbody"
+            element={<EditCCBody />}
+          />
+          <Route
+            path="/landingpage/coursecontentbody/addcoursecontentbody"
+            element={<AddCCBody />}
+          />
 
-<Route path="/landingpage/coursecontentbody" element={<CCBody/>} />
-<Route path="/landingpage/coursecontentbody/editcoursecontentbody" element={<EditCCBody/>} />
-<Route path="/landingpage/coursecontentbody/addcoursecontentbody" element={<AddCCBody/>} />
+          {/* Orgazinzation Matters */}
+          <Route
+            path="/landingpage/organizationmattersheading"
+            element={<OMHeading />}
+          />
+          <Route
+            path="/landingpage/organizationmattersheading/editorganizationmattersheading"
+            element={<EditOMHeading />}
+          />
 
-{/* Orgazinzation Matters */}
-<Route path="/landingpage/organizationmattersheading" element={<OMHeading/>} />
-<Route path="/landingpage/organizationmattersheading/editorganizationmattersheading" element={<EditOMHeading/>} />
-
-<Route path="/landingpage/organizationmattersbody" element={<OMBody/>} />
-<Route path="/landingpage/organizationmattersbody/editorganizationmattersbody" element={<EditOMBody/>} />
-<Route path="/landingpage/organizationmattersbody/addorganizationmattersbody" element={<AddOMBody/>} />
-
+          <Route
+            path="/landingpage/organizationmattersbody"
+            element={<OMBody />}
+          />
+          <Route
+            path="/landingpage/organizationmattersbody/editorganizationmattersbody"
+            element={<EditOMBody />}
+          />
+          <Route
+            path="/landingpage/organizationmattersbody/addorganizationmattersbody"
+            element={<AddOMBody />}
+          />
 
           {/* Admin */}
           <Route path="/adminlist" element={<AdminList />} />
@@ -157,7 +195,6 @@ const Approuter = () => {
             <Route path="contact" element={<Contact />} />
           </Route>
           <Route path="*" element={<ErrorPage />} />
-
         </Routes>
       </BrowserRouter>
       <div className="sidebar-overlay"></div>
