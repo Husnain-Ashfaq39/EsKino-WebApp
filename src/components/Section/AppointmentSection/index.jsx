@@ -4,7 +4,7 @@ import AppointmentForm from '../../AppointmentForm';
 
 
 export default function AppointmentSection({
-
+  sectionId
 }) {
   return (
     <div className="cs_shape_wrap ">
@@ -13,7 +13,7 @@ export default function AppointmentSection({
         <div className="row align-items-center cs_gap_y_40">
           
         
-            <AppointmentForm />
+            <AppointmentForm sectionId={sectionId} />
         </div>
       </div>
     </div>

@@ -8,8 +8,12 @@ function SessionCard({limit}) {
   const btnText = "Book Now";
   const [isOpen, setIsOpen] = useState(false);
   const [sections, setSections] = useState([]);
+  const [selectedSectionId, setSelectedSectionId] = useState(null);
 
-  const handleOpen = () => setIsOpen(true);
+  const handleOpen = (sectionId) => { // Pass the section ID to the handleOpen function
+    setIsOpen(true);
+    setSelectedSectionId(sectionId); // Set the selected section ID
+  };
   const handleClose = () => {
     setIsOpen(false);
     console.log("modal is turning off");
@@ -95,7 +99,7 @@ function SessionCard({limit}) {
               <p className="cs_hero_info_subtitle cs_fs_12">zip code: {section.zipCode}</p>
             </div>
           </div>
-      <div onClick={handleOpen} className="cs_btn cs_style_1" style={{ cursor: 'pointer', margin: '20px' }}>
+      <div onClick={()=>{handleOpen(section.id)}} className="cs_btn cs_style_1" style={{ cursor: 'pointer', margin: '20px' }}>
         <span>{btnText}</span>
         <i><img src={arrowWhiteSvg} alt="Icon" /></i>
       </div>
@@ -104,9 +108,8 @@ function SessionCard({limit}) {
       {isOpen && (
         <ModalComponent isOpen={isOpen} setIsOpen={setIsOpen}>
           <AppointmentSection
-            sectionTitle="Book Your Appointment"
-            sectionTitleUp="Make an appointment today"
-            imgUrl="/path-to-your-image.jpg"
+            
+            sectionId={selectedSectionId}
           />
         </ModalComponent>
       )}
