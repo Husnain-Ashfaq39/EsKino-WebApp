@@ -28,7 +28,7 @@ export default function Hero({
             
           </div>
           <img src={heroimgPng2} alt="Hero" className="cs_hero_img" style={{bottom: '190px' }} />
-       
+       3-
          
         </div>
        

@@ -4,7 +4,7 @@ import AppointmentSection from '../Section/AppointmentSection';
 import { arrowWhiteSvg, date_timeSvg, pinSvg, titleIconsSvg } from '../imagepath';
 import { getAllDocuments } from '../../services/dbService';
 
-function SessionCard() {
+function SessionCard({limit}) {
   const btnText = "Book Now";
   const [isOpen, setIsOpen] = useState(false);
   const [sections, setSections] = useState([]);
@@ -63,7 +63,7 @@ function SessionCard() {
 
   return (
     <div>
-      {sections.map(section => (
+      {sections.slice(0, limit ? 3 : sections.length).map(section => (
         <div key={section.id} className="cs_hero_info_wrap cs_shadow_1 cs_white_bg cs_radius_15" style={{ margin: '10px',marginBottom:'25px', padding: '20px' }}>
           {/* First Section */}
           <div className="cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
@@ -72,7 +72,7 @@ function SessionCard() {
             </div>
             <div className="cs_hero_info_right">
               <h3 className="cs_hero_info_title cs_semibold">{section.title}</h3>
-              <p className="cs_hero_info_subtitle cs_fs_20">hey</p>
+              <p className="cs_hero_info_subtitle cs_fs_12"> Remaining Capacity: {section.capacity}</p>
             </div>
           </div>
           {/* Date and Time Section */}
@@ -82,7 +82,7 @@ function SessionCard() {
             </div>
             <div className="cs_hero_info_right">
               <h3 className="cs_hero_info_title cs_semibold">{section.startDate} to {section.endDate}</h3>
-              <p className="cs_hero_info_subtitle cs_fs_20">{section.startTime} to {section.endTime}</p>
+              <p className="cs_hero_info_subtitle cs_fs_12">{section.startTime} to {section.endTime}</p>
             </div>
           </div>
           {/* Location Section */}
@@ -92,7 +92,7 @@ function SessionCard() {
             </div>
             <div className="cs_hero_info_right">
               <h3 className="cs_hero_info_title cs_semibold">{section.streetAddress}</h3>
-              <p className="cs_hero_info_subtitle cs_fs_20">zip{section.zipCode}</p>
+              <p className="cs_hero_info_subtitle cs_fs_12">zip code: {section.zipCode}</p>
             </div>
           </div>
       <div onClick={handleOpen} className="cs_btn cs_style_1" style={{ cursor: 'pointer', margin: '20px' }}>

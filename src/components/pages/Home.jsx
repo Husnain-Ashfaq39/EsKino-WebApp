@@ -104,7 +104,7 @@ export default function Home() {
 <div className='container cs_hero cs_style_1'>
     <SectionHeading title="Upcoming Training Sessions" center={true} />
     <Spacing md="72" lg="50" />
-    <SessionCard  />
+    <SessionCard limit={true} />
    
 
     {/* Button */}
