@@ -12,7 +12,7 @@ import DepartmentSection from '../Section/DepartmentSection';
 import { pageTitle } from '../../helpers/PageTitle';
 import SessionCard from '../SessionCard';
 
-import { aboutMiniSvg, aboutPng, arrowWhiteSvg, bannerBgSvg, bannerImgPng, compassionSvg, ctaBgSvg, dep_icon1, dep_icon2, dep_icon3, dep_icon4, departmentIcon1Svg, departmentIcon2Svg, departmentIcon3Svg, departmentIcon4Svg, departmentIcon5Svg, departmentIcon6Svg, excellenceSvg, heroBgJpeg, heroImgPng, integritySvg, pinSvg, post1Jpeg, post2Jpeg, post3Jpeg, respectSvg, teamworkSvg, titleIconPng, titleIconsSvg } from '../imagepath';
+import { aboutMiniSvg, aboutPng, about_img, arrowWhiteSvg, bannerBgSvg, bannerImgPng, compassionSvg, ctaBgSvg, dep_icon1, dep_icon2, dep_icon3, dep_icon4, departmentIcon1Svg, departmentIcon2Svg, departmentIcon3Svg, departmentIcon4Svg, departmentIcon5Svg, departmentIcon6Svg, excellenceSvg, heroBgJpeg, heroImgPng, integritySvg, pinSvg, post1Jpeg, post2Jpeg, post3Jpeg, respectSvg, teamworkSvg, titleIconPng, titleIconsSvg } from '../imagepath';
 
 
 const blogData = [
@@ -126,16 +126,16 @@ export default function Home() {
       {/* Start About Section */}
       <Section>
         <AboutSection
-          imgUrl={aboutPng}
+          imgUrl={about_img}
           spiningImgUrl={aboutMiniSvg}
           title="About Us"
-          subTitle="PRO HEALTH"
+          subTitle="EsKino"
           featureList={[
             {
               featureListTitle:
-                'ProHealth is a team of experienced medical professionals',
+                'Eskino is a team of experienced medical professionals',
               featureListSubTitle:
-                'Dedicated to providing top-quality healthcare services. We believe in a holistic approach to healthcare that focuses on treating the whole person, not just the illness or symptoms.',
+                'We offers essential child emergency aid sessions, equipping parents with the knowledge and skills to handle critical situations. From CPR to first aid, we provide the tools to ensure your childs safety.',
             },
           ]}
         />
