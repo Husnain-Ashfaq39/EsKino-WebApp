@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
 import { imagesend } from "../../imagepath";
 import { getDocument, updateDocument } from "../../../services/dbService";
+import ImageUpload from "../ImageUpload"; // Import the ImageUpload component
 
 const EditCCBody = () => {
     const { id } = useParams(); // Retrieve the document ID from the URL
@@ -116,7 +117,7 @@ const EditCCBody = () => {
                                                     <h4>Edit Course Content Body</h4>
                                                 </div>
                                             </div>
-                                            {/* TItle */}
+                                            {/* Title */}
                                             <div className="col-12 col-md-6 col-xl-6">
                                                 <div className="form-group local-forms">
                                                     <label>Title <span className="login-danger">*</span></label>
@@ -158,65 +159,8 @@ const EditCCBody = () => {
                                                 </div>
                                             </div>
 
-                                            {/* Image Input */}
-                                                                 
-{/* Image Input */}
-<div className="col-10 col-md-2 col-xl-4">
-  <div className="form-group">
-    <label className={formData.CCImage ? "" : "local-top"}>
-      Image <span className="login-danger">*</span>
-    </label>
-    <div className={formData.CCImage ? "upload-files-avator" : "upload-files-avator settings-btn"} style={{ position: 'relative' }}>
-      {/* Display the uploaded image */}
-      {formData.CCImage && (
-        <div className="uploaded-image">
-          <img
-            src={formData.CCImage}
-            alt="Uploaded Image"
-            style={{
-              width: '180px',
-              height: '180px',
-              objectFit: 'cover',
-            }}
-          />
-          <div className="edit-icon" style={{ position: 'absolute',backgroundColor: 'white', left:170,top:160 }}>
-            {/* Input for choosing a new image */}
-            <input
-              type="file"
-              accept="image/*"
-              name="CCImage"
-              id="file"
-              onChange={loadFile}
-              className="hide-input"
-              style={{ display: 'none' }}
-            />
-            <label htmlFor="file" className="upload" style={{ cursor: 'pointer' }}>
-              <FeatherIcon icon="edit" />
-            </label>
-          </div>
-        </div>
-      )}
-      {/* Input for choosing a new image */}
-      {!formData.CCImage && (
-        <div>
-          <input
-            type="file"
-            accept="image/*"
-            name="CCImage"
-            id="file"
-            onChange={loadFile}
-            className="hide-input"
-            placeholder="Select an Image..."
-          />
-          <label htmlFor="file" className="upload" style={{ cursor: 'pointer' }}>
-            Choose File
-          </label>
-        </div>
-      )}
-    </div>
-  </div>
-</div>
-
+                                            {/* Image Upload Component */}
+                                            <ImageUpload id="image" src={formData.CCImage} loadFile={loadFile} imageName="Image"/>
 
                                             {/* Submit/Cancel Button */}
                                             <div className="col-12">

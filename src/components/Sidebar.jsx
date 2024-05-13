@@ -247,7 +247,7 @@ const Sidebar = (props) => {
                             ? "active"
                             : ""
                         }
-                        to="/herosection"
+                        to="/landingpage/herosection"
                       >
                 Hero Section 
                       </Link>

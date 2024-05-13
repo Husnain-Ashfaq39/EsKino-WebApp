@@ -110,8 +110,8 @@ const Approuter = () => {
             element={<EditParticipent />}
           />
           {/* Hero Section */}
-          <Route path="/herosection" element={<HeroSection />} />
-          <Route path="/editherosection" element={<EditHeroSection />} />
+          <Route path="/landingpage/herosection" element={<HeroSection />} />
+          <Route path="/landingpage/editherosection/:id" element={<EditHeroSection />} />
           {/* <Route path="/editappoinments" element={<EditAppoinments />} /> */}
 
           {/* Child Emergency */}
@@ -140,13 +140,13 @@ const Approuter = () => {
             element={<CCHeading />}
           />
           <Route
-            path="/landingpage/coursecontentheading/editcoursecontentheading"
+            path="/landingpage/coursecontentheading/editcoursecontentheading/:id"
             element={<EditCCHeading />}
           />
 
 
 <Route path="/landingpage/coursecontentbody" element={<CCBody/>} />
-<Route path="/landingpage/coursecontentbody/editcoursecontentbody" element={<EditCCBody/>} />
+<Route path="/landingpage/coursecontentbody/editcoursecontentbody/:id" element={<EditCCBody/>} />
 <Route path="/landingpage/coursecontentbody/addcoursecontentbody" element={<AddCCBody/>} />
 
           {/* Orgazinzation Matters */}
