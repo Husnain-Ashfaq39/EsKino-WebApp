@@ -66,6 +66,7 @@ import AddOMBody from "./components/Landing Page/organizationMatters/AddOMBody";
 import Contact from "./components/pages/Contact";
 
 import ErrorPage from "./components/pages/ErrorPage";
+import Contactlist from "./components/contactlist";
 
 //Accounts
 const Approuter = () => {
@@ -85,6 +86,7 @@ const Approuter = () => {
           <Route path="/error" element={<Error />} />
           <Route path="/server-error" element={<ServerError />} />
           <Route path="/blankpage" element={<BlankPage />} />
+          <Route path="/contactlist" element={<Contactlist />} />
           {/* Blog */}
           <Route path="/blog" element={<Blogdetails />} />
           <Route path="/addblog" element={<Addblog />} />

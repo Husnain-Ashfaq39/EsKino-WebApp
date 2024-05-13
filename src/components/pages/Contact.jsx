@@ -14,7 +14,7 @@ export default function Contact() {
         bgUrl={bannerBgSvg}
         imgUrl={bannerImgPng}
         title="Contact Us"
-        subTitle="Kindly reach us to get the fastest response and treatment"
+        subTitle="Kindly reach us to get the fastest response and help"
       />
       <div className="container cs_mt_minus_110">
         <div className="row">
