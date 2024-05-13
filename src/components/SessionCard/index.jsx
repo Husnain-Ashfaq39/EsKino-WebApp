@@ -4,16 +4,17 @@ import AppointmentSection from '../Section/AppointmentSection';
 import { arrowWhiteSvg, date_timeSvg, pinSvg, titleIconsSvg } from '../imagepath';
 import { getAllDocuments } from '../../services/dbService';
 
-function SessionCard() {
-  const btnText = "Book Now";
+function SessionCard({ limit }) {
+
   const [isOpen, setIsOpen] = useState(false);
   const [sections, setSections] = useState([]);
+  const [selectedSectionId, setSelectedSectionId] = useState(null);
 
-  const handleOpen = () => setIsOpen(true);
-  const handleClose = () => {
-    setIsOpen(false);
-    console.log("modal is turning off");
+  const handleOpen = (sectionId) => { // Pass the section ID to the handleOpen function
+    setIsOpen(true);
+    setSelectedSectionId(sectionId); // Set the selected section ID
   };
+
 
   useEffect(() => {
     getAllDocuments('meetings')
@@ -63,8 +64,8 @@ function SessionCard() {
 
   return (
     <div>
-      {sections.map(section => (
-        <div key={section.id} className="cs_hero_info_wrap cs_shadow_1 cs_white_bg cs_radius_15" style={{ margin: '10px',marginBottom:'25px', padding: '20px' }}>
+      {sections.slice(0, limit ? 3 : sections.length).map(section => (
+        <div key={section.id} className="cs_hero_info_wrap cs_shadow_1 cs_white_bg cs_radius_15" style={{ margin: '10px', marginBottom: '25px', padding: '20px' }}>
           {/* First Section */}
           <div className="cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
             <div className="cs_hero_info_icon cs_center rounded-circle cs_accent_bg">
@@ -72,7 +73,7 @@ function SessionCard() {
             </div>
             <div className="cs_hero_info_right">
               <h3 className="cs_hero_info_title cs_semibold">{section.title}</h3>
-              <p className="cs_hero_info_subtitle cs_fs_20">hey</p>
+              <p className="cs_hero_info_subtitle cs_fs_12"> Remaining Capacity: {section.capacity}</p>
             </div>
           </div>
           {/* Date and Time Section */}
@@ -82,7 +83,7 @@ function SessionCard() {
             </div>
             <div className="cs_hero_info_right">
               <h3 className="cs_hero_info_title cs_semibold">{section.startDate} to {section.endDate}</h3>
-              <p className="cs_hero_info_subtitle cs_fs_20">{section.startTime} to {section.endTime}</p>
+              <p className="cs_hero_info_subtitle cs_fs_12">{section.startTime} to {section.endTime}</p>
             </div>
           </div>
           {/* Location Section */}
@@ -92,21 +93,32 @@ function SessionCard() {
             </div>
             <div className="cs_hero_info_right">
               <h3 className="cs_hero_info_title cs_semibold">{section.streetAddress}</h3>
-              <p className="cs_hero_info_subtitle cs_fs_20">zip{section.zipCode}</p>
+              <p className="cs_hero_info_subtitle cs_fs_12">zip code: {section.zipCode}</p>
             </div>
           </div>
-      <div onClick={handleOpen} className="cs_btn cs_style_1" style={{ cursor: 'pointer', margin: '20px' }}>
-        <span>{btnText}</span>
-        <i><img src={arrowWhiteSvg} alt="Icon" /></i>
-      </div>
+          <div  style={{
+              cursor: section.capacity > 0 ? 'pointer' : 'default',
+              margin: '20px',
+              
+           
+              pointerEvents: section.capacity === 0 ? 'none' : 'auto', // Optionally disabling pointer events
+            }}>
+
+          <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null}
+           
+            className="cs_btn cs_style_1"
+            >
+            <span>{section.capacity==0?"Closed":"Book Now"}</span>
+            <i><img src={arrowWhiteSvg} alt="Icon" /></i>
+          </div>
+            </div>
         </div>
       ))}
       {isOpen && (
         <ModalComponent isOpen={isOpen} setIsOpen={setIsOpen}>
           <AppointmentSection
-            sectionTitle="Book Your Appointment"
-            sectionTitleUp="Make an appointment today"
-            imgUrl="/path-to-your-image.jpg"
+
+            sectionId={selectedSectionId}
           />
         </ModalComponent>
       )}

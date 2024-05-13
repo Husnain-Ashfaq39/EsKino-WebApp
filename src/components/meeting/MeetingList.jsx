@@ -1,20 +1,20 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Modal, Button } from "antd";
 import { Link } from "react-router-dom";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
-import {
-  imagesend,
-  plusicon,
-  refreshicon,
-  searchnormal,
-} from "../imagepath";
+import { imagesend, plusicon, refreshicon, searchnormal } from "../imagepath";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import { getAllDocuments } from '../../services/dbService';
+import { getAllDocuments } from "../../services/dbService";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../config/firebase";
-
-
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 
 const MeetingList = () => {
   const [meetings, setMeetings] = useState([]);
@@ -22,51 +22,66 @@ const MeetingList = () => {
   const handleDelete = async (meetingId) => {
     const docRef = doc(db, "meetings", meetingId);
     try {
-        await deleteDoc(docRef);
-        setMeetings(prevMeetings => prevMeetings.filter(meeting => meeting.id !== meetingId));
-        // Optionally close the modal after deleting
-        // $('#delete_patient').modal('hide');
+      await deleteDoc(docRef);
+      setMeetings((prevMeetings) =>
+        prevMeetings.filter((meeting) => meeting.id !== meetingId)
+      );
+      // Optionally close the modal after deleting
+      // $('#delete_patient').modal('hide');
     } catch (error) {
-        console.error("Error deleting document: ", error);
+      console.error("Error deleting document: ", error);
     }
-};
+  };
+  const fetchParticipantCount = async (meetingId) => {
+    const q = query(
+      collection(db, "participants"),
+      where("sectionId", "==", meetingId)
+    );
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.length; // Assuming each doc is a participant
+  };
 
   useEffect(() => {
-    getAllDocuments('meetings')
-      .then(querySnapshot => {
-        const loadedMeetings = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          
-          Name: doc.data().title, // Assuming the field is named 'name'
-          StartTime: convertTime(doc.data().startTime),
-          EndTime: convertTime(doc.data().endTime),
-          Participent: doc.data().participent, // Check your actual field names
-          Capacity: doc.data().capacity,
-          Location: doc.data().streetAddress,
-          StartDate: convertTimestamp(doc.data().startDate),
-        }));
-        setMeetings(loadedMeetings);
-      });
+    const getAllMeetings = async () => {
+      const meetingsRef = collection(db, "meetings");
+      const snapshot = await getDocs(meetingsRef);
+      const meetingsWithCounts = await Promise.all(
+        snapshot.docs.map(async (doc) => {
+          const participantCount = await fetchParticipantCount(doc.id);
+          return {
+            id: doc.id,
+            Name: doc.data().title,
+            StartTime: convertTime(doc.data().startTime),
+            EndTime: convertTime(doc.data().endTime),
+            Participants: participantCount, // Adding participant count here
+            Capacity: doc.data().capacity,
+            Location: doc.data().streetAddress,
+            StartDate: convertTimestamp(doc.data().startDate),
+          };
+        })
+      );
+      setMeetings(meetingsWithCounts);
+    };
+
+    getAllMeetings();
   }, []);
 
   const convertTimestamp = (timestamp) => {
-    if (!timestamp) return '';
+    if (!timestamp) return "";
     const date = timestamp.toDate();
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   };
-  
 
   const convertTime = (timestamp) => {
-    if (!timestamp) return '';
+    if (!timestamp) return "";
     const date = timestamp.toDate();
     let hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12;
     hours = hours ? hours : 12;
     return `${hours}:${minutes} ${ampm}`;
   };
-
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMeeting, setSelectedMeeting] = useState({});
@@ -88,7 +103,11 @@ const MeetingList = () => {
     {
       title: "Name",
       dataIndex: "Name",
-      render: (text) => <Link to="/participentlist">{text}</Link>,
+      render: (text, record) => (
+        <Link to={`/meetinglist/participentlist?meetingid=${record.id}`}>
+          {text}
+        </Link>
+      ),
       sorter: (a, b) => a.Name.length - b.Name.length,
     },
     {
@@ -103,7 +122,7 @@ const MeetingList = () => {
     },
     {
       title: "Participent",
-      dataIndex: "Participent",
+      dataIndex: "Participants",
       sorter: (a, b) => a.Participent - b.Participent,
     },
     {
@@ -118,7 +137,7 @@ const MeetingList = () => {
     {
       title: "",
       dataIndex: "FIELD8",
-      render: (_,record) => (
+      render: (_, record) => (
         <>
           <div className="text-end">
             <div className="dropdown dropdown-action">
@@ -131,8 +150,10 @@ const MeetingList = () => {
                 <i className="fas fa-ellipsis-v" />
               </Link>
               <div className="dropdown-menu dropdown-menu-end">
-                
-                <Link className="dropdown-item" to={`/editmeeting?id=${record.id}`} >
+                <Link
+                  className="dropdown-item"
+                  to={`/editmeeting?id=${record.id}`}
+                >
                   <i className="far fa-edit me-2" />
                   Edit
                 </Link>
@@ -308,13 +329,14 @@ const MeetingList = () => {
                                       Close
                                     </Link>
                                     <button
-    type="button"
-    className="btn btn-danger"
-    onClick={() => handleDelete(selectedMeeting.id)}
->
-    Delete
-</button>
-
+                                      type="button"
+                                      className="btn btn-danger"
+                                      onClick={() =>
+                                        handleDelete(selectedMeeting.id)
+                                      }
+                                    >
+                                      Delete
+                                    </button>
                                   </div>
                                 </div>
                               </div>
@@ -335,4 +357,3 @@ const MeetingList = () => {
 };
 
 export default MeetingList;
-

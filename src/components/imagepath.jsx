@@ -51,6 +51,7 @@ export { default as post7Jpeg } from "../assets/images/post_7.jpeg";
 export { default as post8Jpeg } from "../assets/images/post_8.jpeg";
 export { default as post9Jpeg } from "../assets/images/post_9.jpeg";
 export { default as whyChooseUsJpeg } from "../assets/images/why_choose_us.jpeg";
+export { default as about_img } from "../assets/images/about_img.JPG";
 
 
 //icons

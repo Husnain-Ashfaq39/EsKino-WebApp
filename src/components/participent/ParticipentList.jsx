@@ -1,145 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Modal, Button } from "antd";
 import { Link } from "react-router-dom";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
+import { useLocation, useNavigate } from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { blogimg2, imagesend, refreshicon, searchnormal } from "../imagepath";
+import { db } from "../../config/firebase";
+import { getDoc, doc } from "firebase/firestore";
+import moment from "moment";
+import { fetchDocumentsWithQuery } from "../../services/dbService";
 const ParticipantList = () => {
-  const datasource = [
-    {
-      id: 1,
-      Img: blogimg2,
-      FirstName: "Participent",
-      LastName: "1",
-      Email: "participent@gmail.com",
-      AddressOwner: "nsdseid",
-      Personnals: 4,
-      NameOfParticipents: "Ali , Hamza",
-      Gender: "Male",
-      FIELD9: "",
-    },
-    {
-      id: 1,
-      Img: blogimg2,
-      FirstName: "Ali",
-      LastName: "1",
-      Email: "participent@gmail.com",
-      AddressOwner: "nsdseid",
-      Personnals: 4,
-      NameOfParticipents: "Ali , Hamza",
-      Gender: "Male",
-      FIELD9: "",
-    },
-    {
-      id: 1,
-      Img: blogimg2,
-      FirstName: "Participent",
-      LastName: "1",
-      Email: "participent@gmail.com",
-      AddressOwner: "nsdseid",
-      Personnals: 4,
-      NameOfParticipents: "Ali , Hamza",
-      Gender: "Male",
-      FIELD9: "",
-    },
-    {
-      id: 1,
-      Img: blogimg2,
-      FirstName: "Participent",
-      LastName: "1",
-      Email: "participent@gmail.com",
-      AddressOwner: "nsdseid",
-      Personnals: 4,
-      NameOfParticipents: "Ali , Hamza",
-      Gender: "Male",
-      FIELD9: "",
-    },
-    {
-      id: 1,
-      Img: blogimg2,
-      FirstName: "Participent",
-      LastName: "1",
-      Email: "participent@gmail.com",
-      AddressOwner: "nsdseid",
-      Personnals: 4,
-      NameOfParticipents: "Ali , Hamza",
-      Gender: "Female",
-      FIELD9: "",
-    },
-    {
-      id: 1,
-      Img: blogimg2,
-      FirstName: "Participent",
-      LastName: "1",
-      Email: "participent@gmail.com",
-      AddressOwner: "nsdseid",
-      Personnals: 4,
-      NameOfParticipents: "Ali , Hamza",
-      Gender: "Female",
-      FIELD9: "",
-    },
-    {
-      id: 1,
-      Img: blogimg2,
-      FirstName: "Participent",
-      LastName: "1",
-      Email: "participent@gmail.com",
-      AddressOwner: "nsdseid",
-      Personnals: 4,
-      NameOfParticipents: "Ali , Hamza",
-      Gender: "Female",
-      FIELD9: "",
-    },
-    {
-      id: 1,
-      Img: blogimg2,
-      FirstName: "Participent",
-      LastName: "1",
-      Email: "participent@gmail.com",
-      AddressOwner: "nsdseid",
-      Personnals: 4,
-      NameOfParticipents: "Ali , Hamza",
-      Gender: "Female",
-      FIELD9: "",
-    },
-    {
-      id: 1,
-      Img: blogimg2,
-      FirstName: "Participent",
-      LastName: "1",
-      Email: "participent@gmail.com",
-      AddressOwner: "nsdseid",
-      Personnals: 4,
-      NameOfParticipents: "Ali , Hamza",
-      Gender: "Female",
-      FIELD9: "",
-    },
-    {
-      id: 1,
-      Img: blogimg2,
-      FirstName: "Participent",
-      LastName: "1",
-      Email: "participent@gmail.com",
-      AddressOwner: "nsdseid",
-      Personnals: 4,
-      NameOfParticipents: "Ali , Hamza",
-      Gender: "Female",
-      FIELD9: "",
-    },
-    {
-      id: 1,
-      Img: blogimg2,
-      FirstName: "Participent",
-      LastName: "1",
-      Email: "participent@gmail.com",
-      AddressOwner: "nsdseid",
-      Personnals: 4,
-      NameOfParticipents: "Ali , Hamza",
-      Gender: "Female",
-      FIELD9: "",
-    },
-  ];
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const meetingId = searchParams.get("meetingid");
+
+  const initialParticipentData = {
+    sectionId: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    address: "",
+    persons: 4,
+    personNames: "",
+    gender: "",
+    FIELD9: "",
+  };
+
+  const [participentData, setParticipantData] = useState([]);
+
+  useEffect(() => {
+    if (meetingId) {
+      fetchDocumentsWithQuery("participants", "sectionId", meetingId).then(
+        (querySnapshot) => {
+          const loadedParticipants = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+
+            firstName: doc.data().firstName,
+            lastName: doc.data().lastName,
+            email: doc.data().email,
+            address: doc.data().address, // Check your actual field names
+            persons: doc.data().persons,
+            personNames: doc.data().personNames,
+            gender: doc.data().gender,
+            sectionId: doc.data().sectionId,
+          }));
+          setParticipantData(loadedParticipants);
+        }
+      );
+    }
+  }, [meetingId]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedParticipant, setSelectedParticipant] = useState({});
@@ -159,25 +69,31 @@ const ParticipantList = () => {
 
   const columns = [
     {
+      title: "",
+      dataIndex: "sectionId",
+      render: (text) => <Link to="#"></Link>,
+      sorter: (a, b) => a.sectionId.length - b.sectionId.length,
+    },
+    {
       title: "First Name",
-      dataIndex: "FirstName",
+      dataIndex: "firstName",
       render: (text) => <Link to="#">{text}</Link>,
-      sorter: (a, b) => a.FirstName.length - b.FirstName.length,
+      sorter: (a, b) => a.firstName.length - b.firstName.length,
     },
     {
       title: "Last Name",
-      dataIndex: "LastName",
-      sorter: (a, b) => a.LastName.length - b.LastName.length,
+      dataIndex: "lastName",
+      sorter: (a, b) => a.lastName.length - b.lastName.length,
     },
     {
       title: "Email",
-      dataIndex: "Email",
-      sorter: (a, b) => a.Email.length - b.Email.length,
+      dataIndex: "email",
+      sorter: (a, b) => a.email.length - b.email.length,
     },
     {
-      title: "Personnals",
-      dataIndex: "Personnals",
-      sorter: (a, b) => a.Personnals - b.Personnals,
+      title: "Persons",
+      dataIndex: "persons",
+      sorter: (a, b) => a.persons - b.persons,
     },
     {
       title: "",
@@ -191,7 +107,7 @@ const ParticipantList = () => {
     {
       title: "",
       dataIndex: "FIELD9",
-      render: () => (
+      render: (_, record) => (
         <div className="text-end">
           <div className="dropdown dropdown-action">
             <Link
@@ -203,7 +119,10 @@ const ParticipantList = () => {
               <i className="fas fa-ellipsis-v" />
             </Link>
             <div className="dropdown-menu dropdown-menu-end">
-              <Link className="dropdown-item" to="/editparticipent">
+              <Link
+                className="dropdown-item"
+                to={`/meetinglist/participentlist/edit?meetingid=${record.sectionId}&participentid=${record.id}`}
+              >
                 <i className="far fa-edit me-2" />
                 Edit
               </Link>
@@ -233,7 +152,7 @@ const ParticipantList = () => {
               <div className="col-sm-12">
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <Link to="#">Participants</Link>
+                    <Link to="/meetinglist">Meeting</Link>
                   </li>
                   <li className="breadcrumb-item">
                     <i className="feather-chevron-right">
@@ -283,7 +202,7 @@ const ParticipantList = () => {
                 <div className="card-body">
                   <Table
                     columns={columns}
-                    dataSource={datasource}
+                    dataSource={participentData}
                     rowKey="id"
                   />
                   {isModalOpen && (
@@ -303,29 +222,29 @@ const ParticipantList = () => {
                     >
                       <p>
                         <strong>First Name:</strong>{" "}
-                        {selectedParticipant.FirstName}
+                        {selectedParticipant.firstName}
                       </p>
                       <p>
                         <strong>Last Name:</strong>{" "}
-                        {selectedParticipant.LastName}
+                        {selectedParticipant.lastName}
                       </p>
                       <p>
-                        <strong>Email:</strong> {selectedParticipant.Email}
+                        <strong>Email:</strong> {selectedParticipant.email}
                       </p>
                       <p>
                         <strong>Personnals:</strong>{" "}
-                        {selectedParticipant.Personnals}
+                        {selectedParticipant.persons}
                       </p>
                       <p>
                         <strong>Name of Participants:</strong>{" "}
-                        {selectedParticipant.NameOfParticipents}
+                        {selectedParticipant.personNames}
                       </p>
                       <p>
                         <strong>Owner Address:</strong>{" "}
-                        {selectedParticipant.AddressOwner}
+                        {selectedParticipant.address}
                       </p>
                       <p>
-                        <strong>Gender:</strong> {selectedParticipant.Gender}
+                        <strong>Gender:</strong> {selectedParticipant.gender}
                       </p>{" "}
                       {/* Display Gender here */}
                     </Modal>

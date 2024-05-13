@@ -1,25 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { Link } from "react-router-dom";
+import { getDocument, updateDocument } from "../../services/dbService";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const EditParticipant = () => {
-  const initialParticipantData = {
-    id: 1,
-    img: "blogimg2",
-    firstName: "Participant",
-    lastName: "1",
-    email: "participant@gmail.com",
-    addressOwner: "nsdseid",
-    personals: 4,
-    nameOfParticipants: "Ali, Hamza",
-    gender: "Male",
+  const location = useLocation();
+  const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+  const participentId = searchParams.get("participentid");
+
+  const initialParticipentData = {
+    sectionId: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    address: "",
+    persons: 0,
+    personNames: "",
+    gender: "",
+    FIELD9: "",
   };
 
   const [participantData, setParticipantData] = useState(
-    initialParticipantData
+    initialParticipentData
   );
+
+  useEffect(() => {
+    console.log(participentId);
+    if (participentId) {
+      getDocument("participants", participentId)
+        .then((docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            setParticipantData({
+              firstName: data.firstName || "",
+              lastName: data.lastName || "",
+              email: data.email || "",
+              address: data.address || "",
+              persons: data.persons || "",
+              personNames: data.personNames || "",
+              gender: data.gender || "",
+              sectionId: data.sectionId || "",
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching document:", error);
+        });
+    }
+    console.log(participantData);
+  }, [participentId]);
+
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -41,9 +75,10 @@ const EditParticipant = () => {
       "firstName",
       "lastName",
       "email",
-      "addressOwner",
-      "personals",
-      "nameOfParticipants",
+      "address",
+      "persons",
+      "personNames",
+      "gender",
     ];
     requiredFields.forEach((field) => {
       if (!participantData[field]) {
@@ -62,10 +97,27 @@ const EditParticipant = () => {
     if (validateForm()) {
       setIsSubmitting(true);
       // Simulate an API call
-      setTimeout(() => {
-        console.log(participantData); // Logging the data for now
+      const data = {
+        firstName: participantData.firstName,
+        lastName: participantData.lastName,
+        email: participantData.email,
+        address: participantData.address,
+        persons: participantData.persons,
+        personNames: participantData.personNames,
+        gender: participantData.gender,
+      };
+
+      try {
+        // Update the document
+        updateDocument("participants", participentId, data);
+        console.log("Document successfully updated!");
         setIsSubmitting(false);
-      }, 2000); // Simulating a 2 second delay for the API call
+
+        navigate(`/meetinglist/participentlist?meetingid=${participantData.sectionId}&participentid=${participentId}`);
+      } catch (error) {
+        console.error("Error updating document: ", error);
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -150,7 +202,7 @@ const EditParticipant = () => {
                         className="form-control"
                         type="text"
                         name="addressOwner"
-                        value={participantData.addressOwner}
+                        value={participantData.address}
                         onChange={handleChange}
                       />
                     </div>
@@ -161,7 +213,7 @@ const EditParticipant = () => {
                         className="form-control"
                         type="number"
                         name="personals"
-                        value={participantData.personals}
+                        value={participantData.persons}
                         onChange={handleChange}
                       />
                     </div>
@@ -172,7 +224,7 @@ const EditParticipant = () => {
                         className="form-control"
                         type="text"
                         name="nameOfParticipants"
-                        value={participantData.nameOfParticipants}
+                        value={participantData.personNames}
                         onChange={handleChange}
                       />
                     </div>

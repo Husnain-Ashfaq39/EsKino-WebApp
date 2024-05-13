@@ -1,23 +1,22 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { DatePicker, TimePicker } from "antd";
 import moment from "moment";
-import { Link, useLocation,useNavigate} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { getDocument } from "../../services/dbService";
-import { doc,getDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
-import { collection,query } from "firebase/firestore";
+import { collection, query } from "firebase/firestore";
 import { where } from "firebase/firestore";
 import { setDoc, updateDoc } from "firebase/firestore";
 
 const EditMeeting = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
-  const searchParams = new URLSearchParams(location.search); 
-  const id = searchParams.get('id'); 
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("id");
   const initialMeetingData = {
     title: "",
     startDate: null,
@@ -32,35 +31,36 @@ const EditMeeting = () => {
 
   const [meetingData, setMeetingData] = useState(initialMeetingData);
 
- 
- 
   useEffect(() => {
     if (id) {
       const docRef = doc(db, "meetings", id);
-      getDoc(docRef).then(docSnap => {
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setMeetingData({
-            title: data.title || "",
-            startDate: data.startDate ? moment(data.startDate.toDate()) : null,
-            endDate: data.endDate ? moment(data.endDate.toDate()) : null,
-            startTime: data.startTime ? moment(data.startTime.toDate()) : null,
-            endTime: data.endTime ? moment(data.endTime.toDate()) : null,
-            houseOwner: data.houseOwner || "",
-            streetAddress: data.streetAddress || "",
-            zipCode: data.zipCode || "",
-            capacity: data.capacity || "",
-          });
-        }
-      }).catch(error => {
-        console.error("Error fetching document:", error);
-      });
+      getDoc(docRef)
+        .then((docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            setMeetingData({
+              title: data.title || "",
+              startDate: data.startDate
+                ? moment(data.startDate.toDate())
+                : null,
+              endDate: data.endDate ? moment(data.endDate.toDate()) : null,
+              startTime: data.startTime
+                ? moment(data.startTime.toDate())
+                : null,
+              endTime: data.endTime ? moment(data.endTime.toDate()) : null,
+              houseOwner: data.houseOwner || "",
+              streetAddress: data.streetAddress || "",
+              zipCode: data.zipCode || "",
+              capacity: data.capacity || "",
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching document:", error);
+        });
     }
     console.log(meetingData);
   }, [id]);
-  
-  
-
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -134,43 +134,45 @@ const EditMeeting = () => {
 
   // Function to handle form submission
   // Function to handle form submission
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (validateForm()) {
-    setIsSubmitting(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      setIsSubmitting(true);
 
-    // Create a reference to the document
-    const docRef = doc(db, "meetings", id);
+      // Create a reference to the document
+      const docRef = doc(db, "meetings", id);
 
-    // Prepare the data to save
-    const dataToSave = {
-      title: meetingData.title,
-      startDate: meetingData.startDate ? meetingData.startDate.toDate() : null,
-      endDate: meetingData.endDate ? meetingData.endDate.toDate() : null,
-      startTime: meetingData.startTime ? meetingData.startTime.toDate() : null,
-      endTime: meetingData.endTime ? meetingData.endTime.toDate() : null,
-      houseOwner: meetingData.houseOwner,
-      streetAddress: meetingData.streetAddress,
-      zipCode: meetingData.zipCode,
-      capacity: meetingData.capacity,
-    };
+      // Prepare the data to save
+      const dataToSave = {
+        title: meetingData.title,
+        startDate: meetingData.startDate
+          ? meetingData.startDate.toDate()
+          : null,
+        endDate: meetingData.endDate ? meetingData.endDate.toDate() : null,
+        startTime: meetingData.startTime
+          ? meetingData.startTime.toDate()
+          : null,
+        endTime: meetingData.endTime ? meetingData.endTime.toDate() : null,
+        houseOwner: meetingData.houseOwner,
+        streetAddress: meetingData.streetAddress,
+        zipCode: meetingData.zipCode,
+        capacity: meetingData.capacity,
+      };
 
-    try {
-      // Update the document
-      await updateDoc(docRef, dataToSave);
-      console.log("Document successfully updated!");
-      setIsSubmitting(false);
-      // Optionally reset form or navigate user elsewhere
-      //setMeetingData(initialMeetingData); // Reset form after submission
-      navigate("/meetinglist");
-
-    } catch (error) {
-      console.error("Error updating document: ", error);
-      setIsSubmitting(false);
+      try {
+        // Update the document
+        await updateDoc(docRef, dataToSave);
+        console.log("Document successfully updated!");
+        setIsSubmitting(false);
+        // Optionally reset form or navigate user elsewhere
+        //setMeetingData(initialMeetingData); // Reset form after submission
+        navigate("/meetinglist");
+      } catch (error) {
+        console.error("Error updating document: ", error);
+        setIsSubmitting(false);
+      }
     }
-  }
-};
-
+  };
 
   return (
     <div>
