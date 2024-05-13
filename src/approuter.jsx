@@ -86,6 +86,13 @@ const Approuter = () => {
           <Route path="/error" element={<Error />} />
           <Route path="/server-error" element={<ServerError />} />
           <Route path="/blankpage" element={<BlankPage />} />
+
+          <Route path="/gallerylist" element={<GalleryList />} />
+          <Route path="/addgallery" element={<AddGallery />} />
+
+          {/* Contact */}
+
+          <Route path="/contactlist" element={<Contactlist />} />
           {/* Blog */}
           <Route path="/blog" element={<Blogdetails />} />
           <Route path="/addblog" element={<Addblog />} />
