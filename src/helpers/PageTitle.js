@@ -1,3 +1,4 @@
-export const pageTitle = (title) => {
-  return (document.title = title + "Eskino");
+export const pageTitle = title => {
+  return (document.title =
+    title + ' EsKino');
 };

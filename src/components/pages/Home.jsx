@@ -12,7 +12,7 @@ import DepartmentSection from '../Section/DepartmentSection';
 import { pageTitle } from '../../helpers/PageTitle';
 import SessionCard from '../SessionCard';
 
-import { aboutMiniSvg, aboutPng, about_img, arrowWhiteSvg, bannerBgSvg, bannerImgPng, compassionSvg, ctaBgSvg, dep_icon1, dep_icon2, dep_icon3, dep_icon4, departmentIcon1Svg, departmentIcon2Svg, departmentIcon3Svg, departmentIcon4Svg, departmentIcon5Svg, departmentIcon6Svg, excellenceSvg, heroBgJpeg, heroImgPng, integritySvg, pinSvg, post1Jpeg, post2Jpeg, post3Jpeg, respectSvg, teamworkSvg, titleIconPng, titleIconsSvg } from '../imagepath';
+import { aboutMiniSvg, aboutPng, about_img, arrowWhiteSvg, bannerBgSvg, bannerImgPng, banner_img50, compassionSvg, ctaBgSvg, dep_icon1, dep_icon2, dep_icon3, dep_icon4, departmentIcon1Svg, departmentIcon2Svg, departmentIcon3Svg, departmentIcon4Svg, departmentIcon5Svg, departmentIcon6Svg, excellenceSvg, heroBgJpeg, heroImgPng, integritySvg, pinSvg, post1Jpeg, post2Jpeg, post3Jpeg, respectSvg, teamworkSvg, titleIconPng, titleIconsSvg } from '../imagepath';
 
 
 const blogData = [
@@ -168,7 +168,7 @@ export default function Home() {
       <Section>
         <Banner
           bgUrl={ctaBgSvg}
-          imgUrl={bannerImgPng}
+          imgUrl={banner_img50}
           title="Emergency Aid Made Easy for Parents"
           subTitle="Equipping parents with essential skills for child emergency response, ensuring confident and effective action in critical situations."
         />
