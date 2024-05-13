@@ -382,6 +382,19 @@ const Sidebar = (props) => {
                     </li>
                   </ul>
                 </li>
+                <li className="submenu">
+                  <Link
+                    to="/contactlist"
+                    id="menu-item11"
+                    
+                  >
+                    <span className="menu-side">
+                      <img src={patients} alt="" />
+                    </span>{" "}
+                    <span>Contacts</span> 
+                  </Link>
+                  
+                </li>
               </ul>
               <div className="logout-btn">
                 <Link to="/login">

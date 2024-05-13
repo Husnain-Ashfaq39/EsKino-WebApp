@@ -65,6 +65,7 @@ import AddOMBody from "./components/Landing Page/organizationMatters/AddOMBody";
 import Contact from "./components/pages/Contact";
 import AddGallery from "./components/Gallery/AddGallery";
 import ErrorPage from "./components/pages/ErrorPage";
+import Contactlist from "./components/contactlist";
 import GalleryList from "./components/Gallery/GalleryList";
 
 //Accounts
@@ -85,11 +86,6 @@ const Approuter = () => {
           <Route path="/error" element={<Error />} />
           <Route path="/server-error" element={<ServerError />} />
           <Route path="/blankpage" element={<BlankPage />} />
-          {/*Gallery Section*/}
-          <Route path="/gallerylist" element={<GalleryList />} />
-
-          <Route path="/gallerylist/add" element={<AddGallery />} />
-
           {/* Blog */}
           <Route path="/blog" element={<Blogdetails />} />
           <Route path="/addblog" element={<Addblog />} />
