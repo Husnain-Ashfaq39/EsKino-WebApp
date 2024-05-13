@@ -120,7 +120,7 @@ const Approuter = () => {
             element={<CEHeader />}
           />
           <Route
-            path="/landingpage/editchildemergencyheader"
+            path="/landingpage/editchildemergencyheader/:id"
             element={<EditCEHeader />}
           />
 
@@ -130,7 +130,7 @@ const Approuter = () => {
             element={<AddCEBody />}
           />
           <Route
-            path="/landingpage/childemergencybody/editchildemergencybody"
+            path="/landingpage/childemergencybody/editchildemergencybody/:id"
             element={<EditCEBody />}
           />
 
@@ -155,7 +155,7 @@ const Approuter = () => {
             element={<OMHeading />}
           />
           <Route
-            path="/landingpage/organizationmattersheading/editorganizationmattersheading"
+            path="/landingpage/organizationmattersheading/editorganizationmattersheading/:id"
             element={<EditOMHeading />}
           />
 
@@ -164,7 +164,7 @@ const Approuter = () => {
             element={<OMBody />}
           />
           <Route
-            path="/landingpage/organizationmattersbody/editorganizationmattersbody"
+            path="/landingpage/organizationmattersbody/editorganizationmattersbody/:id"
             element={<EditOMBody />}
           />
           <Route

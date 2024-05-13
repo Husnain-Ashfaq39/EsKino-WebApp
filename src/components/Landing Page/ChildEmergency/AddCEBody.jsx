@@ -21,9 +21,9 @@ const AddCEBody = () => {
     e.preventDefault();
     try {
       await addDocument('ChildEmergencyBody', { // Add document to collection
-        CETitle: formData.title,
-        CESubtitle: formData.subtitle,
-        CEDescription: formData.description
+        CEBodyTitle: formData.title, // Corrected field names
+        CEBodySubtitle: formData.subtitle,
+        CEBodyDescription: formData.description
       });
       console.log('Document added successfully!');
       // Optionally, you can redirect the user to another page after successful submission
@@ -138,12 +138,12 @@ const AddCEBody = () => {
                             >
                               Submit
                             </button>
-                            <button
-                              type="button"
+                            <Link
+                              to="/landingpage/childemergencybody"
                               className="btn btn-primary cancel-form"
                             >
                               Cancel
-                            </button>
+                            </Link>
                           </div>
                         </div>
                       </div>
