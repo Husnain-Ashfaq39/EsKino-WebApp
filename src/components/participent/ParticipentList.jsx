@@ -8,12 +8,20 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { blogimg2, imagesend, refreshicon, searchnormal } from "../imagepath";
 import { db } from "../../config/firebase";
 import { getDoc, doc } from "firebase/firestore";
+import { updateDoc } from "firebase/firestore";
+
 import moment from "moment";
-import { fetchDocumentsWithQuery } from "../../services/dbService";
+import {
+  deleteDocument,
+  fetchDocumentsWithQuery,
+  getAllDocuments,
+} from "../../services/dbService";
 const ParticipantList = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const meetingId = searchParams.get("meetingid");
+  const [participentToDele, setParticipentToDele] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const initialParticipentData = {
     sectionId: "",
@@ -25,6 +33,59 @@ const ParticipantList = () => {
     personNames: "",
     gender: "",
     FIELD9: "",
+  };
+  // Import needed Firestore functions
+
+  const handleDelete = async (participantId) => {
+    const participantIndex = participentData.findIndex(
+      (p) => p.id === participantId
+    );
+    if (participantIndex === -1) return;
+
+    const participant = participentData[participantIndex];
+    // Ensure numberOfPersons is treated as an integer
+    const numberOfPersons = parseInt(participant.persons, 10);
+    const meetingId = participant.sectionId;
+
+    try {
+      // Fetch the current meeting data
+      const meetingRef = doc(db, "meetings", meetingId);
+      const meetingSnap = await getDoc(meetingRef);
+
+      if (meetingSnap.exists()) {
+        const meetingData = meetingSnap.data();
+
+        // Ensure currentCapacity is parsed as an integer
+        const currentCapacity = parseInt(meetingData.capacity, 10) || 0; // Default to 0 if undefined, null, or empty string
+
+        // Calculate the new capacity
+        const updatedCapacity = currentCapacity + numberOfPersons;
+        const updatedCapacityStr = updatedCapacity.toString();
+
+        // Update the meeting capacity
+        await updateDoc(meetingRef, {
+          capacity: updatedCapacityStr,
+        });
+
+        // Delete the participant
+        await deleteDocument("participants", participantId);
+
+        // Remove the deleted participant from the state
+        const updatedParticipants = participentData.filter(
+          (p) => p.id !== participantId
+        );
+        setParticipantData(updatedParticipants);
+
+        setIsDeleteModalOpen(false); // Close the modal
+      } else {
+        console.log("No such meeting exists!");
+      }
+    } catch (error) {
+      console.error(
+        "Failed to delete the participant or update the meeting:",
+        error
+      );
+    }
   };
 
   const [participentData, setParticipantData] = useState([]);
@@ -48,6 +109,21 @@ const ParticipantList = () => {
           setParticipantData(loadedParticipants);
         }
       );
+    } else {
+      getAllDocuments("participants").then((querySnapshot) => {
+        const loadedParticipants = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          firstName: doc.data().firstName,
+          lastName: doc.data().lastName,
+          email: doc.data().email,
+          address: doc.data().address, // Check your actual field names
+          persons: doc.data().persons,
+          personNames: doc.data().personNames,
+          gender: doc.data().gender,
+          sectionId: doc.data().sectionId,
+        }));
+        setParticipantData(loadedParticipants);
+      });
     }
   }, [meetingId]);
 
@@ -129,8 +205,10 @@ const ParticipantList = () => {
               <Link
                 className="dropdown-item"
                 to="#"
-                data-bs-toggle="modal"
-                data-bs-target="#delete_patient"
+                onClick={() => {
+                  setParticipentToDele(record.id);
+                  setIsDeleteModalOpen(true);
+                }}
               >
                 <i className="fa fa-trash-alt m-r-5"></i> Delete
               </Link>
@@ -232,8 +310,7 @@ const ParticipantList = () => {
                         <strong>Email:</strong> {selectedParticipant.email}
                       </p>
                       <p>
-                        <strong>Personnals:</strong>{" "}
-                        {selectedParticipant.persons}
+                        <strong>Persons:</strong> {selectedParticipant.persons}
                       </p>
                       <p>
                         <strong>Name of Participants:</strong>{" "}
@@ -251,27 +328,36 @@ const ParticipantList = () => {
                   )}
 
                   <div
-                    id="delete_patient"
-                    className="modal fade delete-modal"
+                    className={
+                      isDeleteModalOpen
+                        ? "modal fade show delete-modal"
+                        : "modal fade delete-modal"
+                    }
+                    style={{
+                      display: isDeleteModalOpen ? "block" : "none",
+                      backgroundColor: "rgba(0,0,0,0.5)",
+                    }}
                     role="dialog"
                   >
                     <div className="modal-dialog modal-dialog-centered">
                       <div className="modal-content">
                         <div className="modal-body text-center">
                           <img src={imagesend} alt="#" width={50} height={46} />
-                          <h3>Are you sure want to delete this ?</h3>
+                          <h3>Are you sure want to delete this participant?</h3>
                           <div className="m-t-20">
-                            {" "}
-                            <Link
-                              to="#"
+                            <Button
+                              onClick={() => setIsDeleteModalOpen(false)}
                               className="btn btn-white me-2"
-                              data-bs-dismiss="modal"
                             >
                               Close
-                            </Link>
-                            <button type="submit" className="btn btn-danger">
+                            </Button>
+                            <Button
+                              type="button"
+                              className="btn btn-danger"
+                              onClick={() => handleDelete(participentToDele)}
+                            >
                               Delete
-                            </button>
+                            </Button>
                           </div>
                         </div>
                       </div>

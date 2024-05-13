@@ -148,7 +148,6 @@ const Sidebar = (props) => {
                         Add Meeting
                       </Link>
                     </li>
-                    
                   </ul>
                 </li>
                 <li className="submenu">
@@ -170,25 +169,13 @@ const Sidebar = (props) => {
                             ? "active"
                             : ""
                         }
-                        to="/participentlist"
+                        to="/meetinglist/participentlist"
                       >
                         Participent List
                       </Link>
                     </li>
                     <li>
                       {/* <Link className={props?.activeClassName === 'add-patient' ? 'active' : ''} to="/addpatients">Add Patients</Link> */}
-                    </li>
-                    <li>
-                      <Link
-                        className={
-                          props?.activeClassName === "edit-participent"
-                            ? "active"
-                            : ""
-                        }
-                        to="/editparticipent"
-                      >
-                        Edit Participent
-                      </Link>
                     </li>
                   </ul>
                 </li>
@@ -249,26 +236,51 @@ const Sidebar = (props) => {
                         }
                         to="/landingpage/herosection"
                       >
-                Hero Section 
+                        Hero Section
                       </Link>
 
-                  {/* Child Emergency */}
-                    <li>
-                      <Link className={props?.activeClassName === 'shedule-list' ? 'active' : ''} to="/landingpage/childemergencyheader">Child Emergency</Link>
-                    </li>
+                      {/* Child Emergency */}
+                      <li>
+                        <Link
+                          className={
+                            props?.activeClassName === "shedule-list"
+                              ? "active"
+                              : ""
+                          }
+                          to="/landingpage/childemergencyheader"
+                        >
+                          Child Emergency
+                        </Link>
+                      </li>
 
-                  {/* Course Content */}
-                    <li>
-                      <Link className={props?.activeClassName === 'shedule-list' ? 'active' : ''} to="/landingpage/coursecontentheading">Course Content</Link>
+                      {/* Course Content */}
+                      <li>
+                        <Link
+                          className={
+                            props?.activeClassName === "shedule-list"
+                              ? "active"
+                              : ""
+                          }
+                          to="/landingpage/coursecontentheading"
+                        >
+                          Course Content
+                        </Link>
+                      </li>
+
+                      {/* Organization Matters*/}
+                      <li>
+                        <Link
+                          className={
+                            props?.activeClassName === "shedule-list"
+                              ? "active"
+                              : ""
+                          }
+                          to="/landingpage/organizationmattersheading"
+                        >
+                          Organization Matters
+                        </Link>
+                      </li>
                     </li>
-                  
-                  {/* Organization Matters*/}
-                    <li>
-                      <Link className={props?.activeClassName === 'shedule-list' ? 'active' : ''} to="/landingpage/organizationmattersheading">Organization Matters</Link>
-                    </li>
-                    </li>
-                    
-                    
                   </ul>
                 </li>
 

@@ -1,37 +1,54 @@
-import React, { useState, useEffect } from "react";
-import { Table, Modal, Button } from "antd";
-import { Link } from "react-router-dom";
+import { Button, Modal, Table } from "antd";
+import FeatherIcon from "feather-icons-react/build/FeatherIcon";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { db } from "../../config/firebase";
+import { deleteDocument } from "../../services/dbService";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { imagesend, plusicon, refreshicon, searchnormal } from "../imagepath";
-import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import { getAllDocuments } from "../../services/dbService";
-import { deleteDoc, doc } from "firebase/firestore";
-import { db } from "../../config/firebase";
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
+
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 const MeetingList = () => {
   const [meetings, setMeetings] = useState([]);
+  const navigate = useNavigate();
+  const [updateTrigger, setUpdateTrigger] = useState(false);
+  const [meetingtoDele, setMeetingtoDele] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleDelete = async (meetingId) => {
-    const docRef = doc(db, "meetings", meetingId);
     try {
-      await deleteDoc(docRef);
+      // Fetch participants associated with the meeting
+      const participantQuery = query(
+        collection(db, "participants"),
+        where("sectionId", "==", meetingId)
+      );
+      const participantsSnapshot = await getDocs(participantQuery);
+
+      // Delete all participants
+      const deleteParticipantsPromises = participantsSnapshot.docs.map(
+        (participantDoc) => {
+          return deleteDocument("participants", participantDoc.id);
+        }
+      );
+
+      // Wait for all participants to be deleted
+      await Promise.all(deleteParticipantsPromises);
+
+      // Delete the meeting after all participants are deleted
+
+      await deleteDocument("meetings", meetingId);
       setMeetings((prevMeetings) =>
         prevMeetings.filter((meeting) => meeting.id !== meetingId)
       );
-      // Optionally close the modal after deleting
-      // $('#delete_patient').modal('hide');
+      setIsDeleteModalOpen(false); // Hide the modal here after successful deletion
     } catch (error) {
-      console.error("Error deleting document: ", error);
+      console.error("Error deleting document and participants: ", error);
     }
   };
+
   const fetchParticipantCount = async (meetingId) => {
     const q = query(
       collection(db, "participants"),
@@ -57,6 +74,7 @@ const MeetingList = () => {
             Capacity: doc.data().capacity,
             Location: doc.data().streetAddress,
             StartDate: convertTimestamp(doc.data().startDate),
+            EndDate: convertTimestamp(doc.data().endDate),
           };
         })
       );
@@ -64,7 +82,7 @@ const MeetingList = () => {
     };
 
     getAllMeetings();
-  }, []);
+  }, [updateTrigger]);
 
   const convertTimestamp = (timestamp) => {
     if (!timestamp) return "";
@@ -85,10 +103,38 @@ const MeetingList = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMeeting, setSelectedMeeting] = useState({});
+  const [hoveredRow, setHoveredRow] = useState(null);
 
   const showModal = (meeting) => {
     setSelectedMeeting(meeting);
     setIsModalOpen(true);
+  };
+
+  const getMeetingStatus = (meeting) => {
+    const currentTime = moment();
+    console.log("Current Time:", currentTime.format());
+
+    // Rearrange the date format from DD/MM/YYYY to YYYY-MM-DD
+    const [day, month, year] = meeting.EndDate.split("/");
+    const formattedEndDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
+      2,
+      "0"
+    )}`;
+
+    // Combine formatted EndDate and EndTime using moment
+    const endTime = moment(
+      `${formattedEndDate} ${meeting.EndTime}`,
+      "YYYY-MM-DD hh:mm A"
+    );
+    console.log("End Time:", endTime.format());
+
+    if (currentTime.isAfter(endTime)) {
+      return "Timeout";
+    } else if (0 == meeting.Capacity) {
+      return "Closed";
+    } else {
+      return "Active";
+    }
   };
 
   const handleOk = () => {
@@ -116,9 +162,27 @@ const MeetingList = () => {
       sorter: (a, b) => a.StartTime.length - b.StartTime.length,
     },
     {
-      title: "EndTime",
+      title: "Status",
       dataIndex: "EndTime",
-      sorter: (a, b) => a.EndTime.length - b.EndTime.length,
+      render: (_, record) => {
+        const status = getMeetingStatus(record);
+        let badgeClasses = "badge font-weight-bold p-2 "; // Bootstrap classes for padding and bold text
+
+        // Append additional classes based on the status
+        if (status === "Active") {
+          badgeClasses += "badge-success";
+        } else if (status === "Timeout") {
+          badgeClasses += "badge-warning";
+        } else if (status === "Closed") {
+          badgeClasses += "badge-danger";
+        }
+
+        return (
+          <span className={badgeClasses} style={{ borderRadius: "15px" }}>
+            {status}
+          </span>
+        );
+      },
     },
     {
       title: "Participent",
@@ -129,7 +193,13 @@ const MeetingList = () => {
       title: "",
       dataIndex: "actions",
       render: (_, record) => (
-        <Button className="btn btn-primary" onClick={() => showModal(record)}>
+        <Button
+          className="btn btn-primary"
+          onClick={(e) => {
+            e.stopPropagation();
+            showModal(record);
+          }}
+        >
           View Details
         </Button>
       ),
@@ -140,7 +210,12 @@ const MeetingList = () => {
       render: (_, record) => (
         <>
           <div className="text-end">
-            <div className="dropdown dropdown-action">
+            <div
+              className="dropdown dropdown-action"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
               <Link
                 to="#"
                 className="action-icon dropdown-toggle"
@@ -151,6 +226,9 @@ const MeetingList = () => {
               </Link>
               <div className="dropdown-menu dropdown-menu-end">
                 <Link
+                  onClick={() => {
+                    setUpdateTrigger(!updateTrigger);
+                  }}
                   className="dropdown-item"
                   to={`/editmeeting?id=${record.id}`}
                 >
@@ -160,8 +238,10 @@ const MeetingList = () => {
                 <Link
                   className="dropdown-item"
                   to="#"
-                  data-bs-toggle="modal"
-                  data-bs-target="#delete_patient"
+                  onClick={() => {
+                    setMeetingtoDele(record.id);
+                    setIsDeleteModalOpen(true); // Show the modal when Delete is clicked
+                  }}
                 >
                   <i className="fa fa-trash-alt m-r-5"></i> Delete
                 </Link>
@@ -172,6 +252,9 @@ const MeetingList = () => {
       ),
     },
   ];
+  const rowClickHandler = (record) => {
+    navigate(`/meetinglist/participentlist?meetingid=${record.id}`);
+  };
 
   return (
     <>
@@ -253,6 +336,18 @@ const MeetingList = () => {
                             columns={columns}
                             dataSource={meetings}
                             rowKey="id"
+                            onRow={(record, rowIndex) => ({
+                              onClick: () => rowClickHandler(record),
+                              onMouseEnter: () => setHoveredRow(rowIndex),
+                              onMouseLeave: () => setHoveredRow(null),
+                              style: {
+                                cursor: "pointer",
+                                backgroundColor:
+                                  hoveredRow === rowIndex
+                                    ? "#f5f5f5"
+                                    : "inherit",
+                              },
+                            })}
                           />
                           {isModalOpen && (
                             <Modal
@@ -286,7 +381,7 @@ const MeetingList = () => {
                               </p>
                               <p>
                                 <strong>Participent:</strong>{" "}
-                                {selectedMeeting.Participent}
+                                {selectedMeeting.Participants}
                               </p>
 
                               <p>
@@ -301,12 +396,24 @@ const MeetingList = () => {
                                 <strong>Start Date:</strong>{" "}
                                 {selectedMeeting.StartDate}
                               </p>
+                              <p>
+                                <strong>End Date:</strong>{" "}
+                                {selectedMeeting.EndDate}
+                              </p>
                               {/* Add more details if needed */}
                             </Modal>
                           )}
+
                           <div
-                            id="delete_patient"
-                            className="modal fade delete-modal"
+                            className={
+                              isDeleteModalOpen
+                                ? "modal fade show delete-modal"
+                                : "modal fade delete-modal"
+                            }
+                            style={{
+                              display: isDeleteModalOpen ? "block" : "none",
+                              backgroundColor: "rgba(0,0,0,0.5)",
+                            }}
                             role="dialog"
                           >
                             <div className="modal-dialog modal-dialog-centered">
@@ -318,22 +425,22 @@ const MeetingList = () => {
                                     width={50}
                                     height={46}
                                   />
-                                  <h3>Are you sure want to delete this ?</h3>
+                                  <h3>Are you sure want to delete this?</h3>
                                   <div className="m-t-20">
-                                    {" "}
-                                    <Link
-                                      to="#"
+                                    <button
+                                      onClick={() =>
+                                        setIsDeleteModalOpen(false)
+                                      }
                                       className="btn btn-white me-2"
-                                      data-bs-dismiss="modal"
                                     >
                                       Close
-                                    </Link>
+                                    </button>
                                     <button
                                       type="button"
                                       className="btn btn-danger"
-                                      onClick={() =>
-                                        handleDelete(selectedMeeting.id)
-                                      }
+                                      onClick={() => {
+                                        handleDelete(meetingtoDele);
+                                      }}
                                     >
                                       Delete
                                     </button>
