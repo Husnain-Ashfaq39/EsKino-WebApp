@@ -1,31 +1,21 @@
-import React, { useState, useEffect } from "react";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import DonutChart from "./DonutChart";
-import Sidebar from "../../Sidebar";
-import Header from "../../Header";
-import PatientChart from "./PaitentChart";
+import React, { useEffect, useState } from "react";
+import CountUp from "react-countup";
+import { Link } from "react-router-dom";
 import Select from "react-select";
+import "react-toastify/dist/ReactToastify.css";
 import { getAllDocuments } from "../../../services/dbService";
-import { db } from "../../../config/firebase";
+import Header from "../../Header";
 import {
-  Avatar2,
-  Avatar3,
-  Avatar4,
-  Avatar5,
   calendar,
-  dep_icon1,
-  dep_icon2,
-  dep_icon3,
-  dep_icon4,
-  dep_icon5,
   empty_wallet,
-  imagesend,
   profile_add,
   scissor,
   user001,
 } from "../../imagepath";
-import { Link } from "react-router-dom";
-import CountUp from "react-countup";
+import Sidebar from "../../Sidebar";
+import DonutChart from "./DonutChart";
+import PatientChart from "./PaitentChart";
 
 const Admin_Dashboard = () => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -33,8 +23,8 @@ const Admin_Dashboard = () => {
 
   useEffect(() => {
     const fetchMeetings = async () => {
-      const querySnapshot = await getAllDocuments('meetings');
-      const loadedMeetings = querySnapshot.docs.map(doc => ({
+      const querySnapshot = await getAllDocuments("meetings");
+      const loadedMeetings = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         Name: doc.data().title,
         StartTime: convertTime(doc.data().startTime),
@@ -51,22 +41,21 @@ const Admin_Dashboard = () => {
   }, []);
 
   const convertTimestamp = (timestamp) => {
-    if (!timestamp) return '';
+    if (!timestamp) return "";
     const date = timestamp.toDate();
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   };
 
   const convertTime = (timestamp) => {
-    if (!timestamp) return '';
+    if (!timestamp) return "";
     const date = timestamp.toDate();
     let hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12;
     hours = hours ? hours : 12;
     return `${hours}:${minutes} ${ampm}`;
   };
-
 
   // eslint-disable-next-line no-unused-vars
   const [year, setyear] = useState([
@@ -282,15 +271,18 @@ const Admin_Dashboard = () => {
               </div>
             </div>
 
-
             <div className=" w-100">
               <div className="content">
                 <div className="row">
                   <div className="col-12 col-xl-12">
                     <div className="card">
                       <div className="card-header pb-0">
-                        <h4 className="card-title d-inline-block">Recent Meetings</h4>
-                        <Link to="/meetinglist" className="float-end">Show all</Link>
+                        <h4 className="card-title d-inline-block">
+                          Recent Meetings
+                        </h4>
+                        <Link to="/meetinglist" className="float-end">
+                          Show all
+                        </Link>
                       </div>
                       <div className="card-block table-dash">
                         <div className="table-responsive">
@@ -326,7 +318,6 @@ const Admin_Dashboard = () => {
               </div>
             </div>
           </div>
-
         </div>
       </>
     </>
