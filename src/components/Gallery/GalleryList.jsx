@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Table, Modal, Button } from "antd";
 import { plusicon, refreshicon, searchnormal } from "../imagepath";
@@ -6,7 +5,8 @@ import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { Link } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
-import { getAllDocuments, deleteDocument } from "../../services/dbService"; // Assuming dbService provides methods to interact with Firebase
+import { getAllDocuments, deleteDocument } from "../../services/dbService";
+import { deleteFileFromStorage } from "../../services/storageService";
 
 const GalleryList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -20,6 +20,7 @@ const GalleryList = () => {
   }, []);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       const data = [];
       const querySnapshot = await getAllDocuments("gallery");
@@ -27,9 +28,9 @@ const GalleryList = () => {
         data.push({ id: doc.id, ...doc.data() });
       });
       setDataSource(data);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -41,7 +42,9 @@ const GalleryList = () => {
   const handleDelete = async () => {
     if (deleteItemId) {
       try {
+        const itemToDelete = dataSource.find(item => item.id === deleteItemId);
         await deleteDocument("gallery", deleteItemId);
+        await deleteFileFromStorage(itemToDelete.url);
         setModalVisible(false);
         setDeleteItemId(null);
         setSelectedRowKeys([]);
@@ -79,7 +82,6 @@ const GalleryList = () => {
       title: "Category",
       dataIndex: "category",
     },
-
     {
       title: "",
       dataIndex: "id",
@@ -96,18 +98,18 @@ const GalleryList = () => {
             </Link>
             <div className="dropdown-menu dropdown-menu-end">
               <Link
-                to={`/landingpage/editHeroSection/${record.id}`}
+                to={`/gallerylist/edit?id=${record.id}`}
                 className="dropdown-item"
               >
                 <i className="far fa-edit me-2" />
                 Edit
               </Link>
-              {/* <Button className="dropdown-item" onClick={() => {
-                                setDeleteItemId(record.id);
-                                setModalVisible(true);
-                            }}>
-                                <i className="fa fa-trash-alt m-r-5" /> Delete
-                            </Button> */}
+              <Button className="dropdown-item" onClick={() => {
+                setDeleteItemId(record.id);
+                setModalVisible(true);
+              }}>
+                <i className="fa fa-trash-alt m-r-5" /> Delete
+              </Button>
             </div>
           </div>
         </div>
@@ -130,7 +132,7 @@ const GalleryList = () => {
               <div className="col-sm-12">
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <Link to="/gallery">Gallery</Link>
+                    <Link to="/gallerylist">Gallery</Link>
                   </li>
                   <li className="breadcrumb-item  active">
                     <i className="feather-chevron-right">
@@ -150,7 +152,7 @@ const GalleryList = () => {
                     <div className="row align-items-center">
                       <div className="col">
                         <div className="doctor-table-blk">
-                          <h3>Hero Section</h3>
+                          <h3>Gallery List</h3>
                           <div className="doctor-search-blk">
                             <div className="top-nav-search table-search-blk">
                               <form>
@@ -166,7 +168,7 @@ const GalleryList = () => {
                             </div>
                             <div className="add-group">
                               <Link
-                                to="/addAppointment"
+                                to="/gallerylist/add"
                                 className="btn btn-primary add-pluss ms-2"
                               >
                                 <img src={plusicon} alt="#" />
@@ -174,6 +176,7 @@ const GalleryList = () => {
                               <Link
                                 to="#"
                                 className="btn btn-primary doctor-refresh ms-2"
+                                onClick={fetchData}
                               >
                                 <img src={refreshicon} alt="#" />
                               </Link>
@@ -193,6 +196,7 @@ const GalleryList = () => {
                       columns={columns}
                       dataSource={dataSource}
                       rowSelection={rowSelection}
+                      loading={loading}
                       rowKey={(record) => record.id}
                     />
                   </div>

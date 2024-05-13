@@ -1,64 +1,87 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
-import { Link } from "react-router-dom";
+import { Link, useLocation,useNavigate } from "react-router-dom";
 import { Button, Select, message } from "antd";
 import FeatherIcon from "feather-icons-react";
 import { uploadFile } from "../../services/storageService"; // Import Storage service
-import { addDocument } from "../../services/dbService"; // Import Firestore service
+import { getDocument, updateDocument } from "../../services/dbService"; // Import Firestore service
 
-const AddGallery = () => {
-  const [fileList, setFileList] = useState([]);
+const EditGallery = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const searchParams = new URLSearchParams(location.search);
+    const id = searchParams.get("id");  const [fileList, setFileList] = useState([]);
   const [category, setCategory] = useState("Events");
   const [uploading, setUploading] = useState(false);
+  const [existingImageUrl, setExistingImageUrl] = useState("");
+
+  useEffect(() => {
+    fetchGalleryItem();
+  }, []);
+
+  const fetchGalleryItem = async () => {
+    try {
+      const doc = await getDocument("gallery", id);
+      if (doc.exists) {
+        const data = doc.data();
+        setCategory(data.category);
+        setExistingImageUrl(data.url);
+      } else {
+        message.error("Gallery item not found");
+      }
+    } catch (error) {
+      console.error("Error fetching gallery item:", error);
+    }
+  };
 
   const handleFileChange = (event) => {
     const files = event.target.files;
-    setFileList([...fileList, ...files]);
+    setFileList([...files]);
   };
 
   const handleCategoryChange = (value) => {
     setCategory(value);
   };
 
-  const handleUpload = async (event) => {
+  const handleUpdate = async (event) => {
     event.preventDefault();
     setUploading(true);
 
-    const promises = Array.from(fileList).map((file) => {
-      return new Promise((resolve, reject) => {
-        uploadFile(file, `images/${file.name}`)
-          .then((url) => {
-            addDocument("gallery", {
-              url,
-              category,
-              timestamp: new Date(),
-            })
-              .then(() => resolve())
-              .catch((err) => reject(err));
-          })
-          .catch((err) => reject(err));
-      });
-    });
+    let imageUrl = existingImageUrl;
 
-    Promise.all(promises)
-      .then(() => {
-        message.success("All images have been uploaded successfully");
-        setFileList([]);
+    if (fileList.length > 0) {
+      const file = fileList[0];
+      try {
+        imageUrl = await uploadFile(file, `images/${file.name}`);
+      } catch (error) {
+        message.error("Image upload failed: " + error.message);
         setUploading(false);
-      })
-      .catch((error) => {
-        message.error("Upload failed: " + error.message);
-        setUploading(false);
+        return;
+      }
+    }
+
+    try {
+      await updateDocument("gallery", id, {
+        url: imageUrl,
+        category,
+        timestamp: new Date(),
       });
+      message.success("Gallery item updated successfully");
+      setUploading(false);
+      navigate("/gallerylist")
+    } catch (error) {
+      message.error("Update failed: " + error.message);
+      setUploading(false);
+    }
   };
 
   return (
     <div>
       <Header />
-      <Sidebar id="menu-item7" id1="menu-items7" activeClassName="addgallery" />
+      <Sidebar id="menu-item7" id1="menu-items7" activeClassName="editgallery" />
       <div className="page-wrapper">
         <div className="content">
           <div className="page-header">
@@ -66,14 +89,14 @@ const AddGallery = () => {
               <div className="col-sm-12">
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <Link to="/gallerylist">Gallery</Link>
+                    <Link to="/gallery">Gallery</Link>
                   </li>
                   <li className="breadcrumb-item">
                     <i className="feather-chevron-right">
                       <FeatherIcon icon="chevron-right" />
                     </i>
                   </li>
-                  <li className="breadcrumb-item active">Add Gallery</li>
+                  <li className="breadcrumb-item active">Edit Gallery</li>
                 </ul>
               </div>
             </div>
@@ -82,23 +105,20 @@ const AddGallery = () => {
             <div className="col-sm-12">
               <div className="card">
                 <div className="card-body">
-                  <form onSubmit={handleUpload}>
+                  <form onSubmit={handleUpdate}>
                     <div className="row">
                       <div className="col-12">
                         <div className="form-heading">
-                          <h4>Add Gallery</h4>
+                          <h4>Edit Gallery</h4>
                         </div>
                       </div>
                       <div className="col-12 col-md-6 col-xl-6">
                         <div className="form-group local-forms">
-                          {/* <label>
-                            Select Photos <span className="login-danger">*</span>
-                          </label> */}
-                          <div className={fileList.length > 0 ? "upload-files-avator" : "upload-files-avator settings-btn"} style={{ position: 'relative' }}>
-                            {fileList.length > 0 && (
+                          <div className={existingImageUrl || fileList.length > 0 ? "upload-files-avator" : "upload-files-avator settings-btn"} style={{ position: 'relative' }}>
+                            {(existingImageUrl || fileList.length > 0) && (
                               <div className="uploaded-image">
                                 <img
-                                  src={URL.createObjectURL(fileList[0])}
+                                  src={fileList.length > 0 ? URL.createObjectURL(fileList[0]) : existingImageUrl}
                                   alt="Uploaded"
                                   style={{
                                     width: '180px',
@@ -121,7 +141,7 @@ const AddGallery = () => {
                                 </div>
                               </div>
                             )}
-                            {fileList.length === 0 && (
+                            {!existingImageUrl && fileList.length === 0 && (
                               <div>
                                 <input
                                   type="file"
@@ -129,9 +149,8 @@ const AddGallery = () => {
                                   id="file"
                                   onChange={handleFileChange}
                                   className="hide-input"
-                                  multiple
                                 />
-                                <label htmlFor="file" className="upload" style={{ cursor: 'pointer' ,marginLeft:"-15px"}}>
+                                <label htmlFor="file" className="upload" style={{ cursor: 'pointer' }}>
                                   Choose Files
                                 </label>
                               </div>
@@ -141,12 +160,12 @@ const AddGallery = () => {
                       </div>
                       <div className="col-12 col-md-6 col-xl-6">
                         <div className="form-group local-forms">
-                          <label  style={{ marginTop: "-10px"}}>
+                          <label style={{ marginTop: "-10px" }}>
                             Category <span className="login-danger">*</span>
                           </label>
                           <Select
-                            defaultValue="Events"
-                            style={{ width: "100%"}}
+                            value={category}
+                            style={{ width: "100%" }}
                             onChange={handleCategoryChange}
                           >
                             <Select.Option value="Events">Events</Select.Option>
@@ -158,14 +177,14 @@ const AddGallery = () => {
                       <div className="col-12">
                         <div className="doctor-submit text-end">
                           <Button
-                          style={{marginRight:"10px"}}
-                          className="btn"
+                            style={{ marginRight: "10px" }}
+                            className="btn"
                             type="primary"
                             htmlType="submit"
-                            disabled={fileList.length === 0 || uploading}
+                            disabled={uploading}
                             loading={uploading}
                           >
-                            {uploading ? "Uploading..." : "Start Upload"}
+                            {uploading ? "Updating..." : "Update"}
                           </Button>
                           <Button
                             type="button"
@@ -190,4 +209,4 @@ const AddGallery = () => {
   );
 };
 
-export default AddGallery;
+export default EditGallery;

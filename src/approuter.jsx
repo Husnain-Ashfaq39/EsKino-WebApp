@@ -67,7 +67,7 @@ import AddGallery from "./components/Gallery/AddGallery";
 import ErrorPage from "./components/pages/ErrorPage";
 import Contactlist from "./components/contactlist";
 import GalleryList from "./components/Gallery/GalleryList";
-
+import EditGallery from "./components/Gallery/EditGallery";
 //Accounts
 const Approuter = () => {
   return (
@@ -88,7 +88,9 @@ const Approuter = () => {
           <Route path="/blankpage" element={<BlankPage />} />
 
           <Route path="/gallerylist" element={<GalleryList />} />
-          <Route path="/addgallery" element={<AddGallery />} />
+          <Route path="/gallerylist/add" element={<AddGallery />} />
+          <Route path="/gallerylist/edit" element={<EditGallery />} />
+
 
           {/* Contact */}
 

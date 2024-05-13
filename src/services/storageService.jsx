@@ -1,6 +1,7 @@
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from "../config/firebase"; // Make sure firebaseConfig is imported
 import { db } from "../config/firebase";
+import { deleteObject } from "firebase/storage";
 const storage = getStorage(app);
 
 export const uploadFile = (file, path) => {
@@ -29,4 +30,8 @@ export const addImageToGallery = async (url, category) => {
     category,
     timestamp: new Date(),
   });
+};
+export const deleteFileFromStorage = async (filePath) => {
+  const fileRef = ref(storage, filePath);
+  await deleteObject(fileRef);
 };
