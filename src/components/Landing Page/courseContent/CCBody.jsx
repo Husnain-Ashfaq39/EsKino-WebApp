@@ -1,40 +1,39 @@
-/* eslint-disable no-unused-vars */
-import React,{ useState } from 'react'
-import { Table } from "antd";
+import React, { useState, useEffect } from 'react';
+import { Table, Modal } from "antd";
 import Header from '../../Header';
 import Sidebar from '../../Sidebar';
-import { blogimg10, imagesend, pdficon, pdficon3, pdficon4, plusicon, refreshicon, searchnormal, blogimg12,
-     blogimg2, blogimg4, blogimg6, blogimg8,
-     backgroundImg} from '../../imagepath';
-import {onShowSizeChange,itemRender}from  '../../Pagination'
 import { Link } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
-import CCNavBar from './CCNavbar';
-
+import { getAllDocuments, deleteDocument } from '../../../services/dbService'; // Import the Firestore service to fetch documents
+import { imagesend, plusicon, refreshicon, searchnormal } from '../../imagepath';
+import { onShowSizeChange, itemRender } from '../../Pagination';
 
 const CCBody = () => {
+    const [dataSource, setDataSource] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedRecordId, setSelectedRecordId] = useState(null);
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
-    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-
-    const onSelectChange = (newSelectedRowKeys) => {
-      console.log("selectedRowKeys changed: ", selectedRowKeys);
-      setSelectedRowKeys(newSelectedRowKeys);
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const querySnapshot = await getAllDocuments('CourseContentBody'); // Fetch documents from Firestore collection
+            const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setDataSource(data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setLoading(false);
+        }
     };
 
-    const rowSelection = {
-        selectedRowKeys,
-        onChange: onSelectChange,
-      };
-    const datasource = [
-        {
-            id:"1",
-            description: "THis is Discription",
-            title: "This is a title",
-            subtitle: "This is a subtitle "
-            
-        },
-    ]
+    useEffect(() => {
+        fetchData();
+    }, []);
 
+    const onSelectChange = (selectedRowKeys) => {
+        // Not needed for delete operation
+    };
 
     const columns = [
         {
@@ -45,227 +44,211 @@ const CCBody = () => {
         },
         {
             title: "Image",
-            dataIndex: "image",
+            dataIndex: "CCImage",
             key: "image",
-            render: (text) => <img src={text} alt="Image" className="image-column" />
+            render: (text) => (
+                <img
+                    src={text}
+                    alt="Image"
+                    className="image-column"
+                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                />
+            )
         },
         {
             title: "Title",
-            dataIndex: "title",
+            dataIndex: "CCTitle",
             key: "title",
             render: (text) => <div className={text && text.length > 20 ? "multiline-text" : ""}>{text}</div>
         },
         {
             title: "Description",
-            dataIndex: "description",
+            dataIndex: "CCDescription",
             key: "description",
             render: (text) => <div className={text && text.length > 20 ? "multiline-text" : ""}>{text}</div>
         },
         {
             title: "Quote",
-            dataIndex: "quote",
+            dataIndex: "CCQuote",
             key: "quote",
-            render: (text) =><div className={text && text.length > 20 ? "multiline-text" : ""}>{text}</div>
+            render: (text) => <div className={text && text.length > 20 ? "multiline-text" : ""}>{text}</div>
         },
         {
             title: "",
-            dataIndex: "FIELD8",
+            dataIndex: "actions",
             render: (text, record) => (
-                <>
-                    <div className="text-end">
-                        <div className="dropdown dropdown-action">
-                            <Link
-                                to="#"
-                                className="action-icon dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                            >
-                                <i className="fas fa-ellipsis-v" />
+                <div className="text-end">
+                    <div className="dropdown dropdown-action">
+                        <Link
+                            to="#"
+                            className="action-icon dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
+                            <i className="fas fa-ellipsis-v" />
+                        </Link>
+                        <div className="dropdown-menu dropdown-menu-end">
+                            <Link className="dropdown-item" to={`/landingpage/coursecontentbody/editcoursecontentbody/${record.id}`}>
+                                <i className="far fa-edit me-2" />
+                                Edit
                             </Link>
-                            <div className="dropdown-menu dropdown-menu-end">
-                                <Link className="dropdown-item" to="/landingpage/coursecontentbody/editcoursecontentbody">
-                                    <i className="far fa-edit me-2" />
-                                    Edit
-                                </Link>
-                                <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#delete_patient">
-                                    <i className="fa fa-trash-alt m-r-5"></i> Delete
-                                </Link>
-                            </div>
+                            <Link className="dropdown-item" to="#" onClick={() => showDeleteModal(record.id)}>
+                                <i className="fa fa-trash-alt m-r-5"></i> Delete
+                            </Link>
                         </div>
                     </div>
-                </>
+                </div>
             ),
         },
     ];
-    
-    
 
+    const handleRefresh = () => {
+        fetchData(); // Refresh data from Firebase
+    };
 
-  return (
-    <>
-    <Header />
-    <Sidebar id='menu-item4' id1='menu-items4' activeClassName='appoinment-list'/>
-    <>
-  <div className="page-wrapper">
-    <div className="content">
+    const showDeleteModal = (id) => {
+        setSelectedRecordId(id);
+        setDeleteModalVisible(true);
+    };
 
-  {/* /Page Navbar*/}
-  <div className="settings-menu-links">
-    <ul className="nav nav-tabs menu-tabs">
-      
-      <li className="nav-item ">
-        <Link className="nav-link" to="/landingpage/coursecontentheading">
-          Course Content Heading 
-        </Link>
-      </li>
-      <li className="nav-item active">
-        <Link className="nav-link" to="/landingpage/coursecontentbody">
-        Course Content Body
-        </Link>
-      </li>
+    const hideDeleteModal = () => {
+        setDeleteModalVisible(false);
+    };
 
-    </ul>
-  </div>
+    const handleDelete = async () => {
+        try {
+            await deleteDocument('CourseContentBody', selectedRecordId);
+            console.log("Deleted Document ID: ",selectedRecordId)
+            fetchData(); // Refresh data after deletion
+            setSelectedRecordId(null);
+            hideDeleteModal();
+        } catch (error) {
+            console.error('Error deleting document:', error);
+        }
+    };
 
-      {/* Page Header */}
-      <div className="page-header">
-        <div className="row">
-          <div className="col-sm-12">
-            <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-               <Link to="#">Landing Page</Link>
-              </li>
-              <li className="breadcrumb-item">
-                <i className="feather-chevron-right">
-                  <FeatherIcon icon="chevron-right"/>
-                </i>
-              </li>
-              <li className="breadcrumb-item active">Child Emergency Body</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      {/* /Page Header */}
-      <div className="row">
-        <div className="col-sm-12">
-          <div className="card card-table show-entire">
-            <div className="card-body">
-              {/* Table Header */}
-              <div className="page-table-header mb-2">
-                <div className="row align-items-center">
-                  <div className="col">
-                    <div className="doctor-table-blk">
-                      <h3>Course Content Section</h3>
-                      <div className="doctor-search-blk">
-                        <div className="top-nav-search table-search-blk">
-                          <form>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Search here"
-                            />
-                           <Link className="btn">
-                              <img
-                                src={searchnormal}
-                               alt="#"
-                              />
-                            </Link>
-                          </form>
+    return (
+        <>
+            <Header />
+            <Sidebar id='menu-item4' id1='menu-items4' activeClassName='appoinment-list' />
+            <>
+                <div className="page-wrapper">
+                    <div className="content">
+                        {/* Page Navbar*/}
+                        <div className="settings-menu-links">
+                            <ul className="nav nav-tabs menu-tabs">
+                                <li className="nav-item ">
+                                    <Link className="nav-link" to="/landingpage/coursecontentheading">
+                                        Course Content Heading
+                                    </Link>
+                                </li>
+                                <li className="nav-item active">
+                                    <Link className="nav-link" to="/landingpage/coursecontentbody">
+                                        Course Content Body
+                                    </Link>
+                                </li>
+                            </ul>
                         </div>
-                        <div className="add-group">
-                          <Link to="/landingpage/coursecontentbody/addcoursecontentbody"
-                            className="btn btn-primary add-pluss ms-2"
-                          >
-                            <img src={plusicon}alt="#" />
-                          </Link>
-                         <Link
-                            to="#"
-                            className="btn btn-primary doctor-refresh ms-2"
-                          >
-                            <img src={refreshicon}alt="#" />
-                          </Link>
+
+                        {/* Page Header */}
+                        <div className="page-header">
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <ul className="breadcrumb">
+                                        <li className="breadcrumb-item">
+                                            <Link to="#">Landing Page</Link>
+                                        </li>
+                                        <li className="breadcrumb-item">
+                                            <i className="feather-chevron-right">
+                                                <FeatherIcon icon="chevron-right" />
+                                            </i>
+                                        </li>
+                                        <li className="breadcrumb-item active">Child Emergency Body</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                      </div>
+                        {/* /Page Header */}
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <div className="card card-table show-entire">
+                                    <div className="card-body">
+                                        {/* Table Header */}
+                                        <div className="page-table-header mb-2">
+                                            <div className="row align-items-center">
+                                                <div className="col">
+                                                    <div className="doctor-table-blk">
+                                                        <h3>Course Content Section</h3>
+                                                        <div className="doctor-search-blk">
+                                                            <div className="top-nav-search table-search-blk">
+                                                                <form>
+                                                                    <input
+                                                                        type="text"
+                                                                        className="form-control"
+                                                                        placeholder="Search here"
+                                                                    />
+                                                                    <Link className="btn">
+                                                                        <img
+                                                                            src={searchnormal}
+                                                                            alt="#"
+                                                                        />
+                                                                    </Link>
+                                                                </form>
+                                                            </div>
+                                                            <div className="add-group">
+                                                                <Link to="/landingpage/coursecontentbody/addcoursecontentbody"
+                                                                    className="btn btn-primary add-pluss ms-2"
+                                                                >
+                                                                    <img src={plusicon} alt="#" />
+                                                                </Link>
+                                                                <Link
+                                                                    to="#"
+                                                                    className="btn btn-primary doctor-refresh ms-2"
+                                                                    onClick={handleRefresh}
+                                                                >
+                                                                    <img src={refreshicon} alt="#" />
+                                                                </Link>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* /Table Header */}
+                                        <div className="table-responsive doctor-list">
+                                            <Table
+                                                loading={loading}
+                                                pagination={{
+                                                    total: dataSource.length,
+                                                    showTotal: (total, range) =>
+                                                        `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+                                                    onShowSizeChange: onShowSizeChange,
+                                                    itemRender: itemRender,
+                                                }}
+                                                columns={columns}
+                                                dataSource={dataSource}
+                                                rowKey={(record) => record.id}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-               
                 </div>
-              </div>
-              {/* /Table Header */}
-              <div className="table-responsive doctor-list">
-              <Table
-                        pagination={{
-                          total: datasource.length,
-                          showTotal: (total, range) =>
-                            `Showing ${range[0]} to ${range[1]} of ${total} entries`,
-                          //showSizeChanger: true,
-                          onShowSizeChange: onShowSizeChange,
-                          itemRender: itemRender,
-                        }}
-                        columns={columns}
-                        dataSource={datasource}
-
-                        rowSelection={rowSelection}
-                        rowKey={(record) => record.id}
-                      />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-   
-  </div>
-  <div id="delete_patient" className="modal fade delete-modal" role="dialog">
-    <div className="modal-dialog modal-dialog-centered">
-      <div className="modal-content">
-        <div className="modal-body text-center">
-          <img src={imagesend}alt="#" width={50} height={46} />
-          <h3>Are you sure want to delete this ?</h3>
-          <div className="m-t-20">
-            {" "}
-           <Link to="#" className="btn btn-white me-2" data-bs-dismiss="modal">
-              Close
-            </Link>
-            <button type="submit" className="btn btn-danger">
-              Delete
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="delete_patient" className="modal fade delete-modal" role="dialog">
-    <div className="modal-dialog modal-dialog-centered">
-      <div className="modal-content">
-        <div className="modal-body text-center">
-          <img src={imagesend}alt="#" width={50} height={46} />
-          <h3>Are you sure want to delete this ?</h3>
-          <div className="m-t-20">
-            {" "}
-           <Link to="#" className="btn btn-white me-2" data-bs-dismiss="modal">
-              Close
-            </Link>
-            <button type="submit" className="btn btn-danger">
-              Delete
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
-
-</>
-
-
-    <>
-
-</>
-
-</>
-
-  )
+            </>
+            <Modal
+                title="Delete Content"
+                visible={deleteModalVisible}
+                onOk={handleDelete}
+                onCancel={hideDeleteModal}
+                okText="Delete"
+                cancelText="Cancel"
+            >
+                <p>Are you sure you want to delete the selected content?</p>
+            </Modal>
+        </>
+    )
 }
 
 export default CCBody;
-

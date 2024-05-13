@@ -144,15 +144,10 @@ const Approuter = () => {
             element={<EditCCHeading />}
           />
 
-          <Route path="/landingpage/coursecontentbody" element={<CCBody />} />
-          <Route
-            path="/landingpage/coursecontentbody/editcoursecontentbody"
-            element={<EditCCBody />}
-          />
-          <Route
-            path="/landingpage/coursecontentbody/addcoursecontentbody"
-            element={<AddCCBody />}
-          />
+
+<Route path="/landingpage/coursecontentbody" element={<CCBody/>} />
+<Route path="/landingpage/coursecontentbody/editcoursecontentbody" element={<EditCCBody/>} />
+<Route path="/landingpage/coursecontentbody/addcoursecontentbody" element={<AddCCBody/>} />
 
           {/* Orgazinzation Matters */}
           <Route

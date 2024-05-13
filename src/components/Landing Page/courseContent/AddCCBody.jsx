@@ -3,21 +3,54 @@
 import React, { useState } from "react";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
-import { favicon, imagesend } from "../../imagepath";
-import { DatePicker} from "antd";
-import FeatherIcon from "feather-icons-react";
 import { Link } from "react-router-dom";
-import Select from "react-select";
-import { TextField } from "@mui/material";
+import { uploadFile } from "../../../services/storageService"; // Import Storage service
+import { addDocument } from "../../../services/dbService"; // Import Firestore service
+import { favicon } from "../../imagepath"; // Assuming imagesend is not used
+import FeatherIcon from "feather-icons-react";
 
 const AddCCBody = () => {
-    const [show, setShow] = useState(false); // Define show state variable
-  
-  const onChange = (date, dateString) => {
-    // console.log(date, dateString);
-  };
+  const [show, setShow] = useState(false); // Define show state variable
+  const [title, setTitle] = useState('');
+  const [quote, setQuote] = useState('');
+  const [description, setDescription] = useState('');
+  const [image, setImage] = useState(null);
+
   const loadFile = (event) => {
-    // Handle file loading logic here
+    if (event.target.files[0]) {
+      setImage(event.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      // Upload image to Firebase Storage
+      const imageUrl = await uploadFile(image, `images/${image.name}`);
+
+      // Store data in Firestore
+      const docId = await addDocument('CourseContentBody', {
+        CCTitle: title,
+        CCQuote: quote,
+        CCDescription: description,
+        CCImage: imageUrl,
+      });
+
+      console.log('Document added with ID:', docId);
+
+      // Reset form fields
+      setTitle('');
+      setQuote('');
+      setDescription('');
+      setImage(null);
+      setShow(false);
+      
+      // Show success message or redirect
+    } catch (error) {
+      console.error('Error adding document: ', error);
+      // Handle error
+    }
   };
 
   return (
@@ -62,7 +95,7 @@ const AddCCBody = () => {
               <div className="col-sm-12">
                 <div className="card">
                   <div className="card-body">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                       <div className="row">
                         <div className="col-12">
                           <div className="form-heading">
@@ -79,79 +112,103 @@ const AddCCBody = () => {
                             <input
                               className="form-control"
                               type="text"
-                              defaultValue="Stephen"
+                              value={title}
+                              onChange={(e) => setTitle(e.target.value)}
                             />
                           </div>
-
-                        {/* Qoute */}
-
                         </div>
+
+                        {/* Quote */}
                         <div className="col-12 col-md-6 col-xl-6">
                           <div className="form-group local-forms">
                             <label>
-                            Qoute <span className="login-danger">*</span>
+                              Quote <span className="login-danger">*</span>
                             </label>
                             <input
                               className="form-control"
                               type="text"
-                              defaultValue="Bruklin"
+                              value={quote}
+                              onChange={(e) => setQuote(e.target.value)}
                             />
                           </div>
                         </div>
                      
-                     {/* Description */}
+                        {/* Description */}
                         <div className="col-12 col-sm-12">
                           <div className="form-group local-forms">
                             <label>
-                            Description <span className="login-danger">*</span>
+                              Description <span className="login-danger">*</span>
                             </label>
                             <textarea
                               className="form-control"
                               rows={3}
-                              cols={30}
-                              defaultValue={
-                                "101, Elanxa Apartments, 340 N Madison Avenue"
-                              }
+                              value={description}
+                              onChange={(e) => setDescription(e.target.value)}
                             />
                           </div>
                         </div>
+                        
+{/* Image Input */}
+<div className="col-10 col-md-2 col-xl-4">
+  <div className="form-group">
+    <label className={image ? "" : "local-top"}>
+      Image <span className="login-danger">*</span>
+    </label>
+    <div className={image ? "upload-files-avator" : "upload-files-avator settings-btn"} style={{ position: 'relative' }}>
+      {/* Display the uploaded image */}
+      {image && (
+        <div className="uploaded-image">
+          <img
+            src={URL.createObjectURL(image)}
+            alt="Uploaded Image"
+            style={{
+              width: '180px',
+              height: '180px',
+              objectFit: 'cover',
+            }}
+          />
+          <div className="edit-icon" style={{ position: 'absolute',backgroundColor: 'white', left:170,top:160 }}>
+            {/* Input for choosing a new image */}
+            <input
+              type="file"
+              accept="image/*"
+              name="CCImage"
+              id="file"
+              onChange={loadFile}
+              className="hide-input"
+              style={{ display: 'none' }}
+            />
+            <label htmlFor="file" className="upload" style={{ cursor: 'pointer' }}>
+              <FeatherIcon icon="edit" />
+            </label>
+          </div>
+        </div>
+      )}
+      {/* Input for choosing a new image */}
+      {!image && (
+        <div>
+          <input
+            type="file"
+            accept="image/*"
+            name="CCImage"
+            id="file"
+            onChange={loadFile}
+            className="hide-input"
+            placeholder="Select an Image..."
+          />
+          <label htmlFor="file" className="upload" style={{ cursor: 'pointer' }}>
+            Choose File
+          </label>
+        </div>
+      )}
+    </div>
+  </div>
+</div>
 
-                        {/* Image Upload */}
-                        <div className="col-12 col-md-6 col-xl-6">
-                          <div className="form-group local-top-form">
-                            <label className="local-top">
-                              Image <span className="login-danger">*</span>
-                            </label>
-                            <div className="settings-btn upload-files-avator">
-                              <input
-                                type="file"
-                                accept="image/*"
-                                name="image"
-                                id="file"
-                                onChange={loadFile}
-                                className="hide-input"
-                              />
-                                 <label htmlFor="file" className="upload">
-                                Choose File
-                              </label>
-                            </div>
-                            <div
-                              className="upload-images upload-sizee"
-                              style={{ display: show ? "none" : "block" }}
-                            >
-                              <img src={favicon} alt="Image" />
-                              <Link to="#" className="btn-icon logo-hide-btn">
-                                <i
-                                  className="feather-x-circle"
-                                  onClick={() => setShow((s) => !s)}
-                                >
-                                  <FeatherIcon icon="x-circle" />
-                                </i>
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      
+
+
+
+                      {/* Submit/Cancel Button */}
                         <div className="col-12">
                           <div className="doctor-submit text-end">
                             <button
@@ -161,7 +218,7 @@ const AddCCBody = () => {
                               Submit
                             </button>
                             <button
-                              type="submit"
+                              type="button"
                               className="btn btn-primary cancel-form"
                             >
                               Cancel
@@ -175,10 +232,7 @@ const AddCCBody = () => {
               </div>
             </div>
           </div>
-         
         </div>
-        
-       
       </>
     </div>
   );

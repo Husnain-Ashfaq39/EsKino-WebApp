@@ -1,23 +1,35 @@
-/* eslint-disable react/jsx-no-duplicate-props */
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
-import { DatePicker, Space } from "antd";
-import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import Select from "react-select";
-import { TextField } from "@mui/material";
 import { Link } from 'react-router-dom';
+import { addDocument } from "../../../services/dbService"; // Import Firestore services
+import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 
 const AddCEBody = () => {
-  const [isClicked, setIsClicked] = useState(false);
-  
-  const onChange = (date, dateString) => {
-    // console.log(date, dateString);
-    setIsClicked(true);
+  const [formData, setFormData] = useState({
+    title: '',
+    subtitle: '',
+    description: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
-  const loadFile = (event) => {
-    // Handle file loading logic here
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await addDocument('ChildEmergencyBody', { // Add document to collection
+        CETitle: formData.title,
+        CESubtitle: formData.subtitle,
+        CEDescription: formData.description
+      });
+      console.log('Document added successfully!');
+      // Optionally, you can redirect the user to another page after successful submission
+    } catch (error) {
+      console.error('Error adding document: ', error);
+    }
   };
 
   return (
@@ -37,7 +49,7 @@ const AddCEBody = () => {
                 <div className="col-sm-12">
                   <ul className="breadcrumb">
                     <li className="breadcrumb-item">
-                     <Link to="/landingpage/childemergencyheader">Landing Page </Link>
+                      <Link to="/landingpage/childemergencyheader">Landing Page</Link>
                     </li>
                     <li className="breadcrumb-item">
                       <i className="feather-chevron-right">
@@ -45,7 +57,7 @@ const AddCEBody = () => {
                       </i>
                     </li>
                     <li className="breadcrumb-item active">
-                     <Link to="/landingpage/childemergencybody">Child Emergency Body</Link>
+                      <Link to="/landingpage/childemergencybody">Child Emergency Body</Link>
                     </li>
                     <li className="breadcrumb-item">
                       <i className="feather-chevron-right">
@@ -62,35 +74,46 @@ const AddCEBody = () => {
               <div className="col-sm-12">
                 <div className="card">
                   <div className="card-body">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                       <div className="row">
                         <div className="col-12">
                           <div className="form-heading">
                             <h4>Child Emergency Body Details</h4>
                           </div>
                         </div>
-
                         {/* Title */}
                         <div className="col-12 col-md-6 col-xl-6">
                           <div className="form-group local-forms">
                             <label>
                               Title <span className="login-danger">*</span>
                             </label>
-                            <input className="form-control" type="text" />
+                            <input
+                              className="form-control"
+                              type="text"
+                              name="title"
+                              value={formData.title}
+                              onChange={handleChange}
+                              required
+                            />
                           </div>
                         </div>
-
-                        {/* Subtile */}
+                        {/* Subtitle */}
                         <div className="col-12 col-md-6 col-xl-6">
                           <div className="form-group local-forms">
                             <label>
-                            Subtile <span className="login-danger">*</span>
+                              Subtitle <span className="login-danger">*</span>
                             </label>
-                            <input className="form-control" type="text" />
+                            <input
+                              className="form-control"
+                              type="text"
+                              name="subtitle"
+                              value={formData.subtitle}
+                              onChange={handleChange}
+                              required
+                            />
                           </div>
                         </div>
-                        
-                          {/* Description */}
+                        {/* Description */}
                         <div className="col-12 col-sm-12">
                           <div className="form-group local-forms">
                             <label>
@@ -99,13 +122,14 @@ const AddCEBody = () => {
                             <textarea
                               className="form-control"
                               rows={3}
-                              cols={30}
-                              defaultValue={""}
+                              name="description"
+                              value={formData.description}
+                              onChange={handleChange}
+                              required
                             />
                           </div>
                         </div>
-
-{/* Submit and Cancel Button */}
+                        {/* Submit and Cancel Button */}
                         <div className="col-12">
                           <div className="doctor-submit text-end">
                             <button
@@ -115,14 +139,13 @@ const AddCEBody = () => {
                               Submit
                             </button>
                             <button
-                              type="submit"
+                              type="button"
                               className="btn btn-primary cancel-form"
                             >
                               Cancel
                             </button>
                           </div>
                         </div>
-                     
                       </div>
                     </form>
                   </div>
@@ -130,7 +153,6 @@ const AddCEBody = () => {
               </div>
             </div>
           </div>
-    
         </div>
       </>
     </div>
