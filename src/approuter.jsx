@@ -62,10 +62,10 @@ import EditOMHeading from "./components/Landing Page/organizationMatters/EditOMH
 import OMBody from "./components/Landing Page/organizationMatters/OMBody";
 import EditOMBody from "./components/Landing Page/organizationMatters/EditOMBody";
 import AddOMBody from "./components/Landing Page/organizationMatters/AddOMBody";
-
 import Contact from "./components/pages/Contact";
-
+import AddGallery from "./components/Gallery/AddGallery";
 import ErrorPage from "./components/pages/ErrorPage";
+import GalleryList from "./components/Gallery/GalleryList";
 
 //Accounts
 const Approuter = () => {
@@ -85,6 +85,11 @@ const Approuter = () => {
           <Route path="/error" element={<Error />} />
           <Route path="/server-error" element={<ServerError />} />
           <Route path="/blankpage" element={<BlankPage />} />
+          {/*Gallery Section*/}
+          <Route path="/gallerylist" element={<GalleryList />} />
+
+          <Route path="/gallerylist/add" element={<AddGallery />} />
+
           {/* Blog */}
           <Route path="/blog" element={<Blogdetails />} />
           <Route path="/addblog" element={<Addblog />} />
@@ -111,7 +116,10 @@ const Approuter = () => {
           />
           {/* Hero Section */}
           <Route path="/landingpage/herosection" element={<HeroSection />} />
-          <Route path="/landingpage/editherosection/:id" element={<EditHeroSection />} />
+          <Route
+            path="/landingpage/editherosection/:id"
+            element={<EditHeroSection />}
+          />
           {/* <Route path="/editappoinments" element={<EditAppoinments />} /> */}
 
           {/* Child Emergency */}
@@ -144,10 +152,15 @@ const Approuter = () => {
             element={<EditCCHeading />}
           />
 
-
-<Route path="/landingpage/coursecontentbody" element={<CCBody/>} />
-<Route path="/landingpage/coursecontentbody/editcoursecontentbody/:id" element={<EditCCBody/>} />
-<Route path="/landingpage/coursecontentbody/addcoursecontentbody" element={<AddCCBody/>} />
+          <Route path="/landingpage/coursecontentbody" element={<CCBody />} />
+          <Route
+            path="/landingpage/coursecontentbody/editcoursecontentbody/:id"
+            element={<EditCCBody />}
+          />
+          <Route
+            path="/landingpage/coursecontentbody/addcoursecontentbody"
+            element={<AddCCBody />}
+          />
 
           {/* Orgazinzation Matters */}
           <Route
