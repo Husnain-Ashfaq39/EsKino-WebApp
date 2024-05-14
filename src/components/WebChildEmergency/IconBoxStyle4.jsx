@@ -10,7 +10,7 @@ export default function IconBoxStyle4({ title, subTitle, description }) {
         <img src={iconUrl} alt="Icon" />
       </div> */}
       <h2 className="cs_iconbox_title cs_fs_32">{title}</h2>
-      <SectionHeading titleDown={subTitle} />
+      <SectionHeading titleDown={subTitle} tileDownProps="18px" />
       <Spacing md="27" lg="7" />
       <p className="cs_iconbox_subtitle m-0">{description}</p>
     </div>

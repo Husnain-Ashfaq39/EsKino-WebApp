@@ -4,35 +4,20 @@ import Section from "../Section";
 import AboutSection from "../Section/AboutSection";
 import Banner from "../Section/BannerSection";
 import SectionHeading from "../SectionHeading";
-// import FeaturesSection from '../Section/FeaturesSection';
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { pageTitle } from "../../helpers/PageTitle";
 import { getAllDocuments } from "../../services/dbService";
 import BlogSection from "../Section/BlogSection";
 import DepartmentSection from "../Section/DepartmentSection";
-import SessionCard from "../SessionCard";
 import Spacing from "../Spacing";
 import DepartmentSectionStyle1 from "../WebChildEmergency/DepartmentSectionStyle2";
-import {
-  aboutMiniSvg,
-  about_img,
-  banner_img50,
-  ctaBgSvg,
-  departmentIcon1Svg,
-  departmentIcon2Svg,
-  departmentIcon3Svg,
-  departmentIcon4Svg,
-  departmentIcon5Svg,
-  departmentIcon6Svg,
-  heroBgJpeg,
-  post1Jpeg,
-  post2Jpeg,
-  post3Jpeg,
-} from "../imagepath";
+import { aboutMiniSvg, about_img, banner_img50, ctaBgSvg, departmentIcon1Svg, departmentIcon2Svg, departmentIcon3Svg, departmentIcon4Svg, departmentIcon5Svg, departmentIcon6Svg, heroBgJpeg, post1Jpeg, post2Jpeg, post3Jpeg } from "../imagepath";
 import Gallery from "./Gallery";
-import { getAllDocuments } from "../../services/dbService";
+import WebCourseContent from "../WebLandingPage/WebCourseContent/WebCourseContent";
+import SessionCard from "../SessionCard";
+import FeaturesSection from "../WebLandingPage/WebOrganizationMatters/OrganizationMattersSection";
 
+// Sample data
 const blogData = [
   {
     title: "The Benefits of Mindfulness Meditation for Stress and Anxiety",
@@ -93,7 +78,6 @@ const departmentData = [
   },
 ];
 
-// Course Content Data 
 const workingProcessData = [
   {
     title: 'Book Appointment',
@@ -133,78 +117,110 @@ const workingProcessData = [
 ];
 
 export default function Home() {
-  const navigate = useNavigate();
-  const [Herokey, setHeroKey] = useState({
-    title: "",
-    subTitle: "",
-    imgUrl: "",
-  });
-  const {
-    data: heroData,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: [Herokey],
-    queryFn: () =>
-      getAllDocuments("HeroSection").then((querySnapshot) => {
-        const heroData = querySnapshot.docs.map((doc) => ({
-          title: doc.data().heroTitle,
-          subTitle: doc.data().heroSubtitle,
-          imgUrl: doc.data().heroBackground,
-        }));
-        setHeroKey(heroData[0]);
-        return heroData[0];
-      }),
+  // const navigate = useNavigate();
+
+  // Hero Section useQuery
+  const { data: heroData, isLoading: heroLoading, error: heroError } = useQuery({
+    queryKey: ["HeroSection"],
+    queryFn: () => getAllDocuments("HeroSection").then((querySnapshot) => {
+      const data = querySnapshot.docs.map((doc) => ({
+        title: doc.data().heroTitle,
+        subTitle: doc.data().heroSubtitle,
+        imgUrl: doc.data().heroBackground,
+      }));
+      return data[0];
+    }),
   });
 
-  const [CEHeaderKey, setCEHeaderKey] = useState({
-    title: "",
+  // Child Emergency Header useQuery
+  const { data: CEHeader, isLoading: CEHeaderLoading, error: CEHeaderError } = useQuery({
+    queryKey: ["ChildEmergencyHeader"],
+    queryFn: () => getAllDocuments("ChildEmergencyHeader").then((querySnapshot) => {
+      const data = querySnapshot.docs.map((doc) => ({
+        title: doc.data().CEHeadTitle,
+      }));
+      return data[0];
+    }),
   });
 
-  const { data: CEHeader } = useQuery({
-    queryKey: [CEHeaderKey],
-    queryFn: () =>
-      getAllDocuments("ChildEmergencyHeader").then((querySnapshot) => {
-        const CEHeader = querySnapshot.docs.map((doc) => ({
-          title: doc.data().CEHeadTitle,
-        }));
-        setCEHeaderKey(CEHeader[0]);
-        return CEHeader[0];
-      }),
+  // Child Emergency Body useQuery
+  const { data: CEBody, isLoading: CEBodyLoading, error: CEBodyError } = useQuery({
+    queryKey: ["ChildEmergencyBody"],
+    queryFn: () => getAllDocuments("ChildEmergencyBody").then((querySnapshot) => {
+      const data = querySnapshot.docs.map((doc) => ({
+        title: doc.data().CEBodyTitle,
+        subTitle: doc.data().CEBodySubtitle,
+        description: doc.data().CEBodyDescription,
+      }));
+      return data;
+    }),
   });
 
-  const [CEBodyKey, setCEBodyKey] = useState([]);
-
-  const { data: CEBody } = useQuery({
-    queryKey: [CEBodyKey],
-    queryFn: () =>
-      getAllDocuments("ChildEmergencyBody").then((querySnapshot) => {
-        const CEBody = querySnapshot.docs.map((doc) => ({
-          title: doc.data().CEBodyTitle,
-          subTitle: doc.data().CEBodySubtitle,
-          description: doc.data().CEBodyDescription,
-        }));
-        setCEBodyKey(CEBody);
-        return CEBody;
-      }),
+  // Course Content Heading useQuery
+  const { data: CCHeadData, isLoading: CCHeadLoading, error: CCHeadError } = useQuery({
+    queryKey: ["CourseContentHeading"],
+    queryFn: () => getAllDocuments("CourseContentHeading").then((querySnapshot) => {
+      const data = querySnapshot.docs.map((doc) => ({
+        CCHeadTitle: doc.data().CCHeadTitle,
+        CCHeadSubtitle: doc.data().CCHeadSubtitle,
+      }));
+      return data[0];
+    }),
   });
+
+   // Course Content Body useQuery
+  const [CCBodyDataKey, setCCBodyDataKey] = useState([]);
+
+  const { data: CCBodyData, isLoading: CCBodyLoading, error: CCBodyError } = useQuery({
+    queryKey: ["CourseContentBodyKey:", ...CCBodyDataKey], // Concatenating with a string
+    queryFn: () => getAllDocuments("CourseContentHeading").then((querySnapshot) => {
+      const data = querySnapshot.docs.map((doc) => ({
+        CCTitle: doc.data().CCTitle,
+        CCSubtitle: doc.data().CCSubtitle,
+        CCQuote: doc.data().CCQuote,
+        CCImage: doc.data().CCImage
+      }));
+
+      setCCBodyDataKey(data);
+      return data;
+    }),
+  });
+
+  // Organization Matters Heading useQuery
+  // const [OMHeadDataKey, setOMHeadDataKey] = useState();
+
+  const { data: OMHeadData, isLoading: OMHeadLoading, error: OMHeadError } = useQuery({
+    queryKey: ["OrganizationMattersHeading: "],
+    queryFn: () => getAllDocuments("OrganizationMattersHeading").then((querySnapshot) => {
+      const data = querySnapshot.docs.map((doc) => ({
+        OMHeadTitle: doc.data().OMHeadTitle,
+        OMHeadDescription: doc.data().OMHeadDescription,
+      }));
+      // setOMHeadDataKey(data[0]);
+      // console.log(data[0])
+      return data[0];
+    }),
+  });
+  
 
   pageTitle("Home");
 
-  if (isLoading) {
+  if (heroLoading || CEHeaderLoading || CEBodyLoading || CCHeadLoading) {
     return <div>Loading...</div>;
   }
 
-  if (error) {
+  if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
     return <div>Error loading data</div>;
   }
 
-  if (!heroData) {
+  if (!heroData || !CEHeader || !CEBody || !CCHeadData) {
     return <div>No data available</div>;
   }
 
   return (
     <>
+
+    {/* Hero Section */}
       <Hero
         title={heroData.title}
         subTitle={heroData.subTitle}
@@ -212,6 +228,7 @@ export default function Home() {
         imgUrl={heroData.imgUrl}
       />
 
+{/* Child Emergency Section */}
       <Section topMd={200} topLg={150} topXl={110}>
         {CEHeader && (
           <DepartmentSectionStyle1
@@ -223,19 +240,38 @@ export default function Home() {
 
       <Spacing md="182" lg="150" />
 
+{/* Course Content Section */}
+      <WebCourseContent
+        sectionTitle={CCHeadData.CCHeadTitle}
+        sectionTitleUp=""
+        sectionTitleDown=""
+        sectionSubTitle={CCHeadData.CCHeadSubtitle}
+        data={workingProcessData}
+      />
+
+<Spacing md="182" lg="150" />
 
 
-{/* Training session Section */}
+{/* Organization Matters Section */}
+<Section
+        topMd={185}
+        topLg={140}
+        topXl={100}
+        bottomMd={185}
+        bottomLg={140}
+        bottomXl={100}
+      >
+        <FeaturesSection  sectionTitle={OMHeadData.OMHeadTitle} sectionSubtile={OMHeadData.OMHeadDescription} />
+      </Section>
+
+{/* Training session */}
       <div className="container cs_hero cs_style_1">
         <SectionHeading title="Upcoming Training Sessions" center={true} />
         <Spacing md="72" lg="50" />
+        {/* Render your training session component here */}
         <SessionCard limit={true} />
       </div>
 
-      {/* Start Feature Section */}
-      {/* <FeaturesSection sectionTitle="Our Values" data={featureListData} /> */}
-      {/* End Feature Section */}
-      {/* Start About Section */}
       <Section>
         <AboutSection
           imgUrl={about_img}
@@ -252,8 +288,7 @@ export default function Home() {
           ]}
         />
       </Section>
-      {/* End About Section */}
-      {/* Start Departments Section */}
+
       <Section topMd={185} topLg={150} topXl={110}>
         <DepartmentSection
           sectionTitle="Departments"
@@ -262,19 +297,8 @@ export default function Home() {
         />
       </Section>
 
-      {/* End Departments Section */}
+      {/* Render your testimonial section here */}
 
-      {/* Start Testimonial */}
-      <Section
-        topMd={185}
-        topLg={140}
-        topXl={100}
-        bottomMd={200}
-        bottomLg={150}
-        bottomXl={110}
-      ></Section>
-      {/* End Testimonial */}
-      {/* Start Banner Section */}
       <Section>
         <Banner
           bgUrl={ctaBgSvg}
@@ -283,11 +307,8 @@ export default function Home() {
           subTitle="Equipping parents with essential skills for child emergency response, ensuring confident and effective action in critical situations."
         />
       </Section>
-      {/* End Banner Section */}
 
       <Gallery />
-
-      {/* End Gallery Section */}
 
       <Section topMd={190} topLg={145} topXl={105}>
         <BlogSection
@@ -296,7 +317,6 @@ export default function Home() {
           data={blogData}
         />
       </Section>
-      {/* End Blog Section */}
     </>
   );
 }
