@@ -8,6 +8,7 @@ export default function SectionHeading({
   titleDown = "",
   subTitle = "",
   center,
+  tileDownProps=""
 }) {
   return (
     <div
@@ -30,7 +31,7 @@ export default function SectionHeading({
           {/* <Spacing md="0" /> */}
           <h3
             className="cs_section_subtitle  cs_accent_color cs_semibold m-0 cs_accent_color cs_fs_32"
-            style={{ fontSize: "18px", marginTop: "-50px" }}
+            style={{ fontSize:"18px", marginTop: "-50px" }}
           >
             {parse(titleDown)}
           </h3>

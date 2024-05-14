@@ -4,14 +4,11 @@ import Section from "../Section";
 import AboutSection from "../Section/AboutSection";
 import Banner from "../Section/BannerSection";
 import SectionHeading from "../SectionHeading";
-// import FeaturesSection from '../Section/FeaturesSection';
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { pageTitle } from "../../helpers/PageTitle";
 import { getAllDocuments } from "../../services/dbService";
 import BlogSection from "../Section/BlogSection";
 import DepartmentSection from "../Section/DepartmentSection";
-import SessionCard from "../SessionCard";
 import Spacing from "../Spacing";
 import DepartmentSectionStyle1 from "../WebChildEmergency/DepartmentSectionStyle2";
 import {
@@ -31,8 +28,12 @@ import {
   post3Jpeg,
 } from "../imagepath";
 import Gallery from "./Gallery";
+import WebCourseContent from "../WebLandingPage/WebCourseContent/WebCourseContent";
+import SessionCard from "../SessionCard";
+import FeaturesSection from "../WebLandingPage/WebOrganizationMatters/OrganizationMattersSection";
 import Preloader from "../Preloader"; // Import the Preloader component
 
+// Sample data
 const blogData = [
   {
     title: "The Benefits of Mindfulness Meditation for Stress and Anxiety",
@@ -141,8 +142,8 @@ export default function Home() {
   });
   const {
     data: heroData,
-    isLoading: isHeroLoading,
-    error: heroError,
+    isLoading,
+    error,
   } = useQuery({
     queryKey: [Herokey],
     queryFn: () =>
@@ -161,11 +162,7 @@ export default function Home() {
     title: "",
   });
 
-  const {
-    data: CEHeader,
-    isLoading: isCEHeaderLoading,
-    error: CEHeaderError,
-  } = useQuery({
+  const { data: CEHeader } = useQuery({
     queryKey: [CEHeaderKey],
     queryFn: () =>
       getAllDocuments("ChildEmergencyHeader").then((querySnapshot) => {
@@ -179,11 +176,7 @@ export default function Home() {
 
   const [CEBodyKey, setCEBodyKey] = useState([]);
 
-  const {
-    data: CEBody,
-    isLoading: isCEBodyLoading,
-    error: CEBodyError,
-  } = useQuery({
+  const { data: CEBody } = useQuery({
     queryKey: [CEBodyKey],
     queryFn: () =>
       getAllDocuments("ChildEmergencyBody").then((querySnapshot) => {
@@ -204,19 +197,20 @@ export default function Home() {
   const error = heroError || CEHeaderError || CEBodyError;
 
   if (isLoading) {
-    return <Preloader />; // Display Preloader while data is loading
+    return <div>Loading...</div>;
   }
 
-  if (error) {
+  if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
     return <div>Error loading data</div>;
   }
 
-  if (!heroData) {
+  if (!heroData || !CEHeader || !CEBody || !CCHeadData) {
     return <div>No data available</div>;
   }
 
   return (
     <>
+      {/* Hero Section */}
       <Hero
         title={heroData.title}
         subTitle={heroData.subTitle}
@@ -224,6 +218,7 @@ export default function Home() {
         imgUrl={heroData.imgUrl}
       />
 
+      {/* Child Emergency Section */}
       <Section topMd={200} topLg={150} topXl={110}>
         {CEHeader && (
           <DepartmentSectionStyle1
@@ -239,13 +234,10 @@ export default function Home() {
       <div className="container cs_hero cs_style_1">
         <SectionHeading title="Upcoming Training Sessions" center={true} />
         <Spacing md="72" lg="50" />
+        {/* Render your training session component here */}
         <SessionCard limit={true} />
       </div>
 
-      {/* Start Feature Section */}
-      {/* <FeaturesSection sectionTitle="Our Values" data={featureListData} /> */}
-      {/* End Feature Section */}
-      {/* Start About Section */}
       <Section>
         <AboutSection
           imgUrl={about_img}
@@ -262,8 +254,7 @@ export default function Home() {
           ]}
         />
       </Section>
-      {/* End About Section */}
-      {/* Start Departments Section */}
+
       <Section topMd={185} topLg={150} topXl={110}>
         <DepartmentSection
           sectionTitle="Departments"
@@ -272,19 +263,8 @@ export default function Home() {
         />
       </Section>
 
-      {/* End Departments Section */}
+      {/* Render your testimonial section here */}
 
-      {/* Start Testimonial */}
-      <Section
-        topMd={185}
-        topLg={140}
-        topXl={100}
-        bottomMd={200}
-        bottomLg={150}
-        bottomXl={110}
-      ></Section>
-      {/* End Testimonial */}
-      {/* Start Banner Section */}
       <Section>
         <Banner
           bgUrl={ctaBgSvg}
@@ -293,11 +273,8 @@ export default function Home() {
           subTitle="Equipping parents with essential skills for child emergency response, ensuring confident and effective action in critical situations."
         />
       </Section>
-      {/* End Banner Section */}
 
       <Gallery />
-
-      {/* End Gallery Section */}
 
       <Section topMd={190} topLg={145} topXl={105}>
         <BlogSection
@@ -306,7 +283,6 @@ export default function Home() {
           data={blogData}
         />
       </Section>
-      {/* End Blog Section */}
     </>
   );
 }
