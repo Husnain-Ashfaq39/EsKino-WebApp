@@ -124,20 +124,7 @@ export default function Home() {
         <Spacing md="72" lg="50" />
         <SessionCard limit={true} />
 
-        {/* Button */}
-        <div className="cs_hero_info_col flex flex-col items-center justify-center">
-          <div
-            className="cs_btn cs_style_1"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/appointments")}
-          >
-            <span>View All Sessions</span>
-            <i>
-              <img src={arrowWhiteSvg} alt="Icon" />
-              <img src={arrowWhiteSvg} alt="Icon" />
-            </i>
-          </div>
-        </div>
+       
       </div>
 
       {/* Start Feature Section */}

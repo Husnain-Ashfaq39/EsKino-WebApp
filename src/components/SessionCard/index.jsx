@@ -3,51 +3,60 @@ import { ModalComponent } from '../ModalComponent/ModalComponent';
 import AppointmentSection from '../Section/AppointmentSection';
 import { arrowWhiteSvg, date_timeSvg, pinSvg, titleIconsSvg } from '../imagepath';
 import { getAllDocuments } from '../../services/dbService';
+import { getMeetingStatus } from "../../services/dbService";
+import { convertTimestamp, convertTime } from "../../services/general_functions";
 
 function SessionCard({ limit }) {
-
   const [isOpen, setIsOpen] = useState(false);
   const [sections, setSections] = useState([]);
   const [selectedSectionId, setSelectedSectionId] = useState(null);
 
-  const handleOpen = (sectionId) => { // Pass the section ID to the handleOpen function
+  const handleOpen = (sectionId) => {
     setIsOpen(true);
-    setSelectedSectionId(sectionId); // Set the selected section ID
+    setSelectedSectionId(sectionId);
   };
-
 
   useEffect(() => {
     getAllDocuments('meetings')
       .then(querySnapshot => {
-        const data = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          icon: selectIcon(doc.data().type),
-          startDate: convertTimestamp(doc.data().startDate),
-          endDate: convertTimestamp(doc.data().endDate),
-          startTime: convertTime(doc.data().startTime),
-          endTime: convertTime(doc.data().endTime),
-        }));
+        const data = querySnapshot.docs.map(doc => {
+          const docData = doc.data();
+
+          // Convert timestamps and times
+          const startDate = convertTimestamp(docData.startDate);
+          const endDate = convertTimestamp(docData.endDate);
+          const startTime = convertTime(docData.startTime);
+          const endTime = convertTime(docData.endTime);
+
+          // Create a new object with the converted times
+          const convertedDocData = {
+            ...docData,
+            startDate,
+            endDate,
+            startTime,
+            endTime
+          };
+          console.log(convertedDocData);
+          // Pass the converted data to getMeetingStatus
+          const meetingStatus = getMeetingStatus(convertedDocData);
+          console.log(meetingStatus);
+          // Only include meetings that are not "Timeout"
+          if (meetingStatus !== 'Timeout') {
+            return {
+              id: doc.id,
+              ...convertedDocData,
+              icon: selectIcon(docData.type),
+              status: meetingStatus,
+            };
+          }
+          return null;
+        }).filter(item => item !== null); // Filter out null values
         setSections(data);
       });
   }, []);
 
-  const convertTimestamp = (timestamp) => {
-    if (!timestamp) return '';
-    const date = timestamp.toDate();
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-  };
 
-  const convertTime = (timestamp) => {
-    if (!timestamp) return '';
-    const date = timestamp.toDate();
-    let hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    return `${hours}:${minutes} ${ampm}`;
-  };
+
 
   const selectIcon = (type) => {
     switch (type) {
@@ -96,30 +105,22 @@ function SessionCard({ limit }) {
               <p className="cs_hero_info_subtitle cs_fs_12">zip code: {section.zipCode}</p>
             </div>
           </div>
-          <div  style={{
-              cursor: section.capacity > 0 ? 'pointer' : 'default',
-              margin: '20px',
-              
-           
-              pointerEvents: section.capacity === 0 ? 'none' : 'auto', // Optionally disabling pointer events
-            }}>
-
-          <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null}
-           
-            className="cs_btn cs_style_1"
-            >
-            <span>{section.capacity==0?"Closed":"Book Now"}</span>
-            <i><img src={arrowWhiteSvg} alt="Icon" /></i>
-          </div>
+          <div style={{
+            cursor: section.capacity > 0 ? 'pointer' : 'default',
+            margin: '20px',
+            pointerEvents: section.capacity === 0 ? 'none' : 'auto',
+          }}>
+            <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null}
+              className="cs_btn cs_style_1">
+              <span>{section.capacity === 0 ? "Closed" : "Book Now"}</span>
+              <i><img src={arrowWhiteSvg} alt="Icon" /></i>
             </div>
+          </div>
         </div>
       ))}
       {isOpen && (
         <ModalComponent isOpen={isOpen} setIsOpen={setIsOpen}>
-          <AppointmentSection
-
-            sectionId={selectedSectionId}
-          />
+          <AppointmentSection sectionId={selectedSectionId} />
         </ModalComponent>
       )}
     </div>
