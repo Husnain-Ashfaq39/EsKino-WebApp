@@ -31,7 +31,7 @@ import {
   post3Jpeg,
 } from "../imagepath";
 import Gallery from "./Gallery";
-import { getAllDocuments } from "../../services/dbService";
+import Preloader from "../Preloader"; // Import the Preloader component
 
 const blogData = [
   {
@@ -93,42 +93,42 @@ const departmentData = [
   },
 ];
 
-// Course Content Data 
+// Course Content Data
 const workingProcessData = [
   {
-    title: 'Book Appointment',
+    title: "Book Appointment",
     subTitle:
-      'You can book an appointment with us by <br />calling our office, filling out an online form, or <br />using our mobile app.',
-    iconUrl: '/images/home_2/wording_process_icon_1.svg',
-    number: '01',
+      "You can book an appointment with us by <br />calling our office, filling out an online form, or <br />using our mobile app.",
+    iconUrl: "/images/home_2/wording_process_icon_1.svg",
+    number: "01",
   },
   {
-    title: 'Visit Our Facility',
+    title: "Visit Our Facility",
     subTitle:
-      'On the day of your appointment, come to our <br />facility at the designated time. Our staff will greet <br />you and guide you through the check-in process.',
-    iconUrl: '/images/home_2/wording_process_icon_2.svg',
-    number: '02',
+      "On the day of your appointment, come to our <br />facility at the designated time. Our staff will greet <br />you and guide you through the check-in process.",
+    iconUrl: "/images/home_2/wording_process_icon_2.svg",
+    number: "02",
   },
   {
-    title: 'Meet with Our Healthcare <br />Professionals',
+    title: "Meet with Our Healthcare <br />Professionals",
     subTitle:
-      'You will meet with one of our healthcare <br />professionals who will conduct a thorough <br />examination and provide a diagnosis or <br />treatment plan.',
-    iconUrl: '/images/home_2/wording_process_icon_3.svg',
-    number: '03',
+      "You will meet with one of our healthcare <br />professionals who will conduct a thorough <br />examination and provide a diagnosis or <br />treatment plan.",
+    iconUrl: "/images/home_2/wording_process_icon_3.svg",
+    number: "03",
   },
   {
-    title: 'Follow-up Care',
+    title: "Follow-up Care",
     subTitle:
-      'We will schedule any necessary follow-up <br />appointments, tests, or procedures to ensure <br />that you receive the best possible care.',
-    iconUrl: '/images/home_2/wording_process_icon_4.svg',
-    number: '04',
+      "We will schedule any necessary follow-up <br />appointments, tests, or procedures to ensure <br />that you receive the best possible care.",
+    iconUrl: "/images/home_2/wording_process_icon_4.svg",
+    number: "04",
   },
   {
-    title: 'Insurance and Billing',
+    title: "Insurance and Billing",
     subTitle:
-      'We accept most major insurance plans and <br />our billing department will work with you to <br />ensure that you understand your coverage <br />and any out-of-pocket expenses.',
-    iconUrl: '/images/home_2/wording_process_icon_5.svg',
-    number: '05',
+      "We accept most major insurance plans and <br />our billing department will work with you to <br />ensure that you understand your coverage <br />and any out-of-pocket expenses.",
+    iconUrl: "/images/home_2/wording_process_icon_5.svg",
+    number: "05",
   },
 ];
 
@@ -141,8 +141,8 @@ export default function Home() {
   });
   const {
     data: heroData,
-    isLoading,
-    error,
+    isLoading: isHeroLoading,
+    error: heroError,
   } = useQuery({
     queryKey: [Herokey],
     queryFn: () =>
@@ -161,7 +161,11 @@ export default function Home() {
     title: "",
   });
 
-  const { data: CEHeader } = useQuery({
+  const {
+    data: CEHeader,
+    isLoading: isCEHeaderLoading,
+    error: CEHeaderError,
+  } = useQuery({
     queryKey: [CEHeaderKey],
     queryFn: () =>
       getAllDocuments("ChildEmergencyHeader").then((querySnapshot) => {
@@ -175,7 +179,11 @@ export default function Home() {
 
   const [CEBodyKey, setCEBodyKey] = useState([]);
 
-  const { data: CEBody } = useQuery({
+  const {
+    data: CEBody,
+    isLoading: isCEBodyLoading,
+    error: CEBodyError,
+  } = useQuery({
     queryKey: [CEBodyKey],
     queryFn: () =>
       getAllDocuments("ChildEmergencyBody").then((querySnapshot) => {
@@ -192,8 +200,11 @@ export default function Home() {
 
   pageTitle("Home");
 
+  const isLoading = isHeroLoading || isCEHeaderLoading || isCEBodyLoading;
+  const error = heroError || CEHeaderError || CEBodyError;
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Preloader />; // Display Preloader while data is loading
   }
 
   if (error) {
@@ -224,9 +235,7 @@ export default function Home() {
 
       <Spacing md="182" lg="150" />
 
-
-
-{/* Training session Section */}
+      {/* Training session Section */}
       <div className="container cs_hero cs_style_1">
         <SectionHeading title="Upcoming Training Sessions" center={true} />
         <Spacing md="72" lg="50" />
