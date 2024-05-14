@@ -1,16 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import SocialWidget from '../Widget/SocialWidget';
-import Newsletter from '../Widget/Newsletter';
-import IconBoxStyle11 from '../IconBox/IconBoxStyle11';
-import Spacing from '../Spacing';
-import { closeSvg, logo2Png, logoSvg } from '../imagepath';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import SocialWidget from "../Widget/SocialWidget";
+import Newsletter from "../Widget/Newsletter";
+import IconBoxStyle11 from "../IconBox/IconBoxStyle11";
+import Spacing from "../Spacing";
+import { closeSvg, logo2Png, logoSvg } from "../imagepath";
+import { getAllDocuments } from "../../services/dbService";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Header2({ logoSrc, variant }) {
   const [isSticky, setIsSticky] = useState(false);
   const [mobileToggle, setMobileToggle] = useState(false);
   const [sideNav, setSideNav] = useState(false);
   const [searchToggle, setSearchToggle] = useState(false);
+  const [key, setKey] = useState({ logoUrl: "" });
+
+  const {
+    data: logoData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: [key],
+    queryFn: () =>
+      getAllDocuments("HeroSection").then((querySnapshot) => {
+        const logoData = querySnapshot.docs.map((doc) => ({
+          logoUrl: doc.data().heroLogo,
+        }));
+        setKey(key);
+        return logoData[0];
+      }),
+  });
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
@@ -19,40 +39,58 @@ export default function Header2({ logoSrc, variant }) {
         setIsSticky(false);
       }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     // Cleanup function to remove the event listener
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading data</div>;
+  }
+
+  if (!logoData) {
+    return <div>No data available</div>;
+  }
+
   return (
     <>
       <header
-        className={`cs_site_header cs_style1 cs_sticky_header ${mobileToggle ? 'cs_mobile_toggle_active' : ''
-          } ${variant} ${isSticky ? 'cs_active_sticky' : ''}`}
+        className={`cs_site_header cs_style1 cs_sticky_header ${
+          mobileToggle ? "cs_mobile_toggle_active" : ""
+        } ${variant} ${isSticky ? "cs_active_sticky" : ""}`}
       >
         <div className="cs_main_header">
           <div className="container">
             <div className="cs_main_header_in">
               <div className="cs_main_header_left">
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
                   <Link className="cs_site_branding logo_style" to="/">
-                    <img src={logo2Png} alt="Logo" />
+                    <img src={logoData.logoUrl} alt="Logo" />
                   </Link>
                   <h2 className="company_name">Eskino</h2>
                 </div>
                 <nav className="cs_nav ml-24">
                   <ul
-                    className={`${mobileToggle ? 'cs_nav_list cs_active' : 'cs_nav_list'
-                      }`}
+                    className={`${
+                      mobileToggle ? "cs_nav_list cs_active" : "cs_nav_list"
+                    }`}
                   >
-                    <li >
+                    <li>
                       <Link to="/">Home</Link>
-
                     </li>
 
-
-                    
                     <li>
                       <Link to="/contact">Contact</Link>
                     </li>
@@ -63,8 +101,8 @@ export default function Header2({ logoSrc, variant }) {
                   <span
                     className={
                       mobileToggle
-                        ? 'cs_menu_toggle cs_teggle_active'
-                        : 'cs_menu_toggle'
+                        ? "cs_menu_toggle cs_teggle_active"
+                        : "cs_menu_toggle"
                     }
                     onClick={() => setMobileToggle(!mobileToggle)}
                   >
@@ -74,7 +112,6 @@ export default function Header2({ logoSrc, variant }) {
               </div>
               <div className="cs_main_header_right">
                 <div className="cs_toolbox">
-
                   <button
                     className="cs_toolbox_btn cs_sidebar_toggle_btn"
                     type="button"
@@ -107,7 +144,7 @@ export default function Header2({ logoSrc, variant }) {
           </div>
         </div>
       </header>
-      <div className={`cs_sidenav ${sideNav ? 'active' : ''}`}>
+      <div className={`cs_sidenav ${sideNav ? "active" : ""}`}>
         <div
           className="cs_sidenav_overlay"
           onClick={() => setSideNav(!sideNav)}
@@ -121,10 +158,17 @@ export default function Header2({ logoSrc, variant }) {
             <img src={closeSvg} alt="Close" />
           </button>
           <div className="cs_logo_box">
-            <div className="account-logo" style={{ display: 'flex', alignItems: 'center' }}>
-              <img src={logo2Png} alt="Eskino" style={{ width: '50px', height: 'auto' }} />
-              <h3 style={{ marginLeft: '10px', marginTop: '25px' }}>Eskino</h3>
-            </div>            
+            <div
+              className="account-logo"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <img
+                src={logo2Png}
+                alt="Eskino"
+                style={{ width: "50px", height: "auto" }}
+              />
+              <h3 style={{ marginLeft: "10px", marginTop: "25px" }}>Eskino</h3>
+            </div>
             <div className="cs_height_15" />
             <h3 className="cs_fs_24 cs_semibold mb-0">
               Your Partner in Health and Wellness
@@ -158,7 +202,7 @@ export default function Header2({ logoSrc, variant }) {
           <SocialWidget />
         </div>
       </div>
-      <div className={`cs_header_search ${searchToggle ? 'active' : ''}`}>
+      <div className={`cs_header_search ${searchToggle ? "active" : ""}`}>
         <div className="cs_header_search_in">
           <div className="container">
             <div className="cs_header_search_box">

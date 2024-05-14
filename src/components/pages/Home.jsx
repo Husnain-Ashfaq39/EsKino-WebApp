@@ -1,52 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import Hero from "../Hero";
-import AboutSection from "../Section/AboutSection";
-import SectionHeading from "../SectionHeading";
-import Banner from "../Section/BannerSection";
 import Section from "../Section";
+import AboutSection from "../Section/AboutSection";
+import Banner from "../Section/BannerSection";
+import SectionHeading from "../SectionHeading";
 // import FeaturesSection from '../Section/FeaturesSection';
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { pageTitle } from "../../helpers/PageTitle";
+import { getAllDocuments } from "../../services/dbService";
 import BlogSection from "../Section/BlogSection";
 import DepartmentSection from "../Section/DepartmentSection";
-import { pageTitle } from "../../helpers/PageTitle";
 import SessionCard from "../SessionCard";
-import { useQuery } from "@tanstack/react-query";
 import Spacing from "../Spacing";
+import DepartmentSectionStyle1 from "../WebChildEmergency/DepartmentSectionStyle2";
 import {
   aboutMiniSvg,
-  aboutPng,
   about_img,
-  arrowWhiteSvg,
-  bannerBgSvg,
-  bannerImgPng,
   banner_img50,
-  compassionSvg,
   ctaBgSvg,
-  dep_icon1,
-  dep_icon2,
-  dep_icon3,
-  dep_icon4,
   departmentIcon1Svg,
   departmentIcon2Svg,
   departmentIcon3Svg,
   departmentIcon4Svg,
   departmentIcon5Svg,
   departmentIcon6Svg,
-  excellenceSvg,
   heroBgJpeg,
-  heroImgPng,
-  integritySvg,
-  pinSvg,
   post1Jpeg,
   post2Jpeg,
   post3Jpeg,
-  respectSvg,
-  teamworkSvg,
-  titleIconPng,
-  titleIconsSvg,
 } from "../imagepath";
 import Gallery from "./Gallery";
-import { getAllDocuments } from "../../services/dbService";
+
+// const childEmergency = [
+//   {
+//     title: "Diagnostic testing",
+//     subTitle:
+//       "Blood tests, imaging studies, and other tests to diagnose health conditions.Blood tests, imaging studies, and other tests to diagnose health conditions.Blood tests, imaging studies, and other tests to diagnose health conditions",
+//     iconUrl: "/images/icons/calendar_white.svg",
+//     href: "/departments/department-details",
+//   },
+//   {
+//     title: "Rehabilitation services",
+//     subTitle:
+//       "Blood tests, imaging studies, and other tests to diagnose health conditions.Blood tests, imaging studies, and other tests to diagnose health conditions.Blood tests, imaging studies, and other tests to diagnose health conditions",
+//     iconUrl: "/images/icons/calendar_white.svg",
+//     href: "/departments/department-details",
+//   },
+// ];
 
 const blogData = [
   {
@@ -110,13 +111,17 @@ const departmentData = [
 
 export default function Home() {
   const navigate = useNavigate();
-
+  const [Herokey, setHeroKey] = useState({
+    title: "",
+    subTitle: "",
+    imgUrl: "",
+  });
   const {
     data: heroData,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["heroData"],
+    queryKey: [Herokey],
     queryFn: () =>
       getAllDocuments("HeroSection").then((querySnapshot) => {
         const heroData = querySnapshot.docs.map((doc) => ({
@@ -124,7 +129,40 @@ export default function Home() {
           subTitle: doc.data().heroSubtitle,
           imgUrl: doc.data().heroBackground,
         }));
+        setHeroKey(heroData[0]);
         return heroData[0];
+      }),
+  });
+
+  const [CEHeaderKey, setCEHeaderKey] = useState({
+    title: "",
+  });
+
+  const { data: CEHeader } = useQuery({
+    queryKey: [CEHeaderKey],
+    queryFn: () =>
+      getAllDocuments("ChildEmergencyHeader").then((querySnapshot) => {
+        const CEHeader = querySnapshot.docs.map((doc) => ({
+          title: doc.data().CEHeadTitle,
+        }));
+        setCEHeaderKey(CEHeader[0]);
+        return CEHeader[0];
+      }),
+  });
+
+  const [CEBodyKey, setCEBodyKey] = useState([]);
+
+  const { data: CEBody } = useQuery({
+    queryKey: [CEBodyKey],
+    queryFn: () =>
+      getAllDocuments("ChildEmergencyBody").then((querySnapshot) => {
+        const CEBody = querySnapshot.docs.map((doc) => ({
+          title: doc.data().CEBodyTitle,
+          subTitle: doc.data().CEBodySubtitle,
+          description: doc.data().CEBodyDescription,
+        }));
+        setCEBodyKey(CEBody);
+        return CEBody;
       }),
   });
 
@@ -151,12 +189,21 @@ export default function Home() {
         imgUrl={heroData.imgUrl}
       />
 
+      <Section topMd={200} topLg={150} topXl={110}>
+        {CEHeader && (
+          <DepartmentSectionStyle1
+            sectionTitle={CEHeader.title}
+            data={CEBody}
+          />
+        )}
+      </Section>
+
+      <Spacing md="182" lg="150" />
+
       <div className="container cs_hero cs_style_1">
         <SectionHeading title="Upcoming Training Sessions" center={true} />
         <Spacing md="72" lg="50" />
         <SessionCard limit={true} />
-
-       
       </div>
 
       {/* Start Feature Section */}

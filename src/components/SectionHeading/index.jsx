@@ -1,17 +1,17 @@
-import React from 'react';
-import parse from 'html-react-parser';
-import Spacing from '../Spacing';
+import React from "react";
+import parse from "html-react-parser";
+import Spacing from "../Spacing";
 
 export default function SectionHeading({
-  title = '',
-  titleUp = '',
-  titleDown = '',
-  subTitle = '',
+  title = "",
+  titleUp = "",
+  titleDown = "",
+  subTitle = "",
   center,
 }) {
   return (
     <div
-      className={`cs_section_heading cs_style_1 ${center ? 'text-center' : ''}`}
+      className={`cs_section_heading cs_style_1 ${center ? "text-center" : ""}`}
     >
       {titleUp && (
         <>
@@ -27,8 +27,11 @@ export default function SectionHeading({
       )}
       {titleDown && (
         <>
-          <Spacing md="5" />
-          <h3 className="cs_section_subtitle text-uppercase cs_accent_color cs_semibold m-0 cs_accent_color cs_fs_32">
+          {/* <Spacing md="0" /> */}
+          <h3
+            className="cs_section_subtitle  cs_accent_color cs_semibold m-0 cs_accent_color cs_fs_32"
+            style={{ fontSize: "18px", marginTop: "-50px" }}
+          >
             {parse(titleDown)}
           </h3>
         </>
