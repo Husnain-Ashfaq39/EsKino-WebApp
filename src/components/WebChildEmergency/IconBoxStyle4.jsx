@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import SectionHeading from "../SectionHeading";
 import Spacing from "../Spacing";
 
-export default function IconBoxStyle4({ title, subTitle, description }) {
+export default function IconBoxStyle4({ title, subTitle, description, href }) {
   return (
     <div className="cs_iconbox cs_style_4">
       {/* <div className="cs_iconbox_icon cs_accent_bg rounded-circle cs_center">
@@ -13,6 +13,12 @@ export default function IconBoxStyle4({ title, subTitle, description }) {
       <SectionHeading titleDown={subTitle} tileDownProps="18px" />
       <Spacing md="27" lg="7" />
       <p className="cs_iconbox_subtitle m-0">{description}</p>
+      {href && (
+        <Link to={href} className="cs_iconbox_btn cs_center">
+          <img src="/images/icons/arrow_white.svg" alt="Icon" />
+          <img src="/images/icons/arrow_white.svg" alt="Icon" />
+        </Link>
+      )}
     </div>
   );
 }
