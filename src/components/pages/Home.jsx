@@ -31,23 +31,7 @@ import {
   post3Jpeg,
 } from "../imagepath";
 import Gallery from "./Gallery";
-
-// const childEmergency = [
-//   {
-//     title: "Diagnostic testing",
-//     subTitle:
-//       "Blood tests, imaging studies, and other tests to diagnose health conditions.Blood tests, imaging studies, and other tests to diagnose health conditions.Blood tests, imaging studies, and other tests to diagnose health conditions",
-//     iconUrl: "/images/icons/calendar_white.svg",
-//     href: "/departments/department-details",
-//   },
-//   {
-//     title: "Rehabilitation services",
-//     subTitle:
-//       "Blood tests, imaging studies, and other tests to diagnose health conditions.Blood tests, imaging studies, and other tests to diagnose health conditions.Blood tests, imaging studies, and other tests to diagnose health conditions",
-//     iconUrl: "/images/icons/calendar_white.svg",
-//     href: "/departments/department-details",
-//   },
-// ];
+import { getAllDocuments } from "../../services/dbService";
 
 const blogData = [
   {
@@ -106,6 +90,45 @@ const departmentData = [
     title: "Psychiatry Department",
     iconUrl: departmentIcon6Svg,
     href: "/departments/department-details",
+  },
+];
+
+// Course Content Data 
+const workingProcessData = [
+  {
+    title: 'Book Appointment',
+    subTitle:
+      'You can book an appointment with us by <br />calling our office, filling out an online form, or <br />using our mobile app.',
+    iconUrl: '/images/home_2/wording_process_icon_1.svg',
+    number: '01',
+  },
+  {
+    title: 'Visit Our Facility',
+    subTitle:
+      'On the day of your appointment, come to our <br />facility at the designated time. Our staff will greet <br />you and guide you through the check-in process.',
+    iconUrl: '/images/home_2/wording_process_icon_2.svg',
+    number: '02',
+  },
+  {
+    title: 'Meet with Our Healthcare <br />Professionals',
+    subTitle:
+      'You will meet with one of our healthcare <br />professionals who will conduct a thorough <br />examination and provide a diagnosis or <br />treatment plan.',
+    iconUrl: '/images/home_2/wording_process_icon_3.svg',
+    number: '03',
+  },
+  {
+    title: 'Follow-up Care',
+    subTitle:
+      'We will schedule any necessary follow-up <br />appointments, tests, or procedures to ensure <br />that you receive the best possible care.',
+    iconUrl: '/images/home_2/wording_process_icon_4.svg',
+    number: '04',
+  },
+  {
+    title: 'Insurance and Billing',
+    subTitle:
+      'We accept most major insurance plans and <br />our billing department will work with you to <br />ensure that you understand your coverage <br />and any out-of-pocket expenses.',
+    iconUrl: '/images/home_2/wording_process_icon_5.svg',
+    number: '05',
   },
 ];
 
@@ -201,6 +224,9 @@ export default function Home() {
 
       <Spacing md="182" lg="150" />
 
+
+
+{/* Training session Section */}
       <div className="container cs_hero cs_style_1">
         <SectionHeading title="Upcoming Training Sessions" center={true} />
         <Spacing md="72" lg="50" />
