@@ -31,6 +31,7 @@ import Gallery from "./Gallery";
 import WebCourseContent from "../WebLandingPage/WebCourseContent/WebCourseContent";
 import SessionCard from "../SessionCard";
 import FeaturesSection from "../WebLandingPage/WebOrganizationMatters/OrganizationMattersSection";
+import Preloader from "../Preloader"; // Import the Preloader component
 
 // Sample data
 const blogData = [
@@ -93,6 +94,7 @@ const departmentData = [
   },
 ];
 
+// Course Content Data
 const workingProcessData = [
   {
     title: "Book Appointment",
@@ -132,6 +134,7 @@ const workingProcessData = [
 ];
 
 export default function Home() {
+<<<<<<< HEAD
   // const navigate = useNavigate();
 
   // Hero Section useQuery
@@ -144,10 +147,23 @@ export default function Home() {
     queryFn: () =>
       getAllDocuments("HeroSection").then((querySnapshot) => {
         const data = querySnapshot.docs.map((doc) => ({
+=======
+  const [Herokey, setHeroKey] = useState({
+    title: "",
+    subTitle: "",
+    imgUrl: "",
+  });
+  const { data: heroData } = useQuery({
+    queryKey: [Herokey],
+    queryFn: () =>
+      getAllDocuments("HeroSection").then((querySnapshot) => {
+        const heroData = querySnapshot.docs.map((doc) => ({
+>>>>>>> 746728ccb4fe8ae23ca1d1a947c5c3e26c32dddb
           title: doc.data().heroTitle,
           subTitle: doc.data().heroSubtitle,
           imgUrl: doc.data().heroBackground,
         }));
+<<<<<<< HEAD
         return data[0];
       }),
   });
@@ -247,19 +263,62 @@ export default function Home() {
       }),
   });
 
+=======
+        setHeroKey(heroData[0]);
+        return heroData[0];
+      }),
+  });
+
+  const [CEHeaderKey, setCEHeaderKey] = useState({
+    title: "",
+  });
+
+  const { data: CEHeader } = useQuery({
+    queryKey: [CEHeaderKey],
+    queryFn: () =>
+      getAllDocuments("ChildEmergencyHeader").then((querySnapshot) => {
+        const CEHeader = querySnapshot.docs.map((doc) => ({
+          title: doc.data().CEHeadTitle,
+        }));
+        setCEHeaderKey(CEHeader[0]);
+        return CEHeader[0];
+      }),
+  });
+
+  const [CEBodyKey, setCEBodyKey] = useState([]);
+
+  const { data: CEBody } = useQuery({
+    queryKey: [CEBodyKey],
+    queryFn: () =>
+      getAllDocuments("ChildEmergencyBody").then((querySnapshot) => {
+        const CEBody = querySnapshot.docs.map((doc) => ({
+          title: doc.data().CEBodyTitle,
+          subTitle: doc.data().CEBodySubtitle,
+          description: doc.data().CEBodyDescription,
+          href: "#",
+        }));
+        setCEBodyKey(CEBody);
+        return CEBody;
+      }),
+  });
+
+>>>>>>> 746728ccb4fe8ae23ca1d1a947c5c3e26c32dddb
   pageTitle("Home");
 
-  if (heroLoading || CEHeaderLoading || CEBodyLoading || CCHeadLoading) {
-    return <div>Loading...</div>;
-  }
+  // const isLoading = isHeroLoading || isCEHeaderLoading || isCEBodyLoading;
+  // const error = heroError || CEHeaderError || CEBodyError;
 
-  if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
-    return <div>Error loading data</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  if (!heroData || !CEHeader || !CEBody || !CCHeadData) {
-    return <div>No data available</div>;
-  }
+  // if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
+  //   return <div>Error loading data</div>;
+  // }
+
+  // if (!heroData || !CEHeader || !CEBody || !CCHeadData) {
+  //   return <div>No data available</div>;
+  // }
 
   return (
     <>
@@ -283,6 +342,7 @@ export default function Home() {
 
       <Spacing md="182" lg="150" />
 
+<<<<<<< HEAD
       {/* Course Content Section */}
       <WebCourseContent
         sectionTitle={CCHeadData.CCHeadTitle}
@@ -310,6 +370,9 @@ export default function Home() {
       </Section>
 
       {/* Training session */}
+=======
+      {/* Training session Section */}
+>>>>>>> 746728ccb4fe8ae23ca1d1a947c5c3e26c32dddb
       <div className="container cs_hero cs_style_1">
         <SectionHeading title="Upcoming Training Sessions" center={true} />
         <Spacing md="72" lg="50" />
