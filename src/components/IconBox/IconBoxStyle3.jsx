@@ -1,12 +1,14 @@
 import React from 'react';
 import parse from 'html-react-parser';
+import { backgroundImg } from '../imagepath';
 
 export default function IconBoxStyle3({ title, subTitle, iconUrl, number }) {
   return (
     <div className="cs_iconbox cs_style_3">
       <div className="cs_iconbox_left">
-        <div className="cs_iconbox_icon cs_center rounded-circle">
-          <img src={iconUrl} alt="Icon" />
+        <div className="cs_iconbox_icon cs_center">
+          {/* Apply CSS styles to fill the image into the box */}
+          <img src={backgroundImg} alt="Image" className='rounded' style={{ width: '55%', height: '55%', objectFit: 'cover' }} />
         </div>
       </div>
       <div className="cs_iconbox_right">
