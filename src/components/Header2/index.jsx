@@ -41,7 +41,7 @@ export default function Header2({ logoSrc, variant }) {
                   </Link>
                   <h2 className="company_name">Eskino</h2>
                 </div>
-                <nav className="cs_nav">
+                <nav className="cs_nav ml-24">
                   <ul
                     className={`${mobileToggle ? 'cs_nav_list cs_active' : 'cs_nav_list'
                       }`}
@@ -52,10 +52,7 @@ export default function Header2({ logoSrc, variant }) {
                     </li>
 
 
-                    <li >
-                      <Link to="/appointments">Training Sessions</Link>
-
-                    </li>
+                    
                     <li>
                       <Link to="/contact">Contact</Link>
                     </li>

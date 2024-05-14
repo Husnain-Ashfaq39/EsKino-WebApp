@@ -8,9 +8,9 @@ import { deleteDocument } from "../../services/dbService";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { imagesend, plusicon, refreshicon, searchnormal } from "../imagepath";
-
+import { fetchParticipantCount,getMeetingStatus } from "../../services/dbService";
 import { collection, getDocs, query, where } from "firebase/firestore";
-
+import { convertTimestamp,convertTime } from "../../services/general_functions";
 const MeetingList = () => {
   const [meetings, setMeetings] = useState([]);
   const navigate = useNavigate();
@@ -49,14 +49,7 @@ const MeetingList = () => {
     }
   };
 
-  const fetchParticipantCount = async (meetingId) => {
-    const q = query(
-      collection(db, "participants"),
-      where("sectionId", "==", meetingId)
-    );
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.length; // Assuming each doc is a participant
-  };
+ 
 
   useEffect(() => {
     const getAllMeetings = async () => {
@@ -69,12 +62,12 @@ const MeetingList = () => {
             id: doc.id,
             Name: doc.data().title,
             StartTime: convertTime(doc.data().startTime),
-            EndTime: convertTime(doc.data().endTime),
+            endTime: convertTime(doc.data().endTime),
             Participants: participantCount, // Adding participant count here
             Capacity: doc.data().capacity,
             Location: doc.data().streetAddress,
             StartDate: convertTimestamp(doc.data().startDate),
-            EndDate: convertTimestamp(doc.data().endDate),
+            endDate: convertTimestamp(doc.data().endDate),
           };
         })
       );
@@ -84,22 +77,7 @@ const MeetingList = () => {
     getAllMeetings();
   }, [updateTrigger]);
 
-  const convertTimestamp = (timestamp) => {
-    if (!timestamp) return "";
-    const date = timestamp.toDate();
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-  };
-
-  const convertTime = (timestamp) => {
-    if (!timestamp) return "";
-    const date = timestamp.toDate();
-    let hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    return `${hours}:${minutes} ${ampm}`;
-  };
+  
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMeeting, setSelectedMeeting] = useState({});
@@ -110,32 +88,7 @@ const MeetingList = () => {
     setIsModalOpen(true);
   };
 
-  const getMeetingStatus = (meeting) => {
-    const currentTime = moment();
-    console.log("Current Time:", currentTime.format());
-
-    // Rearrange the date format from DD/MM/YYYY to YYYY-MM-DD
-    const [day, month, year] = meeting.EndDate.split("/");
-    const formattedEndDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
-      2,
-      "0"
-    )}`;
-
-    // Combine formatted EndDate and EndTime using moment
-    const endTime = moment(
-      `${formattedEndDate} ${meeting.EndTime}`,
-      "YYYY-MM-DD hh:mm A"
-    );
-    console.log("End Time:", endTime.format());
-
-    if (currentTime.isAfter(endTime)) {
-      return "Timeout";
-    } else if (0 == meeting.Capacity) {
-      return "Closed";
-    } else {
-      return "Active";
-    }
-  };
+  
 
   const handleOk = () => {
     setIsModalOpen(false);

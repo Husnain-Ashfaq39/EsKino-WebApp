@@ -4,6 +4,8 @@ import CountUp from "react-countup";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
+import moment from "moment"; // Import moment.js
 import { getAllDocuments } from "../../../services/dbService";
 import Header from "../../Header";
 import {
@@ -16,49 +18,75 @@ import {
 import Sidebar from "../../Sidebar";
 import DonutChart from "./DonutChart";
 import PatientChart from "./PaitentChart";
+import { convertTimestamp, convertTime } from "../../../services/general_functions";
+
+// getMeetingStatus function definition
+export const getMeetingStatus = (meeting) => {
+  const currentTime = moment();
+  console.log("Current Time:", currentTime.format());
+
+  // Check if endDate and endTime are defined
+  if (!meeting.endDate || !meeting.endTime) {
+    return "Unknown";
+  }
+
+  // Rearrange the date format from DD/MM/YYYY to YYYY-MM-DD
+  const [day, month, year] = meeting.endDate.split("/");
+  const formattedEndDate = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+
+  // Combine formatted endDate and endTime using moment
+  const endTime = moment(`${formattedEndDate} ${meeting.endTime}`, "YYYY-MM-DD hh:mm A");
+  console.log("End Time:", endTime.format());
+
+  if (currentTime.isAfter(endTime)) {
+    return "Timeout";
+  } else if (meeting.capacity === 0) {
+    return "Closed";
+  } else {
+    return "Active";
+  }
+};
 
 const Admin_Dashboard = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [meetings, setMeetings] = useState([]);
+  const [countActive, setCountActive] = useState(0);
+  const [countClose, setCountClose] = useState(0);
+  const [countTimeout, setCountTimeout] = useState(0);
 
   useEffect(() => {
+    toast.success('Login Successful Welcome');
+    
     const fetchMeetings = async () => {
       const querySnapshot = await getAllDocuments("meetings");
       const loadedMeetings = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         Name: doc.data().title,
         StartTime: convertTime(doc.data().startTime),
-        EndTime: convertTime(doc.data().endTime),
+        endTime: convertTime(doc.data().endTime),
         Participent: doc.data().participent,
         Capacity: doc.data().capacity,
         Location: doc.data().streetAddress,
         StartDate: convertTimestamp(doc.data().startDate),
+        endDate: convertTimestamp(doc.data().endDate),
+       
       }));
+
+      const activeCount = loadedMeetings.filter(meeting => getMeetingStatus(meeting) === "Active").length;
+      const closeCount = loadedMeetings.filter(meeting => getMeetingStatus(meeting) === "Closed").length;
+      const timeoutCount = loadedMeetings.filter(meeting => getMeetingStatus(meeting) === "Timeout").length;
+
       setMeetings(loadedMeetings.slice(0, 4)); // Fetch only the first 4 meetings
+      setCountActive(activeCount);
+      setCountClose(closeCount);
+      setCountTimeout(timeoutCount);
     };
 
     fetchMeetings();
   }, []);
 
-  const convertTimestamp = (timestamp) => {
-    if (!timestamp) return "";
-    const date = timestamp.toDate();
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-  };
-
-  const convertTime = (timestamp) => {
-    if (!timestamp) return "";
-    const date = timestamp.toDate();
-    let hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    return `${hours}:${minutes} ${ampm}`;
-  };
-
   // eslint-disable-next-line no-unused-vars
-  const [year, setyear] = useState([
+  const [year, setYear] = useState([
     { value: 1, label: "2022" },
     { value: 2, label: "2021" },
     { value: 3, label: "2020" },
@@ -67,12 +95,9 @@ const Admin_Dashboard = () => {
 
   return (
     <>
+      <ToastContainer autoClose={2000} />
       <Header />
-      <Sidebar
-        id="menu-item"
-        id1="menu-items"
-        activeClassName="admin-dashboard"
-      />
+      <Sidebar id="menu-item" id1="menu-items" activeClassName="admin-dashboard" />
       <>
         <div className="page-wrapper">
           <div className="content">
@@ -103,10 +128,7 @@ const Admin_Dashboard = () => {
                   </div>
                   <div className="dash-content dash-count flex-grow-1">
                     <h4>Active Meeting</h4>
-                    <h2>
-                      {" "}
-                      <CountUp delay={0.4} end={250} duration={0.6} />
-                    </h2>
+                    <h2>{countActive}</h2>
                     <p>
                       <span className="passive-view">
                         <i className="feather-arrow-up-right me-1">
@@ -126,9 +148,7 @@ const Admin_Dashboard = () => {
                   </div>
                   <div className="dash-content dash-count">
                     <h4>Close Meeting</h4>
-                    <h2>
-                      <CountUp delay={0.4} end={140} duration={0.6} />
-                    </h2>
+                    <h2>{countClose}</h2>
                     <p>
                       <span className="passive-view">
                         <i className="feather-arrow-up-right me-1">
@@ -148,9 +168,7 @@ const Admin_Dashboard = () => {
                   </div>
                   <div className="dash-content dash-count">
                     <h4>Timeout</h4>
-                    <h2>
-                      <CountUp delay={0.4} end={56} duration={0.6} />
-                    </h2>
+                    <h2>{countTimeout}</h2>
                     <p>
                       <span className="negative-view">
                         <i className="feather-arrow-down-right me-1">
@@ -191,21 +209,15 @@ const Admin_Dashboard = () => {
                 <div className="card">
                   <div className="card-body">
                     <div className="chart-title patient-visit">
-                      <h4>Participents</h4>
+                      <h4>Participants</h4>
                       <div>
                         <ul className="nav chat-user-total">
                           <li>
-                            <i
-                              className="fa fa-circle current-users"
-                              aria-hidden="true"
-                            />
+                            <i className="fa fa-circle current-users" aria-hidden="true" />
                             Male 75%
                           </li>
                           <li>
-                            <i
-                              className="fa fa-circle old-users"
-                              aria-hidden="true"
-                            />{" "}
+                            <i className="fa fa-circle old-users" aria-hidden="true" /> 
                             Female 25%
                           </li>
                         </ul>
@@ -263,7 +275,19 @@ const Admin_Dashboard = () => {
                       <h4>Meetings</h4>
                     </div>
                     <div id="donut-chart-dash" className="chart-user-icon">
-                      <DonutChart />
+                      <DonutChart countActive={countActive} countClose={countClose} countTimeout={countTimeout} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-12 col-md-12 col-lg-6 col-xl-3 d-flex">
+                <div className="card">
+                  <div className="card-body">
+                    <div className="chart-title">
+                      <h4>Users</h4>
+                    </div>
+                    <div id="user-chart-dash" className="chart-user-icon">
+                      <img src={user001} alt="#" />
                       <img src={user001} alt="#" />
                     </div>
                   </div>
@@ -271,7 +295,7 @@ const Admin_Dashboard = () => {
               </div>
             </div>
 
-            <div className=" w-100">
+            <div className="w-100">
               <div className="content">
                 <div className="row">
                   <div className="col-12 col-xl-12">
@@ -292,7 +316,7 @@ const Admin_Dashboard = () => {
                                 <th>Name</th>
                                 <th>Start Time</th>
                                 <th>End Time</th>
-                                <th>Participents</th>
+                                <th>Participants</th>
                                 <th>Location</th>
                                 <th>Date</th>
                               </tr>
