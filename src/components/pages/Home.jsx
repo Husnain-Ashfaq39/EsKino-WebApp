@@ -5,13 +5,13 @@ import SectionHeading from "../SectionHeading";
 import Banner from "../Section/BannerSection";
 import Section from "../Section";
 // import FeaturesSection from '../Section/FeaturesSection';
-import Spacing from "../Spacing";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import BlogSection from "../Section/BlogSection";
 import DepartmentSection from "../Section/DepartmentSection";
 import { pageTitle } from "../../helpers/PageTitle";
 import SessionCard from "../SessionCard";
-
+import { useQuery } from "@tanstack/react-query";
+import Spacing from "../Spacing";
 import {
   aboutMiniSvg,
   aboutPng,
@@ -46,6 +46,7 @@ import {
   titleIconsSvg,
 } from "../imagepath";
 import Gallery from "./Gallery";
+import { getAllDocuments } from "../../services/dbService";
 
 const blogData = [
   {
@@ -77,47 +78,78 @@ const blogData = [
 const departmentData = [
   {
     title: "Emergency Department",
-    iconUrl: { departmentIcon1Svg },
+    iconUrl: departmentIcon1Svg,
     href: "/departments/department-details",
   },
   {
-    title: "Pediatric Departement",
-    iconUrl: { departmentIcon2Svg },
+    title: "Pediatric Department",
+    iconUrl: departmentIcon2Svg,
     href: "/departments/department-details",
   },
   {
     title: "Gynecology Department",
-    iconUrl: { departmentIcon3Svg },
+    iconUrl: departmentIcon3Svg,
     href: "/departments/department-details",
   },
   {
     title: "Cardiology Department",
-    iconUrl: { departmentIcon4Svg },
+    iconUrl: departmentIcon4Svg,
     href: "/departments/department-details",
   },
   {
     title: "Neurology Department",
-    iconUrl: { departmentIcon5Svg },
+    iconUrl: departmentIcon5Svg,
     href: "/departments/department-details",
   },
   {
     title: "Psychiatry Department",
-    iconUrl: { departmentIcon6Svg },
+    iconUrl: departmentIcon6Svg,
     href: "/departments/department-details",
   },
 ];
-const title = "Empowering Parents, Protecting Children.";
-const subTitle =
-  "We offers essential child emergency aid sessions, equipping parents with the knowledge and skills to handle critical situations. From CPR to first aid, we provide the tools to ensure your child's safety.";
-const bgUrl = { heroBgJpeg };
-const imgUrl = { heroImgPng };
 
 export default function Home() {
   const navigate = useNavigate();
+
+  const {
+    data: heroData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["heroData"],
+    queryFn: () =>
+      getAllDocuments("HeroSection").then((querySnapshot) => {
+        const heroData = querySnapshot.docs.map((doc) => ({
+          title: doc.data().heroTitle,
+          subTitle: doc.data().heroSubtitle,
+          imgUrl: doc.data().heroBackground,
+        }));
+        return heroData[0];
+      }),
+  });
+
   pageTitle("Home");
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading data</div>;
+  }
+
+  if (!heroData) {
+    return <div>No data available</div>;
+  }
+
   return (
     <>
-      <Hero title={title} subTitle={subTitle} bgUrl={bgUrl} imgUrl={imgUrl} />
+      <Hero
+        title={heroData.title}
+        subTitle={heroData.subTitle}
+        bgUrl={heroBgJpeg}
+        imgUrl={heroData.imgUrl}
+      />
 
       <div className="container cs_hero cs_style_1">
         <SectionHeading title="Upcoming Training Sessions" center={true} />
