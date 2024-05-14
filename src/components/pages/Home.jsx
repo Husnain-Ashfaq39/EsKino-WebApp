@@ -160,6 +160,7 @@ export default function Home() {
           title: doc.data().CEBodyTitle,
           subTitle: doc.data().CEBodySubtitle,
           description: doc.data().CEBodyDescription,
+          href: "#",
         }));
         setCEBodyKey(CEBody);
         return CEBody;
