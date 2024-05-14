@@ -134,17 +134,12 @@ const workingProcessData = [
 ];
 
 export default function Home() {
-  const navigate = useNavigate();
   const [Herokey, setHeroKey] = useState({
     title: "",
     subTitle: "",
     imgUrl: "",
   });
-  const {
-    data: heroData,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: heroData } = useQuery({
     queryKey: [Herokey],
     queryFn: () =>
       getAllDocuments("HeroSection").then((querySnapshot) => {
@@ -193,20 +188,20 @@ export default function Home() {
 
   pageTitle("Home");
 
-  const isLoading = isHeroLoading || isCEHeaderLoading || isCEBodyLoading;
-  const error = heroError || CEHeaderError || CEBodyError;
+  // const isLoading = isHeroLoading || isCEHeaderLoading || isCEBodyLoading;
+  // const error = heroError || CEHeaderError || CEBodyError;
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
-    return <div>Error loading data</div>;
-  }
+  // if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
+  //   return <div>Error loading data</div>;
+  // }
 
-  if (!heroData || !CEHeader || !CEBody || !CCHeadData) {
-    return <div>No data available</div>;
-  }
+  // if (!heroData || !CEHeader || !CEBody || !CCHeadData) {
+  //   return <div>No data available</div>;
+  // }
 
   return (
     <>
