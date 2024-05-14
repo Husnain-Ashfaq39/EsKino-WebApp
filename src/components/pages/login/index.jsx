@@ -32,7 +32,7 @@ const Login = () => {
     try {
       await signIn(email, password);
       // Navigate after login
-
+     
       navigate("/admin-dashboard");
     } catch (error) {
       setError(error.message); // Basic error handling

@@ -1,11 +1,19 @@
 import React, { useEffect } from 'react';
 import ApexCharts from 'apexcharts';
 
-const DonutChart = () => {
+const DonutChart = ({ countActive, countClose, countTimeout }) => {
   useEffect(() => {
-    if (document.querySelector('#donut-chart-dash')) {
+    const chartElement = document.querySelector('#donut-chart-dash');
+
+    if (chartElement) {
+      // Destroy the existing chart instance before creating a new one
+      if (window.donutChart) {
+        window.donutChart.destroy();
+      }
+
       const donutChartOptions = {
         chart: {
+          id: 'donut-chart',
           height: 290,
           type: 'donut',
           toolbar: {
@@ -21,7 +29,7 @@ const DonutChart = () => {
         dataLabels: {
           enabled: false,
         },
-        series: [44, 55, 41],
+        series: [countActive, countClose, countTimeout],
         labels: ['Active', 'Close', 'Timeout'],
         responsive: [
           {
@@ -41,14 +49,18 @@ const DonutChart = () => {
         },
       };
 
-      const donut = new ApexCharts(
-        document.querySelector('#donut-chart-dash'),
-        donutChartOptions
-      );
-
-      donut.render();
+      // Create a new chart instance and store it globally
+      window.donutChart = new ApexCharts(chartElement, donutChartOptions);
+      window.donutChart.render();
     }
-  }, []);
+
+    // Cleanup function to destroy the chart when the component unmounts or before re-rendering
+    return () => {
+      if (window.donutChart) {
+        window.donutChart.destroy();
+      }
+    };
+  }, [countActive, countClose, countTimeout]); // Ensure the chart updates when prop values change
 
   return <div id="donut-chart-dash"></div>;
 };
