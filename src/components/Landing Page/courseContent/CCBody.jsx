@@ -2,17 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { Table, Modal } from "antd";
 import Header from '../../Header';
 import Sidebar from '../../Sidebar';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
 import { getAllDocuments, deleteDocument } from '../../../services/dbService'; // Import the Firestore service to fetch documents
 import { imagesend, plusicon, refreshicon, searchnormal } from '../../imagepath';
 import { onShowSizeChange, itemRender } from '../../Pagination';
+import { toast, ToastContainer } from 'react-toastify';
 
 const CCBody = () => {
     const [dataSource, setDataSource] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedRecordId, setSelectedRecordId] = useState(null);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+    const location = useLocation();
+
+    useEffect(() => {
+        const updateSuccess = sessionStorage.getItem('updateSuccess');
+        if (updateSuccess) {
+            toast.success("Document updated successfully!", { autoClose: 2000 });
+            sessionStorage.removeItem('updateSuccess'); // Clear the flag after showing the toast
+        }
+        fetchData();
+    }, [location]);
 
     const fetchData = async () => {
         try {
@@ -26,10 +37,6 @@ const CCBody = () => {
             setLoading(false);
         }
     };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     const onSelectChange = (selectedRowKeys) => {
         // Not needed for delete operation
@@ -118,7 +125,7 @@ const CCBody = () => {
     const handleDelete = async () => {
         try {
             await deleteDocument('CourseContentBody', selectedRecordId);
-            console.log("Deleted Document ID: ",selectedRecordId)
+            console.log("Deleted Document ID: ", selectedRecordId)
             fetchData(); // Refresh data after deletion
             setSelectedRecordId(null);
             hideDeleteModal();
@@ -247,6 +254,7 @@ const CCBody = () => {
             >
                 <p>Are you sure you want to delete the selected content?</p>
             </Modal>
+            <ToastContainer />
         </>
     )
 }

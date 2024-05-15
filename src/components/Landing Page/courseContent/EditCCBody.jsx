@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
 import { imagesend } from "../../imagepath";
 import { getDocument, updateDocument } from "../../../services/dbService";
 import ImageUpload from "../ImageUpload"; // Import the ImageUpload component
+import { uploadFile } from "../../../services/storageService";
+import { toast, ToastContainer } from "react-toastify";
 
 const EditCCBody = () => {
     const { id } = useParams(); // Retrieve the document ID from the URL
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         CCTitle: "",
         CCQuote: "",
@@ -45,31 +49,38 @@ const EditCCBody = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            setLoading(true);
             await updateDocument('CourseContentBody', id, formData);
-            console.log('Document updated successfully!');
+            toast.success('Document updated successfully!', { autoClose: 2000 });
+            sessionStorage.setItem('updateSuccess', 'true'); // Set update flag
+            navigate("/landingpage/coursecontentbody");
         } catch (error) {
+            toast.error("Error updating document: " + error.message, { autoClose: 2000 });
             console.error('Error updating document:', error);
         }
+        setLoading(false);
     };
 
-    const loadFile = (event) => {
+    const loadFile = async (event) => {
         const file = event.target.files[0];
-        const reader = new FileReader();
-    
-        reader.onloadend = () => {
-            // Update the CCImage state with the data URL of the uploaded image
-            setFormData((prevData) => ({
-                ...prevData,
-                CCImage: reader.result,
-            }));
-        };
-    
+
         if (file) {
-            // Read the file as a data URL
-            reader.readAsDataURL(file);
+            const toastId = toast.loading("Uploading image...");
+            try {
+                const uploadedImageURL = await uploadFile(file, `Images/${file.name}`, (progress) => {
+                    const percent = Math.round((progress.loaded / progress.total) * 100);
+                    toast.update(toastId, { render: `Uploading image... ${percent}%`, type: "info", isLoading: true });
+                });
+                setFormData((prevData) => ({
+                    ...prevData,
+                    CCImage: uploadedImageURL
+                }));
+                toast.update(toastId, { render: "Image uploaded successfully!", type: "success", isLoading: false, autoClose: 2000 });
+            } catch (error) {
+                toast.update(toastId, { render: "Image upload failed: " + error.message, type: "error", isLoading: false, autoClose: 2000 });
+            }
         }
     };
-    
 
     return (
         <div>
@@ -160,7 +171,7 @@ const EditCCBody = () => {
                                             </div>
 
                                             {/* Image Upload Component */}
-                                            <ImageUpload id="image" src={formData.CCImage} loadFile={loadFile} imageName="Image"/>
+                                            <ImageUpload id="image" src={formData.CCImage} loadFile={loadFile} imageName="Image" />
 
                                             {/* Submit/Cancel Button */}
                                             <div className="col-12">
@@ -168,12 +179,14 @@ const EditCCBody = () => {
                                                     <button
                                                         type="submit"
                                                         className="btn btn-primary submit-form me-2"
+                                                        disabled={loading}
                                                     >
-                                                        Submit
+                                                        {loading ? "Updating..." : "Update"}
                                                     </button>
                                                     <button
                                                         type="button"
                                                         className="btn btn-primary cancel-form"
+                                                        onClick={() => navigate("/landingpage/coursecontentbody")}
                                                     >
                                                         Cancel
                                                     </button>
@@ -181,6 +194,7 @@ const EditCCBody = () => {
                                             </div>
                                         </div>
                                     </form>
+                                    <ToastContainer />
                                 </div>
                             </div>
                         </div>

@@ -1,14 +1,20 @@
+/* eslint-disable react/jsx-no-duplicate-props */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
-import { imagesend, favicon } from "../../imagepath";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import { getDocument, updateDocument } from "../../../services/dbService";
+import { uploadFile, deleteFileFromStorage } from "../../../services/storageService"; // Ensure correct import
 import ImageUpload from "../ImageUpload"; // Import the ImageUpload component
 
 const EditHeroSection = () => {
     const { id } = useParams(); // Retrieve the document ID from the URL
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         heroTitle: "",
         heroSubtitle: "",
@@ -35,57 +41,54 @@ const EditHeroSection = () => {
     }, [id]);
 
     const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData((prevData) => ({
-          ...prevData,
-          [name]: value,
-      }));
-  };
-  
-  const handleBackgroundImageLoad = (event) => {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-  
-      reader.onloadend = () => {
-          // Update the backgroundImage state with the data URL of the uploaded image
-          setFormData((prevData) => ({
-              ...prevData,
-              heroBackground: reader.result,
-          }));
-      };
-  
-      if (file) {
-          // Read the file as a data URL
-          reader.readAsDataURL(file);
-      }
-  };
-  
-  const handleLogoLoad = (event) => {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-  
-      reader.onloadend = () => {
-          // Update the logo state with the data URL of the uploaded image
-          setFormData((prevData) => ({
-              ...prevData,
-              heroLogo: reader.result,
-          }));
-      };
-  
-      if (file) {
-          // Read the file as a data URL
-          reader.readAsDataURL(file);
-      }
-  };
-  
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleBackgroundImageLoad = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            try {
+                const backgroundUrl = await uploadFile(file, `images/${file.name}`);
+                setFormData((prevData) => ({
+                    ...prevData,
+                    heroBackground: backgroundUrl,
+                }));
+            } catch (error) {
+                toast.error("Background image upload failed: " + error.message);
+            } 
+        }
+    };
+
+    const handleLogoLoad = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            try {
+                const logoUrl = await uploadFile(file, `images/${file.name}`);
+                setFormData((prevData) => ({
+                    ...prevData,
+                    heroLogo: logoUrl,
+                }));
+            } catch (error) {
+                toast.error("Logo image upload failed: " + error.message);
+            } 
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             await updateDocument('HeroSection', id, formData);
-            console.log('Document updated successfully!');
+            toast.success('Hero Section updated successfully!');
+            navigate("/landingpage/herosection");
         } catch (error) {
-            console.error('Error updating document:', error);
+            toast.error('Error updating document: ' + error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -164,10 +167,10 @@ const EditHeroSection = () => {
                                             </div>
 
                                             {/* Background Image Input */}
-                                            <ImageUpload id="background" src={formData.heroBackground} loadFile={handleBackgroundImageLoad} imageName="Background Image"/>
+                                            <ImageUpload id="background" src={formData.heroBackground} loadFile={handleBackgroundImageLoad} imageName="Background Image" />
 
                                             {/* Logo Input */}
-                                            <ImageUpload id="logo" src={formData.heroLogo} loadFile={handleLogoLoad}  imageName="Logo"/>
+                                            <ImageUpload id="logo" src={formData.heroLogo} loadFile={handleLogoLoad} imageName="Logo" />
 
                                             {/* Submit/Cancel Button */}
                                             <div className="col-12">
@@ -175,12 +178,14 @@ const EditHeroSection = () => {
                                                     <button
                                                         type="submit"
                                                         className="btn btn-primary submit-form me-2"
+                                                        disabled={loading}
                                                     >
-                                                        Submit
+                                                        {loading ? "Submitting..." : "Submit"}
                                                     </button>
                                                     <button
                                                         type="button"
                                                         className="btn btn-primary cancel-form"
+                                                        onClick={() => navigate("/landingpage/herosection")}
                                                     >
                                                         Cancel
                                                     </button>
@@ -188,6 +193,7 @@ const EditHeroSection = () => {
                                             </div>
                                         </div>
                                     </form>
+                                    <ToastContainer />
                                 </div>
                             </div>
                         </div>
