@@ -28,6 +28,9 @@ const AddMeeting = () => {
       zipCode: "",
       streetAddress: "",
       capacity: "",
+      priceInEuro: "",
+      discountFor2Persons: "",
+      discountFor3Persons: "",
     },
   });
 
@@ -35,7 +38,7 @@ const AddMeeting = () => {
   const [endDate, setEndDate] = useState(null);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
-  const [submitting, setSubmitting] = useState(false); // For button text and disabling it
+  const [submitting, setSubmitting] = useState(false);
 
   const calculateStatus = (endDate, endTime, capacity) => {
     const currentTime = moment();
@@ -55,7 +58,7 @@ const AddMeeting = () => {
   };
 
   const onSubmit = async (data) => {
-    setSubmitting(true); // Disable the button and change text to submitting...
+    setSubmitting(true);
 
     const formattedData = {
       ...data,
@@ -63,14 +66,14 @@ const AddMeeting = () => {
       endDate: endDate ? endDate.toDate() : null,
       startTime: startTime ? startTime.toDate() : null,
       endTime: endTime ? endTime.toDate() : null,
-      Participants: 0, // Initial participants count
-      Status: calculateStatus(endDate, endTime, data.capacity), // Calculated status
+      Participants: 0,
+      Status: calculateStatus(endDate, endTime, data.capacity),
     };
 
     try {
       await addDocument("meetings", formattedData);
       console.log("Document added successfully!");
-      reset(); // Clear form after successful submission
+      reset();
       setStartDate(null);
       setEndDate(null);
       setStartTime(null);
@@ -79,7 +82,7 @@ const AddMeeting = () => {
     } catch (error) {
       console.error("Error adding document: ", error);
     } finally {
-      setSubmitting(false); // Re-enable the button
+      setSubmitting(false);
     }
   };
 
@@ -281,6 +284,49 @@ const AddMeeting = () => {
                       {errors.capacity.message}
                     </div>
                   )}
+                </div>
+              </div>
+              <div className="col-12 col-md-4">
+                <div className="form-group">
+                  <label className="text-dark">
+                    Price in Euro <span className="login-danger">*</span>
+                  </label>
+                  <input
+                    className="form-control"
+                    type="number"
+                    {...register("priceInEuro", {
+                      required: "This field is required",
+                    })}
+                  />
+                  {errors.priceInEuro && (
+                    <div className="error text-danger">
+                      {errors.priceInEuro.message}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-12 col-md-4">
+                <div className="form-group">
+                  <label className="text-dark">
+                    Discount for 2 Persons (%)
+                  </label>
+                  <input
+                    className="form-control"
+                    type="number"
+                    {...register("discountFor2Persons")}
+                  />
+                </div>
+              </div>
+              <div className="col-12 col-md-4">
+                <div className="form-group">
+                  <label className="text-dark">
+                    Discount for 3 Persons (%)
+                  </label>
+                  <input
+                    className="form-control"
+                    type="number"
+                    {...register("discountFor3Persons")}
+                  />
                 </div>
               </div>
               <div className="col-12">

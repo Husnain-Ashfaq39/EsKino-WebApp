@@ -8,48 +8,42 @@ import { deleteDocument } from "../../services/dbService";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { imagesend, plusicon, refreshicon, searchnormal } from "../imagepath";
-import { fetchParticipantCount,getMeetingStatus } from "../../services/dbService";
+import { fetchParticipantCount, getMeetingStatus } from "../../services/dbService";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { convertTimestamp,convertTime } from "../../services/general_functions";
+import { convertTimestamp, convertTime } from "../../services/general_functions";
+
 const MeetingList = () => {
   const [meetings, setMeetings] = useState([]);
   const navigate = useNavigate();
   const [updateTrigger, setUpdateTrigger] = useState(false);
-  const [meetingtoDele, setMeetingtoDele] = useState("");
+  const [meetingToDelete, setMeetingToDelete] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleDelete = async (meetingId) => {
     try {
-      // Fetch participants associated with the meeting
       const participantQuery = query(
         collection(db, "participants"),
         where("sectionId", "==", meetingId)
       );
       const participantsSnapshot = await getDocs(participantQuery);
 
-      // Delete all participants
       const deleteParticipantsPromises = participantsSnapshot.docs.map(
         (participantDoc) => {
           return deleteDocument("participants", participantDoc.id);
         }
       );
 
-      // Wait for all participants to be deleted
       await Promise.all(deleteParticipantsPromises);
-
-      // Delete the meeting after all participants are deleted
 
       await deleteDocument("meetings", meetingId);
       setMeetings((prevMeetings) =>
         prevMeetings.filter((meeting) => meeting.id !== meetingId)
       );
-      setIsDeleteModalOpen(false); // Hide the modal here after successful deletion
+      setIsDeleteModalOpen(false);
     } catch (error) {
       console.error("Error deleting document and participants: ", error);
     }
   };
-
- 
 
   useEffect(() => {
     const getAllMeetings = async () => {
@@ -63,11 +57,14 @@ const MeetingList = () => {
             Name: doc.data().title,
             StartTime: convertTime(doc.data().startTime),
             endTime: convertTime(doc.data().endTime),
-            Participants: participantCount, // Adding participant count here
+            Participants: participantCount,
             Capacity: doc.data().capacity,
             Location: doc.data().streetAddress,
             StartDate: convertTimestamp(doc.data().startDate),
             endDate: convertTimestamp(doc.data().endDate),
+            PriceInEuro: doc.data().priceInEuro,
+            DiscountFor2Persons: doc.data().discountFor2Persons,
+            DiscountFor3Persons: doc.data().discountFor3Persons,
           };
         })
       );
@@ -76,8 +73,6 @@ const MeetingList = () => {
 
     getAllMeetings();
   }, [updateTrigger]);
-
-  
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMeeting, setSelectedMeeting] = useState({});
@@ -88,29 +83,27 @@ const MeetingList = () => {
     setIsModalOpen(true);
   };
 
-  
-
   const handleOk = () => {
     setIsModalOpen(false);
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    ``;
   };
+
   const columns = [
     {
       title: "Name",
       dataIndex: "Name",
       render: (text, record) => (
-        <Link to={`/meetinglist/participentlist?meetingid=${record.id}`}>
+        <Link to={`/meetinglist/participantlist?meetingid=${record.id}`}>
           {text}
         </Link>
       ),
       sorter: (a, b) => a.Name.length - b.Name.length,
     },
     {
-      title: "StartTime",
+      title: "Start Time",
       dataIndex: "StartTime",
       sorter: (a, b) => a.StartTime.length - b.StartTime.length,
     },
@@ -119,9 +112,8 @@ const MeetingList = () => {
       dataIndex: "EndTime",
       render: (_, record) => {
         const status = getMeetingStatus(record);
-        let badgeClasses = "badge font-weight-bold p-2 "; // Bootstrap classes for padding and bold text
+        let badgeClasses = "badge font-weight-bold p-2 ";
 
-        // Append additional classes based on the status
         if (status === "Active") {
           badgeClasses += "badge-success";
         } else if (status === "Timeout") {
@@ -138,9 +130,9 @@ const MeetingList = () => {
       },
     },
     {
-      title: "Participent",
+      title: "Participants",
       dataIndex: "Participants",
-      sorter: (a, b) => a.Participent - b.Participent,
+      sorter: (a, b) => a.Participants - b.Participants,
     },
     {
       title: "",
@@ -192,8 +184,8 @@ const MeetingList = () => {
                   className="dropdown-item"
                   to="#"
                   onClick={() => {
-                    setMeetingtoDele(record.id);
-                    setIsDeleteModalOpen(true); // Show the modal when Delete is clicked
+                    setMeetingToDelete(record.id);
+                    setIsDeleteModalOpen(true);
                   }}
                 >
                   <i className="fa fa-trash-alt m-r-5"></i> Delete
@@ -205,18 +197,15 @@ const MeetingList = () => {
       ),
     },
   ];
+
   const rowClickHandler = (record) => {
-    navigate(`/meetinglist/participentlist?meetingid=${record.id}`);
+    navigate(`/meetinglist/participantlist?meetingid=${record.id}`);
   };
 
   return (
     <>
       <Header />
-      <Sidebar
-        id="menu-item1"
-        id2="menu-item1"
-        activeClassName="meeting-list"
-      />
+      <Sidebar id="menu-item1" id2="menu-item1" activeClassName="meeting-list" />
       <div className="page-wrapper">
         <div className="content">
           <div className="page-header">
@@ -236,12 +225,10 @@ const MeetingList = () => {
               </div>
             </div>
           </div>
-          {/* /Page Header */}
           <div className="row">
             <div className="col-sm-12">
               <div className="card card-table show-entire">
                 <div className="card-body">
-                  {/* Table Header */}
                   <div className="page-table-header mb-2">
                     <div className="row align-items-center">
                       <div className="col">
@@ -279,8 +266,6 @@ const MeetingList = () => {
                       </div>
                     </div>
                   </div>
-
-                  {/* /Table Header */}
                   <div className="row">
                     <div className="col-sm-12">
                       <div className="card">
@@ -330,13 +315,12 @@ const MeetingList = () => {
                               </p>
                               <p>
                                 <strong>End Time:</strong>{" "}
-                                {selectedMeeting.endTime}
+                                {selectedMeeting.EndTime}
                               </p>
                               <p>
-                                <strong>Participent:</strong>{" "}
+                                <strong>Participants:</strong>{" "}
                                 {selectedMeeting.Participants}
                               </p>
-
                               <p>
                                 <strong>Capacity:</strong>{" "}
                                 {selectedMeeting.Capacity}
@@ -351,12 +335,22 @@ const MeetingList = () => {
                               </p>
                               <p>
                                 <strong>End Date:</strong>{" "}
-                                {selectedMeeting.endDate}
+                                {selectedMeeting.EndDate}
                               </p>
-                              {/* Add more details if needed */}
+                              <p>
+                                <strong>Price in Euro:</strong>{" "}
+                                {selectedMeeting.PriceInEuro}
+                              </p>
+                              <p>
+                                <strong>Discount for 2 Persons (%):</strong>{" "}
+                                {selectedMeeting.DiscountFor2Persons}
+                              </p>
+                              <p>
+                                <strong>Discount for 3 Persons (%):</strong>{" "}
+                                {selectedMeeting.DiscountFor3Persons}
+                              </p>
                             </Modal>
                           )}
-
                           <div
                             className={
                               isDeleteModalOpen
@@ -392,7 +386,7 @@ const MeetingList = () => {
                                       type="button"
                                       className="btn btn-danger"
                                       onClick={() => {
-                                        handleDelete(meetingtoDele);
+                                        handleDelete(meetingToDelete);
                                       }}
                                     >
                                       Delete

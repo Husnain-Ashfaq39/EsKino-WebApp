@@ -5,12 +5,8 @@ import { DatePicker, TimePicker } from "antd";
 import moment from "moment";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import { getDocument } from "../../services/dbService";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
-import { collection, query } from "firebase/firestore";
-import { where } from "firebase/firestore";
-import { setDoc, updateDoc } from "firebase/firestore";
 
 const EditMeeting = () => {
   const location = useLocation();
@@ -27,6 +23,9 @@ const EditMeeting = () => {
     zipCode: "",
     streetAddress: "",
     capacity: "",
+    priceInEuro: "",
+    discountFor2Persons: "",
+    discountFor3Persons: "",
   };
 
   const [meetingData, setMeetingData] = useState(initialMeetingData);
@@ -52,6 +51,9 @@ const EditMeeting = () => {
               streetAddress: data.streetAddress || "",
               zipCode: data.zipCode || "",
               capacity: data.capacity || "",
+              priceInEuro: data.priceInEuro || "",
+              discountFor2Persons: data.discountFor2Persons || "",
+              discountFor3Persons: data.discountFor3Persons || "",
             });
           }
         })
@@ -59,13 +61,11 @@ const EditMeeting = () => {
           console.error("Error fetching document:", error);
         });
     }
-    console.log(meetingData);
   }, [id]);
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Function to handle input changes
   const handleChange = (e) => {
     setMeetingData({ ...meetingData, [e.target.name]: e.target.value });
     if (errors[e.target.name]) {
@@ -73,7 +73,6 @@ const EditMeeting = () => {
     }
   };
 
-  // Function to handle date and time changes
   const handleDateTimeChange = (value, name) => {
     setMeetingData({ ...meetingData, [name]: value });
     if (errors[name]) {
@@ -81,12 +80,10 @@ const EditMeeting = () => {
     }
   };
 
-  // Function to validate form inputs
   const validateForm = () => {
     let isValid = true;
     let newErrors = {};
 
-    // Required field validation
     const requiredFields = [
       "title",
       "startDate",
@@ -97,6 +94,9 @@ const EditMeeting = () => {
       "streetAddress",
       "zipCode",
       "capacity",
+      "priceInEuro",
+      "discountFor2Persons",
+      "discountFor3Persons",
     ];
     requiredFields.forEach((field) => {
       if (
@@ -108,7 +108,6 @@ const EditMeeting = () => {
       }
     });
 
-    // Validate that end time is after start time
     if (
       meetingData.startTime &&
       meetingData.endTime &&
@@ -118,7 +117,6 @@ const EditMeeting = () => {
       newErrors.endTime = "End time must be after start time";
     }
 
-    // Validate that end date is the same or after start date
     if (
       meetingData.startDate &&
       meetingData.endDate &&
@@ -132,17 +130,13 @@ const EditMeeting = () => {
     return isValid;
   };
 
-  // Function to handle form submission
-  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       setIsSubmitting(true);
 
-      // Create a reference to the document
       const docRef = doc(db, "meetings", id);
 
-      // Prepare the data to save
       const dataToSave = {
         title: meetingData.title,
         startDate: meetingData.startDate
@@ -157,15 +151,15 @@ const EditMeeting = () => {
         streetAddress: meetingData.streetAddress,
         zipCode: meetingData.zipCode,
         capacity: meetingData.capacity,
+        priceInEuro: meetingData.priceInEuro,
+        discountFor2Persons: meetingData.discountFor2Persons,
+        discountFor3Persons: meetingData.discountFor3Persons,
       };
 
       try {
-        // Update the document
         await updateDoc(docRef, dataToSave);
         console.log("Document successfully updated!");
         setIsSubmitting(false);
-        // Optionally reset form or navigate user elsewhere
-        //setMeetingData(initialMeetingData); // Reset form after submission
         navigate("/meetinglist");
       } catch (error) {
         console.error("Error updating document: ", error);
@@ -215,7 +209,6 @@ const EditMeeting = () => {
                             placeholder="Enter meeting title"
                             value={meetingData.title}
                             onChange={handleChange}
-                            defaultValue={"title"}
                           />
                           {errors.title && (
                             <div className="error text-danger">
@@ -305,7 +298,6 @@ const EditMeeting = () => {
                           )}
                         </div>
                       </div>
-                      {/* House Owner Input */}
                       <div className="col-12">
                         <div className="form-group">
                           <label>
@@ -319,10 +311,13 @@ const EditMeeting = () => {
                             value={meetingData.houseOwner}
                             onChange={handleChange}
                           />
+                          {errors.houseOwner && (
+                            <div className="error text-danger">
+                              {errors.houseOwner}
+                            </div>
+                          )}
                         </div>
                       </div>
-
-                      {/* Address Input */}
                       <div className="col-12">
                         <div className="form-group">
                           <label>
@@ -337,10 +332,13 @@ const EditMeeting = () => {
                             value={meetingData.streetAddress}
                             onChange={handleChange}
                           />
+                          {errors.streetAddress && (
+                            <div className="error text-danger">
+                              {errors.streetAddress}
+                            </div>
+                          )}
                         </div>
                       </div>
-
-                      {/* ZIP Code Input */}
                       <div className="col-12 col-md-6">
                         <div className="form-group">
                           <label>
@@ -354,10 +352,13 @@ const EditMeeting = () => {
                             value={meetingData.zipCode}
                             onChange={handleChange}
                           />
+                          {errors.zipCode && (
+                            <div className="error text-danger">
+                              {errors.zipCode}
+                            </div>
+                          )}
                         </div>
                       </div>
-
-                      {/* Capacity Input */}
                       <div className="col-12 col-md-6">
                         <div className="form-group">
                           <label>
@@ -371,9 +372,75 @@ const EditMeeting = () => {
                             value={meetingData.capacity}
                             onChange={handleChange}
                           />
+                          {errors.capacity && (
+                            <div className="error text-danger">
+                              {errors.capacity}
+                            </div>
+                          )}
                         </div>
                       </div>
-                      {/* ... */}
+                      <div className="col-12 col-md-4">
+                        <div className="form-group">
+                          <label>
+                            Price in Euro <span className="login-danger">*</span>
+                          </label>
+                          <input
+                            className="form-control"
+                            type="number"
+                            name="priceInEuro"
+                            placeholder="Enter price in Euro"
+                            value={meetingData.priceInEuro}
+                            onChange={handleChange}
+                          />
+                          {errors.priceInEuro && (
+                            <div className="error text-danger">
+                              {errors.priceInEuro}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-12 col-md-4">
+                        <div className="form-group">
+                          <label>
+                            Discount for 2 Persons (%){" "}
+                            <span className="login-danger">*</span>
+                          </label>
+                          <input
+                            className="form-control"
+                            type="number"
+                            name="discountFor2Persons"
+                            placeholder="Enter discount for 2 persons"
+                            value={meetingData.discountFor2Persons}
+                            onChange={handleChange}
+                          />
+                          {errors.discountFor2Persons && (
+                            <div className="error text-danger">
+                              {errors.discountFor2Persons}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-12 col-md-4">
+                        <div className="form-group">
+                          <label>
+                            Discount for 3 Persons (%){" "}
+                            <span className="login-danger">*</span>
+                          </label>
+                          <input
+                            className="form-control"
+                            type="number"
+                            name="discountFor3Persons"
+                            placeholder="Enter discount for 3 persons"
+                            value={meetingData.discountFor3Persons}
+                            onChange={handleChange}
+                          />
+                          {errors.discountFor3Persons && (
+                            <div className="error text-danger">
+                              {errors.discountFor3Persons}
+                            </div>
+                          )}
+                        </div>
+                      </div>
                       <div className="col-12">
                         <div className="doctor-submit text-end">
                           <button
@@ -381,15 +448,12 @@ const EditMeeting = () => {
                             className="btn btn-primary submit-form me-2"
                             disabled={isSubmitting}
                           >
-                            {isSubmitting ? (
-                              <span> Submitting...</span>
-                            ) : (
-                              "Submit"
-                            )}
+                            {isSubmitting ? "Submitting..." : "Submit"}
                           </button>
                           <button
                             type="button"
                             className="btn btn-primary cancel-form"
+                            onClick={() => navigate("/meetinglist")}
                           >
                             Cancel
                           </button>
