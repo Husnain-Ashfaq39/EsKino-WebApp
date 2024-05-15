@@ -62,12 +62,12 @@ const MeetingList = () => {
             id: doc.id,
             Name: doc.data().title,
             StartTime: convertTime(doc.data().startTime),
-            endTime: convertTime(doc.data().endTime),
+            EndTime: convertTime(doc.data().endTime),
             Participants: participantCount, // Adding participant count here
             Capacity: doc.data().capacity,
             Location: doc.data().streetAddress,
             StartDate: convertTimestamp(doc.data().startDate),
-            endDate: convertTimestamp(doc.data().endDate),
+            EndDate: convertTimestamp(doc.data().endDate),
           };
         })
       );

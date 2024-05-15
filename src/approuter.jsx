@@ -42,7 +42,7 @@ import ServerError from "./components/pages/login/ServerError";
 
 import Layout from "./components/Layout";
 import Home from "./components/pages/Home";
-import Blog from "./components/pages/Blog";
+import Blog_client_side from "./components/pages/Blog";
 import BlogDetail from "./components/pages/BlogDetails";
 import Appointments from "./components/pages/Appointments";
 
@@ -96,9 +96,9 @@ const Approuter = () => {
 
           <Route path="/contactlist" element={<Contactlist />} />
           {/* Blog */}
-          <Route path="/blog" element={<Blogdetails />} />
+          <Route path="/blogadmin" element={<Blogdetails />} />
           <Route path="/addblog" element={<Addblog />} />
-          <Route path="/editblog" element={<Editblog />} />
+          <Route path="/editblog/:id" element={<Editblog />} />
           <Route path="/blogview" element={<BlogView />} />
           {/* Settings */}
           <Route
@@ -202,8 +202,8 @@ const Approuter = () => {
             <Route index element={<Home />} />
 
             <Route path="appointments" element={<Appointments />} />
-            <Route path="blog" element={<Blog />} />
-            <Route path="blog/:blogId" element={<BlogDetail />} />
+            <Route path="blog" element={<Blog_client_side />} />
+            <Route path="/blog/blog-details/:id" element={<BlogDetail />} />
 
             <Route path="contact" element={<Contact />} />
           </Route>

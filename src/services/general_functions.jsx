@@ -15,3 +15,4 @@ export const convertTime = (timestamp) => {
     hours = hours ? hours : 12;
     return `${hours}:${minutes} ${ampm}`;
   };
+

@@ -92,6 +92,9 @@ export default function Header2({ logoSrc, variant }) {
                     </li>
 
                     <li>
+                      <Link to="/blog">Our Blogs</Link>
+                    </li>
+                    <li>
                       <Link to="/contact">Contact</Link>
                     </li>
                     <li>
