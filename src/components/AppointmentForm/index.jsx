@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,16 +8,58 @@ import {
   updateDocument,
 } from "../../services/dbService";
 import { arrowWhiteSvg } from "../imagepath";
+
 export default function AppointmentForm({ sectionId }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+    watch,
+  } = useForm({
+    defaultValues: { persons: "1" },
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [meetingData, setMeetingData] = useState(null);
+  const [totalFee, setTotalFee] = useState(0);
+  const [originalPrice, setOriginalPrice] = useState(0);
+
+  useEffect(() => {
+    const fetchMeetingData = async () => {
+      try {
+        const doc = await getDocument("meetings", sectionId);
+        if (doc.exists()) {
+          const data = doc.data();
+          setMeetingData(data);
+          calculateTotalFee(1, data); // Calculate the total fee for 1 person by default
+        } else {
+          toast.error("Meeting not found.");
+        }
+      } catch (error) {
+        console.error("Error fetching meeting data: ", error);
+        toast.error("Failed to fetch meeting data.");
+      }
+    };
+    fetchMeetingData();
+  }, [sectionId]);
+
+  const calculateTotalFee = (persons, meetingData) => {
+    if (meetingData) {
+      let discount = 0;
+      if (persons === 2) {
+        discount = meetingData.discountFor2Persons;
+      } else if (persons === 3) {
+        discount = meetingData.discountFor3Persons;
+      }
+      const originalFee = meetingData.priceInEuro * persons;
+      const discountedFee = originalFee * (1 - discount / 100);
+      setOriginalPrice(originalFee);
+      setTotalFee(discountedFee);
+    }
+  };
 
   const onSubmit = async (data) => {
     data.sectionId = sectionId;
+    data.totalFee = totalFee;
     setIsSubmitting(true);
 
     try {
@@ -52,6 +94,14 @@ export default function AppointmentForm({ sectionId }) {
     }
   };
 
+  const persons = watch("persons");
+
+  useEffect(() => {
+    if (meetingData) {
+      calculateTotalFee(parseInt(persons, 10), meetingData);
+    }
+  }, [persons, meetingData]);
+
   return (
     <div>
       <ToastContainer />
@@ -59,90 +109,124 @@ export default function AppointmentForm({ sectionId }) {
         <div className="col-lg-6">
           <label className="cs_input_label cs_heading_color">First Name</label>
           <input
-            {...register("firstName")}
+            {...register("firstName", { required: true })}
             type="text"
             className="cs_form_field"
             placeholder="David John"
           />
+          {errors.firstName && (
+            <div className="error text-danger">This field is required</div>
+          )}
         </div>
         <div className="col-lg-6">
           <label className="cs_input_label cs_heading_color">Last Name</label>
           <input
-            {...register("lastName")}
+            {...register("lastName", { required: true })}
             type="text"
             className="cs_form_field"
             placeholder="Smith"
           />
+          {errors.lastName && (
+            <div className="error text-danger">This field is required</div>
+          )}
         </div>
-        <div className="col-lg-20">
+        <div className="col-lg-12">
           <label className="cs_input_label cs_heading_color">Email</label>
           <input
-            {...register("email")}
-            type="text"
+            {...register("email", { required: true })}
+            type="email"
             className="cs_form_field"
             placeholder="example@gmail.com"
           />
+          {errors.email && (
+            <div className="error text-danger">This field is required</div>
+          )}
         </div>
-        <div className="col-lg-20">
+        <div className="col-lg-12">
           <label className="cs_input_label cs_heading_color">Address</label>
           <input
-            {...register("address")}
+            {...register("address", { required: true })}
             type="text"
             className="cs_form_field"
             placeholder="Address"
           />
+          {errors.address && (
+            <div className="error text-danger">This field is required</div>
+          )}
         </div>
         <div className="col-lg-4">
-          <label className="cs_input_label cs_heading_color">
-            Select Persons:
-          </label>
-          <select {...register("persons")} className="cs_form_field">
+          <label className="cs_input_label cs_heading_color">Select Persons:</label>
+          <select
+            {...register("persons", { required: true })}
+            className="cs_form_field"
+          >
             <option value="1">1 person</option>
             <option value="2">2 persons</option>
             <option value="3">3 persons</option>
           </select>
+          {errors.persons && (
+            <div className="error text-danger">This field is required</div>
+          )}
+        </div>
+        <div className="col-lg-8 d-flex align-items-end">
+          <label className="cs_input_label cs_heading_color me-2">Total Fee:</label>
+          {originalPrice > totalFee && (
+            <span style={{ textDecoration: "line-through", color: "red",marginBottom: "0.65rem", }}>
+              €{originalPrice.toFixed(2)}
+            </span>
+          )}
+          <span
+            style={{
+              backgroundColor: "#2FCE2E", 
+              color: "white",
+              padding: "5px 10px",
+              borderRadius: "5px",
+              marginLeft: "10px",
+              marginBottom: "0.4rem",
+            }}
+          >
+            €{totalFee.toFixed(2)}
+          </span>
         </div>
         <div className="col-lg-12">
-          <label className="cs_input_label cs_heading_color">
-            Name of Persons
-          </label>
+          <label className="cs_input_label cs_heading_color">Name of Persons</label>
           <input
-            {...register("personNames")}
+            {...register("personNames", { required: true })}
             type="text"
             className="cs_form_field"
             placeholder="name1, name2 etc"
           />
+          {errors.personNames && (
+            <div className="error text-danger">This field is required</div>
+          )}
         </div>
         <div className="col-lg-12">
-          <label className="cs_input_label cs_heading_color">
-            Select Option
-          </label>
+          <label className="cs_input_label cs_heading_color">Select Option</label>
           <div className="cs_radio_group">
             <div className="cs_radio_wrap">
               <input
-                {...register("gender")}
+                {...register("gender", { required: true })}
                 className="cs_radio_input"
                 type="radio"
                 value="Male"
                 id="Male"
               />
-              <label className="cs_radio_label" htmlFor="Male">
-                Male
-              </label>
+              <label className="cs_radio_label" htmlFor="Male">Male</label>
             </div>
             <div className="cs_radio_wrap">
               <input
-                {...register("gender")}
+                {...register("gender", { required: true })}
                 className="cs_radio_input"
                 type="radio"
                 value="Female"
                 id="Female"
               />
-              <label className="cs_radio_label" htmlFor="Female">
-                Female
-              </label>
+              <label className="cs_radio_label" htmlFor="Female">Female</label>
             </div>
           </div>
+          {errors.gender && (
+            <div className="error text-danger">This field is required</div>
+          )}
         </div>
         <div className="col-lg-12 flex justify-end">
           <button
@@ -150,7 +234,7 @@ export default function AppointmentForm({ sectionId }) {
             type="submit"
             disabled={isSubmitting}
           >
-            <span>{isSubmitting ? "Submiting..." : "Submit"}</span>
+            <span>{isSubmitting ? "Submitting..." : "Submit"}</span>
             <i>
               <img src={arrowWhiteSvg} alt="Icon" />
             </i>
