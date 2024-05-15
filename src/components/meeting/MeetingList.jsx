@@ -62,12 +62,12 @@ const MeetingList = () => {
             id: doc.id,
             Name: doc.data().title,
             StartTime: convertTime(doc.data().startTime),
-            EndTime: convertTime(doc.data().endTime),
+            endTime: convertTime(doc.data().endTime),
             Participants: participantCount, // Adding participant count here
             Capacity: doc.data().capacity,
             Location: doc.data().streetAddress,
             StartDate: convertTimestamp(doc.data().startDate),
-            EndDate: convertTimestamp(doc.data().endDate),
+            endDate: convertTimestamp(doc.data().endDate),
           };
         })
       );
@@ -330,7 +330,7 @@ const MeetingList = () => {
                               </p>
                               <p>
                                 <strong>End Time:</strong>{" "}
-                                {selectedMeeting.EndTime}
+                                {selectedMeeting.endTime}
                               </p>
                               <p>
                                 <strong>Participent:</strong>{" "}
@@ -351,7 +351,7 @@ const MeetingList = () => {
                               </p>
                               <p>
                                 <strong>End Date:</strong>{" "}
-                                {selectedMeeting.EndDate}
+                                {selectedMeeting.endDate}
                               </p>
                               {/* Add more details if needed */}
                             </Modal>
