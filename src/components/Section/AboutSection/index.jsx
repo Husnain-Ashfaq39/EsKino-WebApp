@@ -1,5 +1,5 @@
-import React from 'react';
-import Spacing from '../../Spacing';
+import React from "react";
+import Spacing from "../../Spacing";
 
 export default function AboutSection({
   imgUrl,
@@ -13,7 +13,6 @@ export default function AboutSection({
       <div className="container">
         <div className="row align-items-center flex-lg-row flex-column-reverse cs_gap_y_40">
           <div className="col-lg-7">
-            <Spacing md="55" />
             <div className="cs_about_img">
               <img src={imgUrl} alt="About" />
               <div className="cs_about_mini_img">

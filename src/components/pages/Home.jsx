@@ -8,7 +8,6 @@ import { useQuery } from "@tanstack/react-query";
 import { pageTitle } from "../../helpers/PageTitle";
 import { getAllDocuments } from "../../services/dbService";
 import BlogSection from "../Section/BlogSection";
-import DepartmentSection from "../Section/DepartmentSection";
 import Spacing from "../Spacing";
 import DepartmentSectionStyle1 from "../WebChildEmergency/DepartmentSectionStyle2";
 import {
@@ -16,12 +15,6 @@ import {
   about_img,
   banner_img50,
   ctaBgSvg,
-  departmentIcon1Svg,
-  departmentIcon2Svg,
-  departmentIcon3Svg,
-  departmentIcon4Svg,
-  departmentIcon5Svg,
-  departmentIcon6Svg,
   heroBgJpeg,
   post1Jpeg,
   post2Jpeg,
@@ -57,39 +50,6 @@ const blogData = [
     btnText: "Learn More",
     href: "/blog/blog-details",
     socialShare: true,
-  },
-];
-
-const departmentData = [
-  {
-    title: "Emergency Department",
-    iconUrl: departmentIcon1Svg,
-    href: "/departments/department-details",
-  },
-  {
-    title: "Pediatric Department",
-    iconUrl: departmentIcon2Svg,
-    href: "/departments/department-details",
-  },
-  {
-    title: "Gynecology Department",
-    iconUrl: departmentIcon3Svg,
-    href: "/departments/department-details",
-  },
-  {
-    title: "Cardiology Department",
-    iconUrl: departmentIcon4Svg,
-    href: "/departments/department-details",
-  },
-  {
-    title: "Neurology Department",
-    iconUrl: departmentIcon5Svg,
-    href: "/departments/department-details",
-  },
-  {
-    title: "Psychiatry Department",
-    iconUrl: departmentIcon6Svg,
-    href: "/departments/department-details",
   },
 ];
 
@@ -181,6 +141,7 @@ export default function Home() {
           title: doc.data().CEBodyTitle,
           subTitle: doc.data().CEBodySubtitle,
           description: doc.data().CEBodyDescription,
+          href: "#",
         }));
         return data;
       }),
@@ -314,7 +275,7 @@ export default function Home() {
         <SectionHeading title="Upcoming Training Sessions" center={true} />
         <Spacing md="72" lg="50" />
         {/* Render your training session component here */}
-        <SessionCard limit={true} />
+        <SessionCard />
       </div>
 
       <Section>
@@ -334,16 +295,8 @@ export default function Home() {
         />
       </Section>
 
-      <Section topMd={185} topLg={150} topXl={110}>
-        <DepartmentSection
-          sectionTitle="Departments"
-          bgUrl="../../../public/images/home_1/department_bg.svg"
-          data={departmentData}
-        />
-      </Section>
-
       {/* Render your testimonial section here */}
-
+      <Spacing md="165" lg="125" />
       <Section>
         <Banner
           bgUrl={ctaBgSvg}
