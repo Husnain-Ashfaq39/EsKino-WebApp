@@ -1,8 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { Timestamp } from 'firebase/firestore';
-
+import React, { useState,useEffect } from "react";
 import Hero from "../Hero";
 import Section from "../Section";
 import AboutSection from "../Section/AboutSection";
@@ -28,38 +24,10 @@ import Gallery from "./Gallery";
 import WebCourseContent from "../WebLandingPage/WebCourseContent/WebCourseContent";
 import SessionCard from "../SessionCard";
 import FeaturesSection from "../WebLandingPage/WebOrganizationMatters/OrganizationMattersSection";
-
+import { useNavigate } from "react-router-dom";
+import { Timestamp } from 'firebase/firestore';
 // Sample data
-const blogData = [
-  {
-    title: "The Benefits of Mindfulness Meditation for Stress and Anxiety",
-    thumbUrl: post1Jpeg,
-    date: "May 1, 2023",
-    btnText: "Learn More",
-    href: "/blog/blog-details",
-    socialShare: true,
-  },
-  {
-    title: "Healthy Eating on a Budget: Tips and Strategies",
-    thumbUrl: post2Jpeg,
-    date: "May 4, 2023",
-    btnText: "Learn More",
-    href: "/blog/blog-details",
-    socialShare: true,
-  },
-  {
-    title: "The Importance of Regular Cancer Screenings and Early Detection",
-    thumbUrl: post3Jpeg,
-    date: "May 1, 2023",
-    btnText: "Learn More",
-    href: "/blog/blog-details",
-    socialShare: true,
-  },
-];
-import { getAllDocuments } from "../../services/dbService";
-import { pageTitle } from "../../helpers/PageTitle";
-import { aboutMiniSvg, about_img, ctaBgSvg, banner_img50, departmentIcon1Svg, departmentIcon2Svg, departmentIcon3Svg, departmentIcon4Svg, departmentIcon5Svg, departmentIcon6Svg, heroBgJpeg } from "../imagepath";
-import BlogSectionStyle2 from "../Section/BlogSection/BlogSectionStyle2";
+
 
 const workingProcessData = [
   {
@@ -97,18 +65,11 @@ const workingProcessData = [
     iconUrl: "/images/home_2/wording_process_icon_5.svg",
     number: "05",
   },
-const departmentData = [
-  { title: "Emergency Department", iconUrl: departmentIcon1Svg, href: "/departments/department-details" },
-  { title: "Pediatric Department", iconUrl: departmentIcon2Svg, href: "/departments/department-details" },
-  { title: "Gynecology Department", iconUrl: departmentIcon3Svg, href: "/departments/department-details" },
-  { title: "Cardiology Department", iconUrl: departmentIcon4Svg, href: "/departments/department-details" },
-  { title: "Neurology Department", iconUrl: departmentIcon5Svg, href: "/departments/department-details" },
-  { title: "Psychiatry Department", iconUrl: departmentIcon6Svg, href: "/departments/department-details" },
 ];
 
 export default function Home() {
   // const navigate = useNavigate();
-
+  const [blogData, setBlogData] = useState([]);
   // Hero Section useQuery
   const {
     data: heroData,
@@ -116,25 +77,14 @@ export default function Home() {
     error: heroError,
   } = useQuery({
     queryKey: ["HeroSection"],
-  const navigate = useNavigate();
-  const [blogData, setBlogData] = useState([]);
-  const [heroKey, setHeroKey] = useState({ title: "", subTitle: "", imgUrl: "" });
-  const [CEHeaderKey, setCEHeaderKey] = useState({ title: "" });
-  const [CEBodyKey, setCEBodyKey] = useState([]);
-
-
-  const { data: heroData, isLoading, error } = useQuery({
-    queryKey: ['HeroSection'],
     queryFn: () =>
       getAllDocuments("HeroSection").then((querySnapshot) => {
         const data = querySnapshot.docs.map((doc) => ({
-        const heroDataArray = querySnapshot.docs.map((doc) => ({
           title: doc.data().heroTitle,
           subTitle: doc.data().heroSubtitle,
           imgUrl: doc.data().heroBackground,
         }));
-        setHeroKey(heroDataArray[0]);
-        return heroDataArray[0];
+        return data[0];
       }),
   });
 
@@ -145,18 +95,12 @@ export default function Home() {
     error: CEHeaderError,
   } = useQuery({
     queryKey: ["ChildEmergencyHeader"],
-
-  const { data: CEHeader } = useQuery({
-    queryKey: ['ChildEmergencyHeader'],
     queryFn: () =>
       getAllDocuments("ChildEmergencyHeader").then((querySnapshot) => {
         const data = querySnapshot.docs.map((doc) => ({
-        const CEHeaderArray = querySnapshot.docs.map((doc) => ({
           title: doc.data().CEHeadTitle,
         }));
         return data[0];
-        setCEHeaderKey(CEHeaderArray[0]);
-        return CEHeaderArray[0];
       }),
   });
 
@@ -167,20 +111,14 @@ export default function Home() {
     error: CEBodyError,
   } = useQuery({
     queryKey: ["ChildEmergencyBody"],
-
-  const { data: CEBody } = useQuery({
-    queryKey: ['ChildEmergencyBody'],
     queryFn: () =>
       getAllDocuments("ChildEmergencyBody").then((querySnapshot) => {
         const data = querySnapshot.docs.map((doc) => ({
-        const CEBodyArray = querySnapshot.docs.map((doc) => ({
           title: doc.data().CEBodyTitle,
           subTitle: doc.data().CEBodySubtitle,
           description: doc.data().CEBodyDescription,
           href: "#",
         }));
-        setCEBodyKey(CEBodyArray);
-        return CEBodyArray;
         return data;
       }),
   });
@@ -249,17 +187,6 @@ export default function Home() {
   useEffect(() => {
     pageTitle("Home");
 
-  if (heroLoading || CEHeaderLoading || CEBodyLoading || CCHeadLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
-    return <div>Error loading data</div>;
-  }
-
-  if (!heroData || !CEHeader || !CEBody || !CCHeadData) {
-    return <div>No data available</div>;
-  }
     const fetchBlogData = async () => {
       try {
         const snapshot = await getAllDocuments("blogs");
@@ -308,16 +235,39 @@ export default function Home() {
     fetchBlogData();
   }, []);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading data</div>;
-  if (!heroData) return <div>No data available</div>;
+  if (heroLoading || CEHeaderLoading || CEBodyLoading || CCHeadLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
+    return <div>Error loading data</div>;
+  }
+
+  if (!heroData || !CEHeader || !CEBody || !CCHeadData) {
+    return <div>No data available</div>;
+  }
+
 
   return (
     <>
-      <Hero title={heroData.title} subTitle={heroData.subTitle} bgUrl={heroBgJpeg} imgUrl={heroData.imgUrl} />
+      {/* Hero Section */}
+      <Hero
+        title={heroData.title}
+        subTitle={heroData.subTitle}
+        bgUrl={heroBgJpeg}
+        imgUrl={heroData.imgUrl}
+      />
+
+      {/* Child Emergency Section */}
       <Section topMd={200} topLg={150} topXl={110}>
-        {CEHeader && <DepartmentSectionStyle1 sectionTitle={CEHeader.title} data={CEBody} />}
+        {CEHeader && (
+          <DepartmentSectionStyle1
+            sectionTitle={CEHeader.title}
+            data={CEBody}
+          />
+        )}
       </Section>
+
       <Spacing md="182" lg="150" />
 
       {/* Course Content Section */}
@@ -362,8 +312,10 @@ export default function Home() {
           subTitle="EsKino"
           featureList={[
             {
-              featureListTitle: "Eskino is a team of experienced medical professionals",
-              featureListSubTitle: "We offer essential child emergency aid sessions, equipping parents with the knowledge and skills to handle critical situations. From CPR to first aid, we provide the tools to ensure your child's safety.",
+              featureListTitle:
+                "Eskino is a team of experienced medical professionals",
+              featureListSubTitle:
+                "We offers essential child emergency aid sessions, equipping parents with the knowledge and skills to handle critical situations. From CPR to first aid, we provide the tools to ensure your childs safety.",
             },
           ]}
         />
@@ -371,28 +323,24 @@ export default function Home() {
 
       {/* Render your testimonial section here */}
       <Spacing md="165" lg="125" />
-      <Section topMd={185} topLg={150} topXl={110}>
-        <DepartmentSection sectionTitle="Departments" bgUrl="../../../public/images/home_1/department_bg.svg" data={departmentData} />
-      </Section>
-      <Section topMd={185} topLg={140} topXl={100} bottomMd={200} bottomLg={150} bottomXl={110}></Section>
       <Section>
-        <Banner bgUrl={ctaBgSvg} imgUrl={banner_img50} title="Emergency Aid Made Easy for Parents" subTitle="Equipping parents with essential skills for child emergency response, ensuring confident and effective action in critical situations." />
+        <Banner
+          bgUrl={ctaBgSvg}
+          imgUrl={banner_img50}
+          title="Emergency Aid Made Easy for Parents"
+          subTitle="Equipping parents with essential skills for child emergency response, ensuring confident and effective action in critical situations."
+        />
       </Section>
 
       <Gallery />
 
       <Section topMd={190} topLg={145} topXl={105}>
-        <BlogSection
+      <BlogSection
           sectionTitle="Latest Update"
           sectionTitleUp="BLOG POSTS"
           data={blogData}
         />
       </Section>
-      
-      {/* End Blog Section */}
     </>
   );
 }
-
-
- 
