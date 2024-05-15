@@ -2,8 +2,8 @@
 import create from 'zustand';
 
 const useStore = create((set) => ({
-  isToggled: false,
-  toggle: () => set((state) => ({ isToggled: !state.isToggled })),
+  showHeader: true,
+  setShowHeader: (show) => set({ showHeader: show }),
 }));
 
 export default useStore;

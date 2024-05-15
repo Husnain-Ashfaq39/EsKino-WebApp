@@ -63,7 +63,7 @@ export default function Header2({ logoSrc, variant }) {
       <header
         className={`cs_site_header cs_style1 cs_sticky_header ${
           mobileToggle ? "cs_mobile_toggle_active" : ""
-        } ${variant} ${isSticky ? "cs_active_sticky" : ""}`}
+        } ${variant} ${isSticky ? "cs_sticky_active" : ""}`}
       >
         <div className="cs_main_header">
           <div className="container">
@@ -90,7 +90,6 @@ export default function Header2({ logoSrc, variant }) {
                     <li>
                       <Link to="/">Home</Link>
                     </li>
-
                     <li>
                       <Link to="/blog">Our Blogs</Link>
                     </li>
