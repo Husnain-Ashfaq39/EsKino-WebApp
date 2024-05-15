@@ -1,17 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signIn } from "../../../services/authService";
-import {
-  login02,
-  loginlogo,
-  loginicon01,
-  loginicon02,
-  loginicon03,
-  logo2Png,
-  logoSvg,
-} from "../../imagepath";
+import { login02, logo2Png } from "../../imagepath";
 import { Eye, EyeOff } from "feather-icons-react";
 import { ToastContainer, toast } from "react-toastify";
+import ReCAPTCHA from "react-google-recaptcha";
 import "react-toastify/dist/ReactToastify.css";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
@@ -20,6 +13,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState(null);
   const navigate = useNavigate();
   const [error, setError] = useState("");
 
@@ -27,15 +21,21 @@ const Login = () => {
     setPasswordVisible(!passwordVisible);
   };
 
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!captchaValue) {
+      setError("Please complete the CAPTCHA");
+      return;
+    }
     try {
       await signIn(email, password);
-      // Navigate after login
-     
       navigate("/admin-dashboard");
     } catch (error) {
-      setError(error.message); // Basic error handling
+      setError(error.message);
       console.error("Failed to login", error);
     }
   };
@@ -107,6 +107,17 @@ const Login = () => {
                             <Eye className="react-feather-custom" />
                           )}
                         </span>
+                      </div>
+                      <div className="form-group text-right">
+                        <Link to="/forgotpassword" className="forgot-link">
+                          Forgot Password?
+                        </Link>
+                      </div>
+                      <div className="form-group">
+                        <ReCAPTCHA
+                          sitekey="6Lej_twpAAAAAJ0kHb_xT7MjlNFPjFz5tksuhB0G"
+                          onChange={handleCaptchaChange}
+                        />
                       </div>
                       {error && <p className="text-danger">{error}</p>}
                       <div className="form-group login-btn">

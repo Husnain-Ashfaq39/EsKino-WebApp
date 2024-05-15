@@ -338,28 +338,16 @@ const Sidebar = (props) => {
                     <span> Blog</span> <span className="menu-arrow" />
                   </Link>
                   <ul style={{ display: "none" }} className="menu-items11">
-                    {/* <li>
+                    <li>
                       <Link
                         className={
-                          props?.activeClassName === "blog-grid" ? "active" : ""
+                          props?.activeClassName === "blog-view" ? "active" : ""
                         }
                         to="/blogview"
                       >
-                        Blog
+                        View Blogs
                       </Link>
-                    </li> */}
-                    {/* <li>
-                      <Link
-                        className={
-                          props?.activeClassName === "blog-details"
-                            ? "active"
-                            : ""
-                        }
-                        to="/blog"
-                      >
-                        Blog View
-                      </Link>
-                    </li> */}
+                    </li>
                     <li>
                       <Link
                         className={
@@ -370,16 +358,7 @@ const Sidebar = (props) => {
                         Add Blog
                       </Link>
                     </li>
-                    <li>
-                      <Link
-                        className={
-                          props?.activeClassName === "edit-blog" ? "active" : ""
-                        }
-                        to="/editblog"
-                      >
-                        Edit Blog
-                      </Link>
-                    </li>
+                    
                   </ul>
                 </li>
                 <li className="submenu">

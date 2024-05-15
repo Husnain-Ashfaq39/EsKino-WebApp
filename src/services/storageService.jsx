@@ -24,7 +24,7 @@ export const uploadImageToStorage = async (file) => {
 };
 
 export const addImageToGallery = async (url, category) => {
-  const galleryRef = db.collection("gallery");
+  const galleryRef = db.collection("blogimages");
   return galleryRef.add({
     url,
     category,

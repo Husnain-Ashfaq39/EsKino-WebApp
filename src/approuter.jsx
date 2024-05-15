@@ -33,16 +33,16 @@ import Signup from "./components/pages/login/Signup";
 import Admin_Dashboard from "./components/Dashboard/Admin_Dashboard/Admin_Dashboard";
 import BlankPage from "./components/pages/login/BlankPage";
 import ChangePassword from "./components/pages/login/ChangePassword";
-import EditProfile from "./components/pages/login/EditProfile";
+
 import Error from "./components/pages/login/Error";
 import LockScreen from "./components/pages/login/LockScreen";
-import Profile from "./components/pages/login/Profile";
+
 import Register from "./components/pages/login/Register";
 import ServerError from "./components/pages/login/ServerError";
 
 import Layout from "./components/Layout";
 import Home from "./components/pages/Home";
-import Blog from "./components/pages/Blog";
+import Blog_client_side from "./components/pages/Blog";
 import BlogDetail from "./components/pages/BlogDetails";
 import Appointments from "./components/pages/Appointments";
 
@@ -68,18 +68,17 @@ import ErrorPage from "./components/pages/ErrorPage";
 import Contactlist from "./components/contactlist";
 import GalleryList from "./components/Gallery/GalleryList";
 import EditGallery from "./components/Gallery/EditGallery";
+
 //Accounts
 const Approuter = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          {/* <Route path="/" element={<Login />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/edit-profile" element={<EditProfile />} />
+          {/* <Route path="/signup" element={<Signup />} /> */}
+
           <Route path="/register" element={<Register />} />
           <Route path="/lockscreen" element={<LockScreen />} />
           <Route path="/changepassword" element={<ChangePassword />} />
@@ -91,14 +90,13 @@ const Approuter = () => {
           <Route path="/gallerylist/add" element={<AddGallery />} />
           <Route path="/gallerylist/edit" element={<EditGallery />} />
 
-
           {/* Contact */}
 
           <Route path="/contactlist" element={<Contactlist />} />
           {/* Blog */}
-          <Route path="/blog" element={<Blogdetails />} />
+          <Route path="/blogadmin" element={<Blogdetails />} />
           <Route path="/addblog" element={<Addblog />} />
-          <Route path="/editblog" element={<Editblog />} />
+          <Route path="/editblog/:id" element={<Editblog />} />
           <Route path="/blogview" element={<BlogView />} />
           {/* Settings */}
           <Route
@@ -202,8 +200,8 @@ const Approuter = () => {
             <Route index element={<Home />} />
 
             <Route path="appointments" element={<Appointments />} />
-            <Route path="blog" element={<Blog />} />
-            <Route path="blog/:blogId" element={<BlogDetail />} />
+            <Route path="blog" element={<Blog_client_side />} />
+            <Route path="/blog/blog-details/:id" element={<BlogDetail />} />
 
             <Route path="contact" element={<Contact />} />
           </Route>

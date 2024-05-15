@@ -330,7 +330,7 @@ const MeetingList = () => {
                               </p>
                               <p>
                                 <strong>End Time:</strong>{" "}
-                                {selectedMeeting.EndTime}
+                                {selectedMeeting.endTime}
                               </p>
                               <p>
                                 <strong>Participent:</strong>{" "}
@@ -351,7 +351,7 @@ const MeetingList = () => {
                               </p>
                               <p>
                                 <strong>End Date:</strong>{" "}
-                                {selectedMeeting.EndDate}
+                                {selectedMeeting.endDate}
                               </p>
                               {/* Add more details if needed */}
                             </Modal>
