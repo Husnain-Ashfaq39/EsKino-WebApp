@@ -5,11 +5,7 @@ import SocialWidget from '../Widget/SocialWidget';
 import Newsletter from '../Widget/Newsletter';
 import TextWidget from '../Widget/TextWidget';
 import { footerBg1Svg, footerLogoBgSvg, logoIconSvg } from '../imagepath';
-const menuDataOne = [
-  { title: 'About Us', href: '/about' },
-  { title: 'Departments', href: '/departments' },
-  { title: 'Appointment', href: '/appointments' },
-];
+
 const menuDataTwo = [
   { title: 'Blog', href: '/blog' },
   { title: 'Contact Us', href: '/contact' },
@@ -44,9 +40,7 @@ export default function Footer() {
               </div>
             </div>
             <div className="col-lg-2">
-              <div className="cs_footer_item">
-                <MenuWidget data={menuDataOne} />
-              </div>
+              
             </div>
             <div className="col-lg-2">
               <div className="cs_footer_item">

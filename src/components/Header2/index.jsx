@@ -7,6 +7,7 @@ import Spacing from "../Spacing";
 import { closeSvg, logo2Png, logoSvg } from "../imagepath";
 import { getAllDocuments } from "../../services/dbService";
 import { useQuery } from "@tanstack/react-query";
+import { contactInfo } from "../../services/general_functions";
 
 export default function Header2({ logoSrc, variant }) {
   const [isSticky, setIsSticky] = useState(false);
@@ -181,19 +182,19 @@ export default function Header2({ logoSrc, variant }) {
           <Spacing md="35" lg="50" xl="35" />
           <IconBoxStyle11
             title="Phone"
-            subTitle="123-456-7890"
+            subTitle={contactInfo.phone}
             iconSrc="/images/contact/icon_1.svg"
           />
           <Spacing md="30" lg="30" xl="30" />
           <IconBoxStyle11
             title="Email"
-            subTitle="eskino@gmail.com"
+            subTitle={contactInfo.email}
             iconSrc="/images/contact/icon_2.svg"
           />
           <Spacing md="30" lg="30" xl="30" />
           <IconBoxStyle11
             title="Location"
-            subTitle="123 Anywhere St., Any City, 12345"
+            subTitle={contactInfo.address}
             iconSrc="/images/contact/icon_3.svg"
           />
           <Spacing md="60" lg="60" xl="60" />

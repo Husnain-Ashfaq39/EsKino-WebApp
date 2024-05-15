@@ -4,7 +4,7 @@ import ContactForm from '../ContactForm';
 import Section from '../Section';
 import ContactInfoSection from '../Section/ContactInfoSection';
 import { pageTitle } from '../../helpers/PageTitle';
-import { bannerBgSvg, bannerImgPng } from '../imagepath';
+import { bannerBgSvg, bannerImgPng, contactUs } from '../imagepath';
 
 export default function Contact() {
   pageTitle('Contact');
@@ -12,7 +12,7 @@ export default function Contact() {
     <>
       <BannerSectionStyle5
         bgUrl={bannerBgSvg}
-        imgUrl={bannerImgPng}
+        imgUrl={contactUs}
         title="Contact Us"
         subTitle="Kindly reach us to get the fastest response and help"
       />

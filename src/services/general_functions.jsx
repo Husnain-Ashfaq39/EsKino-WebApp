@@ -16,3 +16,9 @@ export const convertTime = (timestamp) => {
     return `${hours}:${minutes} ${ampm}`;
   };
 
+
+export const contactInfo={
+  address:"123 Anywhere St., Any City 12345",
+  phone:"123-456-7890",
+  email:"eskino@gmail.com"
+}

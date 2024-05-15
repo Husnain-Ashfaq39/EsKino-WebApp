@@ -2,7 +2,7 @@
 export {default as backgroundImg} from "../assets/img/landingPage/backgroundImg.JPG"
 //main
 export { default as heroimgPng2 } from "../assets/images/heroimg2.png";
-
+export {default as contactUs} from "../assets/images/contact/contact-us.png"
 export { default as bannerImgJpg } from "../assets/images/banner_img.jpg";
 export { default as heroImgPng } from "../assets/images/hero_img.png";
 export { default as heroJpg } from "../assets/images/hero.jpg";
