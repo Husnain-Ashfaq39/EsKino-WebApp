@@ -11,16 +11,21 @@ import { toast, ToastContainer } from 'react-toastify';
 
 const CCBody = () => {
     const [dataSource, setDataSource] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [selectedRecordId, setSelectedRecordId] = useState(null);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const location = useLocation();
 
     useEffect(() => {
-        const updateSuccess = sessionStorage.getItem('updateSuccess');
+        const updateSuccess = sessionStorage.getItem('updateCCBodySuccess');
+        const addSuccess=sessionStorage.getItem('addCCBodySuccess');
         if (updateSuccess) {
             toast.success("Document updated successfully!", { autoClose: 2000 });
-            sessionStorage.removeItem('updateSuccess'); // Clear the flag after showing the toast
+            sessionStorage.removeItem('updateCCBodySuccess'); // Clear the flag after showing the toast
+        }
+        if (addSuccess) {
+            toast.success("Document Added successfully!", { autoClose: 2000 });
+            sessionStorage.removeItem('addCCBodySuccess'); // Clear the flag after showing the toast
         }
         fetchData();
     }, [location]);

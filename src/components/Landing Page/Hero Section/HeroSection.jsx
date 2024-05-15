@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { Table, Modal, Button } from 'antd';
-import { plusicon, refreshicon, searchnormal} from '../../imagepath';
+import { Table, Modal } from 'antd';
+import { plusicon, refreshicon, searchnormal } from '../../imagepath';
 import Header from '../../Header';
 import Sidebar from '../../Sidebar';
 import { Link } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react';
 import { getAllDocuments, deleteDocument } from "../../../services/dbService"; // Assuming dbService provides methods to interact with Firebase
+import { toast, ToastContainer } from 'react-toastify';
 
 const HeroSection = () => {
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -16,6 +17,12 @@ const HeroSection = () => {
     const [deleteItemId, setDeleteItemId] = useState(null);
 
     useEffect(() => {
+        const updateSuccessStatus = sessionStorage.getItem('updateHeroSuccess');
+        if (updateSuccessStatus) {
+            toast.success("Hero Section Updated Successfully!", { autoClose: 2000 });
+            sessionStorage.removeItem("updateHeroSuccess");
+        }
+
         fetchData();
     }, []);
 
@@ -66,7 +73,6 @@ const HeroSection = () => {
         {
             title: 'S/N',
             dataIndex: 'serialNumber',
-            
             render: (text, record, index) => index + 1,
         },
         {
@@ -74,22 +80,24 @@ const HeroSection = () => {
             dataIndex: 'heroBackground',
             render: (text, record) => (
                 <img
-                src={text}
-                alt="Image"
-                className="image-column"
-                style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-            />
+                    src={text}
+                    alt="Image"
+                    className="image-column"
+                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                />
             ),
         },
         {
             title: 'Logo',
             dataIndex: 'heroLogo',
-            render: (text, record) =>   <img
-            src={text}
-            alt="Image"
-            className="image-column"
-            style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-        />,
+            render: (text, record) => (
+                <img
+                    src={text}
+                    alt="Image"
+                    className="image-column"
+                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                />
+            ),
         },
         {
             title: 'Title',
@@ -143,7 +151,7 @@ const HeroSection = () => {
                                     <li className="breadcrumb-item">
                                         <Link to="/landingpage/herosection">Landing Page</Link>
                                     </li>
-                                    <li className="breadcrumb-item  active">
+                                    <li className="breadcrumb-item active">
                                         <i className="feather-chevron-right">
                                             <FeatherIcon icon="chevron-right" />
                                         </i>
@@ -212,6 +220,7 @@ const HeroSection = () => {
             >
                 <p>Are you sure want to delete this?</p>
             </Modal>
+            <ToastContainer />
         </>
     );
 };

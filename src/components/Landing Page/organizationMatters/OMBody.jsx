@@ -5,7 +5,9 @@ import { deleteDocument, getAllDocuments } from '../../../services/dbService';
 import FeatherIcon from 'feather-icons-react';
 import Header from '../../Header';
 import Sidebar from '../../Sidebar';
-import { plusicon, refreshicon, searchnormal,imagesend } from '../../imagepath';
+import { plusicon, refreshicon, searchnormal, imagesend } from '../../imagepath';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const OMBody = () => {
     const [dataSource, setDataSource] = useState([]);
@@ -15,6 +17,18 @@ const OMBody = () => {
     const [deleteItemId, setDeleteItemId] = useState(null);
 
     useEffect(() => {
+        const updateSuccessStatus = sessionStorage.getItem('updateOMBodySuccess');
+        if (updateSuccessStatus) {
+            toast.success("Organization Matters Body Updated Successfully!", { autoClose: 2000 });
+            sessionStorage.removeItem("updateOMBodySuccess");
+        }
+
+        const addSuccessStatus = sessionStorage.getItem('addOMBodySuccess');
+        if (addSuccessStatus) {
+            toast.success("Organization Matters Body Added Successfully!", { autoClose: 2000 });
+            sessionStorage.removeItem("addOMBodySuccess");
+        }
+
         fetchData();
     }, []);
 
@@ -36,20 +50,22 @@ const OMBody = () => {
     };
 
     const handleDelete = async () => {
-      try {
-          await deleteDocument('OrganizationMattersBody', deleteItemId);
-          setDataSource(dataSource.filter(item => item.id !== deleteItemId));
-          setDeleteModalVisible(false);
-          setDeleteItemId(null);
-      } catch (error) {
-          console.error('Error deleting item:', error);
-      }
-  };
+        try {
+            await deleteDocument('OrganizationMattersBody', deleteItemId);
+            setDataSource(dataSource.filter(item => item.id !== deleteItemId));
+            setDeleteModalVisible(false);
+            setDeleteItemId(null);
+            toast.success("Item deleted successfully!", { autoClose: 2000 });
+        } catch (error) {
+            console.error('Error deleting item:', error);
+            toast.error("Error deleting item: " + error.message, { autoClose: 2000 });
+        }
+    };
 
-  const handleCancelDelete = () => {
-    setDeleteModalVisible(false);
-    setDeleteItemId(null);
-};
+    const handleCancelDelete = () => {
+        setDeleteModalVisible(false);
+        setDeleteItemId(null);
+    };
 
     const columns = [
         {
@@ -168,6 +184,7 @@ const OMBody = () => {
                                                             <Link
                                                                 to="#"
                                                                 className="btn btn-primary doctor-refresh ms-2"
+                                                                onClick={fetchData}
                                                             >
                                                                 <img src={refreshicon} alt="#" />
                                                             </Link>
@@ -216,6 +233,7 @@ const OMBody = () => {
                     </div>
                 </div>
             </Modal>
+            <ToastContainer />
         </>
     );
 };

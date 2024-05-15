@@ -51,30 +51,40 @@ const EditHeroSection = () => {
     const handleBackgroundImageLoad = async (event) => {
         const file = event.target.files[0];
         if (file) {
+            const toastId = toast.loading("Uploading background image...");
             try {
-                const backgroundUrl = await uploadFile(file, `images/${file.name}`);
+                const backgroundUrl = await uploadFile(file, `images/${file.name}`, (progress) => {
+                    const percent = Math.round((progress.loaded / progress.total) * 100);
+                    toast.update(toastId, { render: `Uploading background image... ${percent}%`, type: "info", isLoading: true });
+                });
                 setFormData((prevData) => ({
                     ...prevData,
                     heroBackground: backgroundUrl,
                 }));
+                toast.update(toastId, { render: "Background image uploaded successfully!", type: "success", isLoading: false, autoClose: 1000 });
             } catch (error) {
-                toast.error("Background image upload failed: " + error.message);
-            } 
+                toast.update(toastId, { render: "Background image upload failed: " + error.message, type: "error", isLoading: false, autoClose: 2000 });
+            }
         }
     };
 
     const handleLogoLoad = async (event) => {
         const file = event.target.files[0];
         if (file) {
+            const toastId = toast.loading("Uploading logo image...");
             try {
-                const logoUrl = await uploadFile(file, `images/${file.name}`);
+                const logoUrl = await uploadFile(file, `images/${file.name}`, (progress) => {
+                    const percent = Math.round((progress.loaded / progress.total) * 100);
+                    toast.update(toastId, { render: `Uploading logo image... ${percent}%`, type: "info", isLoading: true });
+                });
                 setFormData((prevData) => ({
                     ...prevData,
                     heroLogo: logoUrl,
                 }));
+                toast.update(toastId, { render: "Logo image uploaded successfully!", type: "success", isLoading: false, autoClose: 1000 });
             } catch (error) {
-                toast.error("Logo image upload failed: " + error.message);
-            } 
+                toast.update(toastId, { render: "Logo image upload failed: " + error.message, type: "error", isLoading: false, autoClose: 2000 });
+            }
         }
     };
 
@@ -83,7 +93,7 @@ const EditHeroSection = () => {
         setLoading(true);
         try {
             await updateDocument('HeroSection', id, formData);
-            toast.success('Hero Section updated successfully!');
+            sessionStorage.setItem("updateHeroSuccess", 'true');
             navigate("/landingpage/herosection");
         } catch (error) {
             toast.error('Error updating document: ' + error.message);

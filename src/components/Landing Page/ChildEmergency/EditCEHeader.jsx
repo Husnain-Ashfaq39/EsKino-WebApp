@@ -3,12 +3,14 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
 import { getDocument, updateDocument } from "../../../services/dbService"; // Import Firestore service
+import { toast, ToastContainer } from "react-toastify";
 
 const EditCEHeader = () => {
     const { id } = useParams(); // Get the document ID from URL params
+    const navigate = useNavigate();
     const [title, setTitle] = useState("");
     const [loading, setLoading] = useState(true);
 
@@ -36,17 +38,21 @@ const EditCEHeader = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            setLoading(true);
             // Update title in Firebase
             await updateDocument('ChildEmergencyHeader', id, { CEHeadTitle: title });
-            alert("Title updated successfully!");
+            sessionStorage.setItem('updateCEHeaderSuccess', 'true'); // Set update flag
+            navigate("/landingpage/childemergencyheader");
         } catch (error) {
+            toast.error("Error updating title: " + error.message, { autoClose: 2000 });
             console.error('Error updating title:', error);
+            setLoading(false);
         }
     };
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    // if (loading) {
+    //     return <div>Loading...</div>;
+    // }
 
     return (
         <div>
@@ -112,12 +118,14 @@ const EditCEHeader = () => {
                                                     <button
                                                         type="submit"
                                                         className="btn btn-primary submit-form me-2"
+                                                        disabled={loading}
                                                     >
-                                                        Submit
+                                                        {loading ? "Updating..." : "Submit"}
                                                     </button>
                                                     <button
-                                                        type="submit"
+                                                        type="button"
                                                         className="btn btn-primary cancel-form"
+                                                        onClick={() => navigate("/landingpage/childemergencyheader")}
                                                     >
                                                         Cancel
                                                     </button>
@@ -125,6 +133,7 @@ const EditCEHeader = () => {
                                             </div>
                                         </div>
                                     </form>
+                                    <ToastContainer />
                                 </div>
                             </div>
                         </div>

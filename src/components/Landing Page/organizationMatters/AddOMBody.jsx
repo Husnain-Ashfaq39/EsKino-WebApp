@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import Header from '../../Header';
 import Sidebar from '../../Sidebar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { addDocument } from '../../../services/dbService'; // Import Firestore services
 import FeatherIcon from 'feather-icons-react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddOMBody = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         title: '',
         description: ''
     });
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -18,15 +22,17 @@ const AddOMBody = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             await addDocument('OrganizationMattersBody', { // Add document to collection
                 OMBodyTitle: formData.title,
                 OMBodyDescription: formData.description
             });
-            alert('Document added successfully!');
-            // Optionally, you can redirect the user to another page after successful submission
+            sessionStorage.setItem('addOMBodySuccess', 'true');
+            navigate("/landingpage/organizationmattersbody");
         } catch (error) {
-            console.error('Error adding document: ', error);
+            toast.error('Error adding document: ' + error.message, { autoClose: 2000 });
+            setLoading(false);
         }
     };
 
@@ -114,8 +120,9 @@ const AddOMBody = () => {
                                                         <button
                                                             type="submit"
                                                             className="btn btn-primary submit-form me-2"
+                                                            disabled={loading}
                                                         >
-                                                            Submit
+                                                            {loading ? "Submitting..." : "Submit"}
                                                         </button>
                                                         <Link
                                                             to="/landingpage/organizationmattersbody"
@@ -127,6 +134,7 @@ const AddOMBody = () => {
                                                 </div>
                                             </div>
                                         </form>
+                                        <ToastContainer />
                                     </div>
                                 </div>
                             </div>

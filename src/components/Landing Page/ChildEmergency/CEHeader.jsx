@@ -1,20 +1,26 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { Table, Modal, Button } from 'antd';
+import { Table, Modal } from "antd";
 import Header from '../../Header';
 import Sidebar from '../../Sidebar';
 import { Link } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react';
 import { getAllDocuments, deleteDocument } from '../../../services/dbService'; // Import the Firestore service to fetch documents
+import { toast, ToastContainer } from 'react-toastify';
 
 const CEHeader = () => {
     const [dataSource, setDataSource] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-    const [deleteItemId, setDeleteItemId] = useState(null);
 
     useEffect(() => {
+        const updateSuccessStatus = sessionStorage.getItem('updateCEHeaderSuccess');
+        if (updateSuccessStatus) {
+            toast.success("Child Emergency Header Updated Successfully!", { autoClose: 2000 });
+            sessionStorage.removeItem("updateCEHeaderSuccess");
+        }
+
         fetchData();
     }, []);
 
@@ -157,9 +163,6 @@ const CEHeader = () => {
                                                 total: dataSource.length,
                                                 showTotal: (total, range) =>
                                                     `Showing ${range[0]} to ${range[1]} of ${total} entries`,
-                                                // showSizeChanger: true,
-                                                // onShowSizeChange: onShowSizeChange,
-                                                // itemRender: itemRender,
                                             }}
                                             columns={columns}
                                             dataSource={dataSource}
@@ -183,6 +186,7 @@ const CEHeader = () => {
             >
                 <p>Are you sure you want to delete the selected item(s)?</p>
             </Modal>
+            <ToastContainer />
         </>
     );
 };

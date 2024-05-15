@@ -6,6 +6,8 @@ import Sidebar from '../../Sidebar';
 import { Link } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react';
 import { getAllDocuments, deleteDocument } from '../../../services/dbService'; // Import the Firestore service to fetch documents
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const OMHeading = () => {
     const [dataSource, setDataSource] = useState([]);
@@ -15,6 +17,12 @@ const OMHeading = () => {
     const [deleteItemId, setDeleteItemId] = useState(null);
 
     useEffect(() => {
+        const updateSuccessStatus = sessionStorage.getItem('updateOMHeadingSuccess');
+        if (updateSuccessStatus) {
+            toast.success("Organization Matters Heading Updated Successfully!", { autoClose: 2000 });
+            sessionStorage.removeItem("updateOMHeadingSuccess");
+        }
+
         fetchData();
     }, []);
 
@@ -46,8 +54,10 @@ const OMHeading = () => {
             setDeleteModalVisible(false);
             setSelectedRowKeys([]);
             fetchData(); // Refresh data after deletion
+            toast.success("Items deleted successfully!", { autoClose: 2000 });
         } catch (error) {
             console.error('Error deleting documents:', error);
+            toast.error("Error deleting items: " + error.message, { autoClose: 2000 });
         }
     };
 
@@ -65,7 +75,7 @@ const OMHeading = () => {
             title: 'Title',
             dataIndex: 'OMHeadTitle',
             key: 'title',
-            render: (text) => <div >{text}</div>
+            render: (text) => <div>{text}</div>
         },
         {
             title: 'Description',
@@ -87,12 +97,6 @@ const OMHeading = () => {
                                 <i className="far fa-edit me-2" />
                                 Edit
                             </Link>
-                            {/* <Button className="dropdown-item" onClick={() => {
-                                setDeleteItemId(record.id);
-                                setDeleteModalVisible(true);
-                            }}>
-                                <i className="fa fa-trash-alt m-r-5" /> Delete
-                            </Button> */}
                         </div>
                     </div>
                 </div>
@@ -163,9 +167,6 @@ const OMHeading = () => {
                                                 total: dataSource.length,
                                                 showTotal: (total, range) =>
                                                     `Showing ${range[0]} to ${range[1]} of ${total} entries`,
-                                                // showSizeChanger: true,
-                                                // onShowSizeChange: onShowSizeChange,
-                                                // itemRender: itemRender,
                                             }}
                                             columns={columns}
                                             dataSource={dataSource}
@@ -189,6 +190,7 @@ const OMHeading = () => {
             >
                 <p>Are you sure you want to delete the selected item(s)?</p>
             </Modal>
+            <ToastContainer />
         </>
     );
 };

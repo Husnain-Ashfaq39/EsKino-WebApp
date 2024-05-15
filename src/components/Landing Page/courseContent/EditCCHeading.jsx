@@ -5,11 +5,15 @@ import Header from "../../Header";
 import Sidebar from "../../Sidebar";
 import { favicon } from "../../imagepath";
 import FeatherIcon from "feather-icons-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { getDocument, updateDocument } from "../../../services/dbService"; // Import Firestore service
+import { uploadFile } from "../../../services/storageService";
+import { toast, ToastContainer } from "react-toastify";
 
 const EditCCHeading = () => {
     const { id } = useParams(); // Get the document ID from URL params
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         CCHeadTitle: "",
         CCHeadSubtitle: "",
@@ -30,21 +34,23 @@ const EditCCHeading = () => {
         }
     };
 
-    const loadFile = (event) => {
+    const loadFile = async (event) => {
         const file = event.target.files[0];
-        const reader = new FileReader();
-    
-        reader.onloadend = () => {
-            // Update the CCHeadImage state with the data URL of the uploaded image
-            setFormData((prevData) => ({
-                ...prevData,
-                CCHeadImage: reader.result,
-            }));
-        };
-    
         if (file) {
-            // Read the file as a data URL
-            reader.readAsDataURL(file);
+            const toastId = toast.loading("Uploading image...");
+            try {
+                const uploadedImageURL = await uploadFile(file, `images/${file.name}`, (progress) => {
+                    const percent = Math.round((progress.loaded / progress.total) * 100);
+                    toast.update(toastId, { render: `Uploading image... ${percent}%`, type: "info", isLoading: true });
+                });
+                setFormData((prevData) => ({
+                    ...prevData,
+                    CCHeadImage: uploadedImageURL
+                }));
+                toast.update(toastId, { render: "Image uploaded successfully!", type: "success", isLoading: false, autoClose: 2000 });
+            } catch (error) {
+                toast.update(toastId, { render: "Image upload failed: " + error.message, type: "error", isLoading: false, autoClose: 2000 });
+            }
         }
     };
 
@@ -58,11 +64,15 @@ const EditCCHeading = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             await updateDocument('CourseContentHeading', id, formData); // Update document in Firestore with the new data
-            // Optionally, you can redirect the user to another page after successful update
+            sessionStorage.setItem("updateCCHeadingSuccess", 'true');
+            navigate("/landingpage/coursecontentheading");
         } catch (error) {
-            console.error('Error updating document:', error);
+            toast.error('Error updating document: ' + error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -165,61 +175,61 @@ const EditCCHeading = () => {
 
 
                                               {/* Image Input */}
-<div className="col-10 col-md-2 col-xl-4">
-  <div className="form-group">
-    <label className={formData.CCHeadImage ? "" : "local-top"}>
-      Image <span className="login-danger">*</span>
-    </label>
-    <div className={formData.CCHeadImage ? "upload-files-avator" : "upload-files-avator settings-btn"} style={{ position: 'relative' }}>
-      {/* Display the uploaded image */}
-      {formData.CCHeadImage && (
-        <div className="uploaded-image">
-          <img
-            src={formData.CCHeadImage}
-            alt="Uploaded Image"
-            style={{
-              width: '180px',
-              height: '180px',
-              objectFit: 'cover',
-            }}
-          />
-          <div className="edit-icon" style={{ position: 'absolute',backgroundColor: 'white', left:170,top:160 }}>
-            {/* Input for choosing a new image */}
-            <input
-              type="file"
-              accept="image/*"
-              name="CCHeadImage"
-              id="file"
-              onChange={loadFile}
-              className="hide-input"
-              style={{ display: 'none' }}
-            />
-            <label htmlFor="file" className="upload" style={{ cursor: 'pointer' }}>
-              <FeatherIcon icon="edit" />
-            </label>
-          </div>
-        </div>
-      )}
-      {/* Input for choosing a new image */}
-      {!formData.CCHeadImage && (
-        <div>
-          <input
-            type="file"
-            accept="image/*"
-            name="CCHeadImage"
-            id="file"
-            onChange={loadFile}
-            className="hide-input"
-            placeholder="Select an Image..."
-          />
-          <label htmlFor="file" className="upload" style={{ cursor: 'pointer' }}>
-            Choose File
-          </label>
-        </div>
-      )}
-    </div>
-  </div>
-</div>
+                                              <div className="col-10 col-md-2 col-xl-4">
+                                                <div className="form-group">
+                                                  <label className={formData.CCHeadImage ? "" : "local-top"}>
+                                                    Image <span className="login-danger">*</span>
+                                                  </label>
+                                                  <div className={formData.CCHeadImage ? "upload-files-avator" : "upload-files-avator settings-btn"} style={{ position: 'relative' }}>
+                                                    {/* Display the uploaded image */}
+                                                    {formData.CCHeadImage && (
+                                                      <div className="uploaded-image">
+                                                        <img
+                                                          src={formData.CCHeadImage}
+                                                          alt="Uploaded Image"
+                                                          style={{
+                                                            width: '180px',
+                                                            height: '180px',
+                                                            objectFit: 'cover',
+                                                          }}
+                                                        />
+                                                        <div className="edit-icon" style={{ position: 'absolute',backgroundColor: 'white', left:170,top:160 }}>
+                                                          {/* Input for choosing a new image */}
+                                                          <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            name="CCHeadImage"
+                                                            id="file"
+                                                            onChange={loadFile}
+                                                            className="hide-input"
+                                                            style={{ display: 'none' }}
+                                                          />
+                                                          <label htmlFor="file" className="upload" style={{ cursor: 'pointer' }}>
+                                                            <FeatherIcon icon="edit" />
+                                                          </label>
+                                                        </div>
+                                                      </div>
+                                                    )}
+                                                    {/* Input for choosing a new image */}
+                                                    {!formData.CCHeadImage && (
+                                                      <div>
+                                                        <input
+                                                          type="file"
+                                                          accept="image/*"
+                                                          name="CCHeadImage"
+                                                          id="file"
+                                                          onChange={loadFile}
+                                                          className="hide-input"
+                                                          placeholder="Select an Image..."
+                                                        />
+                                                        <label htmlFor="file" className="upload" style={{ cursor: 'pointer' }}>
+                                                          Choose File
+                                                        </label>
+                                                      </div>
+                                                    )}
+                                                  </div>
+                                                </div>
+                                              </div>
 
                                                 {/* Submit and Cancel Button */}
                                                 <div className="col-12">
@@ -227,12 +237,14 @@ const EditCCHeading = () => {
                                                         <button
                                                             type="submit"
                                                             className="btn btn-primary submit-form me-2"
+                                                            disabled={loading}
                                                         >
-                                                            Submit
+                                                            {loading ? "Updating..." : "Submit"}
                                                         </button>
                                                         <button
-                                                            type="submit"
+                                                            type="button"
                                                             className="btn btn-primary cancel-form"
+                                                            onClick={() => navigate("/landingpage/coursecontentheading")}
                                                         >
                                                             Cancel
                                                         </button>
@@ -240,6 +252,7 @@ const EditCCHeading = () => {
                                                 </div>
                                             </div>
                                         </form>
+                                        <ToastContainer />
                                     </div>
                                 </div>
                             </div>
