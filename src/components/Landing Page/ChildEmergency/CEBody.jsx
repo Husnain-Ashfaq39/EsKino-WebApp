@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Modal,Button } from 'antd';
+import { Table, Modal, Button } from 'antd';
 import { Link } from 'react-router-dom';
-import { addDocument, getAllDocuments, deleteDocument } from '../../../services/dbService';
+import { getAllDocuments, deleteDocument } from '../../../services/dbService';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
 import Header from '../../Header';
 import Sidebar from '../../Sidebar';
-import { blogimg10, imagesend, plusicon, refreshicon, searchnormal } from '../../imagepath';
+import { imagesend, plusicon, refreshicon, searchnormal } from '../../imagepath';
 import { onShowSizeChange, itemRender } from '../../Pagination';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CEBody = () => {
     const [dataSource, setDataSource] = useState([]);
@@ -16,6 +18,18 @@ const CEBody = () => {
     const [deleteItemId, setDeleteItemId] = useState(null);
 
     useEffect(() => {
+        const updateSuccessStatus = sessionStorage.getItem('updateCEBodySuccess');
+        if (updateSuccessStatus) {
+            toast.success("Child Emergency Body Updated Successfully!", { autoClose: 2000 });
+            sessionStorage.removeItem("updateCEBodySuccess");
+        }
+
+        const addSuccessStatus = sessionStorage.getItem('addCEBodySuccess');
+        if (addSuccessStatus) {
+            toast.success("Child Emergency Body added Successfully!", { autoClose: 2000 });
+            sessionStorage.removeItem("addCEBodySuccess");
+        }
+        
         fetchData();
     }, []);
 
@@ -38,8 +52,10 @@ const CEBody = () => {
             setDataSource(dataSource.filter(item => item.id !== deleteItemId));
             setDeleteModalVisible(false);
             setDeleteItemId(null);
+            toast.success("Item deleted successfully!", { autoClose: 2000 });
         } catch (error) {
             console.error('Error deleting item:', error);
+            toast.error("Error deleting item: " + error.message, { autoClose: 2000 });
         }
     };
 
@@ -72,32 +88,33 @@ const CEBody = () => {
         {
             title: 'Description',
             dataIndex: 'CEBodyDescription',
-            key: 'CEBodyDescription'
+            key: 'CEBodyDescription',
+            render: (text) => <div className={text && text.length > 30 ? "multiline-text" : ""}>{text}</div>
         },
         {
-          title: '',
-          dataIndex: 'id',
-          render: (text, record) => (
-              <div className="text-end">
-                  <div className="dropdown dropdown-action">
-                      <Link to="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                          <i className="fas fa-ellipsis-v" />
-                      </Link>
-                      <div className="dropdown-menu dropdown-menu-end">
-                          <Link to={`/landingpage/childemergencybody/editchildemergencybody/${record.id}`} className="dropdown-item">
-                              <i className="far fa-edit me-2" />
-                              Edit
-                          </Link>
-                          <Button className="dropdown-item" onClick={() => {
-                              setDeleteItemId(record.id);
-                              setDeleteModalVisible(true);
-                          }}>
-                              <i className="fa fa-trash-alt m-r-5" /> Delete
-                          </Button>
-                      </div>
-                  </div>
-              </div>
-          ),
+            title: '',
+            dataIndex: 'id',
+            render: (text, record) => (
+                <div className="text-end">
+                    <div className="dropdown dropdown-action">
+                        <Link to="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i className="fas fa-ellipsis-v" />
+                        </Link>
+                        <div className="dropdown-menu dropdown-menu-end">
+                            <Link to={`/landingpage/childemergencybody/editchildemergencybody/${record.id}`} className="dropdown-item">
+                                <i className="far fa-edit me-2" />
+                                Edit
+                            </Link>
+                            <Button className="dropdown-item" onClick={() => {
+                                setDeleteItemId(record.id);
+                                setDeleteModalVisible(true);
+                            }}>
+                                <i className="fa fa-trash-alt m-r-5" /> Delete
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            ),
         },
     ];
 
@@ -214,6 +231,7 @@ const CEBody = () => {
                     </div>
                 </div>
             </Modal>
+            <ToastContainer />
         </>
     );
 };

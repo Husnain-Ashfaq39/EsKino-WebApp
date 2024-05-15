@@ -8,7 +8,6 @@ import { getDocument, updateDocument } from "../../../services/dbService";
 import ImageUpload from "../ImageUpload"; // Import the ImageUpload component
 import { uploadFile } from "../../../services/storageService";
 import { toast, ToastContainer } from "react-toastify";
-
 const EditCCBody = () => {
     const { id } = useParams(); // Retrieve the document ID from the URL
     const navigate = useNavigate();
@@ -51,8 +50,7 @@ const EditCCBody = () => {
         try {
             setLoading(true);
             await updateDocument('CourseContentBody', id, formData);
-            toast.success('Document updated successfully!', { autoClose: 2000 });
-            sessionStorage.setItem('updateSuccess', 'true'); // Set update flag
+            sessionStorage.setItem('updateCCBodySuccess', 'true'); // Set update flag
             navigate("/landingpage/coursecontentbody");
         } catch (error) {
             toast.error("Error updating document: " + error.message, { autoClose: 2000 });

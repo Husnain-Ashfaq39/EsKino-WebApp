@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { addDocument } from "../../../services/dbService"; // Import Firestore services
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddCEBody = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
     subtitle: '',
     description: ''
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,16 +23,18 @@ const AddCEBody = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await addDocument('ChildEmergencyBody', { // Add document to collection
-        CEBodyTitle: formData.title, // Corrected field names
+        CEBodyTitle: formData.title,
         CEBodySubtitle: formData.subtitle,
         CEBodyDescription: formData.description
       });
-      console.log('Document added successfully!');
-      // Optionally, you can redirect the user to another page after successful submission
+      sessionStorage.setItem('addCEBodySuccess', 'true');
+      navigate("/landingpage/childemergencybody");
     } catch (error) {
-      console.error('Error adding document: ', error);
+      toast.error('Error adding document: ' + error.message, { autoClose: 2000 });
+      setLoading(false);
     }
   };
 
@@ -135,8 +141,9 @@ const AddCEBody = () => {
                             <button
                               type="submit"
                               className="btn btn-primary submit-form me-2"
+                              disabled={loading}
                             >
-                              Submit
+                              {loading ? "Submitting..." : "Submit"}
                             </button>
                             <Link
                               to="/landingpage/childemergencybody"
@@ -148,6 +155,7 @@ const AddCEBody = () => {
                         </div>
                       </div>
                     </form>
+                    <ToastContainer />
                   </div>
                 </div>
               </div>

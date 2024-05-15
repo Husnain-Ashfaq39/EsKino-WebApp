@@ -3,12 +3,15 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../Header';
 import Sidebar from '../../Sidebar';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react';
 import { getDocument, updateDocument } from '../../../services/dbService'; // Import Firestore service
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditOMBody = () => {
     const { id } = useParams(); // Get the document ID from URL params
+    const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(true);
@@ -41,18 +44,21 @@ const EditOMBody = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             // Update title and description in Firebase
             await updateDocument('OrganizationMattersBody', id, { OMBodyTitle: title, OMBodyDescription: description });
-            alert('Title and description updated successfully!');
+            sessionStorage.setItem("updateOMBodySuccess", 'true');
+            navigate("/landingpage/organizationmattersbody");
         } catch (error) {
-            console.error('Error updating title and description:', error);
+            toast.error('Error updating title and description: ' + error.message, { autoClose: 2000 });
+            setLoading(false);
         }
     };
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    // if (loading) {
+    //     return <div>Loading...</div>;
+    // }
 
     return (
         <div>
@@ -131,12 +137,14 @@ const EditOMBody = () => {
                                                     <button
                                                         type="submit"
                                                         className="btn btn-primary submit-form me-2"
+                                                        disabled={loading}
                                                     >
-                                                        Submit
+                                                        {loading ? "Updating..." : "Submit"}
                                                     </button>
                                                     <button
-                                                        type="submit"
+                                                        type="button"
                                                         className="btn btn-primary cancel-form"
+                                                        onClick={() => navigate("/landingpage/organizationmattersbody")}
                                                     >
                                                         Cancel
                                                     </button>
@@ -144,6 +152,7 @@ const EditOMBody = () => {
                                             </div>
                                         </div>
                                     </form>
+                                    <ToastContainer />
                                 </div>
                             </div>
                         </div>

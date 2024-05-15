@@ -8,6 +8,7 @@ import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
 import { imagesend, plusicon, refreshicon, searchnormal } from '../../imagepath';
 import { onShowSizeChange, itemRender } from '../../Pagination';
 import { getAllDocuments, deleteDocument } from '../../../services/dbService'; // Import the Firestore service to fetch documents
+import { toast, ToastContainer } from 'react-toastify';
 
 const CCHeading = () => {
     const [dataSource, setDataSource] = useState([]);
@@ -16,6 +17,12 @@ const CCHeading = () => {
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
     useEffect(() => {
+        const updateSuccessStatus = sessionStorage.getItem('updateCCHeadingSuccess');
+        if (updateSuccessStatus) {
+            toast.success("Course Content Heading Updated Successfully!", { autoClose: 2000 });
+            sessionStorage.removeItem("updateCCHeadingSuccess");
+        }
+
         fetchData();
     }, []);
 
@@ -225,6 +232,7 @@ const CCHeading = () => {
             >
                 <p>Are you sure you want to delete the selected content?</p>
             </Modal>
+            <ToastContainer />
         </>
     )
 }

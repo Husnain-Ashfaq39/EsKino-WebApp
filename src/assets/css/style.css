@@ -11207,7 +11207,7 @@ tr.ant-table-row.ant-table-row-level-0.ant-table-row-selected,
   display: block;
   white-space: normal;
   word-wrap: break-word;
-  max-width: 100px; /* Adjust as needed */
+  /* max-width: 100px; Adjust as needed */
   line-height: 1.2; /* Adjust line height as needed */
 }
 
