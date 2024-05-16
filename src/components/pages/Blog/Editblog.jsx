@@ -51,6 +51,7 @@ const EditBlog = () => {
     try {
       setIsSubmitting(true);
       let newImageUrl = imageUrl;
+
 console.log("image file "+data.imageUrl);
       if (imageFile && imageFile.length > 0) {
         const file = imageFile[0];
