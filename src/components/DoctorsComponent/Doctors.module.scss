@@ -1,11 +1,12 @@
-
 /* Doctors.module.scss */
 .doctors {
+  // Apply box-sizing to all elements for consistent sizing
   * {
     box-sizing: border-box;
   }
 
   .container {
+    // Center the content and set a max width
     width: 80%;
     padding: 20px;
     text-align: center;
@@ -13,7 +14,7 @@
 
     @media (max-width: 768px) {
       width: 100%;
-      padding: 0 10px; /* Adjust padding for smaller screens */
+      padding: 0 10px; // Adjust padding for smaller screens
     }
   }
 
@@ -23,54 +24,53 @@
     .title {
       font-size: 1.5rem;
       @media (min-width: 768px) {
-        font-size: 3.5rem;
+        font-size: 3.5rem; // Larger font size on larger screens
       }
       font-weight: 400;
       margin: 15px 0;
     }
 
     .description {
-      color: gray;
+      color: #86bbf1; // Set text color
     }
   }
 
   .wrapper {
     display: flex;
-    justify-content: center; /* Centers the cards */
+    justify-content: center; // Center the cards
     margin: 0 auto;
     max-width: 1200px;
     padding: 0 20px;
-    flex-wrap: wrap; /* Allows wrapping of cards on smaller screens */
+    flex-wrap: wrap; // Allow cards to wrap on smaller screens
   }
 
   .card {
-    flex: 1 1 calc(50% - 20px); /* Ensure cards take up half the width minus some spacing */
+    flex: 1 1 calc(50% - 20px); // Cards take up half the width minus some spacing
     margin: 30px;
     max-width: 40%;
-    height: 535px;
+    height: 548px;
     border-radius: 15px;
-    background: white;
+    background: rgba(255, 255, 255, 0.5); // White with transparency
     position: relative;
     display: flex;
     justify-content: flex-end;
     transition: 0.4s ease-out;
-    box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.5); // Add shadow
     overflow: hidden;
-    
 
     @media (max-width: 768px) {
       flex: 1 1 100%;
-      max-width: 100%; /* Make sure the card takes up the full width */
-      margin: 10px 0; /* Adjust margin for smaller screens */
-      height: 500px; /* Maintain the same height */
+      max-width: 100%; // Card takes up the full width on smaller screens
+      margin: 10px 0; // Adjust margin for smaller screens
+      height: 500px; // Maintain the same height
     }
 
     &:hover {
-      transform: translateY(-10px);
+      transform: translateY(-10px); // Lift card on hover
 
       .info {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0); // Reveal info on hover
       }
 
       &:before {
@@ -87,16 +87,16 @@
       width: 100%;
       height: 100%;
       border-radius: 15px;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(134, 187, 241, 0.4); // Blue with more transparency
       z-index: 2;
       transition: 0.5s;
-      opacity: 0;
+      opacity: 0; // Hidden by default
     }
 
     img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: cover; // Ensure image covers the card
       position: absolute;
       top: 0;
       left: 0;
@@ -108,43 +108,48 @@
       z-index: 3;
       color: white;
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY(30px); // Start hidden and shifted down
       transition: 0.5s;
       padding: 20px;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(12, 92, 171, 0.6); // Dark blue with transparency
       width: 100%;
       height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      font-size: 14px;
+      font-size: 15px;
 
       @media (max-width: 768px) {
-        opacity: 0; /* Ensure the text doesn't appear until hover */
-        transform: translateY(30px); /* Keep the transform to maintain the hover effect */
-        font-size: 12px; /* Decrease font size for smaller screens */
+        opacity: 0; // Ensure the text doesn't appear until hover
+        transform: translateY(30px); // Keep the transform to maintain the hover effect
+        font-size: 12px; // Decrease font size for smaller screens
       }
 
-      h3, h5, ul, li {
+      ul, li {
         color: white;
+      }
+
+      h3, h5 {
+        color: white;
+        font-weight: bold; // Make headings bold
       }
 
       h3 {
         margin: 0;
-        font-size: 1.2rem;
+        font-size: 1.6rem;
 
         @media (max-width: 768px) {
-          font-size: 1rem; /* Adjust font size for smaller screens */
+          font-size: 1rem; // Adjust font size for smaller screens
         }
       }
 
       h5 {
         margin: 5px 0;
-        line-height: 1.2em;
-        font-size: 14px;
+        line-height: 1.3em;
+        font-size: 20px;
 
         @media (max-width: 768px) {
-          font-size: 0.8rem; /* Adjust font size for smaller screens */
+          font-size: 0.8rem; // Adjust font size for smaller screens
         }
       }
 
@@ -154,15 +159,16 @@
         margin: 10px 0;
 
         @media (max-width: 768px) {
-          margin: 5px 0; /* Adjust margin for smaller screens */
+          margin: 5px 0; // Adjust margin for smaller screens
         }
       }
 
       li {
         margin: 5px 0;
+        line-height: 1.4em;
 
         @media (max-width: 768px) {
-          margin: 3px 0; /* Adjust margin for smaller screens */
+          margin: 3px 0; // Adjust margin for smaller screens
         }
       }
 
@@ -178,12 +184,12 @@
         transition: 0.4s ease;
 
         &:hover {
-          background: dodgerblue;
+          background: rgb(2, 96, 190);
           color: white;
         }
 
         @media (max-width: 768px) {
-          padding: 0.5rem; /* Adjust padding for smaller screens */
+          padding: 0.5rem; // Adjust padding for smaller screens
         }
       }
     }
@@ -201,4 +207,3 @@
     }
   }
 }
-
