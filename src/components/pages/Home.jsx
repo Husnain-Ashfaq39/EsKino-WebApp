@@ -342,7 +342,6 @@ export default function Home() {
       </Section>
 
       <Gallery />
-
       <Section topMd={190} topLg={145} topXl={105}>
         <BlogSection
           sectionTitle="Latest Update"
@@ -350,6 +349,7 @@ export default function Home() {
           data={blogData}
         />
       </Section>
+ <Spacing md="182" lg="150" />
     </>
   );
 }

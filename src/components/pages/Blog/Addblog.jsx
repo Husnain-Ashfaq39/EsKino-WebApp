@@ -11,21 +11,29 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const AddBlog = () => {
-  const { register, handleSubmit, setValue, watch, reset } = useForm();
+  const { register, handleSubmit, setValue, watch } = useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const editorRef = useRef(null);
   const [fileChosen, setFileChosen] = useState(false);
+  const [image, setImage] = useState(null);
 
-  const imageFile = watch('image');
+  const handleFileChange = (e) => {
+    if (e.target.files.length > 0) {
+      setFileChosen(true);
+      setImage(e.target.files[0]);
+    } else {
+      setFileChosen(false);
+      setImage(null);
+    }
+  };
 
   const onSubmit = async (data) => {
     try {
       setIsSubmitting(true);
       let imageUrl = '';
-      if (imageFile.length > 0) {
-        const file = imageFile[0];
-        const imagePath = `blog-images/${file.name}`;
-        imageUrl = await uploadFile(file, imagePath);
+      if (image) {
+        const imagePath = `blog-images/${image.name}`;
+        imageUrl = await uploadFile(image, imagePath);
       }
 
       // Get the data from the text editor
@@ -53,24 +61,16 @@ const AddBlog = () => {
 
       await addDocument('blogs', blogData);
       toast.success('Blog has been Published. Thank you!');
-      reset(); // Reset the form fields
+      setIsSubmitting(false);
+      setFileChosen(false); // Reset file chosen state
+      setImage(null); // Reset image state
       if (editorRef.current) {
         editorRef.current.clearEditor();
       }
-      setIsSubmitting(false);
-      setFileChosen(false); // Reset file chosen state
     } catch (error) {
       console.error('Error adding document: ', error);
       toast.error('Error in Publishing blog');
       setIsSubmitting(false);
-    }
-  };
-
-  const handleFileChange = (e) => {
-    if (e.target.files.length > 0) {
-      setFileChosen(true);
-    } else {
-      setFileChosen(false);
     }
   };
 
@@ -210,11 +210,12 @@ const AddBlog = () => {
                             type="button"
                             className="btn btn-primary cancel-form"
                             onClick={() => {
-                              reset();
+                              // reset();
                               if (editorRef.current) {
                                 editorRef.current.clearEditor();
                               }
                               setFileChosen(false); // Reset file chosen state
+                              setImage(null); // Reset image state
                             }}
                           >
                             Cancel

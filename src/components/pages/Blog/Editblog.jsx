@@ -18,8 +18,8 @@ const EditBlog = () => {
   const editorRef = useRef(null);
   const [fileChosen, setFileChosen] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
-
-  const imageFile = watch('image');
+  const [image, setImage] = useState(null);
+  
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -50,19 +50,10 @@ const EditBlog = () => {
   const onSubmit = async (data) => {
     try {
       setIsSubmitting(true);
-      let newImageUrl = imageUrl;
-
-console.log("image file "+data.imageUrl);
-      if (imageFile && imageFile.length > 0) {
-        const file = imageFile[0];
-        console.log("new file "+file);
-        const imagePath = `blog-images/${file.name}`;
-        newImageUrl = await uploadFile(file, imagePath);
-        setImageUrl(newImageUrl); // Update the image URL state
-      }
-      else
-      {
-        console.log("image file nhi mili");
+      let newimageUrl = imageUrl;
+      if (image) {
+        const imagePath = `blog-images/${image.name}`;
+        newimageUrl = await uploadFile(image, imagePath);
       }
 
       const content = await new Promise((resolve) => {
@@ -82,7 +73,7 @@ console.log("image file "+data.imageUrl);
         tags: data.tags.split(','),
         status: data.status,
         content,
-        imageUrl: newImageUrl, // Use the new or existing image URL
+        imageUrl: newimageUrl, // Use the new or existing image URL
         publicationDate: new Date()
       };
 
@@ -105,12 +96,15 @@ console.log("image file "+data.imageUrl);
     if (e.target.files.length > 0) {
       setFileChosen(true);
       const file = e.target.files[0];
-      console.log("file "+file.name);
+      setImage(e.target.files[0]);
+      console.log("file " +file.name);
       const newImageUrl = URL.createObjectURL(file);
       setImageUrl(newImageUrl);
+      
     } else {
       setFileChosen(false);
-      setImageUrl('');
+     
+      
     }
   };
 
@@ -206,7 +200,7 @@ console.log("image file "+data.imageUrl);
                               <input
                                 type="radio"
                                 value="Inactive"
-                                {...register('status', { required: true })}
+                              {...register('status', { required: true })}
                               />
                               Inactive
                             </label>
