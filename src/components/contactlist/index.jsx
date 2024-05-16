@@ -1,10 +1,11 @@
-import { Button, Modal, Table, Select } from "antd";
-import { MailOutlined } from '@ant-design/icons';  // Importing the icon
+import { Button, Modal, Table, Select, Checkbox } from "antd";
+import { MailOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, doc, updateDoc } from "firebase/firestore"; // Import updateDoc
+import { collection, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore"; // Import deleteDoc
 import { db } from "../../config/firebase";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
+import { Background } from "react-parallax";
 
 const { Option } = Select;
 
@@ -14,6 +15,7 @@ const Contactlist = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState({});
   const [filter, setFilter] = useState("all");
+  const [selectedContacts, setSelectedContacts] = useState([]);
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -25,7 +27,7 @@ const Contactlist = () => {
         email: doc.data().email,
         phoneNumber: doc.data().phoneNumber,
         message: doc.data().message,
-        read: doc.data().read || false,  // Assuming read status is stored in Firestore
+        read: doc.data().read || false,
       }));
       setContacts(contactData);
       setFilteredContacts(contactData);
@@ -57,8 +59,8 @@ const Contactlist = () => {
   };
 
   const handleReply = () => {
-    window.location.href = `mailto:${selectedContact.email}?subject=Response to your message&body=Hi ${selectedContact.name},%0D%0A%0D%0A`; // Using template literals to include the contact's name and email
-    handleOk();  // Closes the modal after clicking Reply
+    window.location.href = `mailto:${selectedContact.email}?subject=Response to your message&body=Hi ${selectedContact.name},%0D%0A%0D%0A`;
+    handleOk();
   };
 
   const handleMarkAsRead = async (contact) => {
@@ -71,7 +73,44 @@ const Contactlist = () => {
     setFilter(value);
   };
 
+  const handleCheckboxChange = (id, checked) => {
+    setSelectedContacts(prev =>
+      checked ? [...prev, id] : prev.filter(contactId => contactId !== id)
+    );
+  };
+
+  const handleDeleteSelected = async () => {
+    const promises = selectedContacts.map(id => deleteDoc(doc(db, "contacts", id)));
+    await Promise.all(promises);
+    setContacts(contacts.filter(contact => !selectedContacts.includes(contact.id)));
+    setSelectedContacts([]);
+  };
+
+  const handleDeleteAllRead = async () => {
+    const readContacts = contacts.filter(contact => contact.read).map(contact => contact.id);
+    const promises = readContacts.map(id => deleteDoc(doc(db, "contacts", id)));
+    await Promise.all(promises);
+    setContacts(contacts.filter(contact => !readContacts.includes(contact.id)));
+  };
+
   const columns = [
+    {
+      title: <Checkbox
+        onChange={e => {
+          const checked = e.target.checked;
+          const allIds = filteredContacts.map(contact => contact.id);
+          setSelectedContacts(checked ? allIds : []);
+        }}
+        checked={selectedContacts.length === filteredContacts.length}
+      />,
+      dataIndex: "checkbox",
+      render: (_, record) => (
+        <Checkbox
+          onChange={e => handleCheckboxChange(record.id, e.target.checked)}
+          checked={selectedContacts.includes(record.id)}
+        />
+      ),
+    },
     {
       title: "Name",
       dataIndex: "name",
@@ -92,16 +131,13 @@ const Contactlist = () => {
       dataIndex: "actions",
       render: (_, record) => (
         <>
-          <Button
-            className="btn btn-primary"
-            onClick={() => showModal(record)}
-          >
+          <Button className="btn btn-primary" onClick={() => showModal(record)}>
             View Message
           </Button>
           {!record.read && (
             <Button
               className="btn btn-primary"
-              style={{ marginLeft: '20px' }} // Adding margin for spacing
+              style={{ marginLeft: '20px' }}
               onClick={() => handleMarkAsRead(record)}
             >
               Mark as Read
@@ -127,6 +163,16 @@ const Contactlist = () => {
                   <Option value="read">Read</Option>
                   <Option value="unread">Unread</Option>
                 </Select>
+                
+                {selectedContacts.length > 0 && (
+                  <Button
+                    type="danger"
+                    style={{ marginLeft: '20px',backgroundColor:'#E70226',color:'white' }}
+                    onClick={handleDeleteSelected}
+                  >
+                    Delete
+                  </Button>
+                )}
               </div>
             </div>
           </div>
