@@ -26,6 +26,7 @@ import SessionCard from "../SessionCard";
 import FeaturesSection from "../WebLandingPage/WebOrganizationMatters/OrganizationMattersSection";
 import { useNavigate } from "react-router-dom";
 import { Timestamp } from 'firebase/firestore';
+import Doctors from "../DoctorsComponent/Doctors";
 // Sample data
 
 
@@ -295,6 +296,11 @@ export default function Home() {
           sectionSubtile={OMHeadData.OMHeadDescription}
         />
       </Section>
+
+
+      {/* Doctors Section */}
+      <Doctors/>
+      <Spacing md="182" lg="150" />
 
       {/* Training session */}
       <div className="container cs_hero cs_style_1">

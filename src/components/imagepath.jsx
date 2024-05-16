@@ -53,6 +53,9 @@ export { default as post9Jpeg } from "../assets/images/post_9.jpeg";
 export { default as whyChooseUsJpeg } from "../assets/images/why_choose_us.jpeg";
 export { default as about_img } from "../assets/images/about_img.JPG";
 export { default as banner_img50 } from "../assets/images/banner_img50.jpg";
+export { default as Stephan } from "../assets/images/doctors/Stephan.jpg";
+export { default as susanne } from "../assets/images/doctors/susanne.jpg";
+
 
 
 //icons
