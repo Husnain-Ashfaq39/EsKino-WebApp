@@ -1,14 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState, useRef, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import TextEditor from '../../TextEditor'; // Ensure TextEditor is correctly imported and implemented
-import Header from '../../Header';
-import Sidebar from '../../Sidebar';
-import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
-import { getDocument, updateDocument } from '../../../services/dbService';
-import { uploadFile } from '../../../services/storageService';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import TextEditor from "../../TextEditor";
+import Header from "../../Header";
+import Sidebar from "../../Sidebar";
+import FeatherIcon from "feather-icons-react/build/FeatherIcon";
+import { getDocument, updateDocument } from "../../../services/dbService";
+import { uploadFile } from "../../../services/storageService";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Editblog = () => {
   const { id } = useParams(); // Get blog ID from URL
@@ -17,30 +17,30 @@ const Editblog = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const editorRef = useRef(null);
   const [fileChosen, setFileChosen] = useState(false);
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState("");
 
-  const imageFile = watch('image');
+  const imageFile = watch("image");
 
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const doc = await getDocument('blogs', id);
+        const doc = await getDocument("blogs", id);
         if (doc.exists) {
           const data = doc.data();
-          setValue('title', data.title);
-          setValue('author', data.author);
-          setValue('tags', data.tags.join(','));
-          setValue('status', data.status);
+          setValue("title", data.title);
+          setValue("author", data.author);
+          setValue("tags", data.tags.join(","));
+          setValue("status", data.status);
           setImageUrl(data.imageUrl); // Set the image URL from the document data
           if (editorRef.current && data.content) {
             editorRef.current.setEditorContent(data.content);
           }
         } else {
-          toast.error('Blog not found');
+          toast.error("Blog not found");
         }
       } catch (error) {
-        console.error('Error fetching blog:', error);
-        toast.error('Error fetching blog data');
+        console.error("Error fetching blog:", error);
+        toast.error("Error fetching blog data");
       }
     };
 
@@ -51,6 +51,7 @@ const Editblog = () => {
     try {
       setIsSubmitting(true);
       let newImageUrl = imageUrl;
+
       if (imageFile && imageFile.length > 0) {
         const file = imageFile[0];
         const imagePath = `blog-images/${file.name}`;
@@ -60,36 +61,32 @@ const Editblog = () => {
 
       const content = await new Promise((resolve) => {
         setTimeout(() => {
-          const editor = document.querySelector('.ck-editor__editable');
-          if (editor) {
-            resolve(editor.innerHTML);
-          } else {
-            resolve('');
-          }
+          const editor = document.querySelector(".ck-editor__editable");
+          resolve(editor ? editor.innerHTML : "");
         }, 100);
       });
 
       const blogData = {
         title: data.title,
         author: data.author,
-        tags: data.tags.split(','),
+        tags: data.tags.split(","),
         status: data.status,
         content,
-        imageUrl: newImageUrl, // Use the new or existing image URL
-        publicationDate: new Date()
+        imageUrl: newImageUrl,
+        publicationDate: new Date(),
       };
 
-      await updateDocument('blogs', id, blogData);
-      toast.success('Blog has been updated. Thank you!');
+      await updateDocument("blogs", id, blogData);
+      toast.success("Blog has been updated. Thank you!");
       reset(); // Reset the form fields
       if (editorRef.current) {
         editorRef.current.clearEditor();
       }
       setIsSubmitting(false);
-      navigate('/blogview'); // Redirect to blog view after update
+      navigate("/blogview"); // Redirect to blog view after update
     } catch (error) {
-      console.error('Error updating document: ', error);
-      toast.error('Error in updating blog');
+      console.error("Error updating document: ", error);
+      toast.error("Error in updating blog");
       setIsSubmitting(false);
     }
   };
@@ -102,16 +99,19 @@ const Editblog = () => {
       setImageUrl(newImageUrl);
     } else {
       setFileChosen(false);
-      setImageUrl('');
+      setImageUrl("");
     }
   };
-
 
   return (
     <div className="main-wrapper">
       <ToastContainer />
       <Header />
-      <Sidebar id='menu-item11' id1='menu-items11' activeClassName='edit-blog' />
+      <Sidebar
+        id="menu-item11"
+        id1="menu-items11"
+        activeClassName="edit-blog"
+      />
       <div className="page-wrapper">
         <div className="content">
           <div className="page-header">
@@ -150,7 +150,7 @@ const Editblog = () => {
                           <input
                             className="form-control"
                             type="text"
-                            {...register('title', { required: true })}
+                            {...register("title", { required: true })}
                           />
                         </div>
                       </div>
@@ -162,7 +162,7 @@ const Editblog = () => {
                           <input
                             className="form-control"
                             type="text"
-                            {...register('author', { required: true })}
+                            {...register("author", { required: true })}
                           />
                         </div>
                       </div>
@@ -175,7 +175,7 @@ const Editblog = () => {
                           <input
                             type="text"
                             className="form-control"
-                            {...register('tags', { required: true })}
+                            {...register("tags", { required: true })}
                           />
                         </div>
                       </div>
@@ -189,7 +189,7 @@ const Editblog = () => {
                               <input
                                 type="radio"
                                 value="Active"
-                                {...register('status', { required: true })}
+                                {...register("status", { required: true })}
                               />
                               Active
                             </label>
@@ -199,7 +199,7 @@ const Editblog = () => {
                               <input
                                 type="radio"
                                 value="Inactive"
-                                {...register('status', { required: true })}
+                                {...register("status", { required: true })}
                               />
                               Inactive
                             </label>
@@ -220,21 +220,28 @@ const Editblog = () => {
                             <input
                               type="file"
                               accept="image/*"
-                              {...register('image')}
+                              {...register("image")}
                               className="hide-input"
-                              id='file'
+                              id="file"
                               onChange={handleFileChange}
+                              src={imageUrl}
                             />
-                            <label htmlFor="file" className="upload" style={{ color: fileChosen ? '#2FCE2E' : 'initial' }}>
-                              {fileChosen ? 'File Chosen' : 'Choose File'}
+                            <label
+                              htmlFor="file"
+                              className="upload"
+                              style={{
+                                color: fileChosen ? "#2FCE2E" : "initial",
+                              }}
+                            >
+                              {fileChosen ? "File Chosen" : "Choose File"}
                             </label>
                           </div>
                           {imageUrl && (
                             <div className="image-preview">
-                              <img 
-                                src={imageUrl} 
-                                alt="Blog" 
-                                className="w-32 h-32 border border-gray-300 mt-2 object-cover rounded-lg" 
+                              <img
+                                src={imageUrl}
+                                alt="Blog"
+                                className="w-32 h-32 border border-gray-300 mt-2 object-cover rounded-lg"
                               />
                             </div>
                           )}
@@ -245,8 +252,9 @@ const Editblog = () => {
                           <button
                             type="submit"
                             className="btn btn-primary submit-form me-2"
+                            disabled={isSubmitting}
                           >
-                            <span>{isSubmitting ? "Updating..." : "Update"}</span>
+                            {isSubmitting ? "Updating..." : "Update"}
                           </button>
                           <button
                             type="button"
