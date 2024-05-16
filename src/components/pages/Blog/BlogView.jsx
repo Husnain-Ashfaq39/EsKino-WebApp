@@ -173,11 +173,13 @@ const BlogView = () => {
                         </span>
                       </div>
                       <h3 className="blog-title">
-                        <Link to={`/blog/${blog.id}`}>{blog.title}</Link>
+                        <Link to={`/blog/blog-details/${blog.id}`}>
+                          {blog.title}
+                        </Link>
                       </h3>
                       <p>{blog.excerpt}</p>
                       <Link
-                        to={`/blog/${blog.id}`}
+                        to={`/blog/blog-details/${blog.id}`}
                         className="read-more flex items-center"
                       >
                         Read more in {blog.readTime} Minutes
