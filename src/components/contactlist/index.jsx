@@ -1,12 +1,18 @@
-import { Button, Modal, Table, Select, Checkbox } from "antd";
-import { MailOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore"; // Import deleteDoc
+import { Table, Button, Checkbox, Select } from "antd";
+import { MailOutlined } from "@ant-design/icons";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { db } from "../../config/firebase";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
-import { Background } from "react-parallax";
-
+import { imagesend } from "../imagepath";
+import { Modal } from "antd";
 const { Option } = Select;
 
 const Contactlist = () => {
@@ -16,14 +22,16 @@ const Contactlist = () => {
   const [selectedContact, setSelectedContact] = useState({});
   const [filter, setFilter] = useState("all");
   const [selectedContacts, setSelectedContacts] = useState([]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteType, setDeleteType] = useState("");
 
   useEffect(() => {
     const fetchContacts = async () => {
       const contactsRef = collection(db, "contacts");
       const snapshot = await getDocs(contactsRef);
-      const contactData = snapshot.docs.map(doc => ({
+      const contactData = snapshot.docs.map((doc) => ({
         id: doc.id,
-        name: doc.data().firstName + ' ' + doc.data().lastName,
+        name: doc.data().firstName + " " + doc.data().lastName,
         email: doc.data().email,
         phoneNumber: doc.data().phoneNumber,
         message: doc.data().message,
@@ -41,7 +49,9 @@ const Contactlist = () => {
       setFilteredContacts(contacts);
     } else {
       const isRead = filter === "read";
-      setFilteredContacts(contacts.filter(contact => contact.read === isRead));
+      setFilteredContacts(
+        contacts.filter((contact) => contact.read === isRead)
+      );
     }
   }, [filter, contacts]);
 
@@ -66,7 +76,9 @@ const Contactlist = () => {
   const handleMarkAsRead = async (contact) => {
     const contactRef = doc(db, "contacts", contact.id);
     await updateDoc(contactRef, { read: true });
-    setContacts(contacts.map(c => c.id === contact.id ? { ...c, read: true } : c));
+    setContacts(
+      contacts.map((c) => (c.id === contact.id ? { ...c, read: true } : c))
+    );
   };
 
   const handleFilterChange = (value) => {
@@ -74,39 +86,67 @@ const Contactlist = () => {
   };
 
   const handleCheckboxChange = (id, checked) => {
-    setSelectedContacts(prev =>
-      checked ? [...prev, id] : prev.filter(contactId => contactId !== id)
+    setSelectedContacts((prev) =>
+      checked ? [...prev, id] : prev.filter((contactId) => contactId !== id)
     );
   };
 
-  const handleDeleteSelected = async () => {
-    const promises = selectedContacts.map(id => deleteDoc(doc(db, "contacts", id)));
-    await Promise.all(promises);
-    setContacts(contacts.filter(contact => !selectedContacts.includes(contact.id)));
-    setSelectedContacts([]);
+  const handleDeleteSelected = () => {
+    setDeleteType("selected");
+    setIsDeleteModalOpen(true);
   };
 
-  const handleDeleteAllRead = async () => {
-    const readContacts = contacts.filter(contact => contact.read).map(contact => contact.id);
-    const promises = readContacts.map(id => deleteDoc(doc(db, "contacts", id)));
-    await Promise.all(promises);
-    setContacts(contacts.filter(contact => !readContacts.includes(contact.id)));
+  const handleDeleteAllRead = () => {
+    setDeleteType("allRead");
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (deleteType === "selected") {
+      const promises = selectedContacts.map((id) =>
+        deleteDoc(doc(db, "contacts", id))
+      );
+      await Promise.all(promises);
+      setContacts(
+        contacts.filter((contact) => !selectedContacts.includes(contact.id))
+      );
+      setSelectedContacts([]);
+    } else if (deleteType === "allRead") {
+      const readContacts = contacts
+        .filter((contact) => contact.read)
+        .map((contact) => contact.id);
+      const promises = readContacts.map((id) =>
+        deleteDoc(doc(db, "contacts", id))
+      );
+      await Promise.all(promises);
+      setContacts(
+        contacts.filter((contact) => !readContacts.includes(contact.id))
+      );
+    }
+    setIsDeleteModalOpen(false);
+  };
+
+  const cancelDelete = () => {
+    setIsDeleteModalOpen(false);
+    setDeleteType("");
   };
 
   const columns = [
     {
-      title: <Checkbox
-        onChange={e => {
-          const checked = e.target.checked;
-          const allIds = filteredContacts.map(contact => contact.id);
-          setSelectedContacts(checked ? allIds : []);
-        }}
-        checked={selectedContacts.length === filteredContacts.length}
-      />,
+      title: (
+        <Checkbox
+          onChange={(e) => {
+            const checked = e.target.checked;
+            const allIds = filteredContacts.map((contact) => contact.id);
+            setSelectedContacts(checked ? allIds : []);
+          }}
+          checked={selectedContacts.length === filteredContacts.length}
+        />
+      ),
       dataIndex: "checkbox",
       render: (_, record) => (
         <Checkbox
-          onChange={e => handleCheckboxChange(record.id, e.target.checked)}
+          onChange={(e) => handleCheckboxChange(record.id, e.target.checked)}
           checked={selectedContacts.includes(record.id)}
         />
       ),
@@ -137,7 +177,7 @@ const Contactlist = () => {
           {!record.read && (
             <Button
               className="btn btn-primary"
-              style={{ marginLeft: '20px' }}
+              style={{ marginLeft: "20px" }}
               onClick={() => handleMarkAsRead(record)}
             >
               Mark as Read
@@ -158,21 +198,39 @@ const Contactlist = () => {
             <div className="row">
               <div className="col-sm-12">
                 <h3>Contact List</h3>
-                <Select defaultValue="all" style={{ width: 200 }} onChange={handleFilterChange}>
+                <Select
+                  defaultValue="all"
+                  style={{ width: 200 }}
+                  onChange={handleFilterChange}
+                >
                   <Option value="all">All</Option>
                   <Option value="read">Read</Option>
                   <Option value="unread">Unread</Option>
                 </Select>
-                
                 {selectedContacts.length > 0 && (
                   <Button
                     type="danger"
-                    style={{ marginLeft: '20px',backgroundColor:'#E70226',color:'white' }}
+                    style={{
+                      marginLeft: "20px",
+                      backgroundColor: "#E70226",
+                      color: "white",
+                    }}
                     onClick={handleDeleteSelected}
                   >
                     Delete
                   </Button>
                 )}
+                <Button
+                  type="danger"
+                  style={{
+                    marginLeft: "20px",
+                    backgroundColor: "#E70226",
+                    color: "white",
+                  }}
+                  onClick={handleDeleteAllRead}
+                >
+                  Delete All Read
+                </Button>
               </div>
             </div>
           </div>
@@ -194,14 +252,60 @@ const Contactlist = () => {
                         <Button key="back" onClick={handleCancel}>
                           Close
                         </Button>,
-                        <Button key="submit" type="primary" onClick={handleReply} icon={<MailOutlined />}>
+                        <Button
+                          key="submit"
+                          type="primary"
+                          onClick={handleReply}
+                          icon={<MailOutlined />}
+                        >
                           Reply
-                        </Button>
+                        </Button>,
                       ]}
                     >
                       <p>{selectedContact.message}</p>
                     </Modal>
                   )}
+                  <div
+                    className={
+                      isDeleteModalOpen
+                        ? "modal fade show delete-modal"
+                        : "modal fade delete-modal"
+                    }
+                    style={{
+                      display: isDeleteModalOpen ? "block" : "none",
+                      backgroundColor: "rgba(0,0,0,0.5)",
+                    }}
+                    role="dialog"
+                  >
+                    <div className="modal-dialog modal-dialog-centered">
+                      <div className="modal-content">
+                        <div className="modal-body text-center">
+                          <img src={imagesend} alt="#" width={50} height={46} />
+                          <h3>
+                            Are you sure you want to delete{" "}
+                            {deleteType === "selected"
+                              ? "the selected contacts?"
+                              : "all read contacts?"}
+                          </h3>
+                          <div className="m-t-20">
+                            <Button
+                              onClick={cancelDelete}
+                              className="btn btn-white me-2"
+                            >
+                              Close
+                            </Button>
+                            <Button
+                              type="button"
+                              className="btn btn-danger"
+                              onClick={confirmDelete}
+                            >
+                              Delete
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
