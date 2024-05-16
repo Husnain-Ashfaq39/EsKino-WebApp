@@ -1,14 +1,19 @@
-import React, { forwardRef, useImperativeHandle } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const TextEditor = forwardRef((props, ref) => {
-  let editorInstance = null;
+  const editorInstanceRef = useRef(null);
 
   useImperativeHandle(ref, () => ({
     clearEditor: () => {
-      if (editorInstance) {
-        editorInstance.setData('');
+      if (editorInstanceRef.current) {
+        editorInstanceRef.current.setData('');
+      }
+    },
+    setEditorContent: (content) => {
+      if (editorInstanceRef.current) {
+        editorInstanceRef.current.setData(content);
       }
     }
   }));
@@ -19,7 +24,7 @@ const TextEditor = forwardRef((props, ref) => {
         editor={ClassicEditor}
         data=""
         onReady={(editor) => {
-          editorInstance = editor;
+          editorInstanceRef.current = editor;
         }}
         onChange={(event, editor) => {
           const data = editor.getData();
@@ -36,7 +41,6 @@ const TextEditor = forwardRef((props, ref) => {
   );
 });
 
-// Set a display name for the TextEditor component
 TextEditor.displayName = 'TextEditor';
 
 export default TextEditor;

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useParams, useNavigate } from "react-router-dom";
-import TextEditor from '../../TextEditor';
+import TextEditor from '../../TextEditor'; // Ensure TextEditor is correctly imported and implemented
 import Header from '../../Header';
 import Sidebar from '../../Sidebar';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
@@ -16,6 +16,8 @@ const Editblog = () => {
   const { register, handleSubmit, setValue, watch, reset } = useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const editorRef = useRef(null);
+  const [fileChosen, setFileChosen] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
 
   const imageFile = watch('image');
 
@@ -29,9 +31,12 @@ const Editblog = () => {
           setValue('author', data.author);
           setValue('tags', data.tags.join(','));
           setValue('status', data.status);
-          if (editorRef.current) {
+          setImageUrl(data.imageUrl); // Set the image URL from the document data
+          if (editorRef.current && data.content) {
             editorRef.current.setEditorContent(data.content);
           }
+        } else {
+          toast.error('Blog not found');
         }
       } catch (error) {
         console.error('Error fetching blog:', error);
@@ -45,14 +50,14 @@ const Editblog = () => {
   const onSubmit = async (data) => {
     try {
       setIsSubmitting(true);
-      let imageUrl = '';
-      if (imageFile.length > 0) {
+      let newImageUrl = imageUrl;
+      if (imageFile && imageFile.length > 0) {
         const file = imageFile[0];
         const imagePath = `blog-images/${file.name}`;
-        imageUrl = await uploadFile(file, imagePath);
+        newImageUrl = await uploadFile(file, imagePath);
+        setImageUrl(newImageUrl); // Update the image URL state
       }
 
-      // Get the data from the text editor
       const content = await new Promise((resolve) => {
         setTimeout(() => {
           const editor = document.querySelector('.ck-editor__editable');
@@ -70,7 +75,7 @@ const Editblog = () => {
         tags: data.tags.split(','),
         status: data.status,
         content,
-        imageUrl: imageUrl || data.imageUrl, // Keep existing image if not changed
+        imageUrl: newImageUrl, // Use the new or existing image URL
         publicationDate: new Date()
       };
 
@@ -88,6 +93,19 @@ const Editblog = () => {
       setIsSubmitting(false);
     }
   };
+
+  const handleFileChange = (e) => {
+    if (e.target.files.length > 0) {
+      setFileChosen(true);
+      const file = e.target.files[0];
+      const newImageUrl = URL.createObjectURL(file);
+      setImageUrl(newImageUrl);
+    } else {
+      setFileChosen(false);
+      setImageUrl('');
+    }
+  };
+
 
   return (
     <div className="main-wrapper">
@@ -204,11 +222,22 @@ const Editblog = () => {
                               accept="image/*"
                               {...register('image')}
                               className="hide-input"
+                              id='file'
+                              onChange={handleFileChange}
                             />
-                            <label htmlFor="file" className="upload">
-                              Choose File
+                            <label htmlFor="file" className="upload" style={{ color: fileChosen ? '#2FCE2E' : 'initial' }}>
+                              {fileChosen ? 'File Chosen' : 'Choose File'}
                             </label>
                           </div>
+                          {imageUrl && (
+                            <div className="image-preview">
+                              <img 
+                                src={imageUrl} 
+                                alt="Blog" 
+                                className="w-32 h-32 border border-gray-300 mt-2 object-cover rounded-lg" 
+                              />
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="col-12">
@@ -227,6 +256,7 @@ const Editblog = () => {
                               if (editorRef.current) {
                                 editorRef.current.clearEditor();
                               }
+                              setFileChosen(false); // Reset file chosen state
                             }}
                           >
                             Cancel

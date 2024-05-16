@@ -14,6 +14,7 @@ const AddBlog = () => {
   const { register, handleSubmit, setValue, watch, reset } = useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const editorRef = useRef(null);
+  const [fileChosen, setFileChosen] = useState(false);
 
   const imageFile = watch('image');
 
@@ -57,10 +58,19 @@ const AddBlog = () => {
         editorRef.current.clearEditor();
       }
       setIsSubmitting(false);
+      setFileChosen(false); // Reset file chosen state
     } catch (error) {
       console.error('Error adding document: ', error);
       toast.error('Error in Publishing blog');
       setIsSubmitting(false);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files.length > 0) {
+      setFileChosen(true);
+    } else {
+      setFileChosen(false);
     }
   };
 
@@ -179,9 +189,11 @@ const AddBlog = () => {
                               accept="image/*"
                               {...register('image', { required: true })}
                               className="hide-input"
+                              id='file'
+                              onChange={handleFileChange}
                             />
-                            <label htmlFor="file" className="upload">
-                              Choose File
+                            <label htmlFor="file" className="upload" style={{ color: fileChosen ? '#2FCE2E' : 'initial' }}>
+                              {fileChosen ? 'File Chosen' : 'Choose File'}
                             </label>
                           </div>
                         </div>
@@ -202,6 +214,7 @@ const AddBlog = () => {
                               if (editorRef.current) {
                                 editorRef.current.clearEditor();
                               }
+                              setFileChosen(false); // Reset file chosen state
                             }}
                           >
                             Cancel

@@ -280,19 +280,6 @@ const Admin_Dashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-12 col-md-12 col-lg-6 col-xl-3 d-flex">
-                <div className="card">
-                  <div className="card-body">
-                    <div className="chart-title">
-                      <h4>Users</h4>
-                    </div>
-                    <div id="user-chart-dash" className="chart-user-icon">
-                      <img src={user001} alt="#" />
-                      <img src={user001} alt="#" />
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <div className="w-100">
