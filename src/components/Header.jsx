@@ -82,7 +82,7 @@ const Header = () => {
         >
           <img src={baricon1} alt="" />
         </Link>
-        <div className="top-nav-search mob-view">
+        {/* <div className="top-nav-search mob-view">
           <form>
             <input
               type="text"
@@ -93,7 +93,7 @@ const Header = () => {
               <img src={searchnormal} alt="" />
             </Link>
           </form>
-        </div>
+        </div> */}
 
         <ul className="nav user-menu float-end">
           <li className="nav-item dropdown has-arrow user-profile-list">

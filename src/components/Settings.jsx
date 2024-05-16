@@ -5,6 +5,8 @@ import Sidebar from "./Sidebar";
 import { Link } from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { getAllDocuments, addDocument, updateDocument } from "../services/dbService";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Settings = () => {
   const {
@@ -35,7 +37,9 @@ const Settings = () => {
     },
   });
 
-  const [submitting, setSubmitting] = useState(false);
+  const [submittingContact, setSubmittingContact] = useState(false);
+  const [submittingSocial, setSubmittingSocial] = useState(false);
+
   const [contactDocId, setContactDocId] = useState(null);
   const [socialDocId, setSocialDocId] = useState(null);
 
@@ -79,7 +83,7 @@ const Settings = () => {
   }, [setValueContact, setValueSocial]);
 
   const onSubmitContactInfo = async (data) => {
-    setSubmitting(true);
+    setSubmittingContact(true);
     try {
       if (contactDocId) {
         await updateDocument("contactInfo", contactDocId, data);
@@ -87,19 +91,20 @@ const Settings = () => {
         const docRef = await addDocument("contactInfo", data);
         setContactDocId(docRef.id);
       }
-      console.log("Contact Info Submitted:", data);
+      toast.success("Contacts updated Successfully!");
       setValueContact("address", data.address);
       setValueContact("phone", data.phone);
       setValueContact("email", data.email);
     } catch (error) {
       console.error("Error submitting contact info: ", error);
+      toast.error("Failed to submit Contact Info!");
     } finally {
-      setSubmitting(false);
+      setSubmittingContact(false);
     }
   };
 
   const onSubmitSocialLinks = async (data) => {
-    setSubmitting(true);
+    setSubmittingSocial(true);
     try {
       if (socialDocId) {
         await updateDocument("socialLinks", socialDocId, data);
@@ -107,7 +112,7 @@ const Settings = () => {
         const docRef = await addDocument("socialLinks", data);
         setSocialDocId(docRef.id);
       }
-      console.log("Social Links Submitted:", data);
+      toast.success("Social Links updated Successfully!");
       setValueSocial("facebook", data.facebook);
       setValueSocial("youtube", data.youtube);
       setValueSocial("twitter", data.twitter);
@@ -115,8 +120,9 @@ const Settings = () => {
       setValueSocial("instagram", data.instagram);
     } catch (error) {
       console.error("Error submitting social links: ", error);
+      toast.error("Failed to submit Social Links!");
     } finally {
-      setSubmitting(false);
+      setSubmittingSocial(false);
     }
   };
 
@@ -194,9 +200,9 @@ const Settings = () => {
                   <button
                     type="submit"
                     className="btn btn-primary submit-form me-2"
-                    disabled={submitting}
+                    disabled={submittingContact}
                   >
-                    {submitting ? "Submitting..." : "Save Contact Info"}
+                    {submittingContact ? "Submitting..." : "Save Contact Info"}
                   </button>
                 </div>
               </form>
@@ -253,9 +259,9 @@ const Settings = () => {
                   <button
                     type="submit"
                     className="btn btn-primary submit-form me-2"
-                    disabled={submitting}
+                    disabled={submittingSocial}
                   >
-                    {submitting ? "Submitting..." : "Save Social Links"}
+                    {submittingSocial ? "Submitting..." : "Save Social Links"}
                   </button>
                 </div>
               </form>
@@ -263,6 +269,7 @@ const Settings = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

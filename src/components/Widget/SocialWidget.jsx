@@ -48,21 +48,31 @@ export default function SocialWidget() {
     <div className="cs_social_links_wrap">
       <h2>Follow Us</h2>
       <div className="cs_social_links">
-        <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer">
-          <Icon icon="fa-brands:facebook-f" />
-        </a>
-        <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer">
-          <Icon icon="fa-brands:youtube" />
-        </a>
-        <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
-          <Icon icon="fa-brands:linkedin-in" />
-        </a>
-        <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer">
-          <Icon icon="fa-brands:twitter" />
-        </a>
-        <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer">
-          <Icon icon="fa-brands:instagram" />
-        </a>
+        {socialLinks.facebook && (
+          <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer">
+            <Icon icon="fa-brands:facebook-f" />
+          </a>
+        )}
+        {socialLinks.youtube && (
+          <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer">
+            <Icon icon="fa-brands:youtube" />
+          </a>
+        )}
+        {socialLinks.linkedin && (
+          <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
+            <Icon icon="fa-brands:linkedin-in" />
+          </a>
+        )}
+        {socialLinks.twitter && (
+          <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer">
+            <Icon icon="fa-brands:twitter" />
+          </a>
+        )}
+        {socialLinks.instagram && (
+          <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer">
+            <Icon icon="fa-brands:instagram" />
+          </a>
+        )}
       </div>
     </div>
   );

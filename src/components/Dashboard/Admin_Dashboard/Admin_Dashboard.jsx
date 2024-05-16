@@ -105,64 +105,43 @@ const Admin_Dashboard = () => {
           {/* /Page Header */}
           <div className="row">
             <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-              <div className="dash-widget">
-                <div className="dash-boxs comman-flex-center">
-                  <img src={calendar} alt="#" />
+              <Link to="/meetinglist?status=Active">
+                <div className="dash-widget">
+                  <div className="dash-boxs comman-flex-center">
+                    <img src={calendar} alt="#" />
+                  </div>
+                  <div className="dash-content dash-count flex-grow-1">
+                    <h4>Active Meeting</h4>
+                    <h2>{countActive}</h2>
+                  </div>
                 </div>
-                <div className="dash-content dash-count flex-grow-1">
-                  <h4>Active Meeting</h4>
-                  <h2>{countActive}</h2>
-                  <p>
-                    <span className="passive-view">
-                      <i className="feather-arrow-up-right me-1">
-                        <FeatherIcon icon="arrow-up-right" />
-                      </i>
-                      40%
-                    </span>{" "}
-                    vs last month
-                  </p>
-                </div>
-              </div>
+              </Link>
             </div>
             <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-              <div className="dash-widget">
-                <div className="dash-boxs comman-flex-center">
-                  <img src={profile_add} alt="#" />
+              <Link to="/meetinglist?status=Closed">
+                <div className="dash-widget">
+                  <div className="dash-boxs comman-flex-center">
+                    <img src={profile_add} alt="#" />
+                  </div>
+                  <div className="dash-content dash-count">
+                    <h4>Close Meeting</h4>
+                    <h2>{countClose}</h2>
+                  </div>
                 </div>
-                <div className="dash-content dash-count">
-                  <h4>Close Meeting</h4>
-                  <h2>{countClose}</h2>
-                  <p>
-                    <span className="passive-view">
-                      <i className="feather-arrow-up-right me-1">
-                        <FeatherIcon icon="arrow-up-right" />
-                      </i>
-                      20%
-                    </span>{" "}
-                    vs last month
-                  </p>
-                </div>
-              </div>
+              </Link>
             </div>
             <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-              <div className="dash-widget">
-                <div className="dash-boxs comman-flex-center">
-                  <img src={scissor} alt="#" />
+              <Link to="/meetinglist?status=Timeout">
+                <div className="dash-widget">
+                  <div className="dash-boxs comman-flex-center">
+                    <img src={scissor} alt="#" />
+                  </div>
+                  <div className="dash-content dash-count">
+                    <h4>Timeout</h4>
+                    <h2>{countTimeout}</h2>
+                  </div>
                 </div>
-                <div className="dash-content dash-count">
-                  <h4>Timeout</h4>
-                  <h2>{countTimeout}</h2>
-                  <p>
-                    <span className="negative-view">
-                      <i className="feather-arrow-down-right me-1">
-                        <FeatherIcon icon="arrow-down-right" />
-                      </i>
-                      15%
-                    </span>{" "}
-                    vs last month
-                  </p>
-                </div>
-              </div>
+              </Link>
             </div>
             <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
               <div className="dash-widget">
@@ -172,15 +151,6 @@ const Admin_Dashboard = () => {
                 <div className="dash-content dash-count">
                   <h4>Earnings</h4>
                   <h2>€{totalEarning}</h2>
-                  <p>
-                    <span className="passive-view">
-                      <i className="feather-arrow-up-right me-1">
-                        <FeatherIcon icon="arrow-up-right" />
-                      </i>
-                      30%
-                    </span>{" "}
-                    vs last month
-                  </p>
                 </div>
               </div>
             </div>
@@ -191,7 +161,6 @@ const Admin_Dashboard = () => {
                 <div className="card-body">
                   <div className="chart-title patient-visit">
                     <h4>Participants</h4>
-              
                   </div>
                   <div id="patient-chart" />
                   <PatientChart />
