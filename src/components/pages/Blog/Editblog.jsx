@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useParams, useNavigate } from "react-router-dom";
-import TextEditor from '../../TextEditor'; // Ensure TextEditor is correctly imported and implemented
+import TextEditor from '../../TextEditor'; 
 import Header from '../../Header';
 import Sidebar from '../../Sidebar';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';

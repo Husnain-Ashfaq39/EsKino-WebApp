@@ -69,6 +69,7 @@ import Contactlist from "./components/contactlist";
 import GalleryList from "./components/Gallery/GalleryList";
 import EditGallery from "./components/Gallery/EditGallery";
 import Policy from "./components/Policy";
+import Settings from "./components/Settings";
 
 //Accounts
 const Approuter = () => {
@@ -80,7 +81,10 @@ const Approuter = () => {
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           {/* <Route path="/signup" element={<Signup />} /> */}
 
-         
+          <Route
+            path="/settings"
+            element={<Settings />}
+          />
 
           <Route path="/register" element={<Register />} />
           <Route path="/lockscreen" element={<LockScreen />} />
@@ -190,6 +194,7 @@ const Approuter = () => {
             path="/landingpage/organizationmattersbody/addorganizationmattersbody"
             element={<AddOMBody />}
           />
+          
 
 
 
