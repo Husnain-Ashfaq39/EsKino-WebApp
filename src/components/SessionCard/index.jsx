@@ -36,15 +36,15 @@ function SessionCard({ limit }) {
           const convertedDocData = { ...docData, startDate, endDate, startTime, endTime };
           const meetingStatus = getMeetingStatus(convertedDocData);
 
-          if (meetingStatus !== 'Timeout') {
+           if (meetingStatus !== 'Timeout') {
             return {
               id: doc.id,
               ...convertedDocData,
               icon: selectIcon(docData.type),
               status: meetingStatus,
             };
-          }
-          return null;
+           }
+           return null;
         })
         .filter((item) => item !== null);
       setSections(data);

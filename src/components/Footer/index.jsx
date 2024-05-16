@@ -9,6 +9,8 @@ import { footerBg1Svg, footerLogoBgSvg, logoIconSvg } from '../imagepath';
 const menuDataTwo = [
   { title: 'Blog', href: '/blog' },
   { title: 'Contact Us', href: '/contact' },
+  { title: 'Policy', href: '/policy' },
+
 ];
 
 export default function Footer() {
