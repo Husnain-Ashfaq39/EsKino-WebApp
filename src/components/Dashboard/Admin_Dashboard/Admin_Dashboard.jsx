@@ -70,12 +70,12 @@ const Admin_Dashboard = () => {
     fetchMeetings();
   }, []);
 
-  const [year, setYear] = useState([
-    { value: 1, label: "2022" },
-    { value: 2, label: "2021" },
-    { value: 3, label: "2020" },
-    { value: 4, label: "2019" },
-  ]);
+  // const [year, setYear] = useState([
+  //   { value: 1, label: "2022" },
+  //   { value: 2, label: "2021" },
+  //   { value: 3, label: "2020" },
+  //   { value: 4, label: "2019" },
+  // ]);
 
   return (
     <>
@@ -191,58 +191,7 @@ const Admin_Dashboard = () => {
                 <div className="card-body">
                   <div className="chart-title patient-visit">
                     <h4>Participants</h4>
-                    <div>
-                      <ul className="nav chat-user-total">
-                        <li>
-                          <i className="fa fa-circle current-users" aria-hidden="true" />
-                          Male 75%
-                        </li>
-                        <li>
-                          <i className="fa fa-circle old-users" aria-hidden="true" />
-                          Female 25%
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="form-group mb-0">
-                      <Select
-                        className="custom-react-select"
-                        defaultValue={selectedOption}
-                        onChange={setSelectedOption}
-                        options={year}
-                        id="search-commodity"
-                        components={{
-                          IndicatorSeparator: () => null,
-                        }}
-                        styles={{
-                          control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            borderColor: state.isFocused
-                              ? "none"
-                              : "2px solid rgba(46, 55, 164, 0.1);",
-                            boxShadow: state.isFocused
-                              ? "0 0 0 1px #2e37a4"
-                              : "none",
-                            "&:hover": {
-                              borderColor: state.isFocused
-                                ? "none"
-                                : "2px solid rgba(46, 55, 164, 0.1)",
-                            },
-                            borderRadius: "10px",
-                            fontSize: "14px",
-                            minHeight: "45px",
-                          }),
-                          dropdownIndicator: (base, state) => ({
-                            ...base,
-                            transform: state.selectProps.menuIsOpen
-                              ? "rotate(-180deg)"
-                              : "rotate(0)",
-                            transition: "250ms",
-                            width: "35px",
-                            height: "35px",
-                          }),
-                        }}
-                      />
-                    </div>
+              
                   </div>
                   <div id="patient-chart" />
                   <PatientChart />
