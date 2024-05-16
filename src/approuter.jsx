@@ -110,11 +110,11 @@ const Approuter = () => {
 
           {/* Participent */}
           <Route
-            path="/meetinglist/participentlist"
+            path="/meetinglist/participantlist"
             element={<ParticipentList />}
           />
           <Route
-            path="/meetinglist/participentlist/edit"
+            path="/meetinglist/participantlist/edit"
             element={<EditParticipent />}
           />
           {/* Hero Section */}

@@ -8,9 +8,15 @@ import { deleteDocument } from "../../services/dbService";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { imagesend, plusicon, refreshicon, searchnormal } from "../imagepath";
-import { fetchParticipantCount, getMeetingStatus } from "../../services/dbService";
+import {
+  fetchParticipantCount,
+  getMeetingStatus,
+} from "../../services/dbService";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { convertTimestamp, convertTime } from "../../services/general_functions";
+import {
+  convertTimestamp,
+  convertTime,
+} from "../../services/general_functions";
 
 const MeetingList = () => {
   const [meetings, setMeetings] = useState([]);
@@ -205,7 +211,11 @@ const MeetingList = () => {
   return (
     <>
       <Header />
-      <Sidebar id="menu-item1" id2="menu-item1" activeClassName="meeting-list" />
+      <Sidebar
+        id="menu-item1"
+        id2="menu-item1"
+        activeClassName="meeting-list"
+      />
       <div className="page-wrapper">
         <div className="content">
           <div className="page-header">
@@ -315,7 +325,7 @@ const MeetingList = () => {
                               </p>
                               <p>
                                 <strong>End Time:</strong>{" "}
-                                {selectedMeeting.EndTime}
+                                {selectedMeeting.endTime}
                               </p>
                               <p>
                                 <strong>Participants:</strong>{" "}
@@ -335,7 +345,7 @@ const MeetingList = () => {
                               </p>
                               <p>
                                 <strong>End Date:</strong>{" "}
-                                {selectedMeeting.EndDate}
+                                {selectedMeeting.endDate}
                               </p>
                               <p>
                                 <strong>Price in Euro:</strong>{" "}

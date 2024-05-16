@@ -25,11 +25,10 @@ const PatientChart = () => {
       // Map meeting IDs to their end month and count participants
       meetingsSnapshot.forEach((doc) => {
         const data = doc.data();
-        const endDate = moment(data.endDate.toDate(), "DD/MM/YYYY"); // Adjust date format as needed
+        const endDate = moment(data.endDate.toDate());
         const monthIndex = endDate.diff(oneYearAgo, "months");
 
         if (monthIndex >= 0 && monthIndex < 12) {
-          // Check if Participants field exists and is structured as expected
           if (data.Participants) {
             if (typeof data.Participants === "number") {
               // If Participants is a number, divide equally for demo purposes

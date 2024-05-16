@@ -169,7 +169,7 @@ const Sidebar = (props) => {
                             ? "active"
                             : ""
                         }
-                        to="/meetinglist/participentlist"
+                        to="/meetinglist/participantlist"
                       >
                         Participent List
                       </Link>
@@ -358,21 +358,15 @@ const Sidebar = (props) => {
                         Add Blog
                       </Link>
                     </li>
-                    
                   </ul>
                 </li>
                 <li className="submenu">
-                  <Link
-                    to="/contactlist"
-                    id="menu-item11"
-                    
-                  >
+                  <Link to="/contactlist" id="menu-item11">
                     <span className="menu-side">
                       <img src={patients} alt="" />
                     </span>{" "}
-                    <span>Contacts</span> 
+                    <span>Contacts</span>
                   </Link>
-                  
                 </li>
               </ul>
               <div className="logout-btn">
