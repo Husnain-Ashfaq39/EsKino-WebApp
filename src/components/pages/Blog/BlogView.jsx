@@ -139,7 +139,7 @@ const BlogView = () => {
                                             <p>
                                                 {blog.excerpt}
                                             </p>
-                                            <Link to={`/blog/${blog.id}`} className="read-more flex items-center">
+                                            <Link to={`/blog/blog-details/${blog.id}`} className="read-more flex items-center">
                                                     Read more in {blog.readTime} Minutes
                                                     <i className="fa fa-long-arrow-right ml-2" />
                                                 </Link>

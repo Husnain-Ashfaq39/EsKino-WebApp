@@ -10,7 +10,7 @@ import { uploadFile } from '../../../services/storageService';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Editblog = () => {
+const EditBlog = () => {
   const { id } = useParams(); // Get blog ID from URL
   const navigate = useNavigate();
   const { register, handleSubmit, setValue, watch, reset } = useForm();
@@ -51,11 +51,17 @@ const Editblog = () => {
     try {
       setIsSubmitting(true);
       let newImageUrl = imageUrl;
+console.log("image file "+data.imageUrl);
       if (imageFile && imageFile.length > 0) {
         const file = imageFile[0];
+        console.log("new file "+file);
         const imagePath = `blog-images/${file.name}`;
         newImageUrl = await uploadFile(file, imagePath);
         setImageUrl(newImageUrl); // Update the image URL state
+      }
+      else
+      {
+        console.log("image file nhi mili");
       }
 
       const content = await new Promise((resolve) => {
@@ -98,6 +104,7 @@ const Editblog = () => {
     if (e.target.files.length > 0) {
       setFileChosen(true);
       const file = e.target.files[0];
+      console.log("file "+file.name);
       const newImageUrl = URL.createObjectURL(file);
       setImageUrl(newImageUrl);
     } else {
@@ -105,7 +112,6 @@ const Editblog = () => {
       setImageUrl('');
     }
   };
-
 
   return (
     <div className="main-wrapper">
@@ -230,12 +236,8 @@ const Editblog = () => {
                             </label>
                           </div>
                           {imageUrl && (
-                            <div className="image-preview">
-                              <img 
-                                src={imageUrl} 
-                                alt="Blog" 
-                                className="w-32 h-32 border border-gray-300 mt-2 object-cover rounded-lg" 
-                              />
+                            <div>
+                              <img src={imageUrl} alt="Selected Image" style={{ maxWidth: '100%', marginTop: '10px' }} />
                             </div>
                           )}
                         </div>
@@ -257,6 +259,7 @@ const Editblog = () => {
                                 editorRef.current.clearEditor();
                               }
                               setFileChosen(false); // Reset file chosen state
+                              setImageUrl(''); // Reset image URL
                             }}
                           >
                             Cancel
@@ -276,4 +279,4 @@ const Editblog = () => {
   );
 };
 
-export default Editblog;
+export default EditBlog;
