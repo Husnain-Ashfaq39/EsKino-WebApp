@@ -7,7 +7,6 @@ import Spacing from "../Spacing";
 import { closeSvg, logo2Png, logoSvg } from "../imagepath";
 import { getAllDocuments } from "../../services/dbService";
 import { useQuery } from "@tanstack/react-query";
-import { contactInfo } from "../../services/general_functions";
 
 export default function Header2({ logoSrc, variant }) {
   const [isSticky, setIsSticky] = useState(false);
@@ -15,7 +14,11 @@ export default function Header2({ logoSrc, variant }) {
   const [sideNav, setSideNav] = useState(false);
   const [searchToggle, setSearchToggle] = useState(false);
   const [key, setKey] = useState({ logoUrl: "" });
-
+  const [contactInfo, setContactInfo] = useState({
+    address: "",
+    phone: "",
+    email: ""
+  });
   const {
     data: logoData,
     isLoading,
@@ -32,6 +35,28 @@ export default function Header2({ logoSrc, variant }) {
       }),
   });
 
+
+const fetchContactInfo = async () => {
+   
+  const colSnap = await getAllDocuments("contactInfo");
+
+  if (!colSnap.empty) {
+      const docSnap = colSnap.docs[0]; // Get the first document
+      return {
+          address: docSnap.data().address,
+          phone: docSnap.data().phone,
+          email: docSnap.data().email
+      };
+  } else {
+      console.log("No documents found in the contactInfo collection!");
+      return {
+          address: "",
+          phone: "",
+          email: ""
+      };
+  }
+};
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
@@ -45,8 +70,17 @@ export default function Header2({ logoSrc, variant }) {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
 
+    
+  }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchContactInfo();
+      setContactInfo(data);
+    };
+
+    fetchData();
+  }, []);
   if (isLoading) {
     return <div>Loading...</div>;
   }

@@ -9,19 +9,20 @@ import { blogimg2, imagesend, refreshicon, searchnormal } from "../imagepath";
 import { db } from "../../config/firebase";
 import { getDoc, doc } from "firebase/firestore";
 import { updateDoc } from "firebase/firestore";
-
-import moment from "moment";
 import {
   deleteDocument,
   fetchDocumentsWithQuery,
   getAllDocuments,
 } from "../../services/dbService";
+
 const ParticipantList = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const meetingId = searchParams.get("meetingid");
   const [participentToDele, setParticipentToDele] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // New state for search query
+  const [filteredParticipants, setFilteredParticipants] = useState([]);
 
   const initialParticipentData = {
     sectionId: "",
@@ -34,7 +35,6 @@ const ParticipantList = () => {
     gender: "",
     FIELD9: "",
   };
-  // Import needed Firestore functions
 
   const handleDelete = async (participantId) => {
     const participantIndex = participentData.findIndex(
@@ -43,40 +43,31 @@ const ParticipantList = () => {
     if (participantIndex === -1) return;
 
     const participant = participentData[participantIndex];
-    // Ensure numberOfPersons is treated as an integer
     const numberOfPersons = parseInt(participant.persons, 10);
     const meetingId = participant.sectionId;
 
     try {
-      // Fetch the current meeting data
       const meetingRef = doc(db, "meetings", meetingId);
       const meetingSnap = await getDoc(meetingRef);
 
       if (meetingSnap.exists()) {
         const meetingData = meetingSnap.data();
-
-        // Ensure currentCapacity is parsed as an integer
-        const currentCapacity = parseInt(meetingData.capacity, 10) || 0; // Default to 0 if undefined, null, or empty string
-
-        // Calculate the new capacity
+        const currentCapacity = parseInt(meetingData.capacity, 10) || 0;
         const updatedCapacity = currentCapacity + numberOfPersons;
         const updatedCapacityStr = updatedCapacity.toString();
 
-        // Update the meeting capacity
         await updateDoc(meetingRef, {
           capacity: updatedCapacityStr,
         });
 
-        // Delete the participant
         await deleteDocument("participants", participantId);
 
-        // Remove the deleted participant from the state
         const updatedParticipants = participentData.filter(
           (p) => p.id !== participantId
         );
         setParticipantData(updatedParticipants);
 
-        setIsDeleteModalOpen(false); // Close the modal
+        setIsDeleteModalOpen(false);
       } else {
         console.log("No such meeting exists!");
       }
@@ -96,11 +87,10 @@ const ParticipantList = () => {
         (querySnapshot) => {
           const loadedParticipants = querySnapshot.docs.map((doc) => ({
             id: doc.id,
-
             firstName: doc.data().firstName,
             lastName: doc.data().lastName,
             email: doc.data().email,
-            address: doc.data().address, // Check your actual field names
+            address: doc.data().address,
             persons: doc.data().persons,
             personNames: doc.data().personNames,
             gender: doc.data().gender,
@@ -116,7 +106,7 @@ const ParticipantList = () => {
           firstName: doc.data().firstName,
           lastName: doc.data().lastName,
           email: doc.data().email,
-          address: doc.data().address, // Check your actual field names
+          address: doc.data().address,
           persons: doc.data().persons,
           personNames: doc.data().personNames,
           gender: doc.data().gender,
@@ -126,6 +116,15 @@ const ParticipantList = () => {
       });
     }
   }, [meetingId]);
+
+  useEffect(() => {
+    const filtered = participentData.filter(
+      (participant) =>
+        participant.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        participant.lastName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredParticipants(filtered);
+  }, [searchQuery, participentData]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedParticipant, setSelectedParticipant] = useState({});
@@ -250,14 +249,18 @@ const ParticipantList = () => {
                   <div className="row align-items-center">
                     <div className="col">
                       <div className="doctor-table-blk">
-                        <h3>Participent List</h3>
+                        <h3>Participant List</h3>
                         <div className="doctor-search-blk">
                           <div className="top-nav-search table-search-blk">
                             <form>
                               <input
                                 type="text"
                                 className="form-control"
-                                placeholder="Search here"
+                                placeholder="Search by first or last name"
+                                value={searchQuery}
+                                onChange={(e) =>
+                                  setSearchQuery(e.target.value)
+                                }
                               />
                               <Link className="btn">
                                 <img src={searchnormal} alt="#" />
@@ -268,6 +271,7 @@ const ParticipantList = () => {
                             <Link
                               to="#"
                               className="btn btn-primary doctor-refresh ms-2"
+                              onClick={() => window.location.reload()}
                             >
                               <img src={refreshicon} alt="#" />
                             </Link>
@@ -280,7 +284,7 @@ const ParticipantList = () => {
                 <div className="card-body">
                   <Table
                     columns={columns}
-                    dataSource={participentData}
+                    dataSource={filteredParticipants}
                     rowKey="id"
                   />
                   {isModalOpen && (

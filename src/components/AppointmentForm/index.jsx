@@ -8,6 +8,7 @@ import {
   updateDocument,
 } from "../../services/dbService";
 import { arrowWhiteSvg } from "../imagepath";
+import { Link } from "react-router-dom";
 
 export default function AppointmentForm({ sectionId }) {
   const {
@@ -171,13 +172,13 @@ export default function AppointmentForm({ sectionId }) {
         <div className="col-lg-8 d-flex align-items-end">
           <label className="cs_input_label cs_heading_color me-2">Total Fee:</label>
           {originalPrice > totalFee && (
-            <span style={{ textDecoration: "line-through", color: "red",marginBottom: "0.65rem", }}>
+            <span style={{ textDecoration: "line-through", color: "red", marginBottom: "0.65rem" }}>
               €{originalPrice.toFixed(2)}
             </span>
           )}
           <span
             style={{
-              backgroundColor: "#2FCE2E", 
+              backgroundColor: "#2FCE2E",
               color: "white",
               padding: "5px 10px",
               borderRadius: "5px",
@@ -225,6 +226,27 @@ export default function AppointmentForm({ sectionId }) {
             </div>
           </div>
           {errors.gender && (
+            <div className="error text-danger">This field is required</div>
+          )}
+        </div>
+        <div className="col-lg-12">
+          <label className="cs_input_label cs_heading_color" style={{ marginTop: "15px" ,backgroundColor:"#CFECF7", padding:"0.7rem",borderRadius:"10px"}}>
+            <input
+              type="checkbox"
+              {...register("policyAccepted", { required: true })}
+            />
+            {" "}
+            I hereby confirm that I have read the information below and have taken note of the information on{" "}
+            <Link
+              to="/policy"
+              style={{ color: "blue" }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              data protection
+            </Link>.
+          </label>
+          {errors.policyAccepted && (
             <div className="error text-danger">This field is required</div>
           )}
         </div>

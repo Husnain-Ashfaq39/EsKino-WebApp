@@ -5,122 +5,132 @@ import moment from "moment";
 import { db } from "../../../config/firebase";
 
 const PatientChart = () => {
-  const [chartData, setChartData] = useState({ male: [], female: [] });
+  const [chartData, setChartData] = useState(Array(12).fill(0));
 
   useEffect(() => {
     const fetchChartData = async () => {
-      const oneYearAgo = moment().subtract(1, "year").startOf("month");
-
-      // Initialize arrays to store participant counts
-      const maleData = Array(12).fill(0);
-      const femaleData = Array(12).fill(0);
+      const oneYearAgo = moment().subtract(1, "year").startOf("month").toDate();
 
       // Fetch all meetings ending within the past year
       const meetingsQuery = query(
         collection(db, "meetings"),
-        where("endDate", ">=", oneYearAgo.toDate())
+        where("endDate", ">=", oneYearAgo)
       );
       const meetingsSnapshot = await getDocs(meetingsQuery);
 
-      // Map meeting IDs to their end month and count participants
-      meetingsSnapshot.forEach((doc) => {
-        const data = doc.data();
-        const endDate = moment(data.endDate.toDate());
-        const monthIndex = endDate.diff(oneYearAgo, "months");
+      console.log("Meetings fetched:", meetingsSnapshot.size);
 
-        if (monthIndex >= 0 && monthIndex < 12) {
-          if (data.Participants) {
-            if (typeof data.Participants === "number") {
-              // If Participants is a number, divide equally for demo purposes
-              maleData[monthIndex] += data.Participants / 2;
-              femaleData[monthIndex] += data.Participants / 2;
-            } else {
-              maleData[monthIndex] += data.Participants.male || 0;
-              femaleData[monthIndex] += data.Participants.female || 0;
-            }
-          }
+      // Fetch all participants
+      const participantsQuery = query(collection(db, "participants"));
+      const participantsSnapshot = await getDocs(participantsQuery);
+
+      console.log("Participants fetched:", participantsSnapshot.size);
+
+      // Create a map of meeting IDs to participant counts
+      const meetingParticipantsMap = {};
+      participantsSnapshot.forEach((doc) => {
+        const participantData = doc.data();
+        const sectionId = participantData.sectionId;
+        const persons = parseInt(participantData.persons, 10) || 0;
+
+        if (!meetingParticipantsMap[sectionId]) {
+          meetingParticipantsMap[sectionId] = 0;
         }
+
+        meetingParticipantsMap[sectionId] += persons;
       });
+
+      console.log("Meeting participants map:", meetingParticipantsMap);
+
+      const data = Array(12).fill(0);
+
+      // Map meeting IDs to their end month and sum participants
+      meetingsSnapshot.forEach((doc) => {
+        const meetingData = doc.data();
+        console.log("Meeting data:", meetingData);
+        const endDate = meetingData.endDate.toDate();
+        const monthIndex = moment(endDate).month(); // Get the month index (0-11)
+        const meetingId = doc.id;
+
+        const participants = meetingParticipantsMap[meetingId] || 0;
+        data[monthIndex] += participants;
+      });
+
+      console.log("Chart data:", data);
 
       // Adjust the order of data to start from the current month and go back one year
       const currentMonthIndex = moment().month();
-      const adjustedMaleData = maleData
+      const adjustedData = data
         .slice(currentMonthIndex + 1)
-        .concat(maleData.slice(0, currentMonthIndex + 1));
-      const adjustedFemaleData = femaleData
-        .slice(currentMonthIndex + 1)
-        .concat(femaleData.slice(0, currentMonthIndex + 1));
+        .concat(data.slice(0, currentMonthIndex + 1));
 
-      setChartData({ male: adjustedMaleData, female: adjustedFemaleData });
+      console.log("Adjusted data:", adjustedData);
+
+      setChartData(adjustedData);
     };
 
     fetchChartData();
   }, []);
 
   useEffect(() => {
-    if (document.querySelector("#patient-chart")) {
-      const currentMonthIndex = moment().month();
-      const sColStackedOptions = {
-        chart: {
-          height: 230,
-          type: "bar",
-          stacked: true,
-          toolbar: {
-            show: false,
-          },
+    const currentMonthIndex = moment().month();
+    const sColStackedOptions = {
+      chart: {
+        height: 230,
+        type: "bar",
+        stacked: true,
+        toolbar: {
+          show: false,
         },
-        responsive: [
-          {
-            breakpoint: 480,
-            options: {
-              legend: {
-                position: "bottom",
-                offsetX: -10,
-                offsetY: 0,
-              },
+      },
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            legend: {
+              position: "bottom",
+              offsetX: -10,
+              offsetY: 0,
             },
           },
-        ],
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            columnWidth: "15%",
-          },
         },
-        dataLabels: {
-          enabled: false,
+      ],
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: "15%",
         },
-        series: [
-          {
-            name: "Male",
-            color: "#2E37A4",
-            data: chartData.male,
-          },
-          {
-            name: "Female",
-            color: "#00D3C7",
-            data: chartData.female,
-          },
-        ],
-        xaxis: {
-          categories: moment
-            .monthsShort()
-            .slice(currentMonthIndex + 1)
-            .concat(moment.monthsShort().slice(0, currentMonthIndex + 1)),
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      series: [
+        {
+          name: "Persons",
+          color: "#2E37A4",
+          data: chartData,
         },
-      };
+      ],
+      xaxis: {
+        categories: moment
+          .monthsShort()
+          .slice(currentMonthIndex + 1)
+          .concat(moment.monthsShort().slice(0, currentMonthIndex + 1)),
+      },
+    };
 
-      const chart = new ApexCharts(
-        document.querySelector("#patient-chart"),
-        sColStackedOptions
-      );
+    console.log("Chart options:", sColStackedOptions);
 
-      chart.render();
+    const chart = new ApexCharts(
+      document.querySelector("#patient-chart"),
+      sColStackedOptions
+    );
 
-      return () => {
-        chart.destroy();
-      };
-    }
+    chart.render();
+
+    return () => {
+      chart.destroy();
+    };
   }, [chartData]);
 
   return <div id="patient-chart"></div>;

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Hero from "../Hero";
 import Section from "../Section";
 import AboutSection from "../Section/AboutSection";
@@ -28,7 +28,6 @@ import { useNavigate } from "react-router-dom";
 import { Timestamp } from 'firebase/firestore';
 import Doctors from "../DoctorsComponent/Doctors";
 // Sample data
-
 
 const workingProcessData = [
   {
@@ -196,24 +195,35 @@ export default function Home() {
           let publicationDate;
 
           if (data.publicationDate instanceof Timestamp) {
-            publicationDate = data.publicationDate.toDate().toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            });
-          } else if (data.publicationDate.seconds && data.publicationDate.nanoseconds) {
-            const timestamp = new Timestamp(data.publicationDate.seconds, data.publicationDate.nanoseconds);
+            publicationDate = data.publicationDate
+              .toDate()
+              .toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              });
+          } else if (
+            data.publicationDate.seconds &&
+            data.publicationDate.nanoseconds
+          ) {
+            const timestamp = new Timestamp(
+              data.publicationDate.seconds,
+              data.publicationDate.nanoseconds
+            );
             publicationDate = timestamp.toDate().toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",
             });
           } else {
-            publicationDate = new Date(data.publicationDate).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            });
+            publicationDate = new Date(data.publicationDate).toLocaleDateString(
+              "en-US",
+              {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }
+            );
           }
 
           return {
@@ -247,7 +257,6 @@ export default function Home() {
   if (!heroData || !CEHeader || !CEBody || !CCHeadData) {
     return <div>No data available</div>;
   }
-
 
   return (
     <>
@@ -326,7 +335,7 @@ export default function Home() {
           ]}
         />
       </Section>
-
+      <Spacing md="182" lg="150" />
       {/* Render your testimonial section here */}
       <Spacing md="165" lg="125" />
       <Section>
@@ -339,14 +348,14 @@ export default function Home() {
       </Section>
 
       <Gallery />
-
       <Section topMd={190} topLg={145} topXl={105}>
-      <BlogSection
+        <BlogSection
           sectionTitle="Latest Update"
           sectionTitleUp="BLOG POSTS"
           data={blogData}
         />
       </Section>
+ <Spacing md="182" lg="150" />
     </>
   );
 }

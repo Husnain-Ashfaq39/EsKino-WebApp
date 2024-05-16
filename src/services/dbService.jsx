@@ -65,7 +65,7 @@ export const fetchParticipantCount = async (meetingId) => {
   
     if (currentTime.isAfter(endTime)) {
       return "Timeout";
-    } else if (meeting.capacity === 0) {
+    } else if (meeting.Capacity === "0") {
       return "Closed";
     } else {
       return "Active";

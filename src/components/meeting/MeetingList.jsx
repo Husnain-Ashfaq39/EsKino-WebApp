@@ -2,7 +2,7 @@ import { Button, Modal, Table } from "antd";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { db } from "../../config/firebase";
 import { deleteDocument } from "../../services/dbService";
 import Header from "../Header";
@@ -19,8 +19,11 @@ import {
 } from "../../services/general_functions";
 
 const MeetingList = () => {
-  const [meetings, setMeetings] = useState([]);
+  const [allMeetings, setAllMeetings] = useState([]);
+  const [filteredMeetings, setFilteredMeetings] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // New state for search query
   const navigate = useNavigate();
+  const location = useLocation();
   const [updateTrigger, setUpdateTrigger] = useState(false);
   const [meetingToDelete, setMeetingToDelete] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -42,7 +45,7 @@ const MeetingList = () => {
       await Promise.all(deleteParticipantsPromises);
 
       await deleteDocument("meetings", meetingId);
-      setMeetings((prevMeetings) =>
+      setAllMeetings((prevMeetings) =>
         prevMeetings.filter((meeting) => meeting.id !== meetingId)
       );
       setIsDeleteModalOpen(false);
@@ -51,34 +54,54 @@ const MeetingList = () => {
     }
   };
 
-  useEffect(() => {
-    const getAllMeetings = async () => {
-      const meetingsRef = collection(db, "meetings");
-      const snapshot = await getDocs(meetingsRef);
-      const meetingsWithCounts = await Promise.all(
-        snapshot.docs.map(async (doc) => {
-          const participantCount = await fetchParticipantCount(doc.id);
-          return {
-            id: doc.id,
-            Name: doc.data().title,
-            StartTime: convertTime(doc.data().startTime),
-            endTime: convertTime(doc.data().endTime),
-            Participants: participantCount,
-            Capacity: doc.data().capacity,
-            Location: doc.data().streetAddress,
-            StartDate: convertTimestamp(doc.data().startDate),
-            endDate: convertTimestamp(doc.data().endDate),
-            PriceInEuro: doc.data().priceInEuro,
-            DiscountFor2Persons: doc.data().discountFor2Persons,
-            DiscountFor3Persons: doc.data().discountFor3Persons,
-          };
-        })
-      );
-      setMeetings(meetingsWithCounts);
-    };
+  const fetchMeetings = async () => {
+    const meetingsRef = collection(db, "meetings");
+    const snapshot = await getDocs(meetingsRef);
+    const meetingsWithCounts = await Promise.all(
+      snapshot.docs.map(async (doc) => {
+        const participantCount = await fetchParticipantCount(doc.id);
+        return {
+          id: doc.id,
+          Name: doc.data().title,
+          StartTime: convertTime(doc.data().startTime),
+          endTime: convertTime(doc.data().endTime),
+          Participants: participantCount,
+          Capacity: doc.data().capacity,
+          Location: doc.data().streetAddress,
+          StartDate: convertTimestamp(doc.data().startDate),
+          endDate: convertTimestamp(doc.data().endDate),
+          PriceInEuro: doc.data().priceInEuro,
+          DiscountFor2Persons: doc.data().discountFor2Persons,
+          DiscountFor3Persons: doc.data().discountFor3Persons,
+        };
+      })
+    );
+    setAllMeetings(meetingsWithCounts);
+  };
 
-    getAllMeetings();
+  useEffect(() => {
+    fetchMeetings();
   }, [updateTrigger]);
+
+  useEffect(() => {
+    const query = new URLSearchParams(location.search);
+    const status = query.get("status");
+    if (status) {
+      const filteredMeetings = allMeetings.filter(
+        (meeting) => getMeetingStatus(meeting) === status
+      );
+      setFilteredMeetings(filteredMeetings);
+    } else {
+      setFilteredMeetings(allMeetings);
+    }
+  }, [location.search, allMeetings]);
+
+  useEffect(() => {
+    const filtered = allMeetings.filter((meeting) =>
+      meeting.Name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredMeetings(filtered);
+  }, [searchQuery, allMeetings]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMeeting, setSelectedMeeting] = useState({});
@@ -122,10 +145,10 @@ const MeetingList = () => {
 
         if (status === "Active") {
           badgeClasses += "badge-success";
-        } else if (status === "Timeout") {
-          badgeClasses += "badge-warning";
         } else if (status === "Closed") {
           badgeClasses += "badge-danger";
+        } else if (status === "Timeout") {
+          badgeClasses += "badge-warning";
         }
 
         return (
@@ -207,7 +230,6 @@ const MeetingList = () => {
   const rowClickHandler = (record) => {
     navigate(`/meetinglist/participantlist?meetingid=${record.id}`);
   };
-
   return (
     <>
       <Header />
@@ -251,6 +273,10 @@ const MeetingList = () => {
                                   type="text"
                                   className="form-control"
                                   placeholder="Search here"
+                                  value={searchQuery}
+                                  onChange={(e) =>
+                                    setSearchQuery(e.target.value)
+                                  }
                                 />
                                 <Link className="btn">
                                   <img src={searchnormal} alt="#" />
@@ -267,6 +293,7 @@ const MeetingList = () => {
                               <Link
                                 to="#"
                                 className="btn btn-primary doctor-refresh ms-2"
+                                onClick={() => setUpdateTrigger(!updateTrigger)}
                               >
                                 <img src={refreshicon} alt="#" />
                               </Link>
@@ -282,7 +309,7 @@ const MeetingList = () => {
                         <div className="card-body">
                           <Table
                             columns={columns}
-                            dataSource={meetings}
+                            dataSource={filteredMeetings}
                             rowKey="id"
                             onRow={(record, rowIndex) => ({
                               onClick: () => rowClickHandler(record),

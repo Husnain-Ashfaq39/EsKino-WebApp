@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Table, Modal, Button } from "antd";
-import { plusicon, refreshicon, searchnormal } from "../imagepath";
+import { Table, Button } from "antd";
+import { plusicon, refreshicon, searchnormal, imagesend } from "../imagepath";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { Link } from "react-router-dom";
@@ -12,7 +12,7 @@ const GalleryList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
 
   useEffect(() => {
@@ -42,10 +42,12 @@ const GalleryList = () => {
   const handleDelete = async () => {
     if (deleteItemId) {
       try {
-        const itemToDelete = dataSource.find(item => item.id === deleteItemId);
+        const itemToDelete = dataSource.find(
+          (item) => item.id === deleteItemId
+        );
         await deleteDocument("gallery", deleteItemId);
         await deleteFileFromStorage(itemToDelete.url);
-        setModalVisible(false);
+        setIsDeleteModalOpen(false);
         setDeleteItemId(null);
         setSelectedRowKeys([]);
         fetchData();
@@ -55,8 +57,8 @@ const GalleryList = () => {
     }
   };
 
-  const handleCancel = () => {
-    setModalVisible(false);
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
     setDeleteItemId(null);
   };
 
@@ -69,7 +71,7 @@ const GalleryList = () => {
     {
       title: "Image",
       dataIndex: "url",
-      render: (text, record) => (
+      render: (text) => (
         <img
           src={text}
           alt="Image"
@@ -104,10 +106,13 @@ const GalleryList = () => {
                 <i className="far fa-edit me-2" />
                 Edit
               </Link>
-              <Button className="dropdown-item" onClick={() => {
-                setDeleteItemId(record.id);
-                setModalVisible(true);
-              }}>
+              <Button
+                className="dropdown-item"
+                onClick={() => {
+                  setDeleteItemId(record.id);
+                  setIsDeleteModalOpen(true);
+                }}
+              >
                 <i className="fa fa-trash-alt m-r-5" /> Delete
               </Button>
             </div>
@@ -206,16 +211,42 @@ const GalleryList = () => {
           </div>
         </div>
       </div>
-      <Modal
-        title="Confirm Delete"
-        visible={modalVisible}
-        onOk={handleDelete}
-        onCancel={handleCancel}
-        okText="Delete"
-        cancelText="Cancel"
+      <div
+        className={
+          isDeleteModalOpen
+            ? "modal fade show delete-modal"
+            : "modal fade delete-modal"
+        }
+        style={{
+          display: isDeleteModalOpen ? "block" : "none",
+          backgroundColor: "rgba(0,0,0,0.5)",
+        }}
+        role="dialog"
       >
-        <p>Are you sure want to delete this?</p>
-      </Modal>
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body text-center">
+              <img src={imagesend} alt="#" width={50} height={46} />
+              <h3>Are you sure you want to delete this image?</h3>
+              <div className="m-t-20">
+                <Button
+                  onClick={handleCancelDelete}
+                  className="btn btn-white me-2"
+                >
+                  Close
+                </Button>
+                <Button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

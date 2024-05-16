@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useParams, useNavigate } from "react-router-dom";
-import TextEditor from '../../TextEditor'; // Ensure TextEditor is correctly imported and implemented
+import TextEditor from '../../TextEditor'; 
 import Header from '../../Header';
 import Sidebar from '../../Sidebar';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
@@ -10,7 +10,7 @@ import { uploadFile } from '../../../services/storageService';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Editblog = () => {
+const EditBlog = () => {
   const { id } = useParams(); // Get blog ID from URL
   const navigate = useNavigate();
   const { register, handleSubmit, setValue, watch, reset } = useForm();
@@ -18,8 +18,8 @@ const Editblog = () => {
   const editorRef = useRef(null);
   const [fileChosen, setFileChosen] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
-
-  const imageFile = watch('image');
+  const [image, setImage] = useState(null);
+  
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -50,12 +50,10 @@ const Editblog = () => {
   const onSubmit = async (data) => {
     try {
       setIsSubmitting(true);
-      let newImageUrl = imageUrl;
-      if (imageFile && imageFile.length > 0) {
-        const file = imageFile[0];
-        const imagePath = `blog-images/${file.name}`;
-        newImageUrl = await uploadFile(file, imagePath);
-        setImageUrl(newImageUrl); // Update the image URL state
+      let newimageUrl = imageUrl;
+      if (image) {
+        const imagePath = `blog-images/${image.name}`;
+        newimageUrl = await uploadFile(image, imagePath);
       }
 
       const content = await new Promise((resolve) => {
@@ -75,7 +73,7 @@ const Editblog = () => {
         tags: data.tags.split(','),
         status: data.status,
         content,
-        imageUrl: newImageUrl, // Use the new or existing image URL
+        imageUrl: newimageUrl, // Use the new or existing image URL
         publicationDate: new Date()
       };
 
@@ -98,14 +96,17 @@ const Editblog = () => {
     if (e.target.files.length > 0) {
       setFileChosen(true);
       const file = e.target.files[0];
+      setImage(e.target.files[0]);
+      console.log("file " +file.name);
       const newImageUrl = URL.createObjectURL(file);
       setImageUrl(newImageUrl);
+      
     } else {
       setFileChosen(false);
-      setImageUrl('');
+     
+      
     }
   };
-
 
   return (
     <div className="main-wrapper">
@@ -199,7 +200,7 @@ const Editblog = () => {
                               <input
                                 type="radio"
                                 value="Inactive"
-                                {...register('status', { required: true })}
+                              {...register('status', { required: true })}
                               />
                               Inactive
                             </label>
@@ -230,12 +231,8 @@ const Editblog = () => {
                             </label>
                           </div>
                           {imageUrl && (
-                            <div className="image-preview">
-                              <img 
-                                src={imageUrl} 
-                                alt="Blog" 
-                                className="w-32 h-32 border border-gray-300 mt-2 object-cover rounded-lg" 
-                              />
+                            <div>
+                              <img src={imageUrl} alt="Selected Image" style={{ maxWidth: '100%', marginTop: '10px' }} />
                             </div>
                           )}
                         </div>
@@ -257,6 +254,7 @@ const Editblog = () => {
                                 editorRef.current.clearEditor();
                               }
                               setFileChosen(false); // Reset file chosen state
+                              setImageUrl(''); // Reset image URL
                             }}
                           >
                             Cancel
@@ -276,4 +274,4 @@ const Editblog = () => {
   );
 };
 
-export default Editblog;
+export default EditBlog;

@@ -19,6 +19,7 @@ import {
   menuicon15,
   menuicon16,
   patients,
+  settingicon01,
   sidemenu,
 } from "./imagepath";
 import Scrollbars from "react-custom-scrollbars-2";
@@ -366,6 +367,14 @@ const Sidebar = (props) => {
                       <img src={patients} alt="" />
                     </span>{" "}
                     <span>Contacts</span>
+                  </Link>
+                </li>
+                <li className="submenu">
+                  <Link to="/settings" id="menu-item12">
+                    <span className="menu-side">
+                      <img src={settingicon01} alt="" />
+                    </span>{" "}
+                    <span>Settings</span>
                   </Link>
                 </li>
               </ul>

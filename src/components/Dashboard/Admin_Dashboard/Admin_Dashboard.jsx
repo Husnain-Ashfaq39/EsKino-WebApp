@@ -70,12 +70,12 @@ const Admin_Dashboard = () => {
     fetchMeetings();
   }, []);
 
-  const [year, setYear] = useState([
-    { value: 1, label: "2022" },
-    { value: 2, label: "2021" },
-    { value: 3, label: "2020" },
-    { value: 4, label: "2019" },
-  ]);
+  // const [year, setYear] = useState([
+  //   { value: 1, label: "2022" },
+  //   { value: 2, label: "2021" },
+  //   { value: 3, label: "2020" },
+  //   { value: 4, label: "2019" },
+  // ]);
 
   return (
     <>
@@ -105,64 +105,43 @@ const Admin_Dashboard = () => {
           {/* /Page Header */}
           <div className="row">
             <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-              <div className="dash-widget">
-                <div className="dash-boxs comman-flex-center">
-                  <img src={calendar} alt="#" />
+              <Link to="/meetinglist?status=Active">
+                <div className="dash-widget">
+                  <div className="dash-boxs comman-flex-center">
+                    <img src={calendar} alt="#" />
+                  </div>
+                  <div className="dash-content dash-count flex-grow-1">
+                    <h4>Active Meeting</h4>
+                    <h2>{countActive}</h2>
+                  </div>
                 </div>
-                <div className="dash-content dash-count flex-grow-1">
-                  <h4>Active Meeting</h4>
-                  <h2>{countActive}</h2>
-                  <p>
-                    <span className="passive-view">
-                      <i className="feather-arrow-up-right me-1">
-                        <FeatherIcon icon="arrow-up-right" />
-                      </i>
-                      40%
-                    </span>{" "}
-                    vs last month
-                  </p>
-                </div>
-              </div>
+              </Link>
             </div>
             <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-              <div className="dash-widget">
-                <div className="dash-boxs comman-flex-center">
-                  <img src={profile_add} alt="#" />
+              <Link to="/meetinglist?status=Closed">
+                <div className="dash-widget">
+                  <div className="dash-boxs comman-flex-center">
+                    <img src={profile_add} alt="#" />
+                  </div>
+                  <div className="dash-content dash-count">
+                    <h4>Close Meeting</h4>
+                    <h2>{countClose}</h2>
+                  </div>
                 </div>
-                <div className="dash-content dash-count">
-                  <h4>Close Meeting</h4>
-                  <h2>{countClose}</h2>
-                  <p>
-                    <span className="passive-view">
-                      <i className="feather-arrow-up-right me-1">
-                        <FeatherIcon icon="arrow-up-right" />
-                      </i>
-                      20%
-                    </span>{" "}
-                    vs last month
-                  </p>
-                </div>
-              </div>
+              </Link>
             </div>
             <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-              <div className="dash-widget">
-                <div className="dash-boxs comman-flex-center">
-                  <img src={scissor} alt="#" />
+              <Link to="/meetinglist?status=Timeout">
+                <div className="dash-widget">
+                  <div className="dash-boxs comman-flex-center">
+                    <img src={scissor} alt="#" />
+                  </div>
+                  <div className="dash-content dash-count">
+                    <h4>Timeout</h4>
+                    <h2>{countTimeout}</h2>
+                  </div>
                 </div>
-                <div className="dash-content dash-count">
-                  <h4>Timeout</h4>
-                  <h2>{countTimeout}</h2>
-                  <p>
-                    <span className="negative-view">
-                      <i className="feather-arrow-down-right me-1">
-                        <FeatherIcon icon="arrow-down-right" />
-                      </i>
-                      15%
-                    </span>{" "}
-                    vs last month
-                  </p>
-                </div>
-              </div>
+              </Link>
             </div>
             <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
               <div className="dash-widget">
@@ -172,15 +151,6 @@ const Admin_Dashboard = () => {
                 <div className="dash-content dash-count">
                   <h4>Earnings</h4>
                   <h2>€{totalEarning}</h2>
-                  <p>
-                    <span className="passive-view">
-                      <i className="feather-arrow-up-right me-1">
-                        <FeatherIcon icon="arrow-up-right" />
-                      </i>
-                      30%
-                    </span>{" "}
-                    vs last month
-                  </p>
                 </div>
               </div>
             </div>
@@ -191,58 +161,6 @@ const Admin_Dashboard = () => {
                 <div className="card-body">
                   <div className="chart-title patient-visit">
                     <h4>Participants</h4>
-                    <div>
-                      <ul className="nav chat-user-total">
-                        <li>
-                          <i className="fa fa-circle current-users" aria-hidden="true" />
-                          Male 75%
-                        </li>
-                        <li>
-                          <i className="fa fa-circle old-users" aria-hidden="true" />
-                          Female 25%
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="form-group mb-0">
-                      <Select
-                        className="custom-react-select"
-                        defaultValue={selectedOption}
-                        onChange={setSelectedOption}
-                        options={year}
-                        id="search-commodity"
-                        components={{
-                          IndicatorSeparator: () => null,
-                        }}
-                        styles={{
-                          control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            borderColor: state.isFocused
-                              ? "none"
-                              : "2px solid rgba(46, 55, 164, 0.1);",
-                            boxShadow: state.isFocused
-                              ? "0 0 0 1px #2e37a4"
-                              : "none",
-                            "&:hover": {
-                              borderColor: state.isFocused
-                                ? "none"
-                                : "2px solid rgba(46, 55, 164, 0.1)",
-                            },
-                            borderRadius: "10px",
-                            fontSize: "14px",
-                            minHeight: "45px",
-                          }),
-                          dropdownIndicator: (base, state) => ({
-                            ...base,
-                            transform: state.selectProps.menuIsOpen
-                              ? "rotate(-180deg)"
-                              : "rotate(0)",
-                            transition: "250ms",
-                            width: "35px",
-                            height: "35px",
-                          }),
-                        }}
-                      />
-                    </div>
                   </div>
                   <div id="patient-chart" />
                   <PatientChart />
