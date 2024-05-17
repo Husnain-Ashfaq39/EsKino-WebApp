@@ -8,14 +8,14 @@ export function ModalComponent({ children, isOpen, setIsOpen }) {
   return (
     <>
       <Modal show={isOpen} className="mt-0" popup>
-        <Modal.Header onClose={() => setIsOpen(false)} />
         <Modal.Body>
           <Button
             style={{
-              marginLeft: "27rem",
+              marginLeft: "28.5rem",
               backgroundColor: "red",
               color: "white",
               marginTop: "1rem",
+              marginBottom: "1rem",
             }}
             color="danger"
             onClick={() => setIsOpen(false)}
