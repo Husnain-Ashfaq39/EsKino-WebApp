@@ -197,7 +197,7 @@ const Contactlist = () => {
           <div className="page-header">
             <div className="row">
               <div className="col-sm-12">
-                <h3>Contact List</h3>
+                <h2 className="cs_section_title cs_fs_32 m-0 text-2xl font-semibold mb-2">Contact List</h2>
                 <Select
                   defaultValue="all"
                   style={{ width: 200 }}

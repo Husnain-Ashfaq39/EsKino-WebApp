@@ -7,7 +7,7 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { getAllDocuments, addDocument, updateDocument } from "../services/dbService";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-
+import SectionHeading from "../components/SectionHeading/index"
 const Settings = () => {
   const {
     register: registerContact,
@@ -152,7 +152,8 @@ const Settings = () => {
           <div className="row">
             <div className="col-12">
               <form onSubmit={handleSubmitContact(onSubmitContactInfo)}>
-                <h3>Contact Information</h3>
+                
+                <h2 className="cs_section_title cs_fs_32 m-0 text-2xl font-semibold mb-3">Contact Information</h2>
                 <div className="form-group">
                   <label className="text-dark">
                     Address <span className="login-danger">*</span>
@@ -209,7 +210,7 @@ const Settings = () => {
             </div>
             <div className="col-12">
               <form onSubmit={handleSubmitSocial(onSubmitSocialLinks)}>
-                <h3>Social Media Links</h3>
+                <h2 className="cs_section_title cs_fs_32 m-0 text-2xl font-semibold mb-3">Social Media Links</h2>
                 <div className="form-group">
                   <label className="text-dark">
                     Facebook
