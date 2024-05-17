@@ -24,7 +24,6 @@ import FeaturesSection from "../WebLandingPage/WebOrganizationMatters/Organizati
 
 import { Timestamp } from "firebase/firestore";
 import Doctors from "../DoctorsComponent/Doctors";
-import Preloader from "../Preloader/Preloader";
 
 export default function Home() {
   // const navigate = useNavigate();
@@ -205,7 +204,7 @@ export default function Home() {
   }, []);
 
   if (heroLoading || CEHeaderLoading || CEBodyLoading || CCHeadLoading) {
-    return <Preloader />;
+    return <div></div>;
   }
 
   if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
