@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login02, loginlogo } from "../../imagepath";
+import { login02, loginlogo, logo, logo2Png } from "../../imagepath";
 import {
   getAuth,
   fetchSignInMethodsForEmail,
@@ -51,8 +51,9 @@ const ForgotPassword = () => {
                 <div className="login-right">
                   <div className="login-right-wrap">
                     <div className="account-logo">
-                      <Link to="/admin-dashboard">
-                        <img src={loginlogo} alt="#" />
+                      <Link to="/" className="logo">
+                        <img src={logo} width={35} height={35} alt="" />{" "}
+                        <h2 className="mb-0 ml-1">Eskino</h2>
                       </Link>
                     </div>
                     <h2>Reset Password</h2>
