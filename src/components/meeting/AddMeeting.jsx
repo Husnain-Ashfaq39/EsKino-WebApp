@@ -28,9 +28,7 @@ const AddMeeting = () => {
       zipCode: "",
       streetAddress: "",
       capacity: "",
-      priceInEuro: "",
-      discountFor2Persons: "",
-      discountFor3Persons: "",
+
     },
   });
 
@@ -286,49 +284,7 @@ const AddMeeting = () => {
                   )}
                 </div>
               </div>
-              <div className="col-12 col-md-4">
-                <div className="form-group">
-                  <label className="text-dark">
-                    Price in Euro <span className="login-danger">*</span>
-                  </label>
-                  <input
-                    className="form-control"
-                    type="number"
-                    {...register("priceInEuro", {
-                      required: "This field is required",
-                    })}
-                  />
-                  {errors.priceInEuro && (
-                    <div className="error text-danger">
-                      {errors.priceInEuro.message}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-12 col-md-4">
-                <div className="form-group">
-                  <label className="text-dark">
-                    Discount for 2 Persons (%)
-                  </label>
-                  <input
-                    className="form-control"
-                    type="number"
-                    {...register("discountFor2Persons")}
-                  />
-                </div>
-              </div>
-              <div className="col-12 col-md-4">
-                <div className="form-group">
-                  <label className="text-dark">
-                    Discount for 3 Persons (%)
-                  </label>
-                  <input
-                    className="form-control"
-                    type="number"
-                    {...register("discountFor3Persons")}
-                  />
-                </div>
-              </div>
+              
               <div className="col-12">
                 <div className="doctor-submit text-end">
                   <button

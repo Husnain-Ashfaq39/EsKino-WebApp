@@ -22,6 +22,7 @@ const MeetingList = () => {
   const [allMeetings, setAllMeetings] = useState([]);
   const [filteredMeetings, setFilteredMeetings] = useState([]);
   const [searchQuery, setSearchQuery] = useState(""); // New state for search query
+  const [statusFilter, setStatusFilter] = useState(""); // New state for status filter
   const navigate = useNavigate();
   const location = useLocation();
   const [updateTrigger, setUpdateTrigger] = useState(false);
@@ -70,9 +71,6 @@ const MeetingList = () => {
           Location: doc.data().streetAddress,
           StartDate: convertTimestamp(doc.data().startDate),
           endDate: convertTimestamp(doc.data().endDate),
-          PriceInEuro: doc.data().priceInEuro,
-          DiscountFor2Persons: doc.data().discountFor2Persons,
-          DiscountFor3Persons: doc.data().discountFor3Persons,
         };
       })
     );
@@ -86,22 +84,17 @@ const MeetingList = () => {
   useEffect(() => {
     const query = new URLSearchParams(location.search);
     const status = query.get("status");
-    if (status) {
-      const filteredMeetings = allMeetings.filter(
-        (meeting) => getMeetingStatus(meeting) === status
-      );
-      setFilteredMeetings(filteredMeetings);
-    } else {
-      setFilteredMeetings(allMeetings);
-    }
-  }, [location.search, allMeetings]);
+    setStatusFilter(status || ""); // Set the status filter
+  }, [location.search]);
 
   useEffect(() => {
-    const filtered = allMeetings.filter((meeting) =>
-      meeting.Name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filtered = allMeetings.filter((meeting) => {
+      const matchesSearch = meeting.Name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesStatus = statusFilter ? getMeetingStatus(meeting) === statusFilter : true;
+      return matchesSearch && matchesStatus;
+    });
     setFilteredMeetings(filtered);
-  }, [searchQuery, allMeetings]);
+  }, [searchQuery, statusFilter, allMeetings]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMeeting, setSelectedMeeting] = useState({});
@@ -230,6 +223,7 @@ const MeetingList = () => {
   const rowClickHandler = (record) => {
     navigate(`/meetinglist/participantlist?meetingid=${record.id}`);
   };
+
   return (
     <>
       <Header />
@@ -374,18 +368,7 @@ const MeetingList = () => {
                                 <strong>End Date:</strong>{" "}
                                 {selectedMeeting.endDate}
                               </p>
-                              <p>
-                                <strong>Price in Euro:</strong>{" "}
-                                {selectedMeeting.PriceInEuro}
-                              </p>
-                              <p>
-                                <strong>Discount for 2 Persons (%):</strong>{" "}
-                                {selectedMeeting.DiscountFor2Persons}
-                              </p>
-                              <p>
-                                <strong>Discount for 3 Persons (%):</strong>{" "}
-                                {selectedMeeting.DiscountFor3Persons}
-                              </p>
+                             
                             </Modal>
                           )}
                           <div

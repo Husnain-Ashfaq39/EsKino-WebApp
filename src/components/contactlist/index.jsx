@@ -220,17 +220,7 @@ const Contactlist = () => {
                     Delete
                   </Button>
                 )}
-                <Button
-                  type="danger"
-                  style={{
-                    marginLeft: "20px",
-                    backgroundColor: "#E70226",
-                    color: "white",
-                  }}
-                  onClick={handleDeleteAllRead}
-                >
-                  Delete All Read
-                </Button>
+                
               </div>
             </div>
           </div>

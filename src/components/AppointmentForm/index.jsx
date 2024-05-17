@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  addDocument,
-  getDocument,
-  updateDocument,
-} from "../../services/dbService";
+import { addDocument, getDocument, updateDocument } from "../../services/dbService";
 import { arrowWhiteSvg } from "../imagepath";
 import { Link } from "react-router-dom";
 
@@ -20,42 +16,46 @@ export default function AppointmentForm({ sectionId }) {
     defaultValues: { persons: "1" },
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [meetingData, setMeetingData] = useState(null);
   const [totalFee, setTotalFee] = useState(0);
   const [originalPrice, setOriginalPrice] = useState(0);
 
-  useEffect(() => {
-    const fetchMeetingData = async () => {
-      try {
-        const doc = await getDocument("meetings", sectionId);
-        if (doc.exists()) {
-          const data = doc.data();
-          setMeetingData(data);
-          calculateTotalFee(1, data); // Calculate the total fee for 1 person by default
-        } else {
-          toast.error("Meeting not found.");
-        }
-      } catch (error) {
-        console.error("Error fetching meeting data: ", error);
-        toast.error("Failed to fetch meeting data.");
-      }
-    };
-    fetchMeetingData();
-  }, [sectionId]);
-
-  const calculateTotalFee = (persons, meetingData) => {
-    if (meetingData) {
-      let discount = 0;
-      if (persons === 2) {
-        discount = meetingData.discountFor2Persons;
-      } else if (persons === 3) {
-        discount = meetingData.discountFor3Persons;
-      }
-      const originalFee = meetingData.priceInEuro * persons;
-      const discountedFee = originalFee * (1 - discount / 100);
-      setOriginalPrice(originalFee);
-      setTotalFee(discountedFee);
+  const calculateTotalFee = (persons) => {
+    let fee = 0;
+    let original = 0;
+    switch (persons) {
+      case "1":
+        fee = 50;
+        original = 50;
+        break;
+      case "2":
+        fee = 60;
+        original = 60;
+        break;
+      case "3":
+        fee = 90;
+        original = 120;
+        break;
+      case "4":
+        fee = 135;
+        original = 180;
+        break;
+      case "5":
+        fee = 180;
+        original = 240;
+        break;
+      case "6":
+        fee = 0;
+        original = 60;
+        break;
+      case "7":
+        fee = 0;
+        original = 120;
+        break;
+      default:
+        break;
     }
+    setTotalFee(fee);
+    setOriginalPrice(original);
   };
 
   const onSubmit = async (data) => {
@@ -68,21 +68,17 @@ export default function AppointmentForm({ sectionId }) {
       if (doc.exists()) {
         const meetingData = doc.data();
         if (meetingData.capacity >= parseInt(data.persons, 10)) {
-          const updatedCapacity =
-            meetingData.capacity - parseInt(data.persons, 10);
-          const updatedParticipants =
-            meetingData.Participants + parseInt(data.persons, 10);
+          const updatedCapacity = meetingData.capacity - parseInt(data.persons, 10);
+          const updatedParticipants = meetingData.Participants + parseInt(data.persons, 10);
 
           await updateDocument("meetings", data.sectionId, {
             capacity: updatedCapacity,
             Participants: updatedParticipants,
           });
           await addDocument("participants", data);
-          toast.success("Session has been booked. Thank you!");
+          toast.success("Thank you for your binding registration. We will promptly send you an email with your registration and billing details. Information on Privacy protection can be found under the “Privacy policy” section on our homepage.");
         } else {
-          toast.error(
-            "Not enough capacity for the requested number of persons."
-          );
+          toast.error("Not enough capacity for the requested number of persons.");
         }
       } else {
         toast.error("Meeting not found.");
@@ -98,10 +94,8 @@ export default function AppointmentForm({ sectionId }) {
   const persons = watch("persons");
 
   useEffect(() => {
-    if (meetingData) {
-      calculateTotalFee(parseInt(persons, 10), meetingData);
-    }
-  }, [persons, meetingData]);
+    calculateTotalFee(persons);
+  }, [persons]);
 
   return (
     <div>
@@ -159,11 +153,15 @@ export default function AppointmentForm({ sectionId }) {
           <label className="cs_input_label cs_heading_color">Select Persons:</label>
           <select
             {...register("persons", { required: true })}
-            className="cs_form_field"
+            className="cs_form_field w-80"
           >
-            <option value="1">1 person</option>
-            <option value="2">2 persons</option>
-            <option value="3">3 persons</option>
+            <option value="1">Online Seminar</option>
+            <option value="2">1 person</option>
+            <option value="3">2 persons</option>
+            <option value="4">3 persons</option>
+            <option value="5">4 persons</option>
+            <option value="6">Voucher available for 1 person</option>
+            <option value="7">Voucher available for 2 persons</option>
           </select>
           {errors.persons && (
             <div className="error text-danger">This field is required</div>
@@ -172,7 +170,13 @@ export default function AppointmentForm({ sectionId }) {
         <div className="col-lg-8 d-flex align-items-end">
           <label className="cs_input_label cs_heading_color me-2">Total Fee:</label>
           {originalPrice > totalFee && (
-            <span style={{ textDecoration: "line-through", color: "red", marginBottom: "0.65rem" }}>
+            <span
+              style={{
+                textDecoration: "line-through",
+                color: "red",
+                marginBottom: "0.65rem",
+              }}
+            >
               €{originalPrice.toFixed(2)}
             </span>
           )}
@@ -212,7 +216,9 @@ export default function AppointmentForm({ sectionId }) {
                 value="Male"
                 id="Male"
               />
-              <label className="cs_radio_label" htmlFor="Male">Male</label>
+              <label className="cs_radio_label" htmlFor="Male">
+                Male
+              </label>
             </div>
             <div className="cs_radio_wrap">
               <input
@@ -222,7 +228,9 @@ export default function AppointmentForm({ sectionId }) {
                 value="Female"
                 id="Female"
               />
-              <label className="cs_radio_label" htmlFor="Female">Female</label>
+              <label className="cs_radio_label" htmlFor="Female">
+                Female
+              </label>
             </div>
           </div>
           {errors.gender && (
@@ -230,13 +238,21 @@ export default function AppointmentForm({ sectionId }) {
           )}
         </div>
         <div className="col-lg-12">
-          <label className="cs_input_label cs_heading_color" style={{ marginTop: "15px" ,backgroundColor:"#CFECF7", padding:"0.7rem",borderRadius:"10px"}}>
+          <label
+            className="cs_input_label cs_heading_color"
+            style={{
+              marginTop: "15px",
+              backgroundColor: "#CFECF7",
+              padding: "0.7rem",
+              borderRadius: "10px",
+            }}
+          >
             <input
               type="checkbox"
               {...register("policyAccepted", { required: true })}
-            />
-            {" "}
-            I hereby confirm that I have read the information below and have taken note of the information on{" "}
+            />{" "}
+            I hereby confirm that I have read the information below and have
+            taken note of the information on{" "}
             <Link
               to="/policy"
               style={{ color: "blue" }}
@@ -244,18 +260,15 @@ export default function AppointmentForm({ sectionId }) {
               rel="noopener noreferrer"
             >
               data protection
-            </Link>.
+            </Link>
+            .
           </label>
           {errors.policyAccepted && (
             <div className="error text-danger">This field is required</div>
           )}
         </div>
         <div className="col-lg-12 flex justify-end">
-          <button
-            className="cs_btn cs_style_1"
-            type="submit"
-            disabled={isSubmitting}
-          >
+          <button className="cs_btn cs_style_1" type="submit" disabled={isSubmitting}>
             <span>{isSubmitting ? "Submitting..." : "Submit"}</span>
             <i>
               <img src={arrowWhiteSvg} alt="Icon" />
