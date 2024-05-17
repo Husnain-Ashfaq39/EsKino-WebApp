@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addDocument, getDocument, updateDocument } from "../../services/dbService";
+import {
+  addDocument,
+  getDocument,
+  updateDocument,
+} from "../../services/dbService";
 import { arrowWhiteSvg } from "../imagepath";
 import { Link } from "react-router-dom";
 
@@ -68,17 +72,21 @@ export default function AppointmentForm({ sectionId }) {
       if (doc.exists()) {
         const meetingData = doc.data();
         if (meetingData.capacity >= parseInt(data.persons, 10)) {
-          const updatedCapacity = meetingData.capacity - parseInt(data.persons, 10);
-          const updatedParticipants = meetingData.Participants + parseInt(data.persons, 10);
+          const updatedCapacity =
+            meetingData.capacity - parseInt(data.persons, 10);
+          const updatedParticipants =
+            meetingData.Participants + parseInt(data.persons, 10);
 
           await updateDocument("meetings", data.sectionId, {
             capacity: updatedCapacity,
             Participants: updatedParticipants,
           });
           await addDocument("participants", data);
-          toast.success("Thank you for your binding registration. We will promptly send you an email with your registration and billing details. Information on Privacy protection can be found under the “Privacy policy” section on our homepage.");
+          toast.success("Thank you for your binding registration.");
         } else {
-          toast.error("Not enough capacity for the requested number of persons.");
+          toast.error(
+            "Not enough capacity for the requested number of persons."
+          );
         }
       } else {
         toast.error("Meeting not found.");
@@ -99,7 +107,7 @@ export default function AppointmentForm({ sectionId }) {
 
   return (
     <div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <form onSubmit={handleSubmit(onSubmit)} className="row">
         <div className="col-lg-6">
           <label className="cs_input_label cs_heading_color">First Name</label>
@@ -150,7 +158,9 @@ export default function AppointmentForm({ sectionId }) {
           )}
         </div>
         <div className="col-lg-4">
-          <label className="cs_input_label cs_heading_color">Select Persons:</label>
+          <label className="cs_input_label cs_heading_color">
+            Select Persons:
+          </label>
           <select
             {...register("persons", { required: true })}
             className="cs_form_field w-80 p-2 mt-[-10px] mb-[10px]"
@@ -168,7 +178,9 @@ export default function AppointmentForm({ sectionId }) {
           )}
         </div>
         <div className="col-lg-8 d-flex align-items-end">
-          <label className="cs_input_label cs_heading_color me-2">Total Fee:</label>
+          <label className="cs_input_label cs_heading_color me-2">
+            Total Fee:
+          </label>
           {originalPrice > totalFee && (
             <span
               style={{
@@ -194,7 +206,9 @@ export default function AppointmentForm({ sectionId }) {
           </span>
         </div>
         <div className="col-lg-12">
-          <label className="cs_input_label cs_heading_color">Name of Persons</label>
+          <label className="cs_input_label cs_heading_color">
+            Name of Persons
+          </label>
           <input
             {...register("personNames", { required: true })}
             type="text"
@@ -206,7 +220,9 @@ export default function AppointmentForm({ sectionId }) {
           )}
         </div>
         <div className="col-lg-12">
-          <label className="cs_input_label cs_heading_color">Select Option</label>
+          <label className="cs_input_label cs_heading_color">
+            Select Option
+          </label>
           <div className="cs_radio_group">
             <div className="cs_radio_wrap">
               <input
@@ -268,7 +284,11 @@ export default function AppointmentForm({ sectionId }) {
           )}
         </div>
         <div className="col-lg-12 flex justify-end">
-          <button className="cs_btn cs_style_1" type="submit" disabled={isSubmitting}>
+          <button
+            className="cs_btn cs_style_1"
+            type="submit"
+            disabled={isSubmitting}
+          >
             <span>{isSubmitting ? "Submitting..." : "Submit"}</span>
             <i>
               <img src={arrowWhiteSvg} alt="Icon" />

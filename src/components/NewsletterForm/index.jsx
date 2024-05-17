@@ -36,7 +36,6 @@ export default function NewsletterForm({ label, btnText, btnArrowUrl }) {
 
   return (
     <>
-      <ToastContainer />
       {label && <p>Your Email</p>}
       <form action="#" className="cs_newsletter_form" onSubmit={handleSubmit}>
         <input
