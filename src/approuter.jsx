@@ -9,7 +9,7 @@ import Blogdetails from "./components/pages/Blog/Blogdetails";
 import BlogView from "./components/pages/Blog/BlogView";
 import Editblog from "./components/pages/Blog/Editblog";
 //For Settings...
-import SettingsChangePassword from "./components/settings/SettingsChangePassword";
+
 
 //Meeting
 import AddMeeting from "./components/meeting/AddMeeting";
@@ -28,7 +28,7 @@ import AdminList from "./components/Admin/AdminList";
 import EditAdmin from "./components/Admin/EditAdmin";
 
 import ForgotPassword from "./components/pages/login/ForgotPassword";
-import Signup from "./components/pages/login/Signup";
+
 
 import Admin_Dashboard from "./components/Dashboard/Admin_Dashboard/Admin_Dashboard";
 import BlankPage from "./components/pages/login/BlankPage";
@@ -44,7 +44,7 @@ import Layout from "./components/Layout";
 import Home from "./components/pages/Home";
 import Blog_client_side from "./components/pages/Blog";
 import BlogDetail from "./components/pages/BlogDetails";
-import Appointments from "./components/pages/Appointments";
+
 
 // Landing Page
 import CEHeader from "./components/Landing Page/ChildEmergency/CEHeader";
@@ -105,12 +105,8 @@ const Approuter = () => {
           <Route path="/addblog" element={<Addblog />} />
           <Route path="/editblog/:id" element={<Editblog />} />
           <Route path="/blogview" element={<BlogView />} />
-          {/* Settings */}
-          <Route
-            path="/settingschangepassword"
-            element={<SettingsChangePassword />}
-          />
-          {/* Doctor  */}
+        
+          {/* meeting  */}
           <Route path="/meetinglist" element={<MeetingList />} />
           <Route path="/add-meeting" element={<AddMeeting />} />
           <Route path="/editmeeting" element={<EditMeeting />} />
@@ -194,7 +190,7 @@ const Approuter = () => {
             path="/landingpage/organizationmattersbody/addorganizationmattersbody"
             element={<AddOMBody />}
           />
-          
+
 
 
 
@@ -209,7 +205,7 @@ const Approuter = () => {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
 
-            <Route path="appointments" element={<Appointments />} />
+
             <Route path="blog" element={<Blog_client_side />} />
             <Route path="/blog/blog-details/:id" element={<BlogDetail />} />
             <Route path="/policy" element={<Policy />} />

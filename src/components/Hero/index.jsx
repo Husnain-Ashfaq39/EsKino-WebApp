@@ -8,9 +8,6 @@ export default function Hero({
   bgUrl,
   imgUrl,
 
-  infoList,
-  btnText,
-  btnUrl,
 }) {
   return (
     <section className="cs_hero cs_style_1">

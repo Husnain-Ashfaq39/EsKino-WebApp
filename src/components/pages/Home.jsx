@@ -16,15 +16,13 @@ import {
   banner_img50,
   ctaBgSvg,
   heroBgJpeg,
-  post1Jpeg,
-  post2Jpeg,
-  post3Jpeg,
+
 } from "../imagepath";
 import Gallery from "./Gallery";
 import WebCourseContent from "../WebLandingPage/WebCourseContent/WebCourseContent";
 import SessionCard from "../SessionCard";
 import FeaturesSection from "../WebLandingPage/WebOrganizationMatters/OrganizationMattersSection";
-import { useNavigate } from "react-router-dom";
+
 import { Timestamp } from 'firebase/firestore';
 import Doctors from "../DoctorsComponent/Doctors";
 // Sample data
