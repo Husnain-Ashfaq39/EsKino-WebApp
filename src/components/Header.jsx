@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getCurrentUser, signOutUser } from "../services/authService";
 import {
@@ -12,11 +12,12 @@ import {
   user06,
   settingicon01,
   noteicon1,
+  arrowWhiteSvg,
 } from "./imagepath";
 
 const Header = () => {
 
-  const [username, setUsername] = useState(""); 
+  const [username, setUsername] = useState("");
 
   const handlesidebar = () => {
     document.body.classList.toggle("mini-sidebar");
@@ -26,7 +27,8 @@ const Header = () => {
     if (user) {
       setUsername(user.displayName);
       // console.log(user);  // Assume user object has displayName or email
-    }})
+    }
+  })
 
   const handlesidebarmobilemenu = () => {
     document.body.classList.toggle("slide-nav");
@@ -36,36 +38,14 @@ const Header = () => {
       .classList.toggle("opened");
   };
 
-  const openDrawer = () => {
-    const div = document.querySelector(".main-wrapper");
-    if (div?.className?.includes("open-msg-box")) {
-      div?.classList?.remove("open-msg-box");
-    } else {
-      div?.classList?.add("open-msg-box");
-    }
-  };
 
-  useEffect(() => {
-    const handleClick = () => {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        }
-      }
-    };
 
-    const maximizeBtn = document.querySelector(".win-maximize");
-    // maximizeBtn.addEventListener('click', handleClick);
-
-    return () => {
-      // maximizeBtn.removeEventListener('click', handleClick);
-    };
-  }, []);
   return (
     <div className="main-wrapper">
       <div className="header">
+
+
+
         <div className="header-left">
           <Link to="/admin-dashboard" className="logo">
             <img src={logo} width={35} height={35} alt="" /> <span>Eskino</span>
@@ -82,18 +62,17 @@ const Header = () => {
         >
           <img src={baricon1} alt="" />
         </Link>
-        {/* <div className="top-nav-search mob-view">
-          <form>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search here"
-            />
-            <Link className="btn">
-              <img src={searchnormal} alt="" />
-            </Link>
-          </form>
-        </div> */}
+        {/* <Link to="/" >
+          <label className="inline-flex items-center me-5 cursor-pointer m-4">
+            <div className="relative w-11 h-6 bg-blue-800 rounded-full peer dark:bg-blue-900 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
+            <span className="ms-3 text-sm font-medium text-gray-400">Switch to customer</span>
+          </label>
+
+
+        </Link> */}
+
+
+
 
         <ul className="nav user-menu float-end">
           <li className="nav-item dropdown has-arrow user-profile-list">
@@ -111,13 +90,23 @@ const Header = () => {
               </span>
             </Link>
             <div className="dropdown-menu">
-              
-              <Link onClick={()=> {signOutUser()}} className="dropdown-item" to="/login">
+
+              <Link onClick={() => { signOutUser() }} className="dropdown-item" to="/login">
                 Logout
               </Link>
             </div>
+            
           </li>
+          <Link to="/" >
+          <label className="inline-flex items-center me-5 cursor-pointer mx-[-2px] my-4 ">
+            <div className="relative w-11 h-6 bg-blue-800 rounded-full peer dark:bg-blue-900 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
+            {/* <span className="ms-3 text-sm font-medium text-gray-400">Switch to customer</span> */}
+          </label>
+
+
+        </Link>
         </ul>
+
         <div className="dropdown mobile-user-menu float-end">
           <Link
             to="#"
@@ -140,10 +129,16 @@ const Header = () => {
             <Link className="dropdown-item" to="/login">
               Logout
             </Link>
+            
+
           </div>
+          
         </div>
+        
+
       </div>
-      
+
+
     </div>
   );
 };
