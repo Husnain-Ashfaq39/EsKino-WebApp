@@ -17,7 +17,7 @@ export default function Hero({
       >
         <div className="container">
           <div className="cs_hero_text">
-            <h1 className="cs_hero_title cs_fs_94">{parse(title)}</h1>
+            <h1 className="cs_hero_title cs_fs_94 text-4xl font-medium">{parse(title)}</h1>
             <p className="cs_hero_subtitle cs_fs_20 cs_heading_color">
               {parse(subTitle)}
             </p>
