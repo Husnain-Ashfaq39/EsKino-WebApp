@@ -157,20 +157,8 @@ const GalleryList = () => {
                     <div className="row align-items-center">
                       <div className="col">
                         <div className="doctor-table-blk">
-                          <h3>Gallery List</h3>
+                          <h3 className="mr-5">Gallery List</h3>
                           <div className="doctor-search-blk">
-                            <div className="top-nav-search table-search-blk">
-                              <form>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search here"
-                                />
-                                <Link className="btn">
-                                  <img src={searchnormal} alt="#" />
-                                </Link>
-                              </form>
-                            </div>
                             <div className="add-group">
                               <Link
                                 to="/gallerylist/add"

@@ -2,7 +2,8 @@
 "use client";
 
 import { Button, Modal } from "flowbite-react";
-/* styles.css */
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 export function ModalComponent({ children, isOpen, setIsOpen }) {
   return (
@@ -11,16 +12,16 @@ export function ModalComponent({ children, isOpen, setIsOpen }) {
         <Modal.Body>
           <Button
             style={{
-              marginLeft: "28.5rem",
-              backgroundColor: "red",
-              color: "white",
+              marginLeft: "30rem",
+
+              color: "gray",
               marginTop: "1rem",
               marginBottom: "1rem",
             }}
             color="danger"
             onClick={() => setIsOpen(false)}
           >
-            Close
+            <FontAwesomeIcon icon={faTimes} size="2x" />
           </Button>
           {children}
         </Modal.Body>
