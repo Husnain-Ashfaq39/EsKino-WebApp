@@ -106,7 +106,7 @@ export default function AppointmentForm({ sectionId }) {
           <input
             {...register("firstName", { required: true })}
             type="text"
-            className="cs_form_field"
+            className="cs_form_field p-2 mt-[-10px] mb-[10px]"
             placeholder="David John"
           />
           {errors.firstName && (
@@ -118,7 +118,7 @@ export default function AppointmentForm({ sectionId }) {
           <input
             {...register("lastName", { required: true })}
             type="text"
-            className="cs_form_field"
+            className="cs_form_field p-2 mt-[-10px] mb-[10px]"
             placeholder="Smith"
           />
           {errors.lastName && (
@@ -130,7 +130,7 @@ export default function AppointmentForm({ sectionId }) {
           <input
             {...register("email", { required: true })}
             type="email"
-            className="cs_form_field"
+            className="cs_form_field p-2 mt-[-10px] mb-[10px]"
             placeholder="example@gmail.com"
           />
           {errors.email && (
@@ -142,7 +142,7 @@ export default function AppointmentForm({ sectionId }) {
           <input
             {...register("address", { required: true })}
             type="text"
-            className="cs_form_field"
+            className="cs_form_field p-2 mt-[-10px] mb-[10px]"
             placeholder="Address"
           />
           {errors.address && (
@@ -153,7 +153,7 @@ export default function AppointmentForm({ sectionId }) {
           <label className="cs_input_label cs_heading_color">Select Persons:</label>
           <select
             {...register("persons", { required: true })}
-            className="cs_form_field w-80"
+            className="cs_form_field w-80 p-2 mt-[-10px] mb-[10px]"
           >
             <option value="1">Online Seminar</option>
             <option value="2">1 person</option>
@@ -198,7 +198,7 @@ export default function AppointmentForm({ sectionId }) {
           <input
             {...register("personNames", { required: true })}
             type="text"
-            className="cs_form_field"
+            className="cs_form_field p-2 mt-[-10px] mb-[10px]"
             placeholder="name1, name2 etc"
           />
           {errors.personNames && (
