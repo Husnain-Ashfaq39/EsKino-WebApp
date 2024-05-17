@@ -24,6 +24,7 @@ const Admin_Dashboard = () => {
   const [countClose, setCountClose] = useState(0);
   const [countTimeout, setCountTimeout] = useState(0);
   const [totalEarning, setTotalEarning] = useState(0);
+  const [countTimeoutLatestMonth, setCountTimeoutLatestMonth] = useState(0);
 
   useEffect(() => {
     toast.success("Login Successful Welcome");
@@ -76,6 +77,48 @@ const Admin_Dashboard = () => {
       }
 
       setTotalEarning(totalEarnings);
+
+     // Calculate count of timeout meetings for the latest month
+const now = new Date();
+const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+const formatDate = (date) => {
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
+const formattedFirstDay = formatDate(firstDayOfMonth);
+const formattedLastDay = formatDate(lastDayOfMonth);
+
+console.log(formattedFirstDay);
+console.log(formattedLastDay);
+
+// Extract the endDate of each meeting
+const allEndDates = loadedMeetings.map((meeting) => meeting.endDate);
+
+// Log the endDates
+console.log(allEndDates);
+
+// Filter the meetings for the specific condition
+const timeoutLatestMonthCount = loadedMeetings.filter((meeting) => {
+  const meetingEndDate = formatDate(new Date(meeting.endDate));
+  return (
+    getMeetingStatus(meeting) === "Timeout" &&
+    meetingEndDate >= formattedFirstDay &&
+    meetingEndDate <= formattedLastDay
+  );
+}).length;
+
+// Log the count of filtered meetings
+console.log(timeoutLatestMonthCount);
+
+
+
+
+      setCountTimeoutLatestMonth(timeoutLatestMonthCount);
     };
 
     fetchMeetings();
@@ -185,7 +228,7 @@ const Admin_Dashboard = () => {
                     <DonutChart
                       countActive={countActive}
                       countClose={countClose}
-                      countTimeout={countTimeout}
+                      countTimeout={countTimeoutLatestMonth}
                     />
                   </div>
                 </div>

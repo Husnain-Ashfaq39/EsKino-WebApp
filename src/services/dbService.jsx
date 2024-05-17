@@ -58,7 +58,7 @@ export const fetchParticipantCount = async (meetingId) => {
 
 export const getMeetingStatus = (meeting) => {
   const currentTime = moment();
-  console.log("Current Time:", currentTime.format());
+ 
 
   // Check if endDate and endTime are defined
   if (!meeting.endDate || !meeting.endTime) {
@@ -77,7 +77,7 @@ export const getMeetingStatus = (meeting) => {
     `${formattedEndDate} ${meeting.endTime}`,
     "YYYY-MM-DD hh:mm A"
   );
-  console.log("End Time:", endTime.format());
+ 
 
   if (currentTime.isAfter(endTime)) {
     return "Timeout";
