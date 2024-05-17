@@ -246,7 +246,7 @@ export default function Home() {
         sectionTitleUp=""
         sectionTitleDown=""
         sectionSubTitle={CCHeadData.CCHeadSubtitle}
-     
+
       />
 
       <Spacing md="182" lg="150" />
@@ -268,16 +268,19 @@ export default function Home() {
 
 
       {/* Doctors Section */}
-      <Doctors/>
+      <Doctors />
       <Spacing md="182" lg="150" />
 
       {/* Training session */}
-      <div className="container cs_hero cs_style_1 ">
+      <div className="container cs_hero cs_style_1" style={{ height: 'auto', important: 'height', marginBottom: "200px" }}>
         <SectionHeading title="Upcoming Training Sessions" center={true} />
         <Spacing md="72" lg="50" />
         {/* Render your training session component here */}
         <SessionCard />
       </div>
+
+
+
 
       <Section>
         <AboutSection
@@ -296,7 +299,7 @@ export default function Home() {
         />
       </Section>
       <Spacing md="182" lg="150" />
-    
+
       <Spacing md="165" lg="125" />
       <Section>
         <Banner
@@ -316,7 +319,7 @@ export default function Home() {
           limit={true}
         />
       </Section>
- <Spacing md="182" lg="150" />
+      <Spacing md="182" lg="150" />
     </>
   );
 }
