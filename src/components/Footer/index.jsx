@@ -1,19 +1,40 @@
-import React from 'react';
-import ContactInfoWidget from '../Widget/ContactInfoWidget';
-import MenuWidget from '../Widget/MenuWidget';
-import SocialWidget from '../Widget/SocialWidget';
-import Newsletter from '../Widget/Newsletter';
-import TextWidget from '../Widget/TextWidget';
-import { footerBg1Svg, footerLogoBgSvg, logoIconSvg } from '../imagepath';
-
+import React, { useState } from "react";
+import ContactInfoWidget from "../Widget/ContactInfoWidget";
+import MenuWidget from "../Widget/MenuWidget";
+import SocialWidget from "../Widget/SocialWidget";
+import Newsletter from "../Widget/Newsletter";
+import TextWidget from "../Widget/TextWidget";
+import { footerBg1Svg, footerLogoBgSvg } from "../imagepath";
+import { getAllDocuments } from "../../services/dbService";
+import { useQuery } from "@tanstack/react-query";
 const menuDataTwo = [
-  { title: 'Blog', href: '/blog' },
-  { title: 'Contact Us', href: '/contact' },
-  { title: 'Privacy Policy', href: '/policy' },
-
+  { title: "Blog", href: "/blog" },
+  { title: "Contact Us", href: "/contact" },
+  { title: "Privacy Policy", href: "/policy" },
 ];
 
 export default function Footer() {
+  const [key, setKey] = useState({ logoUrl: "" });
+
+  const {
+    data: logoData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: [key],
+    queryFn: () =>
+      getAllDocuments("HeroSection").then((querySnapshot) => {
+        const logoData = querySnapshot.docs.map((doc) => ({
+          logoUrl: doc.data().heroLogo,
+        }));
+        setKey(key);
+        return logoData[0];
+      }),
+  });
+
+  if (isLoading) return <div />;
+  if (error) return <div />;
+
   return (
     <footer className="cs_footer cs_style_1 cs_heading_color">
       <div
@@ -25,7 +46,9 @@ export default function Footer() {
           style={{ backgroundImage: `url(${footerLogoBgSvg})` }}
         >
           <img
-            src={logoIconSvg}
+            src={logoData.logoUrl}
+            height={72}
+            width={72}
             alt="Logo Icon"
             className="cs_footer_brand_icon"
           />
@@ -41,9 +64,7 @@ export default function Footer() {
                 <ContactInfoWidget />
               </div>
             </div>
-            <div className="col-lg-2">
-              
-            </div>
+            <div className="col-lg-2"></div>
             <div className="col-lg-2">
               <div className="cs_footer_item">
                 <MenuWidget data={menuDataTwo} />

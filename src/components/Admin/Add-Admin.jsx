@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { Link } from "react-router-dom";
@@ -47,15 +49,21 @@ const AddAdmin = () => {
       setLoading(true);
       try {
         const userCredential = await registerUser(name, email, password);
-       
+
         // Clear the form
         setName("");
         setEmail("");
         setPassword("");
         setErrors({});
+
+        // Show success toast
+        toast.success("Admin added successfully!");
       } catch (error) {
         console.error("Error registering new admin:", error.message);
         setErrors({ ...errors, form: error.message });
+
+        // Show error toast
+        toast.error("Failed to add admin. Please try again.");
       }
       setLoading(false);
     }
@@ -151,13 +159,13 @@ const AddAdmin = () => {
                             className="btn btn-primary me-2"
                             disabled={loading}
                           >
-                            Submit
+                            {loading ? "Submiting..." : "Submit"}
                           </button>
-                          {loading && <p>Loading...</p>}
                         </div>
                       </div>
                     </div>
                   </form>
+                  <ToastContainer />
                 </div>
               </div>
             </div>

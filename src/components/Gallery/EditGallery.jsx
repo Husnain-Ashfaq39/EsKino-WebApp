@@ -213,8 +213,8 @@ const EditGallery = () => {
                       <div className="col-12">
                         <div className="doctor-submit text-end">
                           <Button
-                            style={{ marginRight: "10px" }}
-                            className="btn"
+                            style={{ marginRight: "10px", padding: "3px" }}
+                            className="btn btn-primary"
                             type="primary"
                             htmlType="submit"
                             disabled={uploading}
@@ -226,7 +226,7 @@ const EditGallery = () => {
                             type="button"
                             className="btn cancel-form"
                             onClick={() => {
-                              // Handle cancel
+                              navigate("/gallerylist");
                             }}
                           >
                             Cancel

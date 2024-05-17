@@ -1,14 +1,14 @@
-import React, { useState, useRef } from 'react';
-import { useForm } from 'react-hook-form';
-import { Link } from "react-router-dom";
-import TextEditor from '../../TextEditor';
-import Header from '../../Header';
-import Sidebar from '../../Sidebar';
-import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
-import { addDocument } from '../../../services/dbService';
-import { uploadFile } from '../../../services/storageService';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useRef } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import TextEditor from "../../TextEditor";
+import Header from "../../Header";
+import Sidebar from "../../Sidebar";
+import FeatherIcon from "feather-icons-react/build/FeatherIcon";
+import { addDocument } from "../../../services/dbService";
+import { uploadFile } from "../../../services/storageService";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddBlog = () => {
   const { register, handleSubmit, setValue, watch } = useForm();
@@ -16,6 +16,7 @@ const AddBlog = () => {
   const editorRef = useRef(null);
   const [fileChosen, setFileChosen] = useState(false);
   const [image, setImage] = useState(null);
+  const navigate = useNavigate();
 
   const handleFileChange = (e) => {
     if (e.target.files.length > 0) {
@@ -30,7 +31,7 @@ const AddBlog = () => {
   const onSubmit = async (data) => {
     try {
       setIsSubmitting(true);
-      let imageUrl = '';
+      let imageUrl = "";
       if (image) {
         const imagePath = `blog-images/${image.name}`;
         imageUrl = await uploadFile(image, imagePath);
@@ -39,11 +40,11 @@ const AddBlog = () => {
       // Get the data from the text editor
       const content = await new Promise((resolve) => {
         setTimeout(() => {
-          const editor = document.querySelector('.ck-editor__editable');
+          const editor = document.querySelector(".ck-editor__editable");
           if (editor) {
             resolve(editor.innerHTML);
           } else {
-            resolve('');
+            resolve("");
           }
         }, 100);
       });
@@ -51,7 +52,7 @@ const AddBlog = () => {
       const blogData = {
         title: data.title,
         author: data.author,
-        tags: data.tags.split(','),
+        tags: data.tags.split(","),
         status: data.status,
         content,
         imageUrl,
@@ -59,8 +60,8 @@ const AddBlog = () => {
         views: 0,
       };
 
-      await addDocument('blogs', blogData);
-      toast.success('Blog has been Published. Thank you!');
+      await addDocument("blogs", blogData);
+      toast.success("Blog has been Published. Thank you!");
       setIsSubmitting(false);
       setFileChosen(false); // Reset file chosen state
       setImage(null); // Reset image state
@@ -68,8 +69,8 @@ const AddBlog = () => {
         editorRef.current.clearEditor();
       }
     } catch (error) {
-      console.error('Error adding document: ', error);
-      toast.error('Error in Publishing blog');
+      console.error("Error adding document: ", error);
+      toast.error("Error in Publishing blog");
       setIsSubmitting(false);
     }
   };
@@ -78,7 +79,7 @@ const AddBlog = () => {
     <div className="main-wrapper">
       <ToastContainer />
       <Header />
-      <Sidebar id='menu-item11' id1='menu-items11' activeClassName='add-blog' />
+      <Sidebar id="menu-item11" id1="menu-items11" activeClassName="add-blog" />
       <div className="page-wrapper">
         <div className="content">
           <div className="page-header">
@@ -117,7 +118,7 @@ const AddBlog = () => {
                           <input
                             className="form-control"
                             type="text"
-                            {...register('title', { required: true })}
+                            {...register("title", { required: true })}
                           />
                         </div>
                       </div>
@@ -129,7 +130,7 @@ const AddBlog = () => {
                           <input
                             className="form-control"
                             type="text"
-                            {...register('author', { required: true })}
+                            {...register("author", { required: true })}
                           />
                         </div>
                       </div>
@@ -142,7 +143,7 @@ const AddBlog = () => {
                           <input
                             type="text"
                             className="form-control"
-                            {...register('tags', { required: true })}
+                            {...register("tags", { required: true })}
                           />
                         </div>
                       </div>
@@ -156,7 +157,7 @@ const AddBlog = () => {
                               <input
                                 type="radio"
                                 value="Active"
-                                {...register('status', { required: true })}
+                                {...register("status", { required: true })}
                               />
                               Active
                             </label>
@@ -166,7 +167,7 @@ const AddBlog = () => {
                               <input
                                 type="radio"
                                 value="Inactive"
-                                {...register('status', { required: true })}
+                                {...register("status", { required: true })}
                               />
                               Inactive
                             </label>
@@ -187,13 +188,19 @@ const AddBlog = () => {
                             <input
                               type="file"
                               accept="image/*"
-                              {...register('image', { required: true })}
+                              {...register("image", { required: true })}
                               className="hide-input"
-                              id='file'
+                              id="file"
                               onChange={handleFileChange}
                             />
-                            <label htmlFor="file" className="upload" style={{ color: fileChosen ? '#2FCE2E' : 'initial' }}>
-                              {fileChosen ? 'File Chosen' : 'Choose File'}
+                            <label
+                              htmlFor="file"
+                              className="upload"
+                              style={{
+                                color: fileChosen ? "#2FCE2E" : "initial",
+                              }}
+                            >
+                              {fileChosen ? "File Chosen" : "Choose File"}
                             </label>
                           </div>
                         </div>
@@ -204,7 +211,9 @@ const AddBlog = () => {
                             type="submit"
                             className="btn btn-primary submit-form me-2"
                           >
-                            <span>{isSubmitting ? "Publishing..." : "Publish"}</span>
+                            <span>
+                              {isSubmitting ? "Publishing..." : "Publish"}
+                            </span>
                           </button>
                           <button
                             type="button"
@@ -216,6 +225,7 @@ const AddBlog = () => {
                               }
                               setFileChosen(false); // Reset file chosen state
                               setImage(null); // Reset image state
+                              navigate("/blogview");
                             }}
                           >
                             Cancel

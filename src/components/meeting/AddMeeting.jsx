@@ -307,7 +307,13 @@ const AddMeeting = () => {
                   >
                     {submitting ? "Submitting..." : "Submit"}
                   </button>
-                  <button type="button" className="btn btn-primary cancel-form">
+                  <button
+                    onClick={() => {
+                      navigate("/meetinglist");
+                    }}
+                    type="button"
+                    className="btn btn-primary cancel-form"
+                  >
                     Cancel
                   </button>
                 </div>

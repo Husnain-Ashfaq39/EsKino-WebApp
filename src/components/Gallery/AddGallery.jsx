@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Select, message } from "antd";
 import FeatherIcon from "feather-icons-react";
 import { uploadFile } from "../../services/storageService";
@@ -13,6 +13,7 @@ const AddGallery = () => {
   const [fileList, setFileList] = useState([]);
   const [category, setCategory] = useState("Events");
   const [uploading, setUploading] = useState(false);
+  const navigate = useNavigate();
 
   const handleFileChange = (event) => {
     const files = event.target.files;
@@ -73,7 +74,7 @@ const AddGallery = () => {
                       <FeatherIcon icon="chevron-right" />
                     </i>
                   </li>
-                  <li className="breadcrumb-item active">Add Gallery</li>
+                  <li className="breadcrumb-item active">Add Image</li>
                 </ul>
               </div>
             </div>
@@ -185,8 +186,8 @@ const AddGallery = () => {
                       <div className="col-12">
                         <div className="doctor-submit text-end">
                           <Button
-                            style={{ marginRight: "10px" }}
-                            className="btn"
+                            style={{ marginRight: "10px", padding: "3px" }}
+                            className="btn btn-primary"
                             type="primary"
                             htmlType="submit"
                             disabled={fileList.length === 0 || uploading}
@@ -198,7 +199,7 @@ const AddGallery = () => {
                             type="button"
                             className="btn cancel-form"
                             onClick={() => {
-                              // Handle cancel
+                              navigate("/gallerylist");
                             }}
                           >
                             Cancel
