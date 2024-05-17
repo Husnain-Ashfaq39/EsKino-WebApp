@@ -3,7 +3,7 @@ import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { Link } from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import { registerUser } from "../../services/authService"; // Import the registration function
+import { registerUser } from "../../services/authService";
 
 const AddAdmin = () => {
   const [name, setName] = useState("");

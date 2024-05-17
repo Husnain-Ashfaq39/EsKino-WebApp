@@ -17,12 +17,14 @@ import {
   convertTimestamp,
   convertTime,
 } from "../../services/general_functions";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MeetingList = () => {
   const [allMeetings, setAllMeetings] = useState([]);
   const [filteredMeetings, setFilteredMeetings] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(""); // New state for search query
-  const [statusFilter, setStatusFilter] = useState(""); // New state for status filter
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const [updateTrigger, setUpdateTrigger] = useState(false);
@@ -50,8 +52,10 @@ const MeetingList = () => {
         prevMeetings.filter((meeting) => meeting.id !== meetingId)
       );
       setIsDeleteModalOpen(false);
+      toast.success("Meeting deleted successfully");
     } catch (error) {
       console.error("Error deleting document and participants: ", error);
+      toast.error("Failed to delete the meeting");
     }
   };
 
@@ -67,7 +71,7 @@ const MeetingList = () => {
           StartTime: convertTime(doc.data().startTime),
           endTime: convertTime(doc.data().endTime),
           Participants: participantCount,
-          Capacity: doc.data().capacity,
+          capacity: doc.data().capacity,
           Location: doc.data().streetAddress,
           StartDate: convertTimestamp(doc.data().startDate),
           endDate: convertTimestamp(doc.data().endDate),
@@ -89,8 +93,12 @@ const MeetingList = () => {
 
   useEffect(() => {
     const filtered = allMeetings.filter((meeting) => {
-      const matchesSearch = meeting.Name.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesStatus = statusFilter ? getMeetingStatus(meeting) === statusFilter : true;
+      const matchesSearch = meeting.Name.toLowerCase().includes(
+        searchQuery.toLowerCase()
+      );
+      const matchesStatus = statusFilter
+        ? getMeetingStatus(meeting) === statusFilter
+        : true;
       return matchesSearch && matchesStatus;
     });
     setFilteredMeetings(filtered);
@@ -354,7 +362,7 @@ const MeetingList = () => {
                               </p>
                               <p>
                                 <strong>Capacity:</strong>{" "}
-                                {selectedMeeting.Capacity}
+                                {selectedMeeting.capacity}
                               </p>
                               <p>
                                 <strong>Location:</strong>{" "}
@@ -368,7 +376,6 @@ const MeetingList = () => {
                                 <strong>End Date:</strong>{" "}
                                 {selectedMeeting.endDate}
                               </p>
-                             
                             </Modal>
                           )}
                           <div
@@ -424,6 +431,7 @@ const MeetingList = () => {
               </div>
             </div>
           </div>
+          <ToastContainer />
         </div>
       </div>
     </>

@@ -1,7 +1,7 @@
-import React from 'react';
-import Post from '../../Post';
-import Spacing from '../../Spacing';
-import { Link } from 'react-router-dom';
+import React from "react";
+import Post from "../../Post";
+import Spacing from "../../Spacing";
+import { Link } from "react-router-dom";
 
 export default function BlogSectionStyle2({ data }) {
   return (

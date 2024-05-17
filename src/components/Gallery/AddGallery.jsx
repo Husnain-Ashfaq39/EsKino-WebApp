@@ -6,8 +6,8 @@ import Sidebar from "../Sidebar";
 import { Link } from "react-router-dom";
 import { Button, Select, message } from "antd";
 import FeatherIcon from "feather-icons-react";
-import { uploadFile } from "../../services/storageService"; // Import Storage service
-import { addDocument } from "../../services/dbService"; // Import Firestore service
+import { uploadFile } from "../../services/storageService";
+import { addDocument } from "../../services/dbService";
 
 const AddGallery = () => {
   const [fileList, setFileList] = useState([]);
@@ -91,31 +91,47 @@ const AddGallery = () => {
                       </div>
                       <div className="col-12 col-md-6 col-xl-6">
                         <div className="form-group local-forms">
-                          {/* <label>
-                            Select Photos <span className="login-danger">*</span>
-                          </label> */}
-                          <div className={fileList.length > 0 ? "upload-files-avator" : "upload-files-avator settings-btn"} style={{ position: 'relative' }}>
+                          <div
+                            className={
+                              fileList.length > 0
+                                ? "upload-files-avator"
+                                : "upload-files-avator settings-btn"
+                            }
+                            style={{ position: "relative" }}
+                          >
                             {fileList.length > 0 && (
                               <div className="uploaded-image">
                                 <img
                                   src={URL.createObjectURL(fileList[0])}
                                   alt="Uploaded"
                                   style={{
-                                    width: '180px',
-                                    height: '180px',
-                                    objectFit: 'cover',
+                                    width: "180px",
+                                    height: "180px",
+                                    objectFit: "cover",
                                   }}
                                 />
-                                <div className="edit-icon" style={{ position: 'absolute', backgroundColor: 'white', left: 170, top: 160 }}>
+                                <div
+                                  className="edit-icon"
+                                  style={{
+                                    position: "absolute",
+                                    backgroundColor: "white",
+                                    left: 170,
+                                    top: 160,
+                                  }}
+                                >
                                   <input
                                     type="file"
                                     accept="image/*"
                                     id="file"
                                     onChange={handleFileChange}
                                     className="hide-input"
-                                    style={{ display: 'none' }}
+                                    style={{ display: "none" }}
                                   />
-                                  <label htmlFor="file" className="upload" style={{ cursor: 'pointer' }}>
+                                  <label
+                                    htmlFor="file"
+                                    className="upload"
+                                    style={{ cursor: "pointer" }}
+                                  >
                                     <FeatherIcon icon="edit" />
                                   </label>
                                 </div>
@@ -131,7 +147,14 @@ const AddGallery = () => {
                                   className="hide-input"
                                   multiple
                                 />
-                                <label htmlFor="file" className="upload" style={{ cursor: 'pointer' ,marginLeft:"-15px"}}>
+                                <label
+                                  htmlFor="file"
+                                  className="upload"
+                                  style={{
+                                    cursor: "pointer",
+                                    marginLeft: "-15px",
+                                  }}
+                                >
                                   Choose Files
                                 </label>
                               </div>
@@ -141,25 +164,29 @@ const AddGallery = () => {
                       </div>
                       <div className="col-12 col-md-6 col-xl-6">
                         <div className="form-group local-forms">
-                          <label  style={{ marginTop: "-10px"}}>
+                          <label style={{ marginTop: "-10px" }}>
                             Category <span className="login-danger">*</span>
                           </label>
                           <Select
                             defaultValue="Events"
-                            style={{ width: "100%"}}
+                            style={{ width: "100%" }}
                             onChange={handleCategoryChange}
                           >
                             <Select.Option value="Events">Events</Select.Option>
-                            <Select.Option value="Our Team">Our Team</Select.Option>
-                            <Select.Option value="Function">Function</Select.Option>
+                            <Select.Option value="Our Team">
+                              Our Team
+                            </Select.Option>
+                            <Select.Option value="Function">
+                              Function
+                            </Select.Option>
                           </Select>
                         </div>
                       </div>
                       <div className="col-12">
                         <div className="doctor-submit text-end">
                           <Button
-                          style={{marginRight:"10px"}}
-                          className="btn"
+                            style={{ marginRight: "10px" }}
+                            className="btn"
                             type="primary"
                             htmlType="submit"
                             disabled={fileList.length === 0 || uploading}

@@ -10,7 +10,6 @@ import BlogView from "./components/pages/Blog/BlogView";
 import Editblog from "./components/pages/Blog/Editblog";
 //For Settings...
 
-
 //Meeting
 import AddMeeting from "./components/meeting/AddMeeting";
 import EditMeeting from "./components/meeting/EditMeeting";
@@ -24,27 +23,18 @@ import EditHeroSection from "./components/Landing Page/Hero Section/EditHeroSect
 import EditParticipent from "./components/participent/EditParticipent";
 
 import AddAdmin from "./components/Admin/Add-Admin";
-import AdminList from "./components/Admin/AdminList";
-import EditAdmin from "./components/Admin/EditAdmin";
 
 import ForgotPassword from "./components/pages/login/ForgotPassword";
 
-
 import Admin_Dashboard from "./components/Dashboard/Admin_Dashboard/Admin_Dashboard";
-import BlankPage from "./components/pages/login/BlankPage";
 import ChangePassword from "./components/pages/login/ChangePassword";
 
-import Error from "./components/pages/login/Error";
-import LockScreen from "./components/pages/login/LockScreen";
-
-import Register from "./components/pages/login/Register";
 import ServerError from "./components/pages/login/ServerError";
 
 import Layout from "./components/Layout";
 import Home from "./components/pages/Home";
 import Blog_client_side from "./components/pages/Blog";
 import BlogDetail from "./components/pages/BlogDetails";
-
 
 // Landing Page
 import CEHeader from "./components/Landing Page/ChildEmergency/CEHeader";
@@ -79,19 +69,11 @@ const Approuter = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
-          {/* <Route path="/signup" element={<Signup />} /> */}
 
-          <Route
-            path="/settings"
-            element={<Settings />}
-          />
+          <Route path="/settings" element={<Settings />} />
 
-       
-       
           <Route path="/changepassword" element={<ChangePassword />} />
-          <Route path="/error" element={<Error />} />
           <Route path="/server-error" element={<ServerError />} />
-          <Route path="/blankpage" element={<BlankPage />} />
 
           <Route path="/gallerylist" element={<GalleryList />} />
           <Route path="/gallerylist/add" element={<AddGallery />} />
@@ -105,7 +87,7 @@ const Approuter = () => {
           <Route path="/addblog" element={<Addblog />} />
           <Route path="/editblog/:id" element={<Editblog />} />
           <Route path="/blogview" element={<BlogView />} />
-        
+
           {/* meeting  */}
           <Route path="/meetinglist" element={<MeetingList />} />
           <Route path="/add-meeting" element={<AddMeeting />} />
@@ -191,20 +173,15 @@ const Approuter = () => {
             element={<AddOMBody />}
           />
 
-
-
-
           {/* Admin */}
-          <Route path="/adminlist" element={<AdminList />} />
+
           <Route path="/addadmin" element={<AddAdmin />} />
-          <Route path="/editadmin" element={<EditAdmin />} />
 
           {/* Dashboard */}
           <Route path="/admin-dashboard" element={<Admin_Dashboard />} />
 
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-
 
             <Route path="blog" element={<Blog_client_side />} />
             <Route path="/blog/blog-details/:id" element={<BlogDetail />} />

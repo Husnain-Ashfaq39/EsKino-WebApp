@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SocialWidget from "../Widget/SocialWidget";
 import Newsletter from "../Widget/Newsletter";
-import IconBoxStyle11 from "../IconBox/IconBoxStyle11";
+import IconBoxStyle1 from "../IconBox/IconBoxStyle1";
 import Spacing from "../Spacing";
 import { closeSvg, logo2Png, logoSvg } from "../imagepath";
 import { getAllDocuments } from "../../services/dbService";
@@ -17,7 +17,7 @@ export default function Header2({ logoSrc, variant }) {
   const [contactInfo, setContactInfo] = useState({
     address: "",
     phone: "",
-    email: ""
+    email: "",
   });
   const {
     data: logoData,
@@ -35,27 +35,24 @@ export default function Header2({ logoSrc, variant }) {
       }),
   });
 
+  const fetchContactInfo = async () => {
+    const colSnap = await getAllDocuments("contactInfo");
 
-const fetchContactInfo = async () => {
-   
-  const colSnap = await getAllDocuments("contactInfo");
-
-  if (!colSnap.empty) {
+    if (!colSnap.empty) {
       const docSnap = colSnap.docs[0]; // Get the first document
       return {
-          address: docSnap.data().address,
-          phone: docSnap.data().phone,
-          email: docSnap.data().email
+        address: docSnap.data().address,
+        phone: docSnap.data().phone,
+        email: docSnap.data().email,
       };
-  } else {
-      
+    } else {
       return {
-          address: "",
-          phone: "",
-          email: ""
+        address: "",
+        phone: "",
+        email: "",
       };
-  }
-};
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,8 +67,6 @@ const fetchContactInfo = async () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-
-    
   }, []);
   useEffect(() => {
     const fetchData = async () => {
@@ -214,19 +209,19 @@ const fetchContactInfo = async () => {
           <Spacing md="35" lg="35" xl="35" />
           <hr />
           <Spacing md="35" lg="50" xl="35" />
-          <IconBoxStyle11
+          <IconBoxStyle1
             title="Phone"
             subTitle={contactInfo.phone}
             iconSrc="/images/contact/icon_1.svg"
           />
           <Spacing md="30" lg="30" xl="30" />
-          <IconBoxStyle11
+          <IconBoxStyle1
             title="Email"
             subTitle={contactInfo.email}
             iconSrc="/images/contact/icon_2.svg"
           />
           <Spacing md="30" lg="30" xl="30" />
-          <IconBoxStyle11
+          <IconBoxStyle1
             title="Location"
             subTitle={contactInfo.address}
             iconSrc="/images/contact/icon_3.svg"
