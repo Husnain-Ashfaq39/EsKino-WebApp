@@ -3,61 +3,55 @@ import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { Link } from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import { registerUser } from "../../services/authService";
 
-const AddAdmin = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
-
-  const validate = () => {
-    let tempErrors = {};
-    let formIsValid = true;
-
-    if (!name) {
-      formIsValid = false;
-      tempErrors["name"] = "Cannot be empty";
-    }
-
-    if (!email) {
-      formIsValid = false;
-      tempErrors["email"] = "Cannot be empty";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      formIsValid = false;
-      tempErrors["email"] = "Email is not valid";
-    }
-
-    if (!password) {
-      formIsValid = false;
-      tempErrors["password"] = "Cannot be empty";
-    } else if (password.length < 6) {
-      formIsValid = false;
-      tempErrors["password"] = "Password must be at least 6 characters long";
-    }
-
-    setErrors(tempErrors);
-    return formIsValid;
+const EditAdmin = () => {
+  const initialAdminData = {
+    name: "",
+    email: "",
+    password: "",
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (validate()) {
-      setLoading(true);
-      try {
-        const userCredential = await registerUser(name, email, password);
-       
-        // Clear the form
-        setName("");
-        setEmail("");
-        setPassword("");
-        setErrors({});
-      } catch (error) {
-        console.error("Error registering new admin:", error.message);
-        setErrors({ ...errors, form: error.message });
+  const [adminData, setAdminData] = useState(initialAdminData);
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Function to handle input changes
+  const handleChange = (e) => {
+    setAdminData({ ...adminData, [e.target.name]: e.target.value });
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: null });
+    }
+  };
+
+  // Function to validate form inputs
+  const validateForm = () => {
+    let isValid = true;
+    let newErrors = {};
+
+    // Required field validation
+    const requiredFields = ["name", "email", "password"];
+    requiredFields.forEach((field) => {
+      if (!adminData[field]) {
+        isValid = false;
+        newErrors[field] = "This field is required";
       }
-      setLoading(false);
+    });
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  // Function to handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      setIsSubmitting(true);
+      // Simulate an API call
+      setTimeout(() => {
+      
+        setIsSubmitting(false);
+        setAdminData(initialAdminData); // Reset form fields after submission
+      }, 2000); // Simulating a 2 second delay for the API call
     }
   };
 
@@ -72,14 +66,14 @@ const AddAdmin = () => {
               <div className="col-sm-12">
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <Link to="/adminlist">Admins</Link>
+                    <Link to="/adminlist">Admins </Link>
                   </li>
                   <li className="breadcrumb-item">
                     <i className="feather-chevron-right">
                       <FeatherIcon icon="chevron-right" />
                     </i>
                   </li>
-                  <li className="breadcrumb-item active">Add Admins</li>
+                  <li className="breadcrumb-item active">Edit Admin</li>
                 </ul>
               </div>
             </div>
@@ -98,8 +92,9 @@ const AddAdmin = () => {
                           <input
                             className="form-control"
                             type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            name="name"
+                            value={adminData.name}
+                            onChange={handleChange}
                           />
                           {errors.name && (
                             <div className="error text-danger">
@@ -116,8 +111,9 @@ const AddAdmin = () => {
                           <input
                             className="form-control"
                             type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            name="email"
+                            value={adminData.email}
+                            onChange={handleChange}
                           />
                           {errors.email && (
                             <div className="error text-danger">
@@ -134,8 +130,9 @@ const AddAdmin = () => {
                           <input
                             className="form-control"
                             type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            name="password"
+                            value={adminData.password}
+                            onChange={handleChange}
                           />
                           {errors.password && (
                             <div className="error text-danger">
@@ -149,11 +146,10 @@ const AddAdmin = () => {
                           <button
                             type="submit"
                             className="btn btn-primary me-2"
-                            disabled={loading}
+                            disabled={isSubmitting}
                           >
-                            Submit
+                            {isSubmitting ? "Submitting..." : "Submit"}
                           </button>
-                          {loading && <p>Loading...</p>}
                         </div>
                       </div>
                     </div>
@@ -168,4 +164,4 @@ const AddAdmin = () => {
   );
 };
 
-export default AddAdmin;
+export default EditAdmin;

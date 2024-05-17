@@ -46,7 +46,6 @@ export default function Header2({ logoSrc, variant }) {
         email: docSnap.data().email,
       };
     } else {
-      console.log("No documents found in the contactInfo collection!");
       return {
         address: "",
         phone: "",

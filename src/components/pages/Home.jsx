@@ -25,45 +25,7 @@ import FeaturesSection from "../WebLandingPage/WebOrganizationMatters/Organizati
 
 import { Timestamp } from 'firebase/firestore';
 import Doctors from "../DoctorsComponent/Doctors";
-// Sample data
 
-const workingProcessData = [
-  {
-    title: "Book Appointment",
-    subTitle:
-      "You can book an appointment with us by <br />calling our office, filling out an online form, or <br />using our mobile app.",
-    iconUrl: "/images/home_2/wording_process_icon_1.svg",
-    number: "01",
-  },
-  {
-    title: "Visit Our Facility",
-    subTitle:
-      "On the day of your appointment, come to our <br />facility at the designated time. Our staff will greet <br />you and guide you through the check-in process.",
-    iconUrl: "/images/home_2/wording_process_icon_2.svg",
-    number: "02",
-  },
-  {
-    title: "Meet with Our Healthcare <br />Professionals",
-    subTitle:
-      "You will meet with one of our healthcare <br />professionals who will conduct a thorough <br />examination and provide a diagnosis or <br />treatment plan.",
-    iconUrl: "/images/home_2/wording_process_icon_3.svg",
-    number: "03",
-  },
-  {
-    title: "Follow-up Care",
-    subTitle:
-      "We will schedule any necessary follow-up <br />appointments, tests, or procedures to ensure <br />that you receive the best possible care.",
-    iconUrl: "/images/home_2/wording_process_icon_4.svg",
-    number: "04",
-  },
-  {
-    title: "Insurance and Billing",
-    subTitle:
-      "We accept most major insurance plans and <br />our billing department will work with you to <br />ensure that you understand your coverage <br />and any out-of-pocket expenses.",
-    iconUrl: "/images/home_2/wording_process_icon_5.svg",
-    number: "05",
-  },
-];
 
 export default function Home() {
   // const navigate = useNavigate();
@@ -176,8 +138,7 @@ export default function Home() {
           OMHeadTitle: doc.data().OMHeadTitle,
           OMHeadDescription: doc.data().OMHeadDescription,
         }));
-        // setOMHeadDataKey(data[0]);
-        // console.log(data[0])
+      
         return data[0];
       }),
   });
@@ -284,7 +245,7 @@ export default function Home() {
         sectionTitleUp=""
         sectionTitleDown=""
         sectionSubTitle={CCHeadData.CCHeadSubtitle}
-        data={workingProcessData}
+
       />
 
       <Spacing md="182" lg="150" />
@@ -306,16 +267,19 @@ export default function Home() {
 
 
       {/* Doctors Section */}
-      <Doctors/>
+      <Doctors />
       <Spacing md="182" lg="150" />
 
       {/* Training session */}
-      <div className="container cs_hero cs_style_1">
+      <div className="container cs_hero cs_style_1" style={{ height: 'auto', important: 'height', marginBottom: "200px" }}>
         <SectionHeading title="Upcoming Training Sessions" center={true} />
         <Spacing md="72" lg="50" />
         {/* Render your training session component here */}
         <SessionCard />
       </div>
+
+
+
 
       <Section>
         <AboutSection
@@ -334,7 +298,7 @@ export default function Home() {
         />
       </Section>
       <Spacing md="182" lg="150" />
-      {/* Render your testimonial section here */}
+
       <Spacing md="165" lg="125" />
       <Section>
         <Banner
@@ -354,7 +318,7 @@ export default function Home() {
           limit={true}
         />
       </Section>
- <Spacing md="182" lg="150" />
+      <Spacing md="182" lg="150" />
     </>
   );
 }

@@ -12,22 +12,23 @@ html {
   font-weight: 400;
   line-height: 1.625em;
   overflow-x: hidden !important;
+  color: #274760;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  clear: both;
-  color: $primary;
-  padding: 0;
-  margin: 0 0 20px 0;
-  font-weight: 700;
-  line-height: 1.2em;
-  font-family: 'Figtree', sans-serif;
-}
+// h1,
+// h2,
+// h3,
+// h4,
+// h5,
+// h6 {
+//   clear: both;
+//   color: $primary;
+//   padding: 0;
+//   margin: 0 0 20px 0;
+//   font-weight: 700;
+//   line-height: 1.2em;
+//   font-family: 'Figtree', sans-serif;
+// }
 
 .cs_primary_font,
 .cs_btn {

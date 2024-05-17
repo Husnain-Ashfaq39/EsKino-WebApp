@@ -18,13 +18,12 @@ const ParticipantChart = () => {
       );
       const meetingsSnapshot = await getDocs(meetingsQuery);
 
-      console.log("Meetings fetched:", meetingsSnapshot.size);
-
+      
       // Fetch all participants
       const participantsQuery = query(collection(db, "participants"));
       const participantsSnapshot = await getDocs(participantsQuery);
 
-      console.log("Participants fetched:", participantsSnapshot.size);
+     
 
       // Create a map of meeting IDs to participant counts
       const meetingParticipantsMap = {};

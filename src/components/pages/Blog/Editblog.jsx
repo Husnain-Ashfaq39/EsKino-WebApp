@@ -97,7 +97,7 @@ const EditBlog = () => {
       setFileChosen(true);
       const file = e.target.files[0];
       setImage(e.target.files[0]);
-      console.log("file " +file.name);
+     
       const newImageUrl = URL.createObjectURL(file);
       setImageUrl(newImageUrl);
       

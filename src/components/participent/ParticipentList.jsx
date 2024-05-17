@@ -68,8 +68,6 @@ const ParticipantList = () => {
         setParticipantData(updatedParticipants);
 
         setIsDeleteModalOpen(false);
-      } else {
-        console.log("No such meeting exists!");
       }
     } catch (error) {
       console.error(
