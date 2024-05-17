@@ -1,12 +1,21 @@
 /*--------------------------------------------------------------
 7. Header
 ----------------------------------------------------------------*/
-h2
-{
-  font-size: 2.5em;
-  font-weight: 700;
-  margin-bottom: 0.5em;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  clear: both;
+  color: #274760;
+  padding: 0;
+  margin: 0 0 20px 0;
+  font-weight: 600;
+  line-height: 1.2em;
+  
 }
+
 .cs_site_header {
   position: relative;
   z-index: 101;
