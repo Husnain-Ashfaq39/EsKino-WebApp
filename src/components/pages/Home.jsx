@@ -10,6 +10,7 @@ import { getAllDocuments } from "../../services/dbService";
 import BlogSection from "../Section/BlogSection";
 import Spacing from "../Spacing";
 import DepartmentSectionStyle1 from "../WebChildEmergency/DepartmentSectionStyle2";
+import Preloader from "../Loader/Preloader";
 import {
   aboutMiniSvg,
   about_img,
@@ -204,7 +205,7 @@ export default function Home() {
   }, []);
 
   if (heroLoading || CEHeaderLoading || CEBodyLoading || CCHeadLoading) {
-    return <div></div>;
+    return <Preloader/>
   }
 
   if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
