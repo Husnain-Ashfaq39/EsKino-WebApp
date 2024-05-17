@@ -68,8 +68,6 @@ const ParticipantList = () => {
         setParticipantData(updatedParticipants);
 
         setIsDeleteModalOpen(false);
-      } else {
-        
       }
     } catch (error) {
       console.error(
