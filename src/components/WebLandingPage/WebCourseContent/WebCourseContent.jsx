@@ -10,7 +10,7 @@ export default function WebCourseContent({
   sectionTitleUp,
   sectionTitleDown,
   sectionSubTitle,
-  data,
+
 }) {
 
     // Course Content Body useQuery

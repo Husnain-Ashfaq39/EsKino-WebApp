@@ -60,7 +60,7 @@ console.log("here is the id "+id);
   return (
     <>
       <Section topMd={170} bottomMd={54} bottomLg={54}>
-        <Breadcrumb title={blog.title} />
+       
       </Section>
       <div className="container">
         <div className="cs_blog_details_info">

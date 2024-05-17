@@ -35,7 +35,7 @@ function SessionCard({ limit }) {
           const endTime = convertTime(docData.endTime);
           const convertedDocData = { ...docData, startDate, endDate, startTime, endTime };
           const meetingStatus = getMeetingStatus(convertedDocData);
-          console.log(docData.title +meetingStatus);
+          console.log(docData.title + meetingStatus);
 
           if (meetingStatus !== 'Timeout') {
             return {
@@ -100,14 +100,24 @@ function SessionCard({ limit }) {
               <p className="cs_hero_info_subtitle cs_fs_12">zip code: {section.zipCode}</p>
             </div>
           </div>
-          <div style={{ cursor: section.capacity > 0 ? 'pointer' : 'default', margin: '20px', pointerEvents: section.capacity === 0 ? 'none' : 'auto' }}>
-            <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null} className="cs_btn cs_style_1 ">
-              <span>{section.capacity =="0" ? 'Closed' : 'Book Now'}</span>
-              <i>
-                <img src={arrowWhiteSvg} alt="Icon" />
-              </i>
+          {section.capacity == "0" &&
+            <button className='bg-red-500 text-white px-8 px-10 py-2.5 mr-7 rounded-full flex items-center'>
+              Closed
+              <img src={arrowWhiteSvg} alt="Icon" className='w-4 h-4 ml-2' />
+            </button>
+          }
+
+          {section.capacity != "0" &&
+
+            <div style={{ cursor: section.capacity > 0 ? 'pointer' : 'default', margin: '20px', pointerEvents: section.capacity === 0 ? 'none' : 'auto' }}>
+              <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null} className="cs_btn cs_style_1 ">
+                <span>{section.capacity == "0" ? 'Closed' : 'Book Now'}</span>
+                <i>
+                  <img src={arrowWhiteSvg} alt="Icon" />
+                </i>
+              </div>
             </div>
-          </div>
+          }
         </div>
       ))}
       {isOpen && (

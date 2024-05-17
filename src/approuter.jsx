@@ -86,8 +86,8 @@ const Approuter = () => {
             element={<Settings />}
           />
 
-          <Route path="/register" element={<Register />} />
-          <Route path="/lockscreen" element={<LockScreen />} />
+       
+       
           <Route path="/changepassword" element={<ChangePassword />} />
           <Route path="/error" element={<Error />} />
           <Route path="/server-error" element={<ServerError />} />

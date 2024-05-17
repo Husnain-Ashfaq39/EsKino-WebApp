@@ -3,14 +3,16 @@
 ----------------------------------------------------------------*/
 
 .cs_hero.cs_style_1 {
-  height: 1200px;
+  height: auto;
   padding-bottom: 110px;
   position: relative;
   @media (max-width: 1700px) {
-    height: 1075px;
+    height: auto;
+    margin-bottom: 200px;
   }
   @media (max-width: 1480px) {
-    height: 1115px;
+    height: auto;
+    margin-bottom: 200px;
   }
   @media (max-width: 1380px) {
     height: 980px;
