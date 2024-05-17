@@ -182,7 +182,7 @@ const ParticipantList = () => {
             <div className="dropdown-menu dropdown-menu-end">
               <Link
                 className="dropdown-item"
-                to={`/meetinglist/participentlist/edit?meetingid=${record.sectionId}&participentid=${record.id}`}
+                to={`/meetinglist/participantlist/edit?meetingid=${record.sectionId}&participentid=${record.id}`}
               >
                 <i className="far fa-edit me-2" />
                 Edit
