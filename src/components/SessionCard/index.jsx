@@ -35,7 +35,7 @@ function SessionCard({ limit }) {
           const endTime = convertTime(docData.endTime);
           const convertedDocData = { ...docData, startDate, endDate, startTime, endTime };
           const meetingStatus = getMeetingStatus(convertedDocData);
-          console.log(docData.title + meetingStatus);
+
 
           if (meetingStatus !== 'Timeout') {
             return {

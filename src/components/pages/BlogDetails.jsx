@@ -12,7 +12,7 @@ import { Timestamp } from 'firebase/firestore';
 export default function BlogDetail() {
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
-console.log("here is the id "+id);
+
   useEffect(() => {
     const fetchBlogDetails = async () => {
       const doc = await getDocument('blogs', id);

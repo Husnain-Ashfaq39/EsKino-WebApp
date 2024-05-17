@@ -138,8 +138,7 @@ export default function Home() {
           OMHeadTitle: doc.data().OMHeadTitle,
           OMHeadDescription: doc.data().OMHeadDescription,
         }));
-        // setOMHeadDataKey(data[0]);
-        // console.log(data[0])
+      
         return data[0];
       }),
   });

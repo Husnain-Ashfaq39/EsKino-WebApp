@@ -29,7 +29,7 @@ const EditParticipant = () => {
   );
 
   useEffect(() => {
-    console.log(participentId);
+  
     if (participentId) {
       getDocument("participants", participentId)
         .then((docSnap) => {
@@ -51,7 +51,7 @@ const EditParticipant = () => {
           console.error("Error fetching document:", error);
         });
     }
-    console.log(participantData);
+    
   }, [participentId]);
 
   const [errors, setErrors] = useState({});

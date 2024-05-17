@@ -47,7 +47,7 @@ const AddAdmin = () => {
       setLoading(true);
       try {
         const userCredential = await registerUser(name, email, password);
-        console.log("User registered successfully:", userCredential);
+       
         // Clear the form
         setName("");
         setEmail("");

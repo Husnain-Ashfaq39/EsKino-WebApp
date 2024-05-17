@@ -48,7 +48,7 @@ const EditAdmin = () => {
       setIsSubmitting(true);
       // Simulate an API call
       setTimeout(() => {
-        console.log(adminData); // Logging the data for now
+      
         setIsSubmitting(false);
         setAdminData(initialAdminData); // Reset form fields after submission
       }, 2000); // Simulating a 2 second delay for the API call
