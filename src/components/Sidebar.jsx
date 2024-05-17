@@ -195,18 +195,6 @@ const Sidebar = (props) => {
                     <li>
                       <Link
                         className={
-                          props?.activeClassName === "staff-list"
-                            ? "active"
-                            : ""
-                        }
-                        to="/adminlist"
-                      >
-                        Admin List
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className={
                           props?.activeClassName === "add-staff" ? "active" : ""
                         }
                         to="/addadmin"

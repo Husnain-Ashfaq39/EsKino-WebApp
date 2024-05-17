@@ -3,17 +3,18 @@
 import React, { useState, useEffect } from "react";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
-import { Link, useLocation,useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button, Select, message } from "antd";
 import FeatherIcon from "feather-icons-react";
-import { uploadFile } from "../../services/storageService"; // Import Storage service
-import { getDocument, updateDocument } from "../../services/dbService"; // Import Firestore service
+import { uploadFile } from "../../services/storageService";
+import { getDocument, updateDocument } from "../../services/dbService";
 
 const EditGallery = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const searchParams = new URLSearchParams(location.search);
-    const id = searchParams.get("id");  const [fileList, setFileList] = useState([]);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("id");
+  const [fileList, setFileList] = useState([]);
   const [category, setCategory] = useState("Events");
   const [uploading, setUploading] = useState(false);
   const [existingImageUrl, setExistingImageUrl] = useState("");
@@ -71,7 +72,7 @@ const EditGallery = () => {
       });
       message.success("Gallery item updated successfully");
       setUploading(false);
-      navigate("/gallerylist")
+      navigate("/gallerylist");
     } catch (error) {
       message.error("Update failed: " + error.message);
       setUploading(false);
@@ -81,7 +82,11 @@ const EditGallery = () => {
   return (
     <div>
       <Header />
-      <Sidebar id="menu-item7" id1="menu-items7" activeClassName="editgallery" />
+      <Sidebar
+        id="menu-item7"
+        id1="menu-items7"
+        activeClassName="editgallery"
+      />
       <div className="page-wrapper">
         <div className="content">
           <div className="page-header">
@@ -114,28 +119,51 @@ const EditGallery = () => {
                       </div>
                       <div className="col-12 col-md-6 col-xl-6">
                         <div className="form-group local-forms">
-                          <div className={existingImageUrl || fileList.length > 0 ? "upload-files-avator" : "upload-files-avator settings-btn"} style={{ position: 'relative' }}>
+                          <div
+                            className={
+                              existingImageUrl || fileList.length > 0
+                                ? "upload-files-avator"
+                                : "upload-files-avator settings-btn"
+                            }
+                            style={{ position: "relative" }}
+                          >
                             {(existingImageUrl || fileList.length > 0) && (
                               <div className="uploaded-image">
                                 <img
-                                  src={fileList.length > 0 ? URL.createObjectURL(fileList[0]) : existingImageUrl}
+                                  src={
+                                    fileList.length > 0
+                                      ? URL.createObjectURL(fileList[0])
+                                      : existingImageUrl
+                                  }
                                   alt="Uploaded"
                                   style={{
-                                    width: '180px',
-                                    height: '180px',
-                                    objectFit: 'cover',
+                                    width: "180px",
+                                    height: "180px",
+                                    objectFit: "cover",
                                   }}
                                 />
-                                <div className="edit-icon" style={{ position: 'absolute', backgroundColor: 'white', left: 170, top: 160 }}>
+                                <div
+                                  className="edit-icon"
+                                  style={{
+                                    position: "absolute",
+                                    backgroundColor: "white",
+                                    left: 170,
+                                    top: 160,
+                                  }}
+                                >
                                   <input
                                     type="file"
                                     accept="image/*"
                                     id="file"
                                     onChange={handleFileChange}
                                     className="hide-input"
-                                    style={{ display: 'none' }}
+                                    style={{ display: "none" }}
                                   />
-                                  <label htmlFor="file" className="upload" style={{ cursor: 'pointer' }}>
+                                  <label
+                                    htmlFor="file"
+                                    className="upload"
+                                    style={{ cursor: "pointer" }}
+                                  >
                                     <FeatherIcon icon="edit" />
                                   </label>
                                 </div>
@@ -150,7 +178,11 @@ const EditGallery = () => {
                                   onChange={handleFileChange}
                                   className="hide-input"
                                 />
-                                <label htmlFor="file" className="upload" style={{ cursor: 'pointer' }}>
+                                <label
+                                  htmlFor="file"
+                                  className="upload"
+                                  style={{ cursor: "pointer" }}
+                                >
                                   Choose Files
                                 </label>
                               </div>
@@ -169,8 +201,12 @@ const EditGallery = () => {
                             onChange={handleCategoryChange}
                           >
                             <Select.Option value="Events">Events</Select.Option>
-                            <Select.Option value="Our Team">Our Team</Select.Option>
-                            <Select.Option value="Function">Function</Select.Option>
+                            <Select.Option value="Our Team">
+                              Our Team
+                            </Select.Option>
+                            <Select.Option value="Function">
+                              Function
+                            </Select.Option>
                           </Select>
                         </div>
                       </div>

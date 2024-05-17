@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import IconBoxStyle11 from "../../IconBox/IconBoxStyle11";
+import IconBoxStyle1 from "../../IconBox/IconBoxStyle1";
 import Spacing from "../../Spacing";
 import { icon1Svg, icon2Svg, icon3Svg } from "../../imagepath";
 import { getAllDocuments } from "../../../services/dbService";
@@ -44,21 +44,21 @@ export default function ContactInfoSection({ sectionTitle }) {
       <Spacing md="70" lg="50" />
       <div className="row g-4 g-xl-3 g-xxl-5">
         <div className="col-xl-4">
-          <IconBoxStyle11
+          <IconBoxStyle1
             title="Phone"
             subTitle={contactInfo.phone}
             iconSrc={icon1Svg}
           />
         </div>
         <div className="col-xl-4">
-          <IconBoxStyle11
+          <IconBoxStyle1
             title="Email"
             subTitle={contactInfo.email}
             iconSrc={icon2Svg}
           />
         </div>
         <div className="col-xl-4">
-          <IconBoxStyle11
+          <IconBoxStyle1
             title="Location"
             subTitle={contactInfo.address}
             iconSrc={icon3Svg}

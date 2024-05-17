@@ -1,25 +1,24 @@
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Select from "react-select";
-import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
-import moment from "moment";
-import { getAllDocuments, fetchDocumentsWithQuery, getMeetingStatus } from "../../../services/dbService";
-import Header from "../../Header";
+import "react-toastify/dist/ReactToastify.css";
 import {
-  calendar,
-  empty_wallet,
-  profile_add,
-  scissor,
-} from "../../imagepath";
+  fetchDocumentsWithQuery,
+  getAllDocuments,
+  getMeetingStatus,
+} from "../../../services/dbService";
+import {
+  convertTime,
+  convertTimestamp,
+} from "../../../services/general_functions";
+import Header from "../../Header";
+import { calendar, empty_wallet, profile_add, scissor } from "../../imagepath";
 import Sidebar from "../../Sidebar";
 import DonutChart from "./DonutChart";
-import PatientChart from "./PaitentChart";
-import { convertTimestamp, convertTime } from "../../../services/general_functions";
+import ParticipantChart from "./ParticipantChart";
 
 const Admin_Dashboard = () => {
-  const [selectedOption, setSelectedOption] = useState(null);
   const [meetings, setMeetings] = useState([]);
   const [countActive, setCountActive] = useState(0);
   const [countClose, setCountClose] = useState(0);
@@ -27,8 +26,8 @@ const Admin_Dashboard = () => {
   const [totalEarning, setTotalEarning] = useState(0);
 
   useEffect(() => {
-    toast.success('Login Successful Welcome');
-    
+    toast.success("Login Successful Welcome");
+
     const fetchMeetings = async () => {
       const querySnapshot = await getAllDocuments("meetings");
       const loadedMeetings = querySnapshot.docs.map((doc) => ({
@@ -37,15 +36,21 @@ const Admin_Dashboard = () => {
         StartTime: convertTime(doc.data().startTime),
         endTime: convertTime(doc.data().endTime),
         Participent: doc.data().participent,
-        Capacity: doc.data().capacity,
+        capacity: doc.data().capacity,
         Location: doc.data().streetAddress,
         StartDate: convertTimestamp(doc.data().startDate),
         endDate: convertTimestamp(doc.data().endDate),
       }));
 
-      const activeCount = loadedMeetings.filter(meeting => getMeetingStatus(meeting) === "Active").length;
-      const closeCount = loadedMeetings.filter(meeting => getMeetingStatus(meeting) === "Closed").length;
-      const timeoutCount = loadedMeetings.filter(meeting => getMeetingStatus(meeting) === "Timeout").length;
+      const activeCount = loadedMeetings.filter(
+        (meeting) => getMeetingStatus(meeting) === "Active"
+      ).length;
+      const closeCount = loadedMeetings.filter(
+        (meeting) => getMeetingStatus(meeting) === "Closed"
+      ).length;
+      const timeoutCount = loadedMeetings.filter(
+        (meeting) => getMeetingStatus(meeting) === "Timeout"
+      ).length;
 
       setMeetings(loadedMeetings.slice(0, 4)); // Fetch only the first 4 meetings
       setCountActive(activeCount);
@@ -55,12 +60,18 @@ const Admin_Dashboard = () => {
       // Calculate total earnings from timeout meetings
       let totalEarnings = 0;
 
-      for (const meeting of loadedMeetings.filter(meeting => getMeetingStatus(meeting) === "Timeout")) {
-        const participantsSnapshot = await fetchDocumentsWithQuery("participants", "sectionId", meeting.id);
-        const participants = participantsSnapshot.docs.map(doc => doc.data());
-        
-        participants.forEach(participant => {
-          totalEarnings += participant.totalFee || 0; // Assuming each participant has a totalFee attribute
+      for (const meeting of loadedMeetings.filter(
+        (meeting) => getMeetingStatus(meeting) === "Timeout"
+      )) {
+        const participantsSnapshot = await fetchDocumentsWithQuery(
+          "participants",
+          "sectionId",
+          meeting.id
+        );
+        const participants = participantsSnapshot.docs.map((doc) => doc.data());
+
+        participants.forEach((participant) => {
+          totalEarnings += participant.totalFee || 0;
         });
       }
 
@@ -70,18 +81,15 @@ const Admin_Dashboard = () => {
     fetchMeetings();
   }, []);
 
-  // const [year, setYear] = useState([
-  //   { value: 1, label: "2022" },
-  //   { value: 2, label: "2021" },
-  //   { value: 3, label: "2020" },
-  //   { value: 4, label: "2019" },
-  // ]);
-
   return (
     <>
       <ToastContainer autoClose={2000} />
       <Header />
-      <Sidebar id="menu-item" id1="menu-items" activeClassName="admin-dashboard" />
+      <Sidebar
+        id="menu-item"
+        id1="menu-items"
+        activeClassName="admin-dashboard"
+      />
       <div className="page-wrapper">
         <div className="content">
           {/* Page Header */}
@@ -124,7 +132,7 @@ const Admin_Dashboard = () => {
                     <img src={profile_add} alt="#" />
                   </div>
                   <div className="dash-content dash-count">
-                    <h4>Close Meeting</h4>
+                    <h4>Closed Meeting</h4>
                     <h2>{countClose}</h2>
                   </div>
                 </div>
@@ -163,7 +171,7 @@ const Admin_Dashboard = () => {
                     <h4>Participants</h4>
                   </div>
                   <div id="patient-chart" />
-                  <PatientChart />
+                  <ParticipantChart />
                 </div>
               </div>
             </div>
@@ -174,7 +182,11 @@ const Admin_Dashboard = () => {
                     <h4>Meetings</h4>
                   </div>
                   <div id="donut-chart-dash" className="chart-user-icon">
-                    <DonutChart countActive={countActive} countClose={countClose} countTimeout={countTimeout} />
+                    <DonutChart
+                      countActive={countActive}
+                      countClose={countClose}
+                      countTimeout={countTimeout}
+                    />
                   </div>
                 </div>
               </div>

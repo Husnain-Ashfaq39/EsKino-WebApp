@@ -7,6 +7,8 @@ import moment from "moment";
 import { Link, useNavigate } from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { addDocument } from "../../services/dbService";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddMeeting = () => {
   const navigate = useNavigate();
@@ -28,7 +30,6 @@ const AddMeeting = () => {
       zipCode: "",
       streetAddress: "",
       capacity: "",
-
     },
   });
 
@@ -54,6 +55,18 @@ const AddMeeting = () => {
       return "Active";
     }
   };
+  const showSuccessToast = () => {
+    toast.success("Meeting added successfully!", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
 
   const onSubmit = async (data) => {
     setSubmitting(true);
@@ -70,7 +83,7 @@ const AddMeeting = () => {
 
     try {
       await addDocument("meetings", formattedData);
-      console.log("Document added successfully!");
+      showSuccessToast();
       reset();
       setStartDate(null);
       setEndDate(null);
@@ -284,7 +297,7 @@ const AddMeeting = () => {
                   )}
                 </div>
               </div>
-              
+
               <div className="col-12">
                 <div className="doctor-submit text-end">
                   <button
@@ -301,6 +314,7 @@ const AddMeeting = () => {
               </div>
             </div>
           </form>
+          <ToastContainer />
         </div>
       </div>
     </div>

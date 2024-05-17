@@ -4,7 +4,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import moment from "moment";
 import { db } from "../../../config/firebase";
 
-const PatientChart = () => {
+const ParticipantChart = () => {
   const [chartData, setChartData] = useState(Array(12).fill(0));
 
   useEffect(() => {
@@ -136,4 +136,4 @@ const PatientChart = () => {
   return <div id="patient-chart"></div>;
 };
 
-export default PatientChart;
+export default ParticipantChart;
