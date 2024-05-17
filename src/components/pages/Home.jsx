@@ -25,6 +25,7 @@ import FeaturesSection from "../WebLandingPage/WebOrganizationMatters/Organizati
 
 import { Timestamp } from "firebase/firestore";
 import Doctors from "../DoctorsComponent/Doctors";
+import ServerError from "./login/ServerError";
 
 export default function Home() {
   // const navigate = useNavigate();
@@ -209,11 +210,11 @@ export default function Home() {
   }
 
   if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
-    return <div>Error loading data</div>;
+    return <ServerError/>
   }
 
   if (!heroData || !CEHeader || !CEBody || !CCHeadData) {
-    return <div>No data available</div>;
+    return <ServerError/>;
   }
 
   return (

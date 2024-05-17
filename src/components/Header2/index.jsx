@@ -81,11 +81,11 @@ export default function Header2({ logoSrc, variant }) {
   }
 
   if (error) {
-    return <div>Error loading data</div>;
+    return <div></div>;
   }
 
   if (!logoData) {
-    return <div>No data available</div>;
+    return <div></div>;
   }
 
   return (

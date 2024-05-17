@@ -111,15 +111,7 @@ const Header = () => {
               </span>
             </Link>
             <div className="dropdown-menu">
-              <Link className="dropdown-item" to="/admin-dashboard">
-                My Profile
-              </Link>
-              <Link className="dropdown-item" to="/admin-dashboard">
-                Edit Profile
-              </Link>
-              <Link className="dropdown-item" to="/settingschangepassword">
-                Change Password
-              </Link>
+              
               <Link onClick={()=> {signOutUser()}} className="dropdown-item" to="/login">
                 Logout
               </Link>

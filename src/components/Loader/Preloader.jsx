@@ -82,13 +82,12 @@ const Preloader = () => {
       <style>{keyframes}</style>
       <div style={containerStyle}>
         <div className="loading-text" style={textStyle}>
-          <span style={{ ...spanStyle, animationDelay: '0.1s' }}>L</span>
-          <span style={{ ...spanStyle, animationDelay: '0.2s' }}>O</span>
-          <span style={{ ...spanStyle, animationDelay: '0.3s' }}>A</span>
-          <span style={{ ...spanStyle, animationDelay: '0.4s' }}>D</span>
-          <span style={{ ...spanStyle, animationDelay: '0.5s' }}>I</span>
-          <span style={{ ...spanStyle, animationDelay: '0.6s' }}>N</span>
-          <span style={{ ...spanStyle, animationDelay: '0.7s' }}>G</span>
+          <span style={{ ...spanStyle, animationDelay: '0.1s' }}>E</span>
+          <span style={{ ...spanStyle, animationDelay: '0.2s' }}>S</span>
+          <span style={{ ...spanStyle, animationDelay: '0.3s' }}>K</span>
+          <span style={{ ...spanStyle, animationDelay: '0.4s' }}>I</span>
+          <span style={{ ...spanStyle, animationDelay: '0.5s' }}>N</span>
+          <span style={{ ...spanStyle, animationDelay: '0.6s' }}>O</span>
         </div>
         <div style={{
           content: "''",
