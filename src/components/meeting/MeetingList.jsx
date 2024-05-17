@@ -54,8 +54,8 @@ const MeetingList = () => {
       setIsDeleteModalOpen(false);
       toast.success("Meeting deleted successfully");
     } catch (error) {
-      console.error("Error deleting document and participants: ", error);
       toast.error("Failed to delete the meeting");
+      navigate("/server-error");
     }
   };
 

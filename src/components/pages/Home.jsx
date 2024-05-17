@@ -16,16 +16,15 @@ import {
   banner_img50,
   ctaBgSvg,
   heroBgJpeg,
-
 } from "../imagepath";
 import Gallery from "./Gallery";
 import WebCourseContent from "../WebLandingPage/WebCourseContent/WebCourseContent";
 import SessionCard from "../SessionCard";
 import FeaturesSection from "../WebLandingPage/WebOrganizationMatters/OrganizationMattersSection";
 
-import { Timestamp } from 'firebase/firestore';
+import { Timestamp } from "firebase/firestore";
 import Doctors from "../DoctorsComponent/Doctors";
-
+import Preloader from "../Preloader/Preloader";
 
 export default function Home() {
   // const navigate = useNavigate();
@@ -138,7 +137,7 @@ export default function Home() {
           OMHeadTitle: doc.data().OMHeadTitle,
           OMHeadDescription: doc.data().OMHeadDescription,
         }));
-      
+
         return data[0];
       }),
   });
@@ -206,7 +205,7 @@ export default function Home() {
   }, []);
 
   if (heroLoading || CEHeaderLoading || CEBodyLoading || CCHeadLoading) {
-    return <div>Loading...</div>;
+    return <Preloader />;
   }
 
   if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
@@ -245,7 +244,6 @@ export default function Home() {
         sectionTitleUp=""
         sectionTitleDown=""
         sectionSubTitle={CCHeadData.CCHeadSubtitle}
-
       />
 
       <Spacing md="182" lg="150" />
@@ -265,21 +263,20 @@ export default function Home() {
         />
       </Section>
 
-
       {/* Doctors Section */}
       <Doctors />
       <Spacing md="182" lg="150" />
 
       {/* Training session */}
-      <div className="container cs_hero cs_style_1" style={{ height: 'auto', important: 'height', marginBottom: "200px" }}>
+      <div
+        className="container cs_hero cs_style_1"
+        style={{ height: "auto", important: "height", marginBottom: "200px" }}
+      >
         <SectionHeading title="Upcoming Training Sessions" center={true} />
         <Spacing md="72" lg="50" />
         {/* Render your training session component here */}
         <SessionCard />
       </div>
-
-
-
 
       <Section>
         <AboutSection

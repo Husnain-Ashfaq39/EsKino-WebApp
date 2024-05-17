@@ -5,7 +5,7 @@ import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { useLocation, useNavigate } from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import { blogimg2, imagesend, refreshicon, searchnormal } from "../imagepath";
+import { imagesend, refreshicon, searchnormal } from "../imagepath";
 import { db } from "../../config/firebase";
 import { getDoc, doc } from "firebase/firestore";
 import { updateDoc } from "firebase/firestore";
@@ -19,22 +19,11 @@ const ParticipantList = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const meetingId = searchParams.get("meetingid");
+  const navigate = useNavigate();
   const [participentToDele, setParticipentToDele] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // New state for search query
+  const [searchQuery, setSearchQuery] = useState("");
   const [filteredParticipants, setFilteredParticipants] = useState([]);
-
-  const initialParticipentData = {
-    sectionId: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    address: "",
-    persons: 4,
-    personNames: "",
-    gender: "",
-    FIELD9: "",
-  };
 
   const handleDelete = async (participantId) => {
     const participantIndex = participentData.findIndex(
@@ -70,10 +59,7 @@ const ParticipantList = () => {
         setIsDeleteModalOpen(false);
       }
     } catch (error) {
-      console.error(
-        "Failed to delete the participant or update the meeting:",
-        error
-      );
+      navigate("/server-error");
     }
   };
 
@@ -118,7 +104,9 @@ const ParticipantList = () => {
   useEffect(() => {
     const filtered = participentData.filter(
       (participant) =>
-        participant.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        participant.firstName
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
         participant.lastName.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredParticipants(filtered);
@@ -256,9 +244,7 @@ const ParticipantList = () => {
                                 className="form-control"
                                 placeholder="Search by first or last name"
                                 value={searchQuery}
-                                onChange={(e) =>
-                                  setSearchQuery(e.target.value)
-                                }
+                                onChange={(e) => setSearchQuery(e.target.value)}
                               />
                               <Link className="btn">
                                 <img src={searchnormal} alt="#" />

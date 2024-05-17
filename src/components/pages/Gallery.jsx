@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Section from "../Section";
 import GallerySectionStyle2 from "../GallerySection/GallerySectionStyle2";
-import { pageTitle } from "../../helpers/PageTitle";
-import { getAllDocuments } from "../../services/dbService"; // Import Firestore service
+import { getAllDocuments } from "../../services/dbService";
 import { Button, Row, Col } from "antd";
 import SectionHeading from "../SectionHeading";
 import Spacing from "../Spacing";
-
 
 export default function Gallery() {
   const [galleryData, setGalleryData] = useState([]);
@@ -15,7 +13,6 @@ export default function Gallery() {
   const [selectedFilter, setSelectedFilter] = useState("All");
 
   useEffect(() => {
-    pageTitle("Gallery");
     fetchGalleryData();
   }, []);
 
@@ -28,7 +25,7 @@ export default function Gallery() {
         data.push({ imgUrl: doc.data().url, category: doc.data().category });
       });
       setGalleryData(data);
-      setFilteredData(data); // Initially show all data
+      setFilteredData(data);
     } catch (error) {
       console.error("Error fetching gallery data:", error);
     } finally {
@@ -55,27 +52,43 @@ export default function Gallery() {
         bottomLg={150}
         bottomXl={110}
       >
-              <SectionHeading title={"Our Events"} center />
-              <Spacing md="72" lg="50" />
+        <SectionHeading title={"Our Events"} center />
+        <Spacing md="72" lg="50" />
 
-        <Row justify="center" gutter={[16, 16]} style={{ marginBottom: "20px" }}>
+        <Row
+          justify="center"
+          gutter={[16, 16]}
+          style={{ marginBottom: "20px" }}
+        >
           <Col>
-            <Button type={selectedFilter === "All" ? "primary" : "default"} onClick={() => handleFilterChange("All")}>
+            <Button
+              type={selectedFilter === "All" ? "primary" : "default"}
+              onClick={() => handleFilterChange("All")}
+            >
               All
             </Button>
           </Col>
           <Col>
-            <Button type={selectedFilter === "Events" ? "primary" : "default"} onClick={() => handleFilterChange("Events")}>
+            <Button
+              type={selectedFilter === "Events" ? "primary" : "default"}
+              onClick={() => handleFilterChange("Events")}
+            >
               Events
             </Button>
           </Col>
           <Col>
-            <Button type={selectedFilter === "Our Team" ? "primary" : "default"} onClick={() => handleFilterChange("Our Team")}>
+            <Button
+              type={selectedFilter === "Our Team" ? "primary" : "default"}
+              onClick={() => handleFilterChange("Our Team")}
+            >
               Our Team
             </Button>
           </Col>
           <Col>
-            <Button type={selectedFilter === "Function" ? "primary" : "default"} onClick={() => handleFilterChange("Function")}>
+            <Button
+              type={selectedFilter === "Function" ? "primary" : "default"}
+              onClick={() => handleFilterChange("Function")}
+            >
               Function
             </Button>
           </Col>
