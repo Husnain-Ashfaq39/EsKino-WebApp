@@ -95,8 +95,8 @@ export default function Header2({ logoSrc, variant }) {
           mobileToggle ? "cs_mobile_toggle_active" : ""
         } ${variant} ${isSticky ? "cs_sticky_active" : ""}`}
       >
-        <div className="cs_main_header">
-          <div className="container">
+        <div style={{marginTop:"-10px"}} className="cs_main_header bg-[#BEDDF2] rounded-bl-full rounded-br-full mx-[-15px] py-0">
+          <div className="container h-20">
             <div className="cs_main_header_in">
               <div className="cs_main_header_left">
                 <div
@@ -104,6 +104,7 @@ export default function Header2({ logoSrc, variant }) {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    marginTop: "-2.5rem",
                   }}
                 >
                   <Link className="cs_site_branding logo_style" to="/">
@@ -113,7 +114,7 @@ export default function Header2({ logoSrc, variant }) {
                     Eskino
                   </h2>
                 </div>
-                <nav className="cs_nav ml-24">
+                <nav style={{marginTop:"-10px"}} className="cs_nav ml-24">
                   <ul
                     className={`${
                       mobileToggle ? "cs_nav_list cs_active" : "cs_nav_list"
@@ -144,9 +145,10 @@ export default function Header2({ logoSrc, variant }) {
                   </span>
                 </nav>
               </div>
-              <div className="cs_main_header_right">
+              <div  className="cs_main_header_right">
                 <div className="cs_toolbox">
                   <button
+                  style={{marginTop:"-10px"}}
                     className="cs_toolbox_btn cs_sidebar_toggle_btn"
                     type="button"
                     onClick={() => setSideNav(!sideNav)}

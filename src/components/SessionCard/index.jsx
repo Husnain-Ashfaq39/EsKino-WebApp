@@ -101,7 +101,7 @@ function SessionCard({ limit }) {
             </div>
           </div>
           {section.capacity == "0" &&
-            <button className='bg-red-500 text-white px-8 px-10 py-2.5 mr-7 rounded-full flex items-center'>
+            <button disabled={true} className='bg-red-500 text-white px-8 px-10 py-2.5 mr-7 rounded-full flex items-center'>
               Closed
               <img src={arrowWhiteSvg} alt="Icon" className='w-4 h-4 ml-2' />
             </button>

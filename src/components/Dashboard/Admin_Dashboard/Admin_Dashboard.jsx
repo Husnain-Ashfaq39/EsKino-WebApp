@@ -1,6 +1,6 @@
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -17,6 +17,7 @@ import { calendar, empty_wallet, profile_add, scissor } from "../../imagepath";
 import Sidebar from "../../Sidebar";
 import DonutChart from "./DonutChart";
 import ParticipantChart from "./ParticipantChart";
+import { getCurrentUser } from "../../../services/authService";
 
 const Admin_Dashboard = () => {
   const [meetings, setMeetings] = useState([]);
@@ -25,9 +26,14 @@ const Admin_Dashboard = () => {
   const [countTimeout, setCountTimeout] = useState(0);
   const [totalEarning, setTotalEarning] = useState(0);
   const [countTimeoutLatestMonth, setCountTimeoutLatestMonth] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    toast.success("Login Successful Welcome");
+    // toast.success("Login Successful Welcome");
+if(!getCurrentUser())
+  {
+   navigate('/login');
+  }
 
     const fetchMeetings = async () => {
       const querySnapshot = await getAllDocuments("meetings");
