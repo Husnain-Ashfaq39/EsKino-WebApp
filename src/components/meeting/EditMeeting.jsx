@@ -23,9 +23,7 @@ const EditMeeting = () => {
     zipCode: "",
     streetAddress: "",
     capacity: "",
-    priceInEuro: "",
-    discountFor2Persons: "",
-    discountFor3Persons: "",
+  
   };
 
   const [meetingData, setMeetingData] = useState(initialMeetingData);
@@ -50,10 +48,8 @@ const EditMeeting = () => {
               houseOwner: data.houseOwner || "",
               streetAddress: data.streetAddress || "",
               zipCode: data.zipCode || "",
-              capacity: data.capacity || "",
-              priceInEuro: data.priceInEuro || "",
-              discountFor2Persons: data.discountFor2Persons || "",
-              discountFor3Persons: data.discountFor3Persons || "",
+              capacity: data.capacity || ""
+             
             });
           }
         })
@@ -94,9 +90,7 @@ const EditMeeting = () => {
       "streetAddress",
       "zipCode",
       "capacity",
-      "priceInEuro",
-      "discountFor2Persons",
-      "discountFor3Persons",
+    
     ];
     requiredFields.forEach((field) => {
       if (
@@ -151,9 +145,7 @@ const EditMeeting = () => {
         streetAddress: meetingData.streetAddress,
         zipCode: meetingData.zipCode,
         capacity: meetingData.capacity,
-        priceInEuro: meetingData.priceInEuro,
-        discountFor2Persons: meetingData.discountFor2Persons,
-        discountFor3Persons: meetingData.discountFor3Persons,
+      
       };
 
       try {
@@ -379,68 +371,7 @@ const EditMeeting = () => {
                           )}
                         </div>
                       </div>
-                      <div className="col-12 col-md-4">
-                        <div className="form-group">
-                          <label>
-                            Price in Euro <span className="login-danger">*</span>
-                          </label>
-                          <input
-                            className="form-control"
-                            type="number"
-                            name="priceInEuro"
-                            placeholder="Enter price in Euro"
-                            value={meetingData.priceInEuro}
-                            onChange={handleChange}
-                          />
-                          {errors.priceInEuro && (
-                            <div className="error text-danger">
-                              {errors.priceInEuro}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="col-12 col-md-4">
-                        <div className="form-group">
-                          <label>
-                            Discount for 2 Persons (%){" "}
-                            <span className="login-danger">*</span>
-                          </label>
-                          <input
-                            className="form-control"
-                            type="number"
-                            name="discountFor2Persons"
-                            placeholder="Enter discount for 2 persons"
-                            value={meetingData.discountFor2Persons}
-                            onChange={handleChange}
-                          />
-                          {errors.discountFor2Persons && (
-                            <div className="error text-danger">
-                              {errors.discountFor2Persons}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="col-12 col-md-4">
-                        <div className="form-group">
-                          <label>
-                            Discount for 3 Persons (%){" "}
-                            <span className="login-danger">*</span>
-                          </label>
-                          <input
-                            className="form-control"
-                            type="number"
-                            name="discountFor3Persons"
-                            placeholder="Enter discount for 3 persons"
-                            value={meetingData.discountFor3Persons}
-                            onChange={handleChange}
-                          />
-                          {errors.discountFor3Persons && (
-                            <div className="error text-danger">
-                              {errors.discountFor3Persons}
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      
                       <div className="col-12">
                         <div className="doctor-submit text-end">
                           <button

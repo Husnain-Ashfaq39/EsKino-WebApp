@@ -73,7 +73,7 @@ function SessionCard({ limit }) {
           className="cs_hero_info_wrap cs_shadow_1 cs_white_bg cs_radius_15"
           style={{ margin: '10px', marginBottom: '25px', padding: '20px' }}
         >
-          <div className="cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
+          <div className="w-72 cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
             <div className="cs_hero_info_icon cs_center rounded-circle cs_accent_bg">
               <img src={section.icon} alt="Icon" />
             </div>
@@ -82,7 +82,7 @@ function SessionCard({ limit }) {
               <p className="cs_hero_info_subtitle cs_fs_12">Remaining Capacity: {section.capacity}</p>
             </div>
           </div>
-          <div className="cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
+          <div className=" w-72 cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
             <div className="cs_hero_info_icon cs_center rounded-circle cs_accent_bg">
               <img src={date_timeSvg} alt="Icon" />
             </div>
@@ -91,7 +91,7 @@ function SessionCard({ limit }) {
               <p className="cs_hero_info_subtitle cs_fs_12">{section.startTime} to {section.endTime}</p>
             </div>
           </div>
-          <div className="cs_hero_info d-flex align-items-center">
+          <div className="w-72 cs_hero_info d-flex align-items-center">
             <div className="cs_hero_info_icon cs_center rounded-circle cs_accent_bg">
               <img src={pinSvg} alt="Icon" />
             </div>
@@ -101,7 +101,7 @@ function SessionCard({ limit }) {
             </div>
           </div>
           {section.capacity == "0" &&
-            <button disabled={true} className='bg-red-500 text-white px-8 px-10 py-2.5 mr-7 rounded-full flex items-center'>
+            <button disabled={true} className='bg-red-500 text-white px-[3.1rem] py-[0.77rem] mx-[1rem] rounded-full flex items-center'>
               Closed
               <img src={arrowWhiteSvg} alt="Icon" className='w-4 h-4 ml-2' />
             </button>
