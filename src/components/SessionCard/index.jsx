@@ -35,16 +35,17 @@ function SessionCard({ limit }) {
           const endTime = convertTime(docData.endTime);
           const convertedDocData = { ...docData, startDate, endDate, startTime, endTime };
           const meetingStatus = getMeetingStatus(convertedDocData);
+          console.log(docData.title +meetingStatus);
 
-           if (meetingStatus !== 'Timeout') {
+          if (meetingStatus !== 'Timeout') {
             return {
               id: doc.id,
               ...convertedDocData,
               icon: selectIcon(docData.type),
               status: meetingStatus,
             };
-           }
-           return null;
+          }
+          return null;
         })
         .filter((item) => item !== null);
       setSections(data);
@@ -78,7 +79,7 @@ function SessionCard({ limit }) {
             </div>
             <div className="cs_hero_info_right">
               <h3 className="cs_hero_info_title cs_semibold">{section.title}</h3>
-              <p className="cs_hero_info_subtitle cs_fs_12"> Remaining Capacity: {section.capacity}</p>
+              <p className="cs_hero_info_subtitle cs_fs_12">Remaining Capacity: {section.capacity}</p>
             </div>
           </div>
           <div className="cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
@@ -100,8 +101,8 @@ function SessionCard({ limit }) {
             </div>
           </div>
           <div style={{ cursor: section.capacity > 0 ? 'pointer' : 'default', margin: '20px', pointerEvents: section.capacity === 0 ? 'none' : 'auto' }}>
-            <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null} className="cs_btn cs_style_1">
-              <span>{section.capacity === 0 ? 'Closed' : 'Book Now'}</span>
+            <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null} className="cs_btn cs_style_1 ">
+              <span>{section.capacity =="0" ? 'Closed' : 'Book Now'}</span>
               <i>
                 <img src={arrowWhiteSvg} alt="Icon" />
               </i>

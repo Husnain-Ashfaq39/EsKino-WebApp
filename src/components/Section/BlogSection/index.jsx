@@ -9,7 +9,11 @@ export default function BlogSection({
   sectionTitleUp,
   sectionTitleDown,
   sectionSubTitle,
+  limit,
 }) {
+  // Determine the number of items to display based on the limit prop
+  const displayData = limit ? data.slice(0, 3) : data;
+
   return (
     <div className="container">
       <SectionHeading
@@ -21,7 +25,7 @@ export default function BlogSection({
       />
       <Spacing md="72" lg="50" />
       <div className="row gy-4">
-        {data?.map((item, index) => (
+        {displayData?.map((item, index) => (
           <div className="col-lg-4" key={index}>
             <Post {...item} />
           </div>

@@ -14,7 +14,7 @@ export default function AboutSection({
         <div className="row align-items-center flex-lg-row flex-column-reverse cs_gap_y_40">
           <div className="col-lg-7">
             <div className="cs_about_img">
-              <img src={imgUrl} alt="About" />
+              <img className="rounded-lg" src={imgUrl} alt="About" />
               <div className="cs_about_mini_img">
                 <img
                   src={spiningImgUrl}

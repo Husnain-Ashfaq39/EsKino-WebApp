@@ -353,6 +353,7 @@ export default function Home() {
           sectionTitle="Latest Update"
           sectionTitleUp="BLOG POSTS"
           data={blogData}
+          limit={true}
         />
       </Section>
  <Spacing md="182" lg="150" />
