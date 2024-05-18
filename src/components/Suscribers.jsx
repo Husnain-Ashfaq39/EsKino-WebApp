@@ -41,7 +41,7 @@ const SubscriberList = () => {
   };
 
   const handleReply = () => {
-    const mailtoLink = `mailto:${selectedSubscriber.email}?subject=Response to your subscription&body=Dear subscriber,%0D%0A%0D%0A`;
+    const mailtoLink = `mailto:${selectedSubscriber.email}?subject=Eskino&body=Dear Eskino subscriber,%0D%0A%0D%0A`;
     window.location.href = mailtoLink;
     handleOk();
   };
@@ -50,7 +50,7 @@ const SubscriberList = () => {
     const emailList = selectedSubscribers
       .map((id) => subscribers.find((subscriber) => subscriber.id === id).email)
       .join(",");
-    const mailtoLink = `mailto:${emailList}?subject=Response to your subscription&body=Dear subscribers,%0D%0A%0D%0A`;
+    const mailtoLink = `mailto:${emailList}?subject=Eskino&body=Dear Eskino subscriber,%0D%0A%0D%0A`;
     window.location.href = mailtoLink;
   };
 

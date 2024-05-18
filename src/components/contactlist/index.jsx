@@ -69,7 +69,7 @@ const Contactlist = () => {
   };
 
   const handleReply = () => {
-    window.location.href = `mailto:${selectedContact.email}?subject=Response to your message&body=Hi ${selectedContact.name},%0D%0A%0D%0A`;
+    window.location.href = `mailto:${selectedContact.email}?subject=Eskino&body=Hi ${selectedContact.name},%0D%0A%0D%0A`;
     handleOk();
   };
 
@@ -197,7 +197,9 @@ const Contactlist = () => {
           <div className="page-header">
             <div className="row">
               <div className="col-sm-12">
-                <h2 className="cs_section_title cs_fs_32 m-0 text-2xl font-semibold mb-2">Contact List</h2>
+                <h2 className="cs_section_title cs_fs_32 m-0 text-2xl font-semibold mb-2">
+                  Contact List
+                </h2>
                 <Select
                   defaultValue="all"
                   style={{ width: 200 }}
@@ -220,7 +222,6 @@ const Contactlist = () => {
                     Delete
                   </Button>
                 )}
-                
               </div>
             </div>
           </div>
