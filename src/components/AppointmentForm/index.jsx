@@ -163,7 +163,7 @@ export default function AppointmentForm({ sectionId }) {
           </label>
           <select
             {...register("persons", { required: true })}
-            className="cs_form_field w-80 p-2 mt-[-10px] mb-[10px]"
+            className="cs_form_field p-2 mt-[-10px] mb-[10px]"
           >
             <option value="1">Online Seminar</option>
             <option value="2">1 person</option>
@@ -177,7 +177,7 @@ export default function AppointmentForm({ sectionId }) {
             <div className="error text-danger">This field is required</div>
           )}
         </div>
-        <div className="col-lg-8 d-flex align-items-end">
+        <div className=" col-lg-8 d-flex align-items-end">
           <label className="cs_input_label cs_heading_color me-2">
             Total Fee:
           </label>
