@@ -57,5 +57,27 @@ export const ensureContactInfo = async () => {
     await contactInfoPromise;
 };
 
+export function dateConverter(dateStr) {
+    // Split the input date string into components
+    const [day, month, year] = dateStr.split('/');
+
+    // Create a new Date object
+    const dateObj = new Date(`${year}-${month}-${day}`);
+
+    // Define an array of month names
+    const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    // Get the month name from the month number
+    const monthName = monthNames[dateObj.getMonth()];
+
+    // Format the date into the desired string
+    const formattedDate = `${monthName} ${day}, ${year}`;
+
+    return formattedDate;
+}
+
 // Immediately invoked async function to fetch contact info when the script runs
 ensureContactInfo();
