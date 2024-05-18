@@ -7,6 +7,7 @@ import Spacing from "../Spacing";
 import { closeSvg, logo2Png, logoSvg } from "../imagepath";
 import { getAllDocuments } from "../../services/dbService";
 import { useQuery } from "@tanstack/react-query";
+import colors from "../../colorTheme";
 
 export default function Header2({ logoSrc, variant }) {
   const [isSticky, setIsSticky] = useState(false);
@@ -95,7 +96,7 @@ export default function Header2({ logoSrc, variant }) {
           mobileToggle ? "cs_mobile_toggle_active" : ""
         } ${variant} ${isSticky ? "cs_sticky_active" : ""}`}
       >
-        <div style={{marginTop:"-10px"}} className="cs_main_header bg-[#BEDDF2] rounded-bl-full rounded-br-full mx-[-15px] py-0">
+        <div style={{marginTop:"-10px"}} className={`cs_main_header bg-[${colors.primary}] rounded-bl-full rounded-br-full mx-[-15px] py-0`}>
           <div className="container h-20">
             <div className="cs_main_header_in">
               <div className="cs_main_header_left">

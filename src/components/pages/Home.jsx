@@ -279,6 +279,7 @@ export default function Home() {
         <SessionCard />
       </div>
 
+{/* About Section */}
       <Section>
         <AboutSection
           imgUrl={about_img}
@@ -297,17 +298,23 @@ export default function Home() {
       </Section>
       <Spacing md="182" lg="150" />
 
+
+{/* Banner Section */}
       <Spacing md="165" lg="125" />
       <Section>
         <Banner
-          bgUrl={ctaBgSvg}
+          // bgUrl={ctaBgSvg}
           imgUrl={banner_img50}
           title="Emergency Aid Made Easy for Parents"
           subTitle="Equipping parents with essential skills for child emergency response, ensuring confident and effective action in critical situations."
         />
       </Section>
 
+{/* Gallery Section */}
       <Gallery />
+
+
+{/* Blog Section */}
       <Section topMd={190} topLg={145} topXl={105}>
         <BlogSection
           sectionTitle="Latest Update"

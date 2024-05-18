@@ -12,7 +12,7 @@
     position: relative;
     &::before {
       content: '';
-      background: $accent;
+      background: var(--tertiary-color);
       position: absolute;
       height: 100%;
       width: 100%;
@@ -29,7 +29,7 @@
     right: 50px;
     width: 60px;
     height: 200px;
-    background: $accent;
+    background: var(--dark-color);
     border-radius: 0 0 40px 40px;
     display: flex;
     align-items: flex-end;

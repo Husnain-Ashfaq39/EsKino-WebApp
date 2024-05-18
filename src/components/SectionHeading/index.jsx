@@ -1,6 +1,7 @@
 import React from "react";
 import parse from "html-react-parser";
 import Spacing from "../Spacing";
+import colors from "../../colorTheme";
 
 export default function SectionHeading({
   title = "",
@@ -16,7 +17,8 @@ export default function SectionHeading({
     >
       {titleUp && (
         <>
-          <h3 className="cs_section_subtitle text-uppercase cs_accent_color cs_semibold m-0 cs_accent_color cs_fs_32 text-6xl font-semibold">
+        {/* Previous blue color cs_accent_color */}
+          <h3 className="cs_section_subtitle text-uppercase  cs_semibold m-0  cs_fs_32 text-6xl font-semibold" style={{color:colors.dark}}>
             {parse(titleUp)}
           </h3>
           <Spacing md="5" />
@@ -30,8 +32,8 @@ export default function SectionHeading({
         <>
           {/* <Spacing md="0" /> */}
           <h3
-            className="cs_section_subtitle  cs_accent_color cs_semibold m-0 cs_accent_color cs_fs_32 text-6xl font-semibold"
-            style={{ fontSize:"18px", marginTop: "-50px" }}
+            className="cs_section_subtitle   cs_semibold m-0  cs_fs_32 text-6xl font-semibold"
+            style={{ fontSize:"18px", marginTop: "-50px", color: colors.dark}}
           >
             {parse(titleDown)}
           </h3>

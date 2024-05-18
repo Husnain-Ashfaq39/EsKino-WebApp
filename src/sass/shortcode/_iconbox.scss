@@ -154,7 +154,7 @@
     position: absolute;
     width: 9px;
     height: calc(100% + 50px);
-    background-color: $accent;
+    background-color: var(--secondary-color);
     left: 50%;
     margin-left: -4px;
     margin-top: -25px;
@@ -596,7 +596,7 @@
 .cs_iconbox.cs_style_11 {
   display: flex;
   align-items: center;
-  background-color: rgba(210, 234, 239, 0.5);
+  background-color: var(--primary-color);
   padding: 38px 54px;
   gap: 30px;
   @media (max-width: 1700px) {

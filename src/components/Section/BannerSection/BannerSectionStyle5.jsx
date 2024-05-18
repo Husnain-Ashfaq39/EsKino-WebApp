@@ -1,5 +1,6 @@
 import React from 'react';
 import parse from 'html-react-parser';
+import colors from '../../../colorTheme';
 
 export default function BannerSectionStyle5({
   bgUrl,
@@ -10,7 +11,8 @@ export default function BannerSectionStyle5({
   return (
     <section
       className="cs_banner cs_style_5 cs_bg_filed"
-      style={{ backgroundImage: `url(${bgUrl})` }}
+      // style={{ backgroundImage: `url(${bgUrl})` }}
+      style={{ background: colors.primary }}
     >
       <div className="cs_banner_img">
         <img src={imgUrl} alt="Banner" />

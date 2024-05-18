@@ -6,6 +6,7 @@ import { arrowWhiteSvg, date_timeSvg, pinSvg, titleIconsSvg } from '../imagepath
 import { getAllDocuments, getMeetingStatus } from '../../services/dbService';
 import { convertTimestamp, convertTime } from '../../services/general_functions';
 import useStore from '../../services/useStore';
+import colors from '../../colorTheme';
 
 function SessionCard({ limit }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,7 +75,7 @@ function SessionCard({ limit }) {
           style={{ margin: '10px', marginBottom: '25px', padding: '20px' }}
         >
           <div className="w-72 cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
-            <div className="cs_hero_info_icon cs_center rounded-circle cs_accent_bg">
+            <div className="cs_hero_info_icon cs_center rounded-circle" style={{background: colors.secondary}}>
               <img src={section.icon} alt="Icon" />
             </div>
             <div className="cs_hero_info_right">
@@ -83,7 +84,7 @@ function SessionCard({ limit }) {
             </div>
           </div>
           <div className=" w-72 cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
-            <div className="cs_hero_info_icon cs_center rounded-circle cs_accent_bg">
+            <div className="cs_hero_info_icon cs_center rounded-circle "  style={{background: colors.secondary}}>
               <img src={date_timeSvg} alt="Icon" />
             </div>
             <div className="cs_hero_info_right">
@@ -91,8 +92,8 @@ function SessionCard({ limit }) {
               <p className="cs_hero_info_subtitle cs_fs_12">{section.startTime} to {section.endTime}</p>
             </div>
           </div>
-          <div className="w-72 cs_hero_info d-flex align-items-center">
-            <div className="cs_hero_info_icon cs_center rounded-circle cs_accent_bg">
+          <div className="w-72 cs_hero_info d-flex align-items-center"  style={{ marginBottom: '20px' }}>
+            <div className="cs_hero_info_icon cs_center rounded-circle " style={{background: colors.secondary}}>
               <img src={pinSvg} alt="Icon" />
             </div>
             <div className="cs_hero_info_right">
@@ -110,7 +111,7 @@ function SessionCard({ limit }) {
           {section.capacity != "0" &&
 
             <div style={{ cursor: section.capacity > 0 ? 'pointer' : 'default', margin: '20px', pointerEvents: section.capacity === 0 ? 'none' : 'auto' }}>
-              <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null} className="cs_btn cs_style_1 ">
+              <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null} className="cs_btn cs_style_1 " >
                 <span>{section.capacity == "0" ? 'Closed' : 'Book Now'}</span>
                 <i>
                   <img src={arrowWhiteSvg} alt="Icon" />

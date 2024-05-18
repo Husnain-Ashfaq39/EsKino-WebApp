@@ -1,4 +1,5 @@
 import React from 'react';
+import colors from '../../colorTheme';
 
 const Preloader = () => {
   const preloaderStyle = {
@@ -7,7 +8,7 @@ const Preloader = () => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff', // Ensure background is white
+    backgroundColor: colors.primary, // Ensure background is white
     fontFamily: "'Montserrat', sans-serif",
     overflow: 'hidden',
   };
@@ -16,7 +17,7 @@ const Preloader = () => {
     width: '100%',
     maxWidth: '520px',
     textAlign: 'center',
-    color: '#7EC1EC', // Ensure text color is #7EC1EC
+    color: colors.secondary, // Ensure text color is #7EC1EC
     position: 'relative',
     margin: '0 32px',
   };
@@ -94,7 +95,7 @@ const Preloader = () => {
           position: 'absolute',
           width: '100%',
           height: '3px',
-          backgroundColor: '#7EC1EC', // Ensure line color is #7EC1EC
+          backgroundColor: colors.secondary, // Ensure line color is #7EC1EC
           bottom: '0',
           left: '0',
           borderRadius: '10px',

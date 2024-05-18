@@ -3,6 +3,8 @@ import IconBoxStyle1 from "../../IconBox/IconBoxStyle1";
 import Spacing from "../../Spacing";
 import { icon1Svg, icon2Svg, icon3Svg } from "../../imagepath";
 import { getAllDocuments } from "../../../services/dbService";
+import { Background } from "react-parallax";
+import colors from "../../../colorTheme";
 export default function ContactInfoSection({ sectionTitle }) {
   const fetchContactInfo = async () => {
     const colSnap = await getAllDocuments("contactInfo");
@@ -39,17 +41,19 @@ export default function ContactInfoSection({ sectionTitle }) {
     fetchData();
   }, []);
   return (
-    <div className="container">
+    <div className="container" >
       <h2 className="cs_fs_72 mb-0">{sectionTitle}</h2>
       <Spacing md="70" lg="50" />
-      <div className="row g-4 g-xl-3 g-xxl-5">
-        <div className="col-xl-4">
+
+      <div className="row g-4 g-xl-3 g-xxl-5" >
+        <div className="col-xl-4" >
           <IconBoxStyle1
             title="Phone"
             subTitle={contactInfo.phone}
             iconSrc={icon1Svg}
           />
         </div>
+
         <div className="col-xl-4">
           <IconBoxStyle1
             title="Email"
@@ -57,6 +61,7 @@ export default function ContactInfoSection({ sectionTitle }) {
             iconSrc={icon2Svg}
           />
         </div>
+
         <div className="col-xl-4">
           <IconBoxStyle1
             title="Location"
@@ -64,6 +69,7 @@ export default function ContactInfoSection({ sectionTitle }) {
             iconSrc={icon3Svg}
           />
         </div>
+        
       </div>
       <Spacing md="35" />
       {/* Start Google Map */}
