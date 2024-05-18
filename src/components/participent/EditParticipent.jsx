@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { getDocument, updateDocument } from "../../services/dbService";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { getCurrentUser } from "../../services/authService";
 const EditParticipant = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,6 +29,9 @@ const EditParticipant = () => {
   );
 
   useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate('/login');
+    }
     if (participentId) {
       getDocument("participants", participentId)
         .then((docSnap) => {

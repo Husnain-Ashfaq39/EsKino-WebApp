@@ -5,6 +5,8 @@ import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
+import { useNavigate } from "react-router-dom";
+import { getCurrentUser } from "../services/authService";
 
 const SubscriberList = () => {
   const [subscribers, setSubscribers] = useState([]);
@@ -12,8 +14,11 @@ const SubscriberList = () => {
   const [selectedSubscriber, setSelectedSubscriber] = useState({});
   const [selectedSubscribers, setSelectedSubscribers] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate('/login');
+    }
     const fetchSubscribers = async () => {
       const subscribersRef = collection(db, "subscribers");
       const snapshot = await getDocs(subscribersRef);

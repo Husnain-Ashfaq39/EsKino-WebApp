@@ -1,7 +1,19 @@
 import React from "react";
 import FeatherIcon from "feather-icons-react";
+import { useEffect } from "react";
+import { getCurrentUser } from "../../services/authService";
+import { useNavigate } from "react-router-dom";
 
 const ImageUpload = ({ id, src, loadFile, imageName }) => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate('/login');
+    }
+  
+    
+  }, [])
+  
   const handleFileChange = (event) => {
     loadFile(event, id); // Pass the id to the loadFile function
   };

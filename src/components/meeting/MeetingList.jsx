@@ -20,6 +20,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { dateConverter } from "../../services/general_functions";
+import { getCurrentUser } from "../../services/authService";
 
 const MeetingList = () => {
   const [allMeetings, setAllMeetings] = useState([]);
@@ -84,6 +85,9 @@ const MeetingList = () => {
   };
 
   useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate('/login');
+    }
     fetchMeetings();
   }, [updateTrigger]);
 

@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getDocument, updateDocument } from "../../../services/dbService";
 import { uploadFile, deleteFileFromStorage } from "../../../services/storageService"; // Ensure correct import
 import ImageUpload from "../ImageUpload"; // Import the ImageUpload component
+import { getCurrentUser } from "../../../services/authService";
 
 const EditHeroSection = () => {
     const { id } = useParams(); // Retrieve the document ID from the URL
@@ -23,6 +24,9 @@ const EditHeroSection = () => {
     });
 
     useEffect(() => {
+        if (!getCurrentUser()) {
+            navigate('/login');
+          }
         const fetchDocumentData = async () => {
             try {
                 const documentSnapshot = await getDocument('HeroSection', id);

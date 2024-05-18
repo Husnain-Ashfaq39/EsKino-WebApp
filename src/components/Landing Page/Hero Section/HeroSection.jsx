@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
 import { getAllDocuments, deleteDocument } from "../../../services/dbService"; // Assuming dbService provides methods to interact with Firebase
 import { toast, ToastContainer } from "react-toastify";
+import { getCurrentUser } from "../../../services/authService";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -15,8 +17,12 @@ const HeroSection = () => {
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate('/login');
+    }
     const updateSuccessStatus = sessionStorage.getItem("updateHeroSuccess");
     if (updateSuccessStatus) {
       toast.success("Hero Section Updated Successfully!", { autoClose: 2000 });

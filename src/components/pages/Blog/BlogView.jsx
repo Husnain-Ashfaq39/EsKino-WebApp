@@ -8,13 +8,19 @@ import { getAllDocuments, deleteDocument } from "../../../services/dbService";
 import { deleteFileFromStorage } from "../../../services/storageService"; // Import the delete function
 import { Timestamp } from "firebase/firestore";
 import { Modal, Button } from "antd";
+import { getCurrentUser } from "../../../services/authService";
+import { useNavigate } from "react-router-dom";
 
 const BlogView = () => {
   const [blogs, setBlogs] = useState([]);
   const [blogToDelete, setBlogToDelete] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
+  const navigate = useNavigate();
+  
   useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate('/login');
+    }
     const fetchBlogs = async () => {
       try {
         const snapshot = await getAllDocuments("blogs"); // Assuming 'blogs' is the collection name

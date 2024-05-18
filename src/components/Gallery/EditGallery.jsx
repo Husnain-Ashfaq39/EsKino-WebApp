@@ -8,7 +8,7 @@ import { Button, Select, message } from "antd";
 import FeatherIcon from "feather-icons-react";
 import { uploadFile } from "../../services/storageService";
 import { getDocument, updateDocument } from "../../services/dbService";
-
+import { getCurrentUser } from "../../services/authService";
 const EditGallery = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -20,6 +20,9 @@ const EditGallery = () => {
   const [existingImageUrl, setExistingImageUrl] = useState("");
 
   useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate('/login');
+    }
     fetchGalleryItem();
   }, []);
 
