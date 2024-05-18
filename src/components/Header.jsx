@@ -76,9 +76,7 @@ const Header = () => {
                 <h5>{username} </h5>
                 <span>Admin</span>
               </div>
-              <span className="user-img">
-                <img src={user06} alt="Admin" />
-              </span>
+              
             </Link>
             <div className="dropdown-menu">
               <Link
