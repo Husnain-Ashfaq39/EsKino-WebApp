@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signIn } from "../../../services/authService";
-import { login02, logo2Png } from "../../imagepath";
+import { login02, loginImage, logo2Png } from "../../imagepath";
 import { Eye, EyeOff } from "feather-icons-react";
 import { ToastContainer, toast } from "react-toastify";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -46,9 +46,9 @@ const Login = () => {
       <div className="container-fluid px-0">
         <div className="row">
           <div className="col-lg-6 login-wrap">
-            <div className="login-sec">
-              <div className="log-img">
-                <img className="img-fluid" src={login02} alt="#" />
+            <div className="">
+              <div className="log-img mt-10 mr-10" >
+                <img className="img-fluid " src={loginImage} alt="#" />
               </div>
             </div>
           </div>

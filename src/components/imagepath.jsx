@@ -114,7 +114,8 @@ export { default as icon3Svg } from "../assets/images/contact/icon_3.svg";
 
 
 
-
+// Login Image
+export { default as loginImage } from "../assets/images/loginPicturePNG.png";
 
 
 
