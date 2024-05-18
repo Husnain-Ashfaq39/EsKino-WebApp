@@ -4,7 +4,7 @@ import SocialWidget from "../Widget/SocialWidget";
 import Newsletter from "../Widget/Newsletter";
 import IconBoxStyle1 from "../IconBox/IconBoxStyle1";
 import Spacing from "../Spacing";
-import { closeSvg, logo2Png, logoSvg } from "../imagepath";
+import { closeSvg, icon1Svg, icon2Svg, icon3Svg, logo2Png, logoSvg } from "../imagepath";
 import { getAllDocuments } from "../../services/dbService";
 import { useQuery } from "@tanstack/react-query";
 import colors from "../../colorTheme";
@@ -219,19 +219,19 @@ export default function Header2({ logoSrc, variant }) {
           <IconBoxStyle1
             title="Phone"
             subTitle={contactInfo.phone}
-            iconSrc="/images/contact/icon_1.svg"
+            iconSrc={icon1Svg}
           />
           <Spacing md="30" lg="30" xl="30" />
           <IconBoxStyle1
             title="Email"
             subTitle={contactInfo.email}
-            iconSrc="/images/contact/icon_2.svg"
+            iconSrc={icon2Svg}
           />
           <Spacing md="30" lg="30" xl="30" />
           <IconBoxStyle1
             title="Location"
             subTitle={contactInfo.address}
-            iconSrc="/images/contact/icon_3.svg"
+            iconSrc={icon3Svg}
           />
           <Spacing md="60" lg="60" xl="60" />
           <Newsletter />

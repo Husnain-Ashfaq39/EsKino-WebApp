@@ -5,7 +5,7 @@ import Header from '../../Header';
 import Sidebar from '../../Sidebar';
 import { Link } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react';
-import { getAllDocuments, deleteDocument } from '../../../services/dbService'; // Import the Firestore service to fetch documents
+import { getAllDocuments, addDocument, deleteDocument } from '../../../services/dbService'; // Ensure addDocument is imported
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -29,13 +29,33 @@ const OMHeading = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const querySnapshot = await getAllDocuments('OrganizationMattersHeading'); // Fetch documents from Firestore collection
+            const querySnapshot = await getAllDocuments('OrganizationMattersHeading');
+            if (querySnapshot.empty) {
+                // If no documents exist, add a dummy document
+                await addDummyData();
+                // Fetch the data again after adding the dummy document
+                await fetchData();
+                return;
+            }
             const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             setDataSource(data);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching data:', error);
             setLoading(false);
+        }
+    };
+
+    const addDummyData = async () => {
+        const dummyData = {
+            OMHeadTitle: "Dummy Title",
+            OMHeadDescription: "This is a dummy description for the Organization Matters Heading."
+        };
+        try {
+            await addDocument('OrganizationMattersHeading', dummyData);
+            console.log("Dummy data added successfully.");
+        } catch (error) {
+            console.error("Error adding dummy data:", error);
         }
     };
 

@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
 import { imagesend, plusicon, refreshicon, searchnormal } from '../../imagepath';
 import { onShowSizeChange, itemRender } from '../../Pagination';
-import { getAllDocuments, deleteDocument } from '../../../services/dbService'; // Import the Firestore service to fetch documents
+import { getAllDocuments, addDocument, deleteDocument } from '../../../services/dbService'; // Ensure addDocument is imported
 import { toast, ToastContainer } from 'react-toastify';
 
 const CCHeading = () => {
@@ -29,13 +29,35 @@ const CCHeading = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const querySnapshot = await getAllDocuments('CourseContentHeading'); // Fetch documents from Firestore collection
+            const querySnapshot = await getAllDocuments('CourseContentHeading');
+            if (querySnapshot.empty) {
+                // If no documents exist, add a dummy document
+                await addDummyData();
+                // Fetch the data again after adding the dummy document
+                await fetchData();
+                return;
+            }
             const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             setDataSource(data);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching data:', error);
             setLoading(false);
+        }
+    };
+
+    const addDummyData = async () => {
+        const dummyData = {
+            CCHeadImage: "path/to/dummy/image.jpg",
+            CCHeadTitle: "Dummy Title",
+            CCHeadSubtitle: "Dummy Subtitle",
+            CCHeadDescription: "This is a dummy description for the Course Content Heading."
+        };
+        try {
+            await addDocument('CourseContentHeading', dummyData);
+            console.log("Dummy data added successfully.");
+        } catch (error) {
+            console.error("Error adding dummy data:", error);
         }
     };
 

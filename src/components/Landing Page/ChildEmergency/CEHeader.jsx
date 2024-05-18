@@ -5,7 +5,7 @@ import Header from '../../Header';
 import Sidebar from '../../Sidebar';
 import { Link } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react';
-import { getAllDocuments, deleteDocument } from '../../../services/dbService'; // Import the Firestore service to fetch documents
+import { getAllDocuments, addDocument, deleteDocument } from '../../../services/dbService'; // Ensure addDocument is imported
 import { toast, ToastContainer } from 'react-toastify';
 
 const CEHeader = () => {
@@ -27,13 +27,32 @@ const CEHeader = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const querySnapshot = await getAllDocuments('ChildEmergencyHeader'); // Fetch documents from Firestore collection
+            const querySnapshot = await getAllDocuments('ChildEmergencyHeader');
+            if (querySnapshot.empty) {
+                // If no documents exist, add a dummy document
+                await addDummyData();
+                // Fetch the data again after adding the dummy document
+                await fetchData();
+                return;
+            }
             const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             setDataSource(data);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching data:', error);
             setLoading(false);
+        }
+    };
+
+    const addDummyData = async () => {
+        const dummyData = {
+            CEHeadTitle: "Dummy Title"
+        };
+        try {
+            await addDocument('ChildEmergencyHeader', dummyData);
+            console.log("Dummy data added successfully.");
+        } catch (error) {
+            console.error("Error adding dummy data:", error);
         }
     };
 
@@ -87,12 +106,15 @@ const CEHeader = () => {
                                 <i className="far fa-edit me-2" />
                                 Edit
                             </Link>
-                            {/* <Button className="dropdown-item" onClick={() => {
-                                setDeleteItemId(record.id);
-                                setDeleteModalVisible(true);
-                            }}>
+                            <button
+                                className="dropdown-item"
+                                onClick={() => {
+                                    setDeleteModalVisible(true);
+                                    setSelectedRowKeys([record.id]);
+                                }}
+                            >
                                 <i className="fa fa-trash-alt m-r-5" /> Delete
-                            </Button> */}
+                            </button>
                         </div>
                     </div>
                 </div>

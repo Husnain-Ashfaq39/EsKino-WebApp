@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Table, Modal, Button } from "antd";
 import { Link } from "react-router-dom";
-import { getAllDocuments, deleteDocument } from "../../../services/dbService";
+import { getAllDocuments, addDocument, deleteDocument } from "../../../services/dbService"; // Ensure addDocument is imported
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
-import {
-  imagesend,
-  plusicon,
-  refreshicon,
-  searchnormal,
-} from "../../imagepath";
+import { imagesend, plusicon, refreshicon, searchnormal } from "../../imagepath";
 import { onShowSizeChange, itemRender } from "../../Pagination";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -25,17 +20,13 @@ const CEBody = () => {
   useEffect(() => {
     const updateSuccessStatus = sessionStorage.getItem("updateCEBodySuccess");
     if (updateSuccessStatus) {
-      toast.success("Child Emergency Body Updated Successfully!", {
-        autoClose: 2000,
-      });
+      toast.success("Child Emergency Body Updated Successfully!", { autoClose: 2000 });
       sessionStorage.removeItem("updateCEBodySuccess");
     }
 
     const addSuccessStatus = sessionStorage.getItem("addCEBodySuccess");
     if (addSuccessStatus) {
-      toast.success("Child Emergency Body added Successfully!", {
-        autoClose: 2000,
-      });
+      toast.success("Child Emergency Body added Successfully!", { autoClose: 2000 });
       sessionStorage.removeItem("addCEBodySuccess");
     }
 
@@ -46,12 +37,33 @@ const CEBody = () => {
     try {
       setLoading(true);
       const snapshot = await getAllDocuments("ChildEmergencyBody");
+      if (snapshot.empty) {
+        // If no documents exist, add a dummy document
+        await addDummyData();
+        // Fetch the data again after adding the dummy document
+        await fetchData();
+        return;
+      }
       const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setDataSource(data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
+    }
+  };
+
+  const addDummyData = async () => {
+    const dummyData = {
+      CEBodyTitle: "Dummy Title",
+      CEBodySubtitle: "Dummy Subtitle",
+      CEBodyDescription: "This is a dummy description for the Child Emergency Body."
+    };
+    try {
+      await addDocument("ChildEmergencyBody", dummyData);
+      console.log("Dummy data added successfully.");
+    } catch (error) {
+      console.error("Error adding dummy data:", error);
     }
   };
 

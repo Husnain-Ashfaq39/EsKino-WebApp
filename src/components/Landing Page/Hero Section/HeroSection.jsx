@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Table, Modal } from "antd";
 import { plusicon, refreshicon, searchnormal } from "../../imagepath";
@@ -6,7 +5,7 @@ import Header from "../../Header";
 import Sidebar from "../../Sidebar";
 import { Link } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
-import { getAllDocuments, deleteDocument } from "../../../services/dbService"; // Assuming dbService provides methods to interact with Firebase
+import { getAllDocuments, addDocument, deleteDocument } from "../../../services/dbService"; // Ensure addDocument is imported
 import { toast, ToastContainer } from "react-toastify";
 import { getCurrentUser } from "../../../services/authService";
 import { useNavigate } from "react-router-dom";
@@ -36,6 +35,13 @@ const HeroSection = () => {
     try {
       const data = [];
       const querySnapshot = await getAllDocuments("HeroSection");
+      if (querySnapshot.empty) {
+        // If no documents exist, add a dummy document
+        await addDummyData();
+        // Fetch the data again after adding the dummy document
+        await fetchData();
+        return;
+      }
       querySnapshot.forEach((doc) => {
         data.push({ id: doc.id, ...doc.data() });
       });
@@ -44,6 +50,21 @@ const HeroSection = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
+    }
+  };
+
+  const addDummyData = async () => {
+    const dummyData = {
+      heroTitle: "Dummy Title",
+      heroSubtitle: "Dummy Subtitle",
+      heroBackground: "path/to/dummy/background.jpg",
+      heroLogo: "path/to/dummy/logo.jpg",
+    };
+    try {
+      await addDocument("HeroSection", dummyData);
+      console.log("Dummy data added successfully.");
+    } catch (error) {
+      console.error("Error adding dummy data:", error);
     }
   };
 
@@ -143,19 +164,21 @@ const HeroSection = () => {
                 <i className="far fa-edit me-2" />
                 Edit
               </Link>
-              {/* <Button className="dropdown-item" onClick={() => {
-                                setDeleteItemId(record.id);
-                                setModalVisible(true);
-                            }}>
-                                <i className="fa fa-trash-alt m-r-5" /> Delete
-                            </Button> */}
+              <button
+                className="dropdown-item"
+                onClick={() => {
+                  setDeleteItemId(record.id);
+                  setModalVisible(true);
+                }}
+              >
+                <i className="fa fa-trash-alt m-r-5" /> Delete
+              </button>
             </div>
           </div>
         </div>
       ),
     },
   ];
-
   return (
     <>
       <Header />
