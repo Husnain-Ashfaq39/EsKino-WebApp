@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Section from '../Section';
-import Breadcrumb from '../Breadcrumb';
 import { Icon } from '@iconify/react';
 import Spacing from '../Spacing';
 import AuthorWidget from '../Widget/AuthorWidget';
