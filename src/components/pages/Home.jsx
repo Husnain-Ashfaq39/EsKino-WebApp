@@ -208,7 +208,7 @@ export default function Home() {
   }
 
   if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
-    return <ServerError />;
+    return <div />;
   }
 
   return (
