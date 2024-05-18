@@ -125,19 +125,21 @@ const CookieConsent = () => {
     <Wrapper>
       <Header>
         <Icon className="bx bx-cookie" />
-        <Title>Cookies Consent</Title>
+        <h1 className="text-xl text-blue-600 text-center mt-3">
+          Cookies Consent
+        </h1>
       </Header>
       <Data>
-        <Text className="text-lg">
+        <Text>
           This website uses cookies to help you have a superior and more
           relevant browsing experience on the website.{" "}
         </Text>
       </Data>
       <Buttons>
-        <StyledButton className="accept" onClick={handleAccept}>
+        <StyledButton className="accept p-1" onClick={handleAccept}>
           Accept
         </StyledButton>
-        <StyledButton className="decline" onClick={handleDecline}>
+        <StyledButton className="decline p-1" onClick={handleDecline}>
           Decline
         </StyledButton>
       </Buttons>
