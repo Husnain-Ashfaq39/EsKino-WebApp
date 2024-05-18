@@ -211,10 +211,6 @@ export default function Home() {
     return <ServerError />;
   }
 
-  if (!heroData || !CEHeader || !CEBody || !CCHeadData) {
-    return <ServerError />;
-  }
-
   return (
     <>
       {/* Hero Section */}

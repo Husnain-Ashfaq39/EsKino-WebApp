@@ -128,7 +128,7 @@ const CookieConsent = () => {
         <Title>Cookies Consent</Title>
       </Header>
       <Data>
-        <Text>
+        <Text className="text-lg">
           This website uses cookies to help you have a superior and more
           relevant browsing experience on the website.{" "}
         </Text>
