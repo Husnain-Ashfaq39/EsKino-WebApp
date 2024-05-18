@@ -7,7 +7,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
-
+import { getCurrentUser } from "../../services/authService";
 const EditMeeting = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -28,6 +28,9 @@ const EditMeeting = () => {
   const [meetingData, setMeetingData] = useState(initialMeetingData);
 
   useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate('/login');
+    }
     if (id) {
       const docRef = doc(db, "meetings", id);
       getDoc(docRef)

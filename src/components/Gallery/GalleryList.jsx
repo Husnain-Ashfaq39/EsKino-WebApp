@@ -7,15 +7,19 @@ import { Link } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
 import { getAllDocuments, deleteDocument } from "../../services/dbService";
 import { deleteFileFromStorage } from "../../services/storageService";
-
+import { useNavigate } from "react-router-dom";
+import { getCurrentUser } from "../../services/authService";
 const GalleryList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate('/login');
+    }
     fetchData();
   }, []);
 

@@ -72,6 +72,9 @@ export { default as icon1Svg } from "../assets/images/contact/icon_1.svg";
 export { default as icon2Svg } from "../assets/images/contact/icon_2.svg";
 export { default as icon3Svg } from "../assets/images/contact/icon_3.svg";
 
+// Login Image
+export { default as loginImage } from "../assets/images/loginPicturePNG.png";
+
 // home
 export { default as aboutMiniSvg } from "../assets/images/home_1/about_mini.svg";
 

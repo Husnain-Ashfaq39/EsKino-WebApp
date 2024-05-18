@@ -9,6 +9,8 @@ import { addDocument } from "../../../services/dbService";
 import { uploadFile } from "../../../services/storageService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
+import { getCurrentUser } from "../../../services/authService";
 
 const AddBlog = () => {
   const { register, handleSubmit, setValue, watch } = useForm();
@@ -17,6 +19,11 @@ const AddBlog = () => {
   const [fileChosen, setFileChosen] = useState(false);
   const [image, setImage] = useState(null);
   const navigate = useNavigate();
+useEffect(() => {
+  if (!getCurrentUser()) {
+    navigate('/login');
+  }
+}, [])
 
   const handleFileChange = (e) => {
     if (e.target.files.length > 0) {

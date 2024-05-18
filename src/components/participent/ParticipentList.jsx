@@ -14,6 +14,7 @@ import {
   fetchDocumentsWithQuery,
   getAllDocuments,
 } from "../../services/dbService";
+import { getCurrentUser } from "../../services/authService";
 
 const ParticipantList = () => {
   const location = useLocation();
@@ -66,6 +67,9 @@ const ParticipantList = () => {
   const [participentData, setParticipantData] = useState([]);
 
   useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate('/login');
+    }
     if (meetingId) {
       fetchDocumentsWithQuery("participants", "sectionId", meetingId).then(
         (querySnapshot) => {

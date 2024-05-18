@@ -8,7 +8,7 @@ import FeatherIcon from "feather-icons-react";
 import { getDocument, updateDocument } from "../../../services/dbService"; // Import Firestore service
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-
+import { getCurrentUser } from "../../../services/authService";
 const EditOMHeading = () => {
     const { id } = useParams(); // Get the document ID from URL params
     const navigate = useNavigate();
@@ -17,6 +17,9 @@ const EditOMHeading = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!getCurrentUser()) {
+            navigate('/login');
+          }
         fetchData();
     }, []);
 
