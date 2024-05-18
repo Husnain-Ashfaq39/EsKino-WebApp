@@ -40,8 +40,6 @@ const fetchContactInfo = async () => {
         phone: docSnap.data().phone,
         email: docSnap.data().email,
       };
-    } else {
-      console.log("No documents found in the contactInfo collection!");
     }
   } catch (error) {
     console.error("Error fetching contact info:", error);
