@@ -18,7 +18,7 @@ import Sidebar from "../../Sidebar";
 import DonutChart from "./DonutChart";
 import ParticipantChart from "./ParticipantChart";
 import { getCurrentUser } from "../../../services/authService";
-
+import { dateConverter } from "../../../services/general_functions";
 const Admin_Dashboard = () => {
   const [meetings, setMeetings] = useState([]);
   const [countActive, setCountActive] = useState(0);
@@ -39,13 +39,13 @@ if(!getCurrentUser())
       const querySnapshot = await getAllDocuments("meetings");
       const loadedMeetings = querySnapshot.docs.map((doc) => ({
         id: doc.id,
-        Name: doc.data().title,
-        StartTime: convertTime(doc.data().startTime),
+        name: doc.data().title,
+        startTime: convertTime(doc.data().startTime),
         endTime: convertTime(doc.data().endTime),
-        Participent: doc.data().participent,
+        participants: doc.data().Participants,
         capacity: doc.data().capacity,
-        Location: doc.data().streetAddress,
-        StartDate: convertTimestamp(doc.data().startDate),
+        location: doc.data().streetAddress,
+        startDate: convertTimestamp(doc.data().startDate),
         endDate: convertTimestamp(doc.data().endDate),
       }));
 
@@ -270,12 +270,12 @@ console.log(timeoutLatestMonthCount);
                           <tbody>
                             {meetings.map((meeting, index) => (
                               <tr key={index}>
-                                <td>{meeting.Name}</td>
-                                <td>{meeting.StartTime}</td>
-                                <td>{meeting.EndTime}</td>
-                                <td>{meeting.Participent}</td>
-                                <td>{meeting.Location}</td>
-                                <td>{meeting.StartDate}</td>
+                                <td>{meeting.name}</td>
+                                <td>{meeting.startTime}</td>
+                                <td>{meeting.endTime}</td>
+                                <td>{meeting.participants}</td>
+                                <td>{meeting.location}</td>
+                                <td>{dateConverter(meeting.startDate)}</td>
                               </tr>
                             ))}
                           </tbody>

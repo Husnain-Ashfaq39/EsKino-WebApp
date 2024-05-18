@@ -62,6 +62,7 @@ import GalleryList from "./components/Gallery/GalleryList";
 import EditGallery from "./components/Gallery/EditGallery";
 import Policy from "./components/Policy";
 import Settings from "./components/Settings";
+import SubscriberList from "./components/Suscribers";
 
 //Accounts
 const Approuter = () => {
@@ -84,6 +85,8 @@ const Approuter = () => {
           {/* Contact */}
 
           <Route path="/contactlist" element={<Contactlist />} />
+          <Route path="/suscribers" element={<SubscriberList />} />
+
           {/* Blog */}
           <Route path="/blogadmin" element={<Blogdetails />} />
           <Route path="/addblog" element={<Addblog />} />

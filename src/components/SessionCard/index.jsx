@@ -8,6 +8,7 @@ import { convertTimestamp, convertTime } from '../../services/general_functions'
 import useStore from '../../services/useStore';
 import colors from '../../colorTheme';
 
+import { dateConverter } from '../../services/general_functions';
 function SessionCard({ limit }) {
   const [isOpen, setIsOpen] = useState(false);
   const [sections, setSections] = useState([]);
@@ -88,7 +89,7 @@ function SessionCard({ limit }) {
               <img src={date_timeSvg} alt="Icon" />
             </div>
             <div className="cs_hero_info_right">
-              <h3 className="cs_hero_info_title cs_semibold">{section.startDate} to {section.endDate}</h3>
+              <h3 className="cs_hero_info_title cs_semibold">{dateConverter(section.startDate)} to {dateConverter(section.endDate)}</h3>
               <p className="cs_hero_info_subtitle cs_fs_12">{section.startTime} to {section.endTime}</p>
             </div>
           </div>

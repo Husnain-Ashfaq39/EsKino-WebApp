@@ -19,6 +19,7 @@ import {
 } from "../../services/general_functions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { dateConverter } from "../../services/general_functions";
 
 const MeetingList = () => {
   const [allMeetings, setAllMeetings] = useState([]);
@@ -65,6 +66,7 @@ const MeetingList = () => {
     const meetingsWithCounts = await Promise.all(
       snapshot.docs.map(async (doc) => {
         const participantCount = await fetchParticipantCount(doc.id);
+        
         return {
           id: doc.id,
           Name: doc.data().title,
@@ -370,11 +372,11 @@ const MeetingList = () => {
                               </p>
                               <p>
                                 <strong>Start Date:</strong>{" "}
-                                {selectedMeeting.StartDate}
+                                {dateConverter(selectedMeeting.StartDate)}
                               </p>
                               <p>
                                 <strong>End Date:</strong>{" "}
-                                {selectedMeeting.endDate}
+                                {dateConverter(selectedMeeting.endDate)}
                               </p>
                             </Modal>
                           )}

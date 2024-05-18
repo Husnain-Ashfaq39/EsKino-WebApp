@@ -280,7 +280,7 @@ const Sidebar = (props) => {
                     onClick={(e) => handleClick(e, "menu-item7", "menu-items7")}
                   >
                     <span className="menu-side">
-                      <img src={menuicon04} alt="" />
+                      <img src={menuicon15} alt="" />
                     </span>{" "}
                     <span>Gallery</span> <span className="menu-arrow" />
                   </Link>
@@ -352,15 +352,23 @@ const Sidebar = (props) => {
                 <li className="submenu">
                   <Link to="/contactlist" id="menu-item11">
                     <span className="menu-side">
-                      <img src={patients} alt="" />
+                      <img src={menuicon10} alt="" />
                     </span>{" "}
                     <span>Contacts</span>
                   </Link>
                 </li>
                 <li className="submenu">
+                  <Link to="/suscribers" id="menu-item11">
+                    <span className="menu-side">
+                      <img src={menuicon12} alt="" />
+                    </span>{" "}
+                    <span>Suscribers</span>
+                  </Link>
+                </li>
+                <li className="submenu">
                   <Link to="/settings" id="menu-item12">
                     <span className="menu-side">
-                      <img src={settingicon01} alt="" />
+                      <img src={menuicon16} alt="" />
                     </span>{" "}
                     <span>Settings</span>
                   </Link>
