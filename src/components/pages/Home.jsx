@@ -22,14 +22,14 @@ import Gallery from "./Gallery";
 import WebCourseContent from "../WebLandingPage/WebCourseContent/WebCourseContent";
 import SessionCard from "../SessionCard";
 import FeaturesSection from "../WebLandingPage/WebOrganizationMatters/OrganizationMattersSection";
-
 import { Timestamp } from "firebase/firestore";
 import Doctors from "../DoctorsComponent/Doctors";
 import ServerError from "./login/ServerError";
+import CookieConsent from "../CookiesConsent";
 
 export default function Home() {
-  // const navigate = useNavigate();
   const [blogData, setBlogData] = useState([]);
+
   // Hero Section useQuery
   const {
     data: heroData,
@@ -124,8 +124,6 @@ export default function Home() {
   });
 
   // Organization Matters Heading useQuery
-  // const [OMHeadDataKey, setOMHeadDataKey] = useState();
-
   const {
     data: OMHeadData,
     isLoading: OMHeadLoading,
@@ -206,15 +204,15 @@ export default function Home() {
   }, []);
 
   if (heroLoading || CEHeaderLoading || CEBodyLoading || CCHeadLoading) {
-    return <Preloader/>
+    return <Preloader />;
   }
 
   if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
-    return <ServerError/>
+    return <ServerError />;
   }
 
   if (!heroData || !CEHeader || !CEBody || !CCHeadData) {
-    return <ServerError/>;
+    return <ServerError />;
   }
 
   return (
@@ -317,6 +315,9 @@ export default function Home() {
         />
       </Section>
       <Spacing md="182" lg="150" />
+
+      {/* Include CookieConsent Component */}
+      <CookieConsent />
     </>
   );
 }

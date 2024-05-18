@@ -16,7 +16,6 @@ import {
 } from "./imagepath";
 
 const Header = () => {
-
   const [username, setUsername] = useState("");
 
   const handlesidebar = () => {
@@ -28,7 +27,7 @@ const Header = () => {
       setUsername(user.displayName);
       // console.log(user);  // Assume user object has displayName or email
     }
-  })
+  });
 
   const handlesidebarmobilemenu = () => {
     document.body.classList.toggle("slide-nav");
@@ -38,16 +37,11 @@ const Header = () => {
       .classList.toggle("opened");
   };
 
-
-
   return (
     <div className="main-wrapper">
       <div className="header">
-
-
-
         <div className="header-left">
-          <Link to="/admin-dashboard" className="logo">
+          <Link to="/" className="logo">
             <img src={logo} width={35} height={35} alt="" /> <span>Eskino</span>
           </Link>
         </div>
@@ -71,9 +65,6 @@ const Header = () => {
 
         </Link> */}
 
-
-
-
         <ul className="nav user-menu float-end">
           <li className="nav-item dropdown has-arrow user-profile-list">
             <Link
@@ -88,21 +79,23 @@ const Header = () => {
               
             </Link>
             <div className="dropdown-menu">
-
-              <Link onClick={() => { signOutUser() }} className="dropdown-item" to="/login">
+              <Link
+                onClick={() => {
+                  signOutUser();
+                }}
+                className="dropdown-item"
+                to="/login"
+              >
                 Logout
               </Link>
             </div>
-            
           </li>
-          <Link to="/" >
-          <label className="inline-flex items-center me-5 cursor-pointer mx-[-2px] my-4 ">
-            <div className="relative w-11 h-6 bg-blue-800 rounded-full peer dark:bg-blue-900 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
-            {/* <span className="ms-3 text-sm font-medium text-gray-400">Switch to customer</span> */}
-          </label>
-
-
-        </Link>
+          <Link to="/">
+            <label className="inline-flex items-center me-5 cursor-pointer mx-[-2px] my-4 ">
+              <div className="relative w-11 h-6 bg-blue-800 rounded-full peer dark:bg-blue-900 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
+              {/* <span className="ms-3 text-sm font-medium text-gray-400">Switch to customer</span> */}
+            </label>
+          </Link>
         </ul>
 
         <div className="dropdown mobile-user-menu float-end">
@@ -127,16 +120,9 @@ const Header = () => {
             <Link className="dropdown-item" to="/login">
               Logout
             </Link>
-            
-
           </div>
-          
         </div>
-        
-
       </div>
-
-
     </div>
   );
 };
