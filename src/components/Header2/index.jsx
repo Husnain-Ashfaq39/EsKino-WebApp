@@ -111,9 +111,11 @@ export default function Header2({ logoSrc, variant }) {
                   <Link className="cs_site_branding logo_style" to="/">
                     <img src={logoData.logoUrl} alt="Logo" />
                   </Link>
-                  <h2 className="company_name text-4xl font-semibold ">
-                    Eskino
-                  </h2>
+                  <Link to="/">
+                    <h2 className="company_name text-4xl font-semibold ">
+                      Eskino
+                    </h2>
+                  </Link>
                 </div>
                 <nav style={{marginTop:"-10px"}} className="cs_nav ml-24">
                   <ul

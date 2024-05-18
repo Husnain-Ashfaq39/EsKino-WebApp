@@ -7,6 +7,7 @@ import AuthorWidget from '../Widget/AuthorWidget';
 import { pageTitle } from '../../helpers/PageTitle';
 import { getDocument,updateDocument } from '../../services/dbService';
 import { Timestamp } from 'firebase/firestore';
+import { blogimg2 } from '../imagepath';
 
 export default function BlogDetail() {
   const { id } = useParams();
@@ -99,7 +100,7 @@ export default function BlogDetail() {
             </div>
             <Spacing md="85" />
             <AuthorWidget
-              imgUrl="/images/blog/author.png"
+              imgUrl={blogimg2}
               name={blog.author}
               description=""
             />

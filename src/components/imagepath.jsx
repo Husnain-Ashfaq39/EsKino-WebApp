@@ -135,7 +135,6 @@ export { default as social02 } from "../assets/img/icons/social-02.svg";
 export { default as social03 } from "../assets/img/icons/social-03.svg";
 export { default as social04 } from "../assets/img/icons/social-04.svg";
 
-// export { default as profiles03 } from "../assets/img/profiles/avatar-03.jpg";
 export { default as iconsocial } from "../assets/img/icons/social-01.svg";
 export { default as iconsocial02 } from "../assets/img/icons/social-02.svg";
 export { default as iconsocial03 } from "../assets/img/icons/social-03.svg";
