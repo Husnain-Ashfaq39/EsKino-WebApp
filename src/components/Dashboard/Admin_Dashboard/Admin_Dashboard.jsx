@@ -1,6 +1,6 @@
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import React, { useEffect, useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -30,10 +30,9 @@ const Admin_Dashboard = () => {
 
   useEffect(() => {
     // toast.success("Login Successful Welcome");
-if(!getCurrentUser())
-  {
-   navigate('/login');
-  }
+    if (!getCurrentUser()) {
+      navigate("/login");
+    }
 
     const fetchMeetings = async () => {
       const querySnapshot = await getAllDocuments("meetings");
@@ -84,45 +83,33 @@ if(!getCurrentUser())
 
       setTotalEarning(totalEarnings);
 
-     // Calculate count of timeout meetings for the latest month
-const now = new Date();
-const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      // Calculate count of timeout meetings for the latest month
+      const now = new Date();
+      const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
-const formatDate = (date) => {
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-};
+      const formatDate = (date) => {
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+      };
 
-const formattedFirstDay = formatDate(firstDayOfMonth);
-const formattedLastDay = formatDate(lastDayOfMonth);
+      const formattedFirstDay = formatDate(firstDayOfMonth);
+      const formattedLastDay = formatDate(lastDayOfMonth);
 
-console.log(formattedFirstDay);
-console.log(formattedLastDay);
+      // Extract the endDate of each meeting
+      const allEndDates = loadedMeetings.map((meeting) => meeting.endDate);
 
-// Extract the endDate of each meeting
-const allEndDates = loadedMeetings.map((meeting) => meeting.endDate);
-
-// Log the endDates
-console.log(allEndDates);
-
-// Filter the meetings for the specific condition
-const timeoutLatestMonthCount = loadedMeetings.filter((meeting) => {
-  const meetingEndDate = formatDate(new Date(meeting.endDate));
-  return (
-    getMeetingStatus(meeting) === "Timeout" &&
-    meetingEndDate >= formattedFirstDay &&
-    meetingEndDate <= formattedLastDay
-  );
-}).length;
-
-// Log the count of filtered meetings
-console.log(timeoutLatestMonthCount);
-
-
-
+      // Filter the meetings for the specific condition
+      const timeoutLatestMonthCount = loadedMeetings.filter((meeting) => {
+        const meetingEndDate = formatDate(new Date(meeting.endDate));
+        return (
+          getMeetingStatus(meeting) === "Timeout" &&
+          meetingEndDate >= formattedFirstDay &&
+          meetingEndDate <= formattedLastDay
+        );
+      }).length;
 
       setCountTimeoutLatestMonth(timeoutLatestMonthCount);
     };

@@ -15,7 +15,6 @@ import {
   aboutMiniSvg,
   about_img,
   banner_img50,
-  ctaBgSvg,
   heroBgJpeg,
 } from "../imagepath";
 import Gallery from "./Gallery";
@@ -273,7 +272,7 @@ export default function Home() {
         <SessionCard />
       </div>
 
-{/* About Section */}
+      {/* About Section */}
       <Section>
         <AboutSection
           imgUrl={about_img}
@@ -292,8 +291,7 @@ export default function Home() {
       </Section>
       <Spacing md="182" lg="150" />
 
-
-{/* Banner Section */}
+      {/* Banner Section */}
       <Spacing md="165" lg="125" />
       <Section>
         <Banner
@@ -304,11 +302,10 @@ export default function Home() {
         />
       </Section>
 
-{/* Gallery Section */}
+      {/* Gallery Section */}
       <Gallery />
 
-
-{/* Blog Section */}
+      {/* Blog Section */}
       <Section topMd={190} topLg={145} topXl={105}>
         <BlogSection
           sectionTitle="Latest Update"

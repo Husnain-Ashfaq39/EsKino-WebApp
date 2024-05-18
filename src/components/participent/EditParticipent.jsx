@@ -47,7 +47,7 @@ const EditParticipant = () => {
           }
         })
         .catch((error) => {
-          console.error("Error fetching document:", error);
+          console.log();
         });
     }
   }, [participentId]);
@@ -108,14 +108,13 @@ const EditParticipant = () => {
       try {
         // Update the document
         updateDocument("participants", participentId, data);
-        console.log("Document successfully updated!");
+
         setIsSubmitting(false);
 
         navigate(
           `/meetinglist/participantlist?meetingid=${participantData.sectionId}&participentid=${participentId}`
         );
       } catch (error) {
-        console.error("Error updating document: ", error);
         setIsSubmitting(false);
       }
     }

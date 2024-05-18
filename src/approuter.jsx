@@ -1,13 +1,11 @@
 import React from "react";
 // eslint-disable-next-line no-unused-vars
 
-
-
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./components/pages/login";
 // import config from "config";
 import Addblog from "./components/pages/Blog/Addblog";
-import Blogdetails from "./components/pages/Blog/Blogdetails";
+// import Blogdetails from "./components/pages/Blog/Blogdetails";
 import BlogView from "./components/pages/Blog/BlogView";
 import Editblog from "./components/pages/Blog/Editblog";
 //For Settings...
@@ -88,7 +86,7 @@ const Approuter = () => {
           <Route path="/suscribers" element={<SubscriberList />} />
 
           {/* Blog */}
-          <Route path="/blogadmin" element={<Blogdetails />} />
+          {/* <Route path="/blogadmin" element={<Blogdetails />} /> */}
           <Route path="/addblog" element={<Addblog />} />
           <Route path="/editblog/:id" element={<Editblog />} />
           <Route path="/blogview" element={<BlogView />} />

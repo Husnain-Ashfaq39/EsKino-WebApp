@@ -91,7 +91,7 @@ const AddMeeting = () => {
       setEndTime(null);
       navigate("/meetinglist");
     } catch (error) {
-      console.error("Error adding document: ", error);
+      console.log();
     } finally {
       setSubmitting(false);
     }

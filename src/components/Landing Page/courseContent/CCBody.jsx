@@ -157,7 +157,7 @@ const CCBody = () => {
   const handleDelete = async () => {
     try {
       await deleteDocument("CourseContentBody", selectedRecordId);
-      console.log("Deleted Document ID: ", selectedRecordId);
+
       fetchData(); // Refresh data after deletion
       setSelectedRecordId(null);
       hideDeleteModal();

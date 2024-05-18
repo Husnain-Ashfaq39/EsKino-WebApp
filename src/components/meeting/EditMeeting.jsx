@@ -23,7 +23,6 @@ const EditMeeting = () => {
     zipCode: "",
     streetAddress: "",
     capacity: "",
-  
   };
 
   const [meetingData, setMeetingData] = useState(initialMeetingData);
@@ -48,13 +47,12 @@ const EditMeeting = () => {
               houseOwner: data.houseOwner || "",
               streetAddress: data.streetAddress || "",
               zipCode: data.zipCode || "",
-              capacity: data.capacity || ""
-             
+              capacity: data.capacity || "",
             });
           }
         })
         .catch((error) => {
-          console.error("Error fetching document:", error);
+          console.log();
         });
     }
   }, [id]);
@@ -90,7 +88,6 @@ const EditMeeting = () => {
       "streetAddress",
       "zipCode",
       "capacity",
-    
     ];
     requiredFields.forEach((field) => {
       if (
@@ -145,16 +142,14 @@ const EditMeeting = () => {
         streetAddress: meetingData.streetAddress,
         zipCode: meetingData.zipCode,
         capacity: meetingData.capacity,
-      
       };
 
       try {
         await updateDoc(docRef, dataToSave);
-        console.log("Document successfully updated!");
+
         setIsSubmitting(false);
         navigate("/meetinglist");
       } catch (error) {
-        console.error("Error updating document: ", error);
         setIsSubmitting(false);
       }
     }
@@ -371,7 +366,7 @@ const EditMeeting = () => {
                           )}
                         </div>
                       </div>
-                      
+
                       <div className="col-12">
                         <div className="doctor-submit text-end">
                           <button
