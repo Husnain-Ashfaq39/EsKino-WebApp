@@ -13,6 +13,8 @@ import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { imagesend } from "../imagepath";
 import { Modal } from "antd";
+import { getCurrentUser } from "../../services/authService";
+import { useNavigate } from "react-router-dom";
 const { Option } = Select;
 
 const Contactlist = () => {
@@ -24,7 +26,7 @@ const Contactlist = () => {
   const [selectedContacts, setSelectedContacts] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteType, setDeleteType] = useState("");
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchContacts = async () => {
       const contactsRef = collection(db, "contacts");
@@ -45,6 +47,10 @@ const Contactlist = () => {
   }, []);
 
   useEffect(() => {
+    if(!getCurrentUser())
+      {
+       navigate('/login');
+      }
     if (filter === "all") {
       setFilteredContacts(contacts);
     } else {

@@ -9,9 +9,18 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { addDocument } from "../../services/dbService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { useEffect } from "react";
+import { getCurrentUser } from "../../services/authService";
 const AddMeeting = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate('/login');
+    }
+  
+    
+  }, [])
+
   const {
     register,
     handleSubmit,

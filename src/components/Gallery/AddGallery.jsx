@@ -8,12 +8,22 @@ import { Button, Select, message } from "antd";
 import FeatherIcon from "feather-icons-react";
 import { uploadFile } from "../../services/storageService";
 import { addDocument } from "../../services/dbService";
-
+import { useEffect } from "react";
+import { getCurrentUser } from "../../services/authService";
 const AddGallery = () => {
   const [fileList, setFileList] = useState([]);
   const [category, setCategory] = useState("Events");
   const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate('/login');
+    }
+
+
+  }, [])
+
 
   const handleFileChange = (event) => {
     const files = event.target.files;

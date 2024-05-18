@@ -8,6 +8,8 @@ import { getAllDocuments, addDocument, updateDocument } from "../services/dbServ
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import SectionHeading from "../components/SectionHeading/index"
+import { useNavigate } from "react-router-dom";
+import { getCurrentUser } from "../services/authService";
 const Settings = () => {
   const {
     register: registerContact,
@@ -42,8 +44,12 @@ const Settings = () => {
 
   const [contactDocId, setContactDocId] = useState(null);
   const [socialDocId, setSocialDocId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate('/login');
+    }
     const fetchContactInfo = async () => {
       try {
         const contactDocs = await getAllDocuments("contactInfo");

@@ -6,7 +6,8 @@ import { addDocument } from '../../../services/dbService'; // Import Firestore s
 import FeatherIcon from 'feather-icons-react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { getCurrentUser } from '../../../services/authService';
+import { useEffect } from'react';
 const AddOMBody = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -15,6 +16,13 @@ const AddOMBody = () => {
     });
     const [loading, setLoading] = useState(false);
 
+    useEffect(() => {
+        if (!getCurrentUser()) {
+          navigate('/login');
+        }
+      
+        
+      }, [])
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -35,6 +43,8 @@ const AddOMBody = () => {
             setLoading(false);
         }
     };
+   
+    
 
     return (
         <div>

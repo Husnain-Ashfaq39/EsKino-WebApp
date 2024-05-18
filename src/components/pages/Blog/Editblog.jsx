@@ -9,7 +9,7 @@ import { getDocument, updateDocument } from "../../../services/dbService";
 import { uploadFile } from "../../../services/storageService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { getCurrentUser } from "../../../services/authService";
 const EditBlog = () => {
   const { id } = useParams(); // Get blog ID from URL
   const navigate = useNavigate();
@@ -21,6 +21,10 @@ const EditBlog = () => {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate('/login');
+    }
+
     const fetchBlog = async () => {
       try {
         const doc = await getDocument("blogs", id);
