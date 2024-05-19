@@ -1,6 +1,7 @@
 import React from "react";
 import Spacing from "../../Spacing";
 import colors from "../../../colorTheme";
+import { tickSvg } from "../../imagepath";
 
 export default function AboutSection({
   imgUrl,
@@ -22,11 +23,7 @@ export default function AboutSection({
                   alt="Mini"
                   className="cs_rotate_animation"
                 />
-                <img
-                  src="/images/icons/tick.svg"
-                  alt="Right"
-                  className="cs_right_icon"
-                />
+                <img src={tickSvg} alt="Right" className="cs_right_icon" />
               </div>
             </div>
           </div>
@@ -35,7 +32,10 @@ export default function AboutSection({
               <div className="cs_section_heading cs_style_1">
                 <h2 className="cs_section_title cs_fs_72 m-0">{title}</h2>
                 <div className="cs_height_5" />
-                <h3 className="cs_section_subtitle text-uppercase  cs_semibold m-0  cs_fs_32" style={{color: colors.dark}}>
+                <h3
+                  className="cs_section_subtitle text-uppercase  cs_semibold m-0  cs_fs_32"
+                  style={{ color: colors.dark }}
+                >
                   {subTitle}
                 </h3>
               </div>
@@ -43,7 +43,7 @@ export default function AboutSection({
               <ul className="cs_about_text_list">
                 {featureList.map((item, index) => (
                   <li key={index}>
-                    <i >
+                    <i>
                       <svg
                         width={35}
                         height={24}
@@ -58,10 +58,10 @@ export default function AboutSection({
                         />
                       </svg>
                     </i>
-                    <h3 className="cs_normal cs_section_title cs_fs_32 " >
+                    <h3 className="cs_normal cs_section_title cs_fs_32 ">
                       {item.featureListTitle}
                     </h3>
-                    <p className="m-0" >{item.featureListSubTitle}</p>
+                    <p className="m-0">{item.featureListSubTitle}</p>
                   </li>
                 ))}
               </ul>
