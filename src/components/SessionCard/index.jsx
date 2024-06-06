@@ -1,4 +1,3 @@
-// SessionCard.js
 import React, { useEffect, useState } from 'react';
 import { ModalComponent } from '../ModalComponent/ModalComponent';
 import AppointmentSection from '../Section/AppointmentSection';
@@ -8,7 +7,7 @@ import { convertTimestamp, convertTime } from '../../services/general_functions'
 import useStore from '../../services/useStore';
 import colors from '../../colorTheme';
 
-import { dateConverter } from '../../services/general_functions';
+
 function SessionCard({ limit }) {
   const [isOpen, setIsOpen] = useState(false);
   const [sections, setSections] = useState([]);
@@ -26,7 +25,7 @@ function SessionCard({ limit }) {
     setShowHeader(true); // Show the header when modal is closed
   };
 
-  useEffect(() => {
+  const fetchSections = () => {
     getAllDocuments('meetings').then((querySnapshot) => {
       const data = querySnapshot.docs
         .map((doc) => {
@@ -37,7 +36,6 @@ function SessionCard({ limit }) {
           const endTime = convertTime(docData.endTime);
           const convertedDocData = { ...docData, startDate, endDate, startTime, endTime };
           const meetingStatus = getMeetingStatus(convertedDocData);
-
 
           if (meetingStatus !== 'Timeout') {
             return {
@@ -52,6 +50,10 @@ function SessionCard({ limit }) {
         .filter((item) => item !== null);
       setSections(data);
     });
+  };
+
+  useEffect(() => {
+    fetchSections();
   }, []);
 
   const selectIcon = (type) => {
@@ -72,30 +74,21 @@ function SessionCard({ limit }) {
       {sections.map((section) => (
         <div
           key={section.id}
-          className="cs_hero_info_wrap cs_shadow_1 cs_white_bg cs_radius_15"
+          className="cs_hero_info_wrap cs_shadow_1 cs_white_bg cs_radius_15 "
           style={{ margin: '10px', marginBottom: '25px', padding: '20px' }}
         >
           <div className="w-72 cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
-            <div className="cs_hero_info_icon cs_center rounded-circle" style={{background: colors.secondary}}>
-              <img src={section.icon} alt="Icon" />
+            <div className="cs_hero_info_icon cs_center rounded-circle " style={{background: colors.secondary, width: '60px', height: '60px', flexShrink: 0}}>
+              <img src={date_timeSvg} alt="Icon" style={{ width: '100%', height: '100%' }} />
             </div>
-            <div className="cs_hero_info_right">
-              <h3 className="cs_hero_info_title cs_semibold">{section.title}</h3>
-              <p className="cs_hero_info_subtitle cs_fs_12">Remaining Capacity: {section.capacity}</p>
-            </div>
-          </div>
-          <div className=" w-72 cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
-            <div className="cs_hero_info_icon cs_center rounded-circle "  style={{background: colors.secondary}}>
-              <img src={date_timeSvg} alt="Icon" />
-            </div>
-            <div className="cs_hero_info_right">
-              <h3 className="cs_hero_info_title cs_semibold">{dateConverter(section.startDate)} to {dateConverter(section.endDate)}</h3>
+            <div className="cs_hero_info_right" style={{ backgroundColor: '#F6EAEB', padding: '10px', borderRadius: '5px' }}>
+              <h3 className="cs_hero_info_title cs_semibold" style={{fontSize:'1.2rem', fontWeight: 'bold', margin: 0 }}>{section.startDate}</h3>
               <p className="cs_hero_info_subtitle cs_fs_12">{section.startTime} to {section.endTime}</p>
             </div>
           </div>
-          <div className="w-72 cs_hero_info d-flex align-items-center"  style={{ marginBottom: '20px' }}>
-            <div className="cs_hero_info_icon cs_center rounded-circle " style={{background: colors.secondary}}>
-              <img src={pinSvg} alt="Icon" />
+          <div className="w-72 cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
+            <div className="cs_hero_info_icon cs_center rounded-circle " style={{background: colors.secondary, width: '60px', height: '60px', flexShrink: 0}}>
+              <img src={pinSvg} alt="Icon" style={{ width: '100%', height: '100%' }} />
             </div>
             <div className="cs_hero_info_right">
               <h3 className="cs_hero_info_title cs_semibold">{section.streetAddress}</h3>
@@ -110,13 +103,17 @@ function SessionCard({ limit }) {
           }
 
           {section.capacity != "0" &&
-
-            <div style={{ cursor: section.capacity > 0 ? 'pointer' : 'default', margin: '20px', pointerEvents: section.capacity === 0 ? 'none' : 'auto' }}>
-              <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null} className="cs_btn cs_style_1 " >
-                <span>{section.capacity == "0" ? 'Closed' : 'Book Now'}</span>
-                <i>
-                  <img src={arrowWhiteSvg} alt="Icon" />
-                </i>
+            <div>
+              <div style={{ cursor: section.capacity > 0 ? 'pointer' : 'default', margin: '20px', pointerEvents: section.capacity === 0 ? 'none' : 'auto' }}>
+                <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null} className="cs_btn cs_style_1 " >
+                  <span>{section.capacity == "0" ? 'Closed' : 'Book Now'}</span>
+                  <i>
+                    <img src={arrowWhiteSvg} alt="Icon" />
+                  </i>
+                </div>
+              </div>
+              <div className="capacity-info">
+                <p className="text-sm text-gray-600 mt-2 ml-8">Available Capacity: <span className="font-bold">{section.capacity}</span></p>
               </div>
             </div>
           }
@@ -124,7 +121,7 @@ function SessionCard({ limit }) {
       ))}
       {isOpen && (
         <ModalComponent isOpen={isOpen} setIsOpen={handleClose}>
-          <AppointmentSection sectionId={selectedSectionId} />
+          <AppointmentSection sectionId={selectedSectionId} onClose={handleClose} onBookingSuccess={fetchSections} />
         </ModalComponent>
       )}
     </div>

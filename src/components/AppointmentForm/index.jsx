@@ -9,19 +9,24 @@ import {
 } from "../../services/dbService";
 import { arrowWhiteSvg } from "../imagepath";
 import { Link } from "react-router-dom";
+import { convertTimestamp } from "../../services/general_functions"; // Assuming this function exists for timestamp conversion
 
-export default function AppointmentForm({ sectionId }) {
+export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm({
     defaultValues: { persons: "1" },
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [totalFee, setTotalFee] = useState(0);
   const [originalPrice, setOriginalPrice] = useState(0);
+  const [capacity, setCapacity] = useState(null); // State to store the capacity
+  const [warning, setWarning] = useState(""); // State to store the warning message
+  const [startDate, setStartDate] = useState(null); // State to store the startDate
 
   const calculateTotalFee = (persons) => {
     let fee = 0;
@@ -62,6 +67,23 @@ export default function AppointmentForm({ sectionId }) {
     setOriginalPrice(original);
   };
 
+  useEffect(() => {
+    const fetchMeetingData = async () => {
+      try {
+        const doc = await getDocument("meetings", sectionId);
+        if (doc.exists()) {
+          const meetingData = doc.data();
+          setCapacity(meetingData.capacity);
+          setStartDate(convertTimestamp(meetingData.startDate)); // Assuming convertTimestamp is a function to convert timestamp to a readable format
+        }
+      } catch (error) {
+        console.error("Error fetching meeting data: ", error);
+      }
+    };
+
+    fetchMeetingData();
+  }, [sectionId]);
+
   const onSubmit = async (data) => {
     data.sectionId = sectionId;
     data.totalFee = totalFee;
@@ -83,17 +105,22 @@ export default function AppointmentForm({ sectionId }) {
           });
           await addDocument("participants", data);
           toast.success("Thank you for your binding registration.");
+          onBookingSuccess(); // Fetch updated data after successful booking
+          onClose(); // Close the modal on successful submission
         } else {
           toast.error(
             "Not enough capacity for the requested number of persons."
           );
+          reset(); // Reset the form on unsuccessful submission
         }
       } else {
         toast.error("Meeting not found.");
+        reset(); // Reset the form on unsuccessful submission
       }
     } catch (error) {
       console.error("Error handling meeting data: ", error);
       toast.error("Failed to handle meeting data.");
+      reset(); // Reset the form on unsuccessful submission
     } finally {
       setIsSubmitting(false);
     }
@@ -103,7 +130,13 @@ export default function AppointmentForm({ sectionId }) {
 
   useEffect(() => {
     calculateTotalFee(persons);
-  }, [persons]);
+
+    if (capacity !== null && parseInt(persons, 10) > capacity) {
+      setWarning(`Only ${capacity} places left.`);
+    } else {
+      setWarning("");
+    }
+  }, [persons, capacity]);
 
   return (
     <div>
@@ -157,6 +190,13 @@ export default function AppointmentForm({ sectionId }) {
             <div className="error text-danger">This field is required</div>
           )}
         </div>
+        {startDate && (
+          <div className="col-lg-12">
+            <div className="alert alert-info" role="alert" style={{ margin: "10px 0" }}>
+              Date : {startDate}
+            </div>
+          </div>
+        )}
         <div className="col-lg-4">
           <label className="cs_input_label cs_heading_color">
             Select Persons:
@@ -166,45 +206,50 @@ export default function AppointmentForm({ sectionId }) {
             className="cs_form_field p-2 mt-[-10px] mb-[10px]"
           >
             <option value="1">Online Seminar</option>
-            <option value="2">1 person</option>
-            <option value="3">2 persons</option>
-            <option value="4">3 persons</option>
-            <option value="5">4 persons</option>
-            <option value="6">Voucher available for 1 person</option>
-            <option value="7">Voucher available for 2 persons</option>
+            <option value="1">1 person</option>
+            <option value="2">2 persons</option>
+            <option value="3">3 persons</option>
+            <option value="4">4 persons</option>
+            <option value="1">Voucher available for 1 person</option>
+            <option value="2">Voucher available for 2 persons</option>
           </select>
           {errors.persons && (
             <div className="error text-danger">This field is required</div>
           )}
+          {warning && (
+            <div className="warning text-danger">{warning}</div>
+          )}
         </div>
-        <div className=" col-lg-8 d-flex align-items-end">
-          <label className="cs_input_label cs_heading_color me-2">
-            Total Fee:
-          </label>
-          {originalPrice > totalFee && (
+        {!warning && (
+          <div className=" col-lg-8 d-flex align-items-end">
+            <label className="cs_input_label cs_heading_color me-2">
+              Total Fee:
+            </label>
+            {originalPrice > totalFee && (
+              <span
+                style={{
+                  textDecoration: "line-through",
+                  color: "red",
+                  marginBottom: "0.65rem",
+                }}
+              >
+                €{originalPrice.toFixed(2)}
+              </span>
+            )}
             <span
               style={{
-                textDecoration: "line-through",
-                color: "red",
-                marginBottom: "0.65rem",
+                backgroundColor: "#2FCE2E",
+                color: "white",
+                padding: "5px 10px",
+                borderRadius: "5px",
+                marginLeft: "10px",
+                marginBottom: "0.4rem",
               }}
             >
-              €{originalPrice.toFixed(2)}
+              €{totalFee.toFixed(2)}
             </span>
-          )}
-          <span
-            style={{
-              backgroundColor: "#2FCE2E",
-              color: "white",
-              padding: "5px 10px",
-              borderRadius: "5px",
-              marginLeft: "10px",
-              marginBottom: "0.4rem",
-            }}
-          >
-            €{totalFee.toFixed(2)}
-          </span>
-        </div>
+          </div>
+        )}
         <div className="col-lg-12">
           <label className="cs_input_label cs_heading_color">
             Name of Persons
