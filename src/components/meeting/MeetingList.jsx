@@ -1,26 +1,24 @@
 import { Button, Modal, Table } from "antd";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import moment from "moment";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { db } from "../../config/firebase";
-import { deleteDocument } from "../../services/dbService";
+import { getCurrentUser } from "../../services/authService";
+import {
+  deleteDocument, 
+  getMeetingStatus
+} from "../../services/dbService";
+import {
+  convertTime,
+  convertTimestamp,
+  dateConverter,
+} from "../../services/general_functions";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { imagesend, plusicon, refreshicon, searchnormal } from "../imagepath";
-import {
-  fetchParticipantCount,
-  getMeetingStatus,
-} from "../../services/dbService";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import {
-  convertTimestamp,
-  convertTime,
-} from "../../services/general_functions";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { dateConverter } from "../../services/general_functions";
-import { getCurrentUser } from "../../services/authService";
 
 const MeetingList = () => {
   const [allMeetings, setAllMeetings] = useState([]);
@@ -61,12 +59,27 @@ const MeetingList = () => {
     }
   };
 
+  const fetchParticipantsSum = async (meetingId) => {
+    const participantQuery = query(
+      collection(db, "participants"),
+      where("sectionId", "==", meetingId)
+    );
+    const participantsSnapshot = await getDocs(participantQuery);
+  
+    const totalPersons = participantsSnapshot.docs.reduce((sum, participantDoc) => {
+      const data = participantDoc.data();
+      return sum + (data.persons ? parseInt(data.persons, 10) : 0);
+    }, 0);
+  
+    return totalPersons;
+  };
+
   const fetchMeetings = async () => {
     const meetingsRef = collection(db, "meetings");
     const snapshot = await getDocs(meetingsRef);
     const meetingsWithCounts = await Promise.all(
       snapshot.docs.map(async (doc) => {
-        const participantCount = await fetchParticipantCount(doc.id);
+        const participantCount = await fetchParticipantsSum(doc.id);
         
         return {
           id: doc.id,
@@ -137,12 +150,10 @@ const MeetingList = () => {
         </Link>
       ),
       sorter: (a, b) => a.Name.length - b.Name.length,
+      width: 200, // Added width
+
     },
-    {
-      title: "Start Time",
-      dataIndex: "StartTime",
-      sorter: (a, b) => a.StartTime.length - b.StartTime.length,
-    },
+   
     {
       title: "Status",
       dataIndex: "EndTime",
@@ -164,12 +175,22 @@ const MeetingList = () => {
           </span>
         );
       },
+      width: 100, // Added width
+
+    },
+    {
+      title: "Capacity",
+      dataIndex: "capacity",
+      sorter: (a, b) => a.capacity.length - b.capacity.length,
+      width: 100,
     },
     {
       title: "Participants",
       dataIndex: "Participants",
       sorter: (a, b) => a.Participants - b.Participants,
+      width: 100,
     },
+     
     {
       title: "",
       dataIndex: "actions",
@@ -184,6 +205,7 @@ const MeetingList = () => {
           View Details
         </Button>
       ),
+      width: 120,
     },
     {
       title: "",
@@ -231,6 +253,7 @@ const MeetingList = () => {
           </div>
         </>
       ),
+      width: 80,
     },
   ];
 
@@ -315,7 +338,7 @@ const MeetingList = () => {
                     <div className="col-sm-12">
                       <div className="card">
                         <div className="card-body">
-                          <Table
+                         <div className="table-responsive"> <Table
                             columns={columns}
                             dataSource={filteredMeetings}
                             rowKey="id"
@@ -331,7 +354,8 @@ const MeetingList = () => {
                                     : "inherit",
                               },
                             })}
-                          />
+                          /></div>
+
                           {isModalOpen && (
                             <Modal
                               title="Meeting Details"
@@ -445,3 +469,4 @@ const MeetingList = () => {
 };
 
 export default MeetingList;
+

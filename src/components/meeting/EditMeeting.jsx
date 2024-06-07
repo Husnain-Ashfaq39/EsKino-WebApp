@@ -8,6 +8,7 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import { getCurrentUser } from "../../services/authService";
+
 const EditMeeting = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const EditMeeting = () => {
 
   useEffect(() => {
     if (!getCurrentUser()) {
-      navigate('/login');
+      navigate("/login");
     }
     if (id) {
       const docRef = doc(db, "meetings", id);
@@ -55,7 +56,7 @@ const EditMeeting = () => {
           }
         })
         .catch((error) => {
-          console.log();
+          console.log(error);
         });
     }
   }, [id]);
@@ -172,9 +173,7 @@ const EditMeeting = () => {
                     <Link to="/meetinglist">Meetings</Link>
                   </li>
                   <li className="breadcrumb-item">
-                    <i className="feather-chevron-right">
-                      <FeatherIcon icon="chevron-right" />
-                    </i>
+                    <FeatherIcon icon="chevron-right" />
                   </li>
                   <li className="breadcrumb-item active">Edit Meeting</li>
                 </ul>
@@ -341,6 +340,7 @@ const EditMeeting = () => {
                             placeholder="Enter ZIP code"
                             value={meetingData.zipCode}
                             onChange={handleChange}
+                            pattern="^\d+$"
                           />
                           {errors.zipCode && (
                             <div className="error text-danger">

@@ -235,11 +235,12 @@ const Contactlist = () => {
             <div className="col-sm-12">
               <div className="card">
                 <div className="card-body">
+                <div className="table-responsive">
                   <Table
                     columns={columns}
                     dataSource={filteredContacts}
                     rowKey="id"
-                  />
+                  /></div>
                   {isModalOpen && (
                     <Modal
                       title="Contact Message"

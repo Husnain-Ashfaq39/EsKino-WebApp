@@ -47,14 +47,7 @@ export const deleteDocument = (collectionName, id) => {
   return deleteDoc(docRef);
 };
 
-export const fetchParticipantCount = async (meetingId) => {
-  const q = query(
-    collection(db, "participants"),
-    where("sectionId", "==", meetingId)
-  );
-  const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.length; // Assuming each doc is a participant
-};
+
 
 export const getMeetingStatus = (meeting) => {
   const currentTime = moment();
@@ -81,7 +74,7 @@ export const getMeetingStatus = (meeting) => {
 
   if (currentTime.isAfter(endTime)) {
     return "Timeout";
-  } else if (meeting.capacity === "0") {
+  } else if (meeting.capacity === "0" || meeting.capacity === 0) {
     return "Closed";
   } else {
     return "Active";

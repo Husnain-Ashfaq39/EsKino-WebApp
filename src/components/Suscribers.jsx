@@ -171,11 +171,12 @@ const SubscriberList = () => {
             <div className="col-sm-12">
               <div className="card">
                 <div className="card-body">
+                <div className="table-responsive">
                   <Table
                     columns={columns}
                     dataSource={subscribers}
                     rowKey="id"
-                  />
+                  /></div>
                   {isModalOpen && (
                     <Modal
                       title="Reply to Subscriber"

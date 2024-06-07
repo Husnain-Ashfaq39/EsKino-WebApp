@@ -270,11 +270,12 @@ const ParticipantList = () => {
                   </div>
                 </div>
                 <div className="card-body">
+                <div className="table-responsive">
                   <Table
                     columns={columns}
                     dataSource={filteredParticipants}
                     rowKey="id"
-                  />
+                  /></div>
                   {isModalOpen && (
                     <Modal
                       title="Participant Details"

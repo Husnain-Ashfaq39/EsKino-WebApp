@@ -184,6 +184,7 @@ const GalleryList = () => {
                     </div>
                   </div>
                   <div className="table-responsive doctor-list">
+                    
                     <Table
                       pagination={{
                         total: dataSource.length,

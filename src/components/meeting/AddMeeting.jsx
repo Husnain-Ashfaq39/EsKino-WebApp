@@ -1,25 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import Header from "../Header";
-import Sidebar from "../Sidebar";
+import { Link, useNavigate } from "react-router-dom";
 import { DatePicker, TimePicker } from "antd";
 import moment from "moment";
-import { Link, useNavigate } from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { addDocument } from "../../services/dbService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from "react";
 import { getCurrentUser } from "../../services/authService";
+import Header from "../Header";
+import Sidebar from "../Sidebar";
+
 const AddMeeting = () => {
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!getCurrentUser()) {
-      navigate('/login');
+      navigate("/login");
     }
-  
-    
-  }, [])
+  }, []);
 
   const {
     register,
@@ -64,6 +63,7 @@ const AddMeeting = () => {
       return "Active";
     }
   };
+
   const showSuccessToast = () => {
     toast.success("Meeting added successfully!", {
       position: "top-right",
@@ -100,7 +100,7 @@ const AddMeeting = () => {
       setEndTime(null);
       navigate("/meetinglist");
     } catch (error) {
-      console.log();
+      console.log(error);
     } finally {
       setSubmitting(false);
     }
@@ -120,9 +120,7 @@ const AddMeeting = () => {
                     <Link to="/meetinglist">Meetings</Link>
                   </li>
                   <li className="breadcrumb-item">
-                    <i className="feather-chevron-right">
-                      <FeatherIcon icon="chevron-right" />
-                    </i>
+                    <FeatherIcon icon="chevron-right" />
                   </li>
                   <li className="breadcrumb-item active">Add Meeting</li>
                 </ul>
@@ -131,8 +129,8 @@ const AddMeeting = () => {
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="row">
-              <div className="col-12">
-                <div className="form-group">
+              <div className="col-12 d-flex">
+                <div className="form-group flex-grow-1 me-2">
                   <label className="text-dark">
                     Title <span className="login-danger">*</span>
                   </label>
@@ -148,9 +146,26 @@ const AddMeeting = () => {
                     </div>
                   )}
                 </div>
+                <div className="form-group flex-grow-1 ms-2">
+                  <label className="text-dark">
+                    Capacity <span className="login-danger">*</span>
+                  </label>
+                  <input
+                    className="form-control"
+                    type="number"
+                    {...register("capacity", {
+                      required: "This field is required",
+                    })}
+                  />
+                  {errors.capacity && (
+                    <div className="error text-danger">
+                      {errors.capacity.message}
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="col-12 col-md-4">
-                <div className="form-group">
+              <div className="col-12 d-flex">
+                <div className="form-group flex-grow-1 me-2">
                   <label className="text-dark">
                     Start Date <span className="login-danger">*</span>
                   </label>
@@ -168,9 +183,7 @@ const AddMeeting = () => {
                     </div>
                   )}
                 </div>
-              </div>
-              <div className="col-12 col-md-4">
-                <div className="form-group">
+                <div className="form-group flex-grow-1 ms-2">
                   <label className="text-dark">
                     End Date <span className="login-danger">*</span>
                   </label>
@@ -189,8 +202,8 @@ const AddMeeting = () => {
                   )}
                 </div>
               </div>
-              <div className="col-12 col-md-4">
-                <div className="form-group">
+              <div className="col-12 d-flex">
+                <div className="form-group flex-grow-1 me-2">
                   <label className="text-dark">
                     Start Time <span className="login-danger">*</span>
                   </label>
@@ -210,9 +223,7 @@ const AddMeeting = () => {
                     </div>
                   )}
                 </div>
-              </div>
-              <div className="col-12 col-md-4">
-                <div className="form-group">
+                <div className="form-group flex-grow-1 ms-2">
                   <label className="text-dark">
                     End Time <span className="login-danger">*</span>
                   </label>
@@ -233,8 +244,8 @@ const AddMeeting = () => {
                   )}
                 </div>
               </div>
-              <div className="col-12">
-                <div className="form-group">
+              <div className="col-12 d-flex">
+                <div className="form-group flex-grow-1 me-2">
                   <label className="text-dark">
                     House Owner <span className="login-danger">*</span>
                   </label>
@@ -250,9 +261,7 @@ const AddMeeting = () => {
                     </div>
                   )}
                 </div>
-              </div>
-              <div className="col-12">
-                <div className="form-group">
+                <div className="form-group flex-grow-1 ms-2">
                   <label className="text-dark">
                     Street Address <span className="login-danger">*</span>
                   </label>
@@ -278,6 +287,10 @@ const AddMeeting = () => {
                     className="form-control"
                     {...register("zipCode", {
                       required: "This field is required",
+                      pattern: {
+                        value: /^\d+$/,
+                        message: "Only numbers are allowed",
+                      },
                     })}
                   />
                   {errors.zipCode && (
@@ -287,26 +300,6 @@ const AddMeeting = () => {
                   )}
                 </div>
               </div>
-              <div className="col-12 col-md-6">
-                <div className="form-group">
-                  <label className="text-dark">
-                    Capacity <span className="login-danger">*</span>
-                  </label>
-                  <input
-                    className="form-control"
-                    type="number"
-                    {...register("capacity", {
-                      required: "This field is required",
-                    })}
-                  />
-                  {errors.capacity && (
-                    <div className="error text-danger">
-                      {errors.capacity.message}
-                    </div>
-                  )}
-                </div>
-              </div>
-
               <div className="col-12">
                 <div className="doctor-submit text-end">
                   <button

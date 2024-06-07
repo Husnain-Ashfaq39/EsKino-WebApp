@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signIn } from "../../../services/authService";
-import { login02, loginImage, logo2Png } from "../../imagepath";
+import { loginImage, logo2Png } from "../../imagepath";
 import { Eye, EyeOff } from "feather-icons-react";
 import { ToastContainer, toast } from "react-toastify";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -35,7 +35,15 @@ const Login = () => {
       await signIn(email, password);
       navigate("/admin-dashboard");
     } catch (error) {
-      setError(error.message);
+      let errorMessage = "Failed to login";
+      if (error.code === "auth/wrong-password") {
+        errorMessage = "Incorrect password. Please try again.";
+      } else if (error.code === "auth/user-not-found") {
+        errorMessage = "No user found with this email. Please register first.";
+      } else if (error.code === "auth/invalid-email") {
+        errorMessage = "Invalid email address. Please check your input.";
+      }
+      setError(errorMessage);
       console.error("Failed to login", error);
     }
   };
@@ -47,7 +55,7 @@ const Login = () => {
         <div className="row">
           <div className="col-lg-6 login-wrap">
             <div className="">
-              <div className="log-img mt-10 mr-10" >
+              <div className="log-img mt-10 mr-10">
                 <img className="img-fluid " src={loginImage} alt="#" />
               </div>
             </div>

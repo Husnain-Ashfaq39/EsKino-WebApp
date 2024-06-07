@@ -26,7 +26,6 @@ const ContactForm = () => {
 
   return (
     <>
-      <ToastContainer />
       <form
         className="cs_contact_form cs_style_1 cs_white_bg cs_radius_30"
         onSubmit={handleSubmit(onSubmit)}
