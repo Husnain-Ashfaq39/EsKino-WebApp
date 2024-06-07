@@ -17,7 +17,6 @@ export default function SectionHeading({
     >
       {titleUp && (
         <>
-        {/* Previous blue color cs_accent_color */}
           <h3 className="cs_section_subtitle text-uppercase  cs_semibold m-0  cs_fs_32 text-6xl font-semibold" style={{color:colors.dark}}>
             {parse(titleUp)}
           </h3>
@@ -30,10 +29,9 @@ export default function SectionHeading({
       )}
       {titleDown && (
         <>
-          {/* <Spacing md="0" /> */}
           <h3
             className="cs_section_subtitle   cs_semibold m-0  cs_fs_32 text-6xl font-semibold"
-            style={{ fontSize:"18px", marginTop: "-50px", color: colors.dark}}
+            style={{ fontSize:"18px", marginTop: "-50px", color: colors.dark }}
           >
             {parse(titleDown)}
           </h3>
@@ -42,7 +40,9 @@ export default function SectionHeading({
       {subTitle && (
         <>
           <Spacing md="25" />
-          <p className="m-0">{parse(subTitle)}</p>
+          <div style={{ maxWidth: "42rem", margin: "0 auto" }}>
+            <p className="m-0">{parse(subTitle)}</p>
+          </div>
         </>
       )}
     </div>
