@@ -1,16 +1,24 @@
 import React, { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { addDocument, fetchDocumentsWithQuery } from "../../services/dbService";
 
 export default function NewsletterForm({ label, btnText, btnArrowUrl }) {
   const [email, setEmail] = useState("");
-
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (email) {
+      if (!validateEmail(email)) {
+        toast.warn("Please enter a valid email address.");
+        return;
+      }
+  
       try {
-        // Check for duplicate email
         const querySnapshot = await fetchDocumentsWithQuery(
           "subscribers",
           "email",
@@ -20,8 +28,7 @@ export default function NewsletterForm({ label, btnText, btnArrowUrl }) {
           toast.warn("This email is already subscribed.");
           return;
         }
-
-        // Add new email to the database
+  
         await addDocument("subscribers", { email });
         toast.success("Subscription successful!");
         setEmail("");
@@ -33,6 +40,7 @@ export default function NewsletterForm({ label, btnText, btnArrowUrl }) {
       toast.warn("Please enter a valid email address.");
     }
   };
+  
 
   return (
     <>
