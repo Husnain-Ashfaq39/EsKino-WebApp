@@ -6,9 +6,12 @@ import Breadcrumb from '../Breadcrumb';
 import { pageTitle } from '../../helpers/PageTitle';
 import { getAllDocuments } from '../../services/dbService';
 import { Timestamp } from 'firebase/firestore';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function Blog_client_side() {
   const [blogData, setBlogData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     pageTitle('Blog');
@@ -54,6 +57,8 @@ export default function Blog_client_side() {
         setBlogData(blogDataArray);
       } catch (error) {
         console.error('Error fetching blog data: ', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -66,7 +71,14 @@ export default function Blog_client_side() {
         <Breadcrumb title="" />
       </Section>
       <Section bottomMd={200} bottomLg={150} bottomXl={110}>
-        <BlogSectionStyle2 data={blogData} />
+        {loading ? (
+          <div>
+            <Skeleton height={30} width={300} />
+            <Skeleton count={5} />
+          </div>
+        ) : (
+          <BlogSectionStyle2 data={blogData} />
+        )}
       </Section>
       <Section className="cs_footer_margin_0">
         <BannerSectionStyle9

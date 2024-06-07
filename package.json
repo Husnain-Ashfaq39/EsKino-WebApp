@@ -32,6 +32,7 @@
     "react-google-recaptcha": "^3.1.0",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.51.4",
+    "react-loading-skeleton": "^3.4.0",
     "react-modal-image": "^2.6.0",
     "react-parallax": "^3.5.1",
     "react-router-dom": "^6.23.0",

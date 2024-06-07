@@ -186,7 +186,7 @@ const Approuter = () => {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
 
-            <Route path="blog" element={<Blog_client_side />} />
+            <Route path="/blog" element={<Blog_client_side />} />
             <Route path="/blog/blog-details/:id" element={<BlogDetail />} />
             <Route path="/policy" element={<Policy />} />
             <Route path="contact" element={<Contact />} />

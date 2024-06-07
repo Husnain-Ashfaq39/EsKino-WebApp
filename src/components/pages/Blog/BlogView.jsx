@@ -10,13 +10,14 @@ import { Timestamp } from "firebase/firestore";
 import { Modal, Button } from "antd";
 import { getCurrentUser } from "../../../services/authService";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 const BlogView = () => {
   const [blogs, setBlogs] = useState([]);
   const [blogToDelete, setBlogToDelete] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     if (!getCurrentUser()) {
       navigate('/login');
@@ -139,7 +140,7 @@ const BlogView = () => {
               {blogs.map((blog) => (
                 <div key={blog.id} className="col-sm-6 col-md-6 col-xl-4">
                   <div className="blog grid-blog">
-                    <div className="blog-image">
+                    <FixedImageContainer className="blog-image">
                       <Link to={`/blog/${blog.id}`}>
                         <img
                           className="img-fluid"
@@ -153,45 +154,47 @@ const BlogView = () => {
                           {blog.views}
                         </li>
                       </ul>
-                    </div>
-                    <div className="blog-content">
-                      <div className="blog-grp-blk">
-                        <div className="blog-img-blk">
-                          <Link to={`/profile/${blog.authorId}`}>
-                            <img
-                              className="img-fluid"
-                              src={blogimg2} // Replace with author.image if it has an image URL
-                              alt="#"
-                            />
-                          </Link>
-                          <div className="content-blk-blog ms-2">
-                            <h4>
-                              <Link to={`/profile/${blog.authorId}`}>
-                                {blog.author}
-                              </Link>
-                            </h4>
-                            <h5>{blog.authorTitle}</h5>
+                    </FixedImageContainer>
+                    <BlogContent>
+                      <BlogContentInner>
+                        <div className="blog-grp-blk">
+                          <div className="blog-img-blk">
+                            <Link to={`/profile/${blog.authorId}`}>
+                              <img
+                                className="img-fluid"
+                                src={blogimg2} // Replace with author.image if it has an image URL
+                                alt="#"
+                              />
+                            </Link>
+                            <div className="content-blk-blog ms-2">
+                              <h4>
+                                <Link to={`/profile/${blog.authorId}`}>
+                                  {blog.author}
+                                </Link>
+                              </h4>
+                              <h5>{blog.authorTitle}</h5>
+                            </div>
                           </div>
+                          <span>
+                            <FeatherIcon icon="calendar" />
+                            {blog.publicationDate}
+                          </span>
                         </div>
-                        <span>
-                          <FeatherIcon icon="calendar" />
-                          {blog.publicationDate}
-                        </span>
-                      </div>
-                      <h3 className="blog-title">
-                        <Link to={`/blog/blog-details/${blog.id}`}>
-                          {blog.title}
+                        <h3 className="blog-title">
+                          <Link to={`/blog/blog-details/${blog.id}`}>
+                            {blog.title}
+                          </Link>
+                        </h3>
+                        <p>{blog.excerpt}</p>
+                        <Link
+                          to={`/blog/blog-details/${blog.id}`}
+                          className="read-more flex items-center"
+                        >
+                          Read more in {blog.readTime} Minutes
+                          <i className="fa fa-long-arrow-right ml-2" />
                         </Link>
-                      </h3>
-                      <p>{blog.excerpt}</p>
-                      <Link
-                        to={`/blog/blog-details/${blog.id}`}
-                        className="read-more flex items-center"
-                      >
-                        Read more in {blog.readTime} Minutes
-                        <i className="fa fa-long-arrow-right ml-2" />
-                      </Link>
-                      <div className="flex items-center justify-between">
+                      </BlogContentInner>
+                      <BlogActions>
                         <Link
                           to={`/editblog/${blog.id}`}
                           className="bg-green-500 hover:bg-green-600 text-white text-sm py-1.5 px-2 rounded-lg transition duration-200"
@@ -204,8 +207,8 @@ const BlogView = () => {
                         >
                           Delete
                         </button>
-                      </div>
-                    </div>
+                      </BlogActions>
+                    </BlogContent>
                   </div>
                 </div>
               ))}
@@ -255,5 +258,35 @@ const BlogView = () => {
     </div>
   );
 };
+
+const FixedImageContainer = styled.div`
+  width: 100%;
+  height: 200px; /* Adjust height as needed */
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center; /* Center the image within the container */
+  }
+`;
+
+const BlogContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%; /* Ensure the card takes the full height */
+`;
+
+const BlogContentInner = styled.div`
+  flex-grow: 1;
+`;
+
+const BlogActions = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px; /* Adjust as needed */
+`;
 
 export default BlogView;
