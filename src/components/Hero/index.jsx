@@ -2,20 +2,62 @@ import React from "react";
 import parse from "html-react-parser";
 import { heroBgJpeg, heroImgPng, heroimgPng2 } from "../imagepath";
 import colors from "../../colorTheme";
+import Spacing from "../Spacing";
 
 export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
+  const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 768);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const heroImgStyle = isMobile
+    ? {
+        position: "absolute",
+        top: "100%", 
+        left: "50%",
+        transform: "translate(-50%, 0)",
+        maxWidth: "100%",
+        maxHeight: "400px",
+        width: "auto",
+        height: "auto",
+        objectFit: "contain",
+      }
+    : {
+        position: "absolute",
+        top: "-22%",
+        left: "70%",
+        transform: "translateX(-40%)",
+        maxWidth: "50%",
+        height: "auto",
+        width: "auto",
+        maxHeight: "850px",
+        objectFit: "contain",
+      };
+
   return (
+    <>
     <section className="cs_hero cs_style_1">
       <div
         className="cs_hero_wrap cs_bg_filed"
         style={{ backgroundColor: colors.primary }}
       >
-        <div className="container">
+        <div className="container" style={{ position: "relative" }}>
           <div className="cs_hero_text">
             <h1 className="cs_hero_title cs_fs_94 text-6xl font-semibold">
               {parse(title)}
             </h1>
-            <p className="cs_hero_subtitle cs_fs_20 cs_heading_color" style={{ color: colors.dark }}>
+            <p
+              className="cs_hero_subtitle cs_fs_20 cs_heading_color"
+              style={{ color: colors.dark }}
+            >
               {parse(subTitle)}
             </p>
           </div>
@@ -23,21 +65,15 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
             src={imgUrl}
             alt="Hero"
             className="cs_hero_img"
-            style={{
-              position: "absolute",
-              bottom: "100px",
-              top:'7%',
-              left: "70%",
-              transform: "translateX(-40%)",
-              maxWidth: "50%",
-              height: "auto",
-              width: "auto",
-              maxHeight: "850px" ,
-              objectFit: "contain"
-            }}
+            style={heroImgStyle}
           />
         </div>
       </div>
+      
     </section>
+    <div>{isMobile ?       <Spacing md="200" lg="180" /> : null
+}</div>
+    
+    </>
   );
 }
