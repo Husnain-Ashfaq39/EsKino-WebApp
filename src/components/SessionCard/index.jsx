@@ -92,7 +92,7 @@ function SessionCard({ limit }) {
             </div>
             <div className="cs_hero_info_right">
               <h3 className="cs_hero_info_title cs_semibold">{section.streetAddress}</h3>
-              <p className="cs_hero_info_subtitle cs_fs_12">zip code: {section.zipCode}</p>
+              <p className="cs_hero_info_subtitle cs_fs_12">Zip Code: {section.zipCode}</p>
             </div>
           </div>
           {section.capacity == "0" &&

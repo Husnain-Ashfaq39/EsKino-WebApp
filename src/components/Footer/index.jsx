@@ -8,6 +8,7 @@ import { footerBg1Svg, footerLogoBgSvg } from "../imagepath";
 import { getAllDocuments } from "../../services/dbService";
 import { useQuery } from "@tanstack/react-query";
 import colors from "../../colorTheme";
+
 const menuDataTwo = [
   { title: "Blog", href: "/blog" },
   { title: "Contact Us", href: "/contact" },
@@ -40,7 +41,7 @@ export default function Footer() {
     <footer className="cs_footer cs_style_1 cs_heading_color">
       <div
         className="cs_footer_logo_wrap"
-        style={{ backgroundImage: `url(${footerBg1Svg})`}}
+        style={{ backgroundImage: `url(${footerBg1Svg})` }}
       >
         <div
           className="cs_footer_brand"
@@ -82,12 +83,20 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="cs_footer_bottom" style={{background:colors.tertiary}}>
+      <div className="cs_footer_bottom" style={{ background: colors.tertiary }}>
         <div className="container">
           <div className="cs_footer_bottom_in">
             <SocialWidget />
             <div className="cs_copyright">
-              Copyright © 2024 SYNTAX. All rights reserved.
+              Copyright © Eskino. Powered by{" "}
+              <a
+                href="https://syntax-ai.tech"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: colors.linkColor }}
+              >
+                SYNTAX
+              </a>.
             </div>
           </div>
         </div>

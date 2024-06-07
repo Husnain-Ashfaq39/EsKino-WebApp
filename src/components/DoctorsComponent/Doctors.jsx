@@ -2,7 +2,7 @@ import React from 'react';
 import { susanne, Stephan } from '../imagepath';
 import styles from './Doctors.module.scss';
 import SectionHeading from '../SectionHeading';
-
+import Spacing from '../Spacing';
 const doctors = [
   {
     img: susanne,
@@ -47,7 +47,8 @@ const Doctors = () => {
     <div className={styles.doctors}>
       <div className={styles.container}>
       <SectionHeading title='Über Uns' subTitle='Geleitet werden die Seminare von Susanne Nusser und Stephan Schwarz, beide Fachärzte für Kinder- und Jugendmedizin mit mehrjähriger Klinikerfahrung, die aber beide auch die Elternperspektive gut kennen.'/>
-       
+      <Spacing md="72" lg="50" />
+
         <div className={styles.wrapper}>
           {doctors.map((doctor, index) => (
             <div className={styles.card} key={index}>
