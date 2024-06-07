@@ -15,7 +15,7 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
             <h1 className="cs_hero_title cs_fs_94 text-6xl font-semibold">
               {parse(title)}
             </h1>
-            <p className="cs_hero_subtitle cs_fs_20 cs_heading_color" style={{color: colors.dark}}>
+            <p className="cs_hero_subtitle cs_fs_20 cs_heading_color" style={{ color: colors.dark }}>
               {parse(subTitle)}
             </p>
           </div>
@@ -23,7 +23,15 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
             src={imgUrl}
             alt="Hero"
             className="cs_hero_img"
-            style={{ bottom: "100px" }}
+            style={{
+              position: "absolute",
+              bottom: "100px",
+              left: "70%",
+              transform: "translateX(-40%)",
+              maxWidth: "100%",
+              height: "auto",
+              maxHeight: "850px" 
+            }}
           />
         </div>
       </div>
