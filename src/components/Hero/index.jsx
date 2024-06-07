@@ -26,11 +26,14 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
             style={{
               position: "absolute",
               bottom: "100px",
+              top:'7%',
               left: "70%",
               transform: "translateX(-40%)",
-              maxWidth: "100%",
+              maxWidth: "50%",
               height: "auto",
-              maxHeight: "850px" 
+              width: "auto",
+              maxHeight: "850px" ,
+              objectFit: "contain"
             }}
           />
         </div>
