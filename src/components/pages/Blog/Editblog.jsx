@@ -10,6 +10,7 @@ import { uploadFile } from "../../../services/storageService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCurrentUser } from "../../../services/authService";
+
 const EditBlog = () => {
   const { id } = useParams(); // Get blog ID from URL
   const navigate = useNavigate();
@@ -33,7 +34,6 @@ const EditBlog = () => {
           setValue("title", data.title);
           setValue("author", data.author);
           setValue("tags", data.tags.join(","));
-          setValue("status", data.status);
           setImageUrl(data.imageUrl); // Set the image URL from the document data
           if (editorRef.current && data.content) {
             editorRef.current.setEditorContent(data.content);
@@ -74,7 +74,6 @@ const EditBlog = () => {
         title: data.title,
         author: data.author,
         tags: data.tags.split(","),
-        status: data.status,
         content,
         imageUrl: newimageUrl, // Use the new or existing image URL
         publicationDate: new Date(),
@@ -89,7 +88,7 @@ const EditBlog = () => {
       setIsSubmitting(false);
       navigate("/blogview"); // Redirect to blog view after update
     } catch (error) {
-      console.error("Error updating document: ", error);
+      console.error("Error updating document:", error);
       toast.error("Error in updating blog");
       setIsSubmitting(false);
     }
@@ -182,33 +181,6 @@ const EditBlog = () => {
                             className="form-control"
                             {...register("tags", { required: true })}
                           />
-                        </div>
-                      </div>
-                      <div className="col-12 col-md-6 col-xl-6">
-                        <div className="form-group select-gender">
-                          <label className="gen-label">
-                            Blog Status <span className="login-danger">*</span>
-                          </label>
-                          <div className="form-check-inline">
-                            <label className="form-check-label">
-                              <input
-                                type="radio"
-                                value="Active"
-                                {...register("status", { required: true })}
-                              />
-                              Active
-                            </label>
-                          </div>
-                          <div className="form-check-inline">
-                            <label className="form-check-label">
-                              <input
-                                type="radio"
-                                value="Inactive"
-                                {...register("status", { required: true })}
-                              />
-                              Inactive
-                            </label>
-                          </div>
                         </div>
                       </div>
                       <div className="col-12 col-md-6 col-xl-12">

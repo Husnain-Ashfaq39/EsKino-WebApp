@@ -56,12 +56,19 @@ const ContactForm = () => {
           <div className="col-lg-6">
             <label className="cs_input_label cs_heading_color">Email</label>
             <input
-              type="email"
-              className="cs_form_field"
-              placeholder="example@gmail.com"
-              {...register("email", { required: "Email is required" })}
-            />
-            {errors.email && <p>{errors.email.message}</p>}
+  type="email"
+  className="cs_form_field"
+  placeholder="example@gmail.com"
+  {...register("email", {
+    required: "Email is required",
+    pattern: {
+      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      message: "Please enter a valid email address"
+    }
+  })}
+/>
+
+{errors.email && <p className='text-danger'>{errors.email.message}</p>}
             <div className="cs_height_42 cs_height_xl_25" />
           </div>
           <div className="col-lg-12">
@@ -72,7 +79,7 @@ const ContactForm = () => {
               placeholder="555-1234"
               {...register("phoneNumber", { required: "Phone number is required" })}
             />
-            {errors.phoneNumber && <p>{errors.phoneNumber.message}</p>}
+            {errors.phoneNumber && <p className='text-danger'>{errors.phoneNumber.message}</p>}
             <div className="cs_height_42 cs_height_xl_25" />
           </div>
           <div className="col-lg-12">

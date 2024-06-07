@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import TextEditor from "../../TextEditor";
@@ -9,7 +9,6 @@ import { addDocument } from "../../../services/dbService";
 import { uploadFile } from "../../../services/storageService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from "react";
 import { getCurrentUser } from "../../../services/authService";
 
 const AddBlog = () => {
@@ -19,11 +18,12 @@ const AddBlog = () => {
   const [fileChosen, setFileChosen] = useState(false);
   const [image, setImage] = useState(null);
   const navigate = useNavigate();
-useEffect(() => {
-  if (!getCurrentUser()) {
-    navigate('/login');
-  }
-}, [])
+
+  useEffect(() => {
+    if (!getCurrentUser()) {
+      navigate("/login");
+    }
+  }, []);
 
   const handleFileChange = (e) => {
     if (e.target.files.length > 0) {
@@ -60,7 +60,6 @@ useEffect(() => {
         title: data.title,
         author: data.author,
         tags: data.tags.split(","),
-        status: data.status,
         content,
         imageUrl,
         publicationDate: new Date(),
@@ -152,33 +151,6 @@ useEffect(() => {
                             className="form-control"
                             {...register("tags", { required: true })}
                           />
-                        </div>
-                      </div>
-                      <div className="col-12 col-md-6 col-xl-6">
-                        <div className="form-group select-gender">
-                          <label className="gen-label">
-                            Blog Status <span className="login-danger">*</span>
-                          </label>
-                          <div className="form-check-inline">
-                            <label className="form-check-label">
-                              <input
-                                type="radio"
-                                value="Active"
-                                {...register("status", { required: true })}
-                              />
-                              Active
-                            </label>
-                          </div>
-                          <div className="form-check-inline">
-                            <label className="form-check-label">
-                              <input
-                                type="radio"
-                                value="Inactive"
-                                {...register("status", { required: true })}
-                              />
-                              Inactive
-                            </label>
-                          </div>
                         </div>
                       </div>
                       <div className="col-12 col-md-6 col-xl-12">

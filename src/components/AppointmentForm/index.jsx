@@ -33,30 +33,30 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
     let original = 0;
     switch (persons) {
       case "1":
-        fee = 50;
-        original = 50;
-        break;
-      case "2":
         fee = 60;
         original = 60;
         break;
-      case "3":
+      case "2":
         fee = 90;
         original = 120;
         break;
-      case "4":
+      case "3":
         fee = 135;
         original = 180;
         break;
-      case "5":
+      case "4":
         fee = 180;
         original = 240;
         break;
-      case "6":
+      case "Online Seminar":
+        fee = 50;
+        original = 50;
+        break;
+      case "Voucher1":
         fee = 0;
         original = 60;
         break;
-      case "7":
+      case "Voucher2":
         fee = 0;
         original = 120;
         break;
@@ -93,11 +93,19 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
       const doc = await getDocument("meetings", data.sectionId);
       if (doc.exists()) {
         const meetingData = doc.data();
-        if (meetingData.capacity >= parseInt(data.persons, 10)) {
-          const updatedCapacity =
-            meetingData.capacity - parseInt(data.persons, 10);
-          const updatedParticipants =
-            meetingData.Participants + parseInt(data.persons, 10);
+
+        let personsCount = parseInt(data.persons, 10);
+        if (data.persons === "Online Seminar" || data.persons === "Voucher1") {
+          personsCount = 1;
+        } else if (data.persons === "Voucher2") {
+          personsCount = 2;
+        }
+
+        data.persons = personsCount; // Update the data to store numerical value
+
+        if (meetingData.capacity >= personsCount) {
+          const updatedCapacity = meetingData.capacity - personsCount;
+          const updatedParticipants = meetingData.Participants + personsCount;
 
           await updateDocument("meetings", data.sectionId, {
             capacity: updatedCapacity,
@@ -169,13 +177,21 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
         <div className="col-lg-12">
           <label className="cs_input_label cs_heading_color">Email</label>
           <input
-            {...register("email", { required: true })}
+            {...register("email", {
+              required: "This field is required",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Please enter a valid email address",
+              },
+            })}
             type="email"
             className="cs_form_field p-2 mt-[-10px] mb-[10px]"
             placeholder="example@gmail.com"
           />
           {errors.email && (
-            <div className="error text-danger">This field is required</div>
+            <div className="error text-danger">
+              {errors.email.message}
+            </div>
           )}
         </div>
         <div className="col-lg-12">
@@ -205,13 +221,13 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
             {...register("persons", { required: true })}
             className="cs_form_field p-2 mt-[-10px] mb-[10px]"
           >
-            <option value="1">Online Seminar</option>
+            <option value="Online Seminar">Online Seminar</option>
             <option value="1">1 person</option>
             <option value="2">2 persons</option>
             <option value="3">3 persons</option>
             <option value="4">4 persons</option>
-            <option value="1">Voucher available for 1 person</option>
-            <option value="2">Voucher available for 2 persons</option>
+            <option value="Voucher1">Voucher available for 1 person</option>
+            <option value="Voucher2">Voucher available for 2 persons</option>
           </select>
           {errors.persons && (
             <div className="error text-danger">This field is required</div>
