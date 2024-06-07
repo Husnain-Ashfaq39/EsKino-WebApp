@@ -88,7 +88,7 @@ export default function Footer() {
           <div className="cs_footer_bottom_in">
             <SocialWidget />
             <div className="cs_copyright">
-              Copyright © Eskino. Powered by{" "}
+              Copyright © 2024 Eskino. Powered by{" "}
               <a
                 href="https://syntax-ai.tech"
                 target="_blank"
