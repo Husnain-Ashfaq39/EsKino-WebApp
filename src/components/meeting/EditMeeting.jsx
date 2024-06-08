@@ -127,6 +127,7 @@ const EditMeeting = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (validateForm()) {
       setIsSubmitting(true);
 
@@ -252,8 +253,7 @@ const EditMeeting = () => {
                           </label>
                           <TimePicker
                             className="form-control"
-                            use12Hours
-                            format="h:mm a"
+                            format="HH:mm"
                             onChange={(time) =>
                               handleDateTimeChange(time, "startTime")
                             }
@@ -273,8 +273,7 @@ const EditMeeting = () => {
                           </label>
                           <TimePicker
                             className="form-control"
-                            use12Hours
-                            format="h:mm a"
+                            format="HH:mm"
                             onChange={(time) =>
                               handleDateTimeChange(time, "endTime")
                             }

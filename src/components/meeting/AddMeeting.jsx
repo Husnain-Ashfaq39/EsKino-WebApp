@@ -51,8 +51,8 @@ const AddMeeting = () => {
     const currentTime = moment();
     const formattedEndDate = `${endDate.format("YYYY-MM-DD")}`;
     const endTimeMoment = moment(
-      `${formattedEndDate} ${endTime.format("hh:mm A")}`,
-      "YYYY-MM-DD hh:mm A"
+      `${formattedEndDate} ${endTime.format("HH:mm")}`,
+      "YYYY-MM-DD HH:mm"
     );
 
     if (currentTime.isAfter(endTimeMoment)) {
@@ -79,6 +79,38 @@ const AddMeeting = () => {
 
   const onSubmit = async (data) => {
     setSubmitting(true);
+
+    // Validation checks
+    if (startDate && endDate && endDate.isBefore(startDate)) {
+      toast.error("End Date should be the same as or after Start Date");
+      setSubmitting(false);
+      return;
+    }
+    if (startTime && endTime && endTime.isBefore(startTime)) {
+      toast.error("End time should be after Start Date");
+      setSubmitting(false);
+      return;
+    }
+
+
+    if (
+      startDate &&
+      endDate &&
+      startDate.isSame(endDate) &&
+      startTime &&
+      endTime &&
+      !endTime.isAfter(startTime)
+    ) {
+      toast.error("End Time should be after Start Time when Start Date and End Date are the same");
+      setSubmitting(false);
+      return;
+    }
+
+    if (data.capacity <= 0) {
+      toast.error("Capacity should be a positive number");
+      setSubmitting(false);
+      return;
+    }
 
     const formattedData = {
       ...data,
@@ -209,8 +241,7 @@ const AddMeeting = () => {
                   </label>
                   <TimePicker
                     className="form-control"
-                    use12Hours
-                    format="h:mm a"
+                    format="HH:mm"
                     onChange={(time) => {
                       setStartTime(time);
                       setValue("startTime", time);
@@ -229,8 +260,7 @@ const AddMeeting = () => {
                   </label>
                   <TimePicker
                     className="form-control"
-                    use12Hours
-                    format="h:mm a"
+                    format="HH:mm"
                     onChange={(time) => {
                       setEndTime(time);
                       setValue("endTime", time);
