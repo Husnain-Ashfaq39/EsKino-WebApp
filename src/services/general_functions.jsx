@@ -12,12 +12,9 @@ export const convertTimestamp = (timestamp) => {
 export const convertTime = (timestamp) => {
   if (!timestamp) return "";
   const date = timestamp.toDate();
-  let hours = date.getHours();
+  const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
-  const ampm = hours >= 12 ? "PM" : "AM";
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-  return `${hours}:${minutes} ${ampm}`;
+  return `${hours}:${minutes}`;
 };
 
 export let contactInfo = {

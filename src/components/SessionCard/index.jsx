@@ -99,18 +99,18 @@ function SessionCard({ limit }) {
               <p className="cs_hero_info_subtitle cs_fs_12">Zip Code: {section.zipCode}</p>
             </div>
           </div>
-          {section.capacity == "0" &&
+          {section.capacity === "0" &&
             <button disabled={true} className='bg-red-500 text-white px-[3.1rem] py-[0.77rem] mx-[1rem] rounded-full flex items-center'>
               Closed
               <img src={arrowWhiteSvg} alt="Icon" className='w-4 h-4 ml-2' />
             </button>
           }
 
-          {section.capacity != "0" &&
+          {section.capacity !== "0" &&
             <div>
               <div style={{ cursor: section.capacity > 0 ? 'pointer' : 'default', margin: '20px', pointerEvents: section.capacity === 0 ? 'none' : 'auto' }}>
                 <div onClick={section.capacity > 0 ? () => handleOpen(section.id) : null} className="cs_btn cs_style_1 " >
-                  <span>{section.capacity == "0" ? 'Closed' : 'Book Now'}</span>
+                  <span>{section.capacity === "0" ? 'Closed' : 'Book Now'}</span>
                   <i>
                     <img src={arrowWhiteSvg} alt="Icon" />
                   </i>
