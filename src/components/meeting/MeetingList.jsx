@@ -14,7 +14,6 @@ import {
 import {
   convertTime,
   convertTimestamp,
-  dateConverter,
 } from "../../services/general_functions";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
@@ -138,6 +137,11 @@ const MeetingList = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const formatDate = (date) => {
+    const [day, month, year] = date.split('/');
+    return `${day}.${month}.${year}`;
   };
 
   const columns = [
@@ -400,11 +404,11 @@ const MeetingList = () => {
                               </p>
                               <p>
                                 <strong>Start Date:</strong>{" "}
-                                {dateConverter(selectedMeeting.StartDate)}
+                                {formatDate(selectedMeeting.StartDate)}
                               </p>
                               <p>
                                 <strong>End Date:</strong>{" "}
-                                {dateConverter(selectedMeeting.endDate)}
+                                {formatDate(selectedMeeting.endDate)}
                               </p>
                             </Modal>
                           )}
@@ -469,4 +473,3 @@ const MeetingList = () => {
 };
 
 export default MeetingList;
-

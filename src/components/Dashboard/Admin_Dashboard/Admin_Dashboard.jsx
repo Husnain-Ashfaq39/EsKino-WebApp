@@ -18,7 +18,7 @@ import Sidebar from "../../Sidebar";
 import DonutChart from "./DonutChart";
 import ParticipantChart from "./ParticipantChart";
 import { getCurrentUser } from "../../../services/authService";
-import { dateConverter } from "../../../services/general_functions";
+
 const Admin_Dashboard = () => {
   const [meetings, setMeetings] = useState([]);
   const [countActive, setCountActive] = useState(0);
@@ -29,7 +29,6 @@ const Admin_Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // toast.success("Login Successful Welcome");
     if (!getCurrentUser()) {
       navigate("/login");
     }
@@ -89,19 +88,15 @@ const Admin_Dashboard = () => {
       const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
       const formatDate = (date) => {
-        const month = String(date.getMonth() + 1).padStart(2, "0");
         const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
         const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
+        return `${day}.${month}.${year}`;
       };
 
       const formattedFirstDay = formatDate(firstDayOfMonth);
       const formattedLastDay = formatDate(lastDayOfMonth);
 
-      // Extract the endDate of each meeting
-      const allEndDates = loadedMeetings.map((meeting) => meeting.endDate);
-
-      // Filter the meetings for the specific condition
       const timeoutLatestMonthCount = loadedMeetings.filter((meeting) => {
         const meetingEndDate = formatDate(new Date(meeting.endDate));
         return (
@@ -116,6 +111,11 @@ const Admin_Dashboard = () => {
 
     fetchMeetings();
   }, []);
+
+  const formatDate = (date) => {
+    const [day, month, year] = date.split('/');
+    return `${day}.${month}.${year}`;
+  };
 
   return (
     <>
@@ -262,7 +262,7 @@ const Admin_Dashboard = () => {
                                 <td>{meeting.endTime}</td>
                                 <td>{meeting.participants}</td>
                                 <td>{meeting.location}</td>
-                                <td>{dateConverter(meeting.startDate)}</td>
+                                <td>{formatDate(meeting.startDate)}</td>
                               </tr>
                             ))}
                           </tbody>
