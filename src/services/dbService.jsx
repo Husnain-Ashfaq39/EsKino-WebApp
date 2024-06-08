@@ -80,3 +80,19 @@ export const getMeetingStatus = (meeting) => {
     return "Active";
   }
 };
+
+export const ensureCategoriesInitialized = async () => {
+  const categories = [
+    { name: "Events" },
+    { name: "Our Team" },
+    { name: "Function" },
+  ];
+  const colRef = collection(db, "categories");
+  const querySnapshot = await getDocs(colRef);
+  if (querySnapshot.empty) {
+    const promises = categories.map(category =>
+      addDoc(colRef, category)
+    );
+    await Promise.all(promises);
+  }
+};

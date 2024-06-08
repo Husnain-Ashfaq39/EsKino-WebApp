@@ -3,12 +3,12 @@ import { Table, Button } from "antd";
 import { plusicon, refreshicon, searchnormal, imagesend } from "../imagepath";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
 import { getAllDocuments, deleteDocument } from "../../services/dbService";
 import { deleteFileFromStorage } from "../../services/storageService";
-import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "../../services/authService";
+
 const GalleryList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [dataSource, setDataSource] = useState([]);
@@ -16,12 +16,14 @@ const GalleryList = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
     if (!getCurrentUser()) {
       navigate('/login');
     }
     fetchData();
-  }, []);
+  }, [location.state]); // Fetch data whenever the state changes
 
   const fetchData = async () => {
     setLoading(true);
@@ -177,14 +179,21 @@ const GalleryList = () => {
                               >
                                 <img src={refreshicon} alt="#" />
                               </Link>
+                              
                             </div>
+                            <Link
+                                to="/edit-categories"
+                                className="btn btn-primary ms-2"
+                                state={{ from: "gallerylist" }}
+                              >
+                                Edit Categories
+                              </Link>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="table-responsive doctor-list">
-                    
                     <Table
                       pagination={{
                         total: dataSource.length,

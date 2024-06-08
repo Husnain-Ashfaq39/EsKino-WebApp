@@ -61,7 +61,7 @@ import EditGallery from "./components/Gallery/EditGallery";
 import Policy from "./components/Policy";
 import Settings from "./components/Settings";
 import SubscriberList from "./components/Suscribers";
-
+import EditCategories from "./components/Gallery/EditCategories";
 //Accounts
 const Approuter = () => {
   return (
@@ -79,6 +79,8 @@ const Approuter = () => {
           <Route path="/gallerylist" element={<GalleryList />} />
           <Route path="/gallerylist/add" element={<AddGallery />} />
           <Route path="/gallerylist/edit" element={<EditGallery />} />
+          <Route path="/edit-categories" element={<EditCategories />} />
+
 
           {/* Contact */}
 

@@ -1,18 +1,19 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Select, message } from "antd";
 import FeatherIcon from "feather-icons-react";
 import { uploadFile } from "../../services/storageService";
-import { addDocument } from "../../services/dbService";
-import { useEffect } from "react";
+import { addDocument, getAllDocuments } from "../../services/dbService";
 import { getCurrentUser } from "../../services/authService";
+
 const AddGallery = () => {
   const [fileList, setFileList] = useState([]);
   const [category, setCategory] = useState("Events");
+  const [categories, setCategories] = useState([]);
   const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
 
@@ -21,9 +22,21 @@ const AddGallery = () => {
       navigate('/login');
     }
 
+    fetchCategories();
+  }, []);
 
-  }, [])
-
+  const fetchCategories = async () => {
+    try {
+      const data = [];
+      const querySnapshot = await getAllDocuments("categories");
+      querySnapshot.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() });
+      });
+      setCategories(data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
   const handleFileChange = (event) => {
     const files = event.target.files;
@@ -179,17 +192,15 @@ const AddGallery = () => {
                             Category <span className="login-danger">*</span>
                           </label>
                           <Select
-                            defaultValue="Events"
+                            value={category}
                             style={{ width: "100%" }}
                             onChange={handleCategoryChange}
                           >
-                            <Select.Option value="Events">Events</Select.Option>
-                            <Select.Option value="Our Team">
-                              Our Team
-                            </Select.Option>
-                            <Select.Option value="Function">
-                              Function
-                            </Select.Option>
+                            {categories.map((cat) => (
+                              <Select.Option key={cat.id} value={cat.name}>
+                                {cat.name}
+                              </Select.Option>
+                            ))}
                           </Select>
                         </div>
                       </div>

@@ -11,9 +11,11 @@ export default function Gallery() {
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedFilter, setSelectedFilter] = useState("All");
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     fetchGalleryData();
+    fetchCategories();
   }, []);
 
   const fetchGalleryData = async () => {
@@ -30,6 +32,19 @@ export default function Gallery() {
       console.error("Error fetching gallery data:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const data = [];
+      const querySnapshot = await getAllDocuments("categories");
+      querySnapshot.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() });
+      });
+      setCategories(data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
     }
   };
 
@@ -68,30 +83,16 @@ export default function Gallery() {
               All
             </Button>
           </Col>
-          <Col>
-            <Button
-              type={selectedFilter === "Events" ? "primary" : "default"}
-              onClick={() => handleFilterChange("Events")}
-            >
-              Events
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              type={selectedFilter === "Our Team" ? "primary" : "default"}
-              onClick={() => handleFilterChange("Our Team")}
-            >
-              Our Team
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              type={selectedFilter === "Function" ? "primary" : "default"}
-              onClick={() => handleFilterChange("Function")}
-            >
-              Function
-            </Button>
-          </Col>
+          {categories.map((category) => (
+            <Col key={category.id}>
+              <Button
+                type={selectedFilter === category.name ? "primary" : "default"}
+                onClick={() => handleFilterChange(category.name)}
+              >
+                {category.name}
+              </Button>
+            </Col>
+          ))}
         </Row>
         {loading ? (
           <p>Loading...</p> // You can replace this with a loader component

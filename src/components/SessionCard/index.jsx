@@ -7,7 +7,6 @@ import { convertTimestamp, convertTime } from '../../services/general_functions'
 import useStore from '../../services/useStore';
 import colors from '../../colorTheme';
 
-
 function SessionCard({ limit }) {
   const [isOpen, setIsOpen] = useState(false);
   const [sections, setSections] = useState([]);
@@ -17,12 +16,12 @@ function SessionCard({ limit }) {
   const handleOpen = (sectionId) => {
     setIsOpen(true);
     setSelectedSectionId(sectionId);
-    setShowHeader(false); // Hide the header when modal is open
+    setShowHeader(false); 
   };
 
   const handleClose = () => {
     setIsOpen(false);
-    setShowHeader(true); // Show the header when modal is closed
+    setShowHeader(true); 
   };
 
   const fetchSections = () => {
@@ -69,6 +68,11 @@ function SessionCard({ limit }) {
     }
   };
 
+  const formatDate = (date) => {
+    const [month, day, year] = date.split('/');
+    return `${day}.${month}.${year}`;
+  };
+
   return (
     <div>
       {sections.map((section) => (
@@ -82,7 +86,7 @@ function SessionCard({ limit }) {
               <img src={date_timeSvg} alt="Icon" style={{ width: '100%', height: '100%' }} />
             </div>
             <div className="cs_hero_info_right" style={{ backgroundColor: '#F6EAEB', padding: '10px', borderRadius: '5px' }}>
-              <h3 className="cs_hero_info_title cs_semibold" style={{fontSize:'1.2rem', fontWeight: 'bold', margin: 0 }}>{section.startDate}</h3>
+              <h3 className="cs_hero_info_title cs_semibold" style={{fontSize:'1.2rem', fontWeight: 'bold', margin: 0 }}>{formatDate(section.startDate)}</h3>
               <p className="cs_hero_info_subtitle cs_fs_12">{section.startTime} to {section.endTime}</p>
             </div>
           </div>

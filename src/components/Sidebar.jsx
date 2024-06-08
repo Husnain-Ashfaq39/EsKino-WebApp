@@ -1,28 +1,21 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
+import Scrollbars from "react-custom-scrollbars-2";
 import { Link } from "react-router-dom";
 import {
   blog,
   dashboard,
   doctor,
-  doctorschedule,
   logout,
   menuicon04,
-  menuicon06,
   menuicon08,
-  menuicon09,
   menuicon10,
-  menuicon11,
   menuicon12,
-  menuicon14,
   menuicon15,
   menuicon16,
-  patients,
-  settingicon01,
-  sidemenu,
+  patients
 } from "./imagepath";
-import Scrollbars from "react-custom-scrollbars-2";
 
 const Sidebar = (props) => {
   const [sidebar, setSidebar] = useState("");
@@ -308,6 +301,18 @@ const Sidebar = (props) => {
                           to="/gallerylist/add"
                         >
                           Add Image
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className={
+                            props?.activeClassName === "editcategories"
+                              ? "active"
+                              : ""
+                          }
+                          to="/edit-categories"
+                        >
+                          Edit Categories
                         </Link>
                       </li>
                     </li>

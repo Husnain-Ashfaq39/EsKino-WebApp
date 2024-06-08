@@ -7,8 +7,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button, Select, message } from "antd";
 import FeatherIcon from "feather-icons-react";
 import { uploadFile } from "../../services/storageService";
-import { getDocument, updateDocument } from "../../services/dbService";
+import { getDocument, updateDocument, getAllDocuments } from "../../services/dbService";
 import { getCurrentUser } from "../../services/authService";
+
 const EditGallery = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const EditGallery = () => {
   const id = searchParams.get("id");
   const [fileList, setFileList] = useState([]);
   const [category, setCategory] = useState("Events");
+  const [categories, setCategories] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [existingImageUrl, setExistingImageUrl] = useState("");
 
@@ -24,6 +26,7 @@ const EditGallery = () => {
       navigate('/login');
     }
     fetchGalleryItem();
+    fetchCategories();
   }, []);
 
   const fetchGalleryItem = async () => {
@@ -38,6 +41,19 @@ const EditGallery = () => {
       }
     } catch (error) {
       console.error("Error fetching gallery item:", error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const data = [];
+      const querySnapshot = await getAllDocuments("categories");
+      querySnapshot.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() });
+      });
+      setCategories(data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
     }
   };
 
@@ -203,13 +219,11 @@ const EditGallery = () => {
                             style={{ width: "100%" }}
                             onChange={handleCategoryChange}
                           >
-                            <Select.Option value="Events">Events</Select.Option>
-                            <Select.Option value="Our Team">
-                              Our Team
-                            </Select.Option>
-                            <Select.Option value="Function">
-                              Function
-                            </Select.Option>
+                            {categories.map((cat) => (
+                              <Select.Option key={cat.id} value={cat.name}>
+                                {cat.name}
+                              </Select.Option>
+                            ))}
                           </Select>
                         </div>
                       </div>
