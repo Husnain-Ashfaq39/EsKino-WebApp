@@ -69,8 +69,8 @@ function SessionCard({ limit }) {
   };
 
   const formatDate = (date) => {
-    const [month, day, year] = date.split('/');
-    return `${month}.${day}.${year}`;
+    const [day, month, year] = date.split('/');
+    return `${day}.${month}.${year}`;
   };
 
   return (

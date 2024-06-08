@@ -74,7 +74,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
         if (doc.exists()) {
           const meetingData = doc.data();
           setCapacity(meetingData.capacity);
-          setStartDate(convertTimestamp(meetingData.startDate)); // Assuming convertTimestamp is a function to convert timestamp to a readable format
+          setStartDate(formatDate(convertTimestamp(meetingData.startDate))); // Format the date to DD.MM.YYYY
         }
       } catch (error) {
         console.error("Error fetching meeting data: ", error);
@@ -83,6 +83,11 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
 
     fetchMeetingData();
   }, [sectionId]);
+
+  const formatDate = (date) => {
+    const [day, month, year] = date.split('/');
+    return `${day}.${month}.${year}`;
+  };
 
   const onSubmit = async (data) => {
     data.sectionId = sectionId;
