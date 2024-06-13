@@ -189,7 +189,7 @@ const Admin_Dashboard = () => {
                     <img src={scissor} alt="#" />
                   </div>
                   <div className="dash-content dash-count">
-                    <h4>Timeout</h4>
+                    <h4>Timeout Meeting</h4>
                     <h2>{countTimeout}</h2>
                   </div>
                 </div>

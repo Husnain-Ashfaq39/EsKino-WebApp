@@ -1,25 +1,24 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Table, Button, Spin } from "antd";
-import { Link } from "react-router-dom";
-import Header from "../Header";
-import Sidebar from "../Sidebar";
-import { useLocation, useNavigate } from "react-router-dom";
-import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import { imagesend, refreshicon, searchnormal } from "../imagepath";
-import { Modal } from "react-responsive-modal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button, Spin, Table } from "antd";
+import FeatherIcon from "feather-icons-react/build/FeatherIcon";
+import React, { useEffect, useRef, useState } from "react";
+import { Modal } from "react-responsive-modal";
+import 'react-responsive-modal/styles.css';
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { getCurrentUser } from "../../services/authService";
 import {
   addDocument,
+  deleteDocument,
   fetchDocumentsWithQuery,
   getAllDocuments,
-  updateDocument,
-  deleteDocument,
   getDocument,
+  updateDocument,
 } from "../../services/dbService";
-import { getCurrentUser } from "../../services/authService";
-import 'react-responsive-modal/styles.css';
+import Header from "../Header";
+import { imagesend, refreshicon, searchnormal } from "../imagepath";
+import Sidebar from "../Sidebar";
 
 const ReportContainer = styled.div`
   padding: 20px;
@@ -65,7 +64,7 @@ const ParticipantList = () => {
   const navigate = useNavigate();
   const [participentToDele, setParticipentToDele] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false); // Loading state for deletion
+  const [isDeleting, setIsDeleting] = useState(false); 
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredParticipants, setFilteredParticipants] = useState([]);
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -358,7 +357,7 @@ const ParticipantList = () => {
                           <p><strong>Email:</strong> {selectedParticipant.email}</p>
                           <p><strong>Persons:</strong> {selectedParticipant.persons}</p>
                           <p><strong>Plan:</strong> {selectedParticipant.plan}</p>
-                          <p><strong>Total Fee:</strong> {selectedParticipant.totalFee}</p>
+                          <p><strong>Total Fee:</strong> €{selectedParticipant.totalFee}</p>
                           <p><strong>Name of Participants:</strong> {selectedParticipant.personNames}</p>
                           <p><strong>Owner Address:</strong> {selectedParticipant.address}</p>
                           <p><strong>Gender:</strong> {selectedParticipant.gender}</p>
@@ -387,7 +386,7 @@ const ParticipantList = () => {
                             <Button
                               onClick={() => setIsDeleteModalOpen(false)}
                               className="btn btn-white me-2"
-                              disabled={isDeleting} // Disable button while deleting
+                              disabled={isDeleting} 
                             >
                               Close
                             </Button>
@@ -395,7 +394,7 @@ const ParticipantList = () => {
                               type="button"
                               className="btn btn-danger"
                               onClick={() => handleDelete(participentToDele)}
-                              disabled={isDeleting} // Disable button while deleting
+                              disabled={isDeleting} 
                             >
                               {isDeleting ? (
                                 <>
@@ -411,7 +410,7 @@ const ParticipantList = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+             </div>
             </div>
           </div>
         </div>
