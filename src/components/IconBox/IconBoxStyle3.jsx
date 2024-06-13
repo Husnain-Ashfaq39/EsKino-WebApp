@@ -6,7 +6,6 @@ export default function IconBoxStyle3({ item, index }) {
 
   return (
 
-// Color for the hover in the center is in .cs_iconbox.cs_style_3 
     <div className="cs_iconbox cs_style_3 " >
       <div className="cs_iconbox_left" >
         <div className=" cs_center " >
@@ -14,11 +13,11 @@ export default function IconBoxStyle3({ item, index }) {
         </div>
       </div>
       <div className="cs_iconbox_right" >
-        <h4 className="cs_iconbox_number" style={{color: colors.secondary}}>{index}</h4>
-        <h2 className="cs_iconbox_title cs_fs_32 cs_semibold" >
+        <h4 className="cs_iconbox_number font-medium	" style={{color: colors.secondary}}>{index}</h4>
+        <h2 className="cs_iconbox_title cs_fs_32  font-medium" >
           {CCTitle}
         </h2>
-        <p className="cs_iconbox_subtitle m-0" >{CCDescription}</p>
+        <p className="cs_iconbox_subtitle m-0 font-normal	" >{CCDescription}</p>
         <SectionHeading titleDown={CCQuote} titleDownProps="1px"/>
       </div>
     </div>

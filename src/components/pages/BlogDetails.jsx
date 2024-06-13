@@ -134,7 +134,7 @@ export default function BlogDetail() {
         <div className="row">
           <div className="col-lg-8">
             <div className="cs_blog_details">
-              <h2>{blog.title}</h2>
+              <h2 className='font-light'>{blog.title}</h2>
               <div dangerouslySetInnerHTML={{ __html: blog.content }} />
               {/* Other blog details can be rendered here */}
             </div>

@@ -51,7 +51,7 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
       >
         <div className="container" style={{ position: "relative" }}>
           <div className="cs_hero_text">
-            <h1 className="cs_hero_title cs_fs_94 text-6xl font-semibold">
+            <h1 className="cs_hero_title cs_fs_94 text-6xl font-light">
               {parse(title)}
             </h1>
             <p
