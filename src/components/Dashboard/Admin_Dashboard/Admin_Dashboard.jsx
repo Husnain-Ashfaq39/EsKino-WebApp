@@ -1,7 +1,6 @@
-import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   fetchDocumentsWithQuery,
@@ -18,7 +17,7 @@ import Sidebar from "../../Sidebar";
 import DonutChart from "./DonutChart";
 import ParticipantChart from "./ParticipantChart";
 import { getCurrentUser } from "../../../services/authService";
-
+import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 const Admin_Dashboard = () => {
   const [meetings, setMeetings] = useState([]);
   const [countActive, setCountActive] = useState(0);
@@ -62,12 +61,10 @@ const Admin_Dashboard = () => {
       setCountClose(closeCount);
       setCountTimeout(timeoutCount);
 
-      // Calculate total earnings from timeout meetings
+      // Calculate total earnings from both participants and deleted participants
       let totalEarnings = 0;
 
-      for (const meeting of loadedMeetings.filter(
-        (meeting) => getMeetingStatus(meeting) === "Timeout"
-      )) {
+      for (const meeting of loadedMeetings) {
         const participantsSnapshot = await fetchDocumentsWithQuery(
           "participants",
           "sectionId",
@@ -76,6 +73,17 @@ const Admin_Dashboard = () => {
         const participants = participantsSnapshot.docs.map((doc) => doc.data());
 
         participants.forEach((participant) => {
+          totalEarnings += participant.totalFee || 0;
+        });
+
+        const deletedParticipantsSnapshot = await fetchDocumentsWithQuery(
+          "Deleted Participants",
+          "sectionId",
+          meeting.id
+        );
+        const deletedParticipants = deletedParticipantsSnapshot.docs.map((doc) => doc.data());
+
+        deletedParticipants.forEach((participant) => {
           totalEarnings += participant.totalFee || 0;
         });
       }
@@ -110,7 +118,7 @@ const Admin_Dashboard = () => {
     };
 
     fetchMeetings();
-  }, []);
+  }, [navigate]);
 
   const formatDate = (date) => {
     const [day, month, year] = date.split('/');

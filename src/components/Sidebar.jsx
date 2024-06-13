@@ -153,7 +153,7 @@ const Sidebar = (props) => {
                     <span className="menu-side">
                       <img src={patients} alt="" />
                     </span>{" "}
-                    <span>Participent </span> <span className="menu-arrow" />
+                    <span>Participant </span> <span className="menu-arrow" />
                   </Link>
                   <ul style={{ display: "none" }} className="menu-items2">
                     <li>
@@ -165,12 +165,22 @@ const Sidebar = (props) => {
                         }
                         to="/meetinglist/participantlist"
                       >
-                        Participent List
+                        Participant List
                       </Link>
                     </li>
                     <li>
-                      {/* <Link className={props?.activeClassName === 'add-patient' ? 'active' : ''} to="/addpatients">Add Patients</Link> */}
+                      <Link
+                        className={
+                          props?.activeClassName === "deleted-participants"
+                            ? "active"
+                            : ""
+                        }
+                        to="/deleted-participants"
+                      >
+                        Deleted Participants
+                      </Link>
                     </li>
+                    
                   </ul>
                 </li>
                 <li className="submenu">

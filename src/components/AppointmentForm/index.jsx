@@ -156,7 +156,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
 
   return (
     <div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <form onSubmit={handleSubmit(onSubmit)} className="row">
         <div className="col-lg-6">
           <label className="cs_input_label cs_heading_color">First Name</label>

@@ -26,6 +26,7 @@ const DeletedParticipants = () => {
         persons: doc.data().persons,
         gender: doc.data().gender,
         title: doc.data().title,
+        streetAddress: doc.data().streetAddress,
       }));
       setDeletedParticipants(loadedParticipants);
       setFilteredParticipants(loadedParticipants);
@@ -43,10 +44,10 @@ const DeletedParticipants = () => {
 
   const columns = [
     {
-        title: "Meeting Title",
-        dataIndex: "title",
-        sorter: (a, b) => a.title.length - b.title.length,
-      },
+      title: "Meeting Title",
+      dataIndex: "title",
+      sorter: (a, b) => a.title.length - b.title.length,
+    },
     {
       title: "Persons",
       dataIndex: "persons",
@@ -57,7 +58,11 @@ const DeletedParticipants = () => {
       dataIndex: "gender",
       sorter: (a, b) => a.gender.length - b.gender.length,
     },
-    
+    {
+      title: "Street Address",
+      dataIndex: "streetAddress",
+      sorter: (a, b) => a.streetAddress.length - b.streetAddress.length,
+    },
   ];
 
   return (

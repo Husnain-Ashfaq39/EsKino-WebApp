@@ -81,7 +81,6 @@ const ParticipantList = () => {
 
     const participant = participentData[participantIndex];
     const numberOfPersons = parseInt(participant.persons, 10);
-    const meetingId = participant.sectionId;
 
     try {
       const meetingDoc = await getDocument("meetings", participant.sectionId);
@@ -100,6 +99,8 @@ const ParticipantList = () => {
           gender: participant.gender,
           title: meetingData.title,
           sectionId: participant.sectionId,
+          totalFee:participant.totalFee,
+          streetAddress:meetingData.streetAddress
         });
 
         // Remove participant from "Participants" collection

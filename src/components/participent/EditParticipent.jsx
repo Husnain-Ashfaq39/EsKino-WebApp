@@ -6,6 +6,7 @@ import { getDocument, updateDocument } from "../../services/dbService";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getCurrentUser } from "../../services/authService";
+
 const EditParticipant = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -21,7 +22,6 @@ const EditParticipant = () => {
     persons: 0,
     personNames: "",
     gender: "",
-    FIELD9: "",
   };
 
   const [participantData, setParticipantData] = useState(
@@ -30,7 +30,7 @@ const EditParticipant = () => {
 
   useEffect(() => {
     if (!getCurrentUser()) {
-      navigate('/login');
+      navigate("/login");
     }
     if (participentId) {
       getDocument("participants", participentId)
@@ -88,6 +88,13 @@ const EditParticipant = () => {
       }
     });
 
+    // Email format validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (participantData.email && !emailPattern.test(participantData.email)) {
+      isValid = false;
+      newErrors.email = "Please enter a valid email address";
+    }
+
     setErrors(newErrors);
     return isValid;
   };
@@ -102,7 +109,7 @@ const EditParticipant = () => {
         firstName: participantData.firstName,
         lastName: participantData.lastName,
         email: participantData.email,
-        address: participantData.address,
+        address: participantData.address, // Ensure address is correctly mapped
         persons: participantData.persons,
         personNames: participantData.personNames,
         gender: participantData.gender,
@@ -203,32 +210,31 @@ const EditParticipant = () => {
                       <input
                         className="form-control"
                         type="text"
-                        name="addressOwner"
+                        name="address"
                         value={participantData.address}
                         onChange={handleChange}
                       />
+                      {errors.address && (
+                        <div className="error text-danger">
+                          {errors.address}
+                        </div>
+                      )}
                     </div>
-
-                    {/* <div className="form-group">
-                      <label>Personals</label>
-                      <input
-                        className="form-control"
-                        type="number"
-                        name="personals"
-                        value={participantData.persons}
-                        onChange={handleChange}
-                      />
-                    </div> */}
 
                     <div className="form-group">
                       <label>Name of Participants</label>
                       <input
                         className="form-control"
                         type="text"
-                        name="nameOfParticipants"
+                        name="personNames"
                         value={participantData.personNames}
                         onChange={handleChange}
                       />
+                      {errors.personNames && (
+                        <div className="error text-danger">
+                          {errors.personNames}
+                        </div>
+                      )}
                     </div>
                     <div className="form-group">
                       <label>Gender</label>
@@ -262,6 +268,9 @@ const EditParticipant = () => {
                           </label>
                         </div>
                       </div>
+                      {errors.gender && (
+                        <div className="error text-danger">{errors.gender}</div>
+                      )}
                     </div>
 
                     <button
