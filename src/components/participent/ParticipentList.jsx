@@ -54,6 +54,7 @@ const ParticipantList = () => {
           persons: participant.persons,
           gender: participant.gender,
           title: meetingData.title,
+          sectionId:participant.sectionId,
         });
 
         // Remove participant from "Participants" collection

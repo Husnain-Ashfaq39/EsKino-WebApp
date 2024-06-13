@@ -18,12 +18,13 @@ const ParticipantChart = () => {
       );
       const meetingsSnapshot = await getDocs(meetingsQuery);
 
-      
       // Fetch all participants
       const participantsQuery = query(collection(db, "participants"));
       const participantsSnapshot = await getDocs(participantsQuery);
 
-     
+      // Fetch all deleted participants
+      const deletedParticipantsQuery = query(collection(db, "Deleted Participants"));
+      const deletedParticipantsSnapshot = await getDocs(deletedParticipantsQuery);
 
       // Create a map of meeting IDs to participant counts
       const meetingParticipantsMap = {};
@@ -39,14 +40,24 @@ const ParticipantChart = () => {
         meetingParticipantsMap[sectionId] += persons;
       });
 
-      console.log("Meeting participants map:", meetingParticipantsMap);
+      // Include deleted participants in the count
+      deletedParticipantsSnapshot.forEach((doc) => {
+        const participantData = doc.data();
+        const sectionId = participantData.sectionId;
+        const persons = parseInt(participantData.persons, 10) || 0;
+
+        if (!meetingParticipantsMap[sectionId]) {
+          meetingParticipantsMap[sectionId] = 0;
+        }
+
+        meetingParticipantsMap[sectionId] += persons;
+      });
 
       const data = Array(12).fill(0);
 
       // Map meeting IDs to their end month and sum participants
       meetingsSnapshot.forEach((doc) => {
         const meetingData = doc.data();
-        console.log("Meeting data:", meetingData);
         const endDate = meetingData.endDate.toDate();
         const monthIndex = moment(endDate).month(); // Get the month index (0-11)
         const meetingId = doc.id;
@@ -55,15 +66,11 @@ const ParticipantChart = () => {
         data[monthIndex] += participants;
       });
 
-      console.log("Chart data:", data);
-
       // Adjust the order of data to start from the current month and go back one year
       const currentMonthIndex = moment().month();
       const adjustedData = data
         .slice(currentMonthIndex + 1)
         .concat(data.slice(0, currentMonthIndex + 1));
-
-      console.log("Adjusted data:", adjustedData);
 
       setChartData(adjustedData);
     };
@@ -117,8 +124,6 @@ const ParticipantChart = () => {
           .concat(moment.monthsShort().slice(0, currentMonthIndex + 1)),
       },
     };
-
-    console.log("Chart options:", sColStackedOptions);
 
     const chart = new ApexCharts(
       document.querySelector("#patient-chart"),
