@@ -209,7 +209,7 @@ const EditParticipant = () => {
                       />
                     </div>
 
-                    <div className="form-group">
+                    {/* <div className="form-group">
                       <label>Personals</label>
                       <input
                         className="form-control"
@@ -218,7 +218,7 @@ const EditParticipant = () => {
                         value={participantData.persons}
                         onChange={handleChange}
                       />
-                    </div>
+                    </div> */}
 
                     <div className="form-group">
                       <label>Name of Participants</label>

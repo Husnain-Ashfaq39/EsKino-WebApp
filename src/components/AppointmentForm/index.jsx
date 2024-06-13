@@ -19,7 +19,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
     watch,
     reset,
   } = useForm({
-    defaultValues: { persons: "1" },
+    defaultValues: { persons: "1 person" },
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [totalFee, setTotalFee] = useState(0);
@@ -28,35 +28,35 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
   const [warning, setWarning] = useState(""); // State to store the warning message
   const [startDate, setStartDate] = useState(null); // State to store the startDate
 
-  const calculateTotalFee = (persons) => {
+  const calculateTotalFee = (plan) => {
     let fee = 0;
     let original = 0;
-    switch (persons) {
-      case "1":
-        fee = 60;
-        original = 60;
-        break;
-      case "2":
-        fee = 90;
-        original = 120;
-        break;
-      case "3":
-        fee = 135;
-        original = 180;
-        break;
-      case "4":
-        fee = 180;
-        original = 240;
-        break;
+    switch (plan) {
       case "Online Seminar":
         fee = 50;
         original = 50;
         break;
-      case "Voucher1":
+      case "1 person":
+        fee = 60;
+        original = 60;
+        break;
+      case "2 persons":
+        fee = 90;
+        original = 120;
+        break;
+      case "3 persons":
+        fee = 135;
+        original = 180;
+        break;
+      case "4 persons":
+        fee = 180;
+        original = 240;
+        break;
+      case "Voucher for 1 person":
         fee = 0;
         original = 60;
         break;
-      case "Voucher2":
+      case "Voucher for 2 persons":
         fee = 0;
         original = 120;
         break;
@@ -92,6 +92,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
   const onSubmit = async (data) => {
     data.sectionId = sectionId;
     data.totalFee = totalFee;
+    data.plan = data.persons; // Store the selected plan
     setIsSubmitting(true);
 
     try {
@@ -99,18 +100,20 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
       if (doc.exists()) {
         const meetingData = doc.data();
 
-        let personsCount = parseInt(data.persons, 10);
-        if (data.persons === "Online Seminar" || data.persons === "Voucher1") {
+        let personsCount = 0;
+        if (data.persons === "Online Seminar" || data.persons === "Voucher for 1 person") {
           personsCount = 1;
-        } else if (data.persons === "Voucher2") {
+        } else if (data.persons === "Voucher for 2 persons") {
           personsCount = 2;
+        } else {
+          personsCount = parseInt(data.persons.split(" ")[0], 10);
         }
 
         data.persons = personsCount; // Update the data to store numerical value
 
-        if (meetingData.capacity >= personsCount) {
-          const updatedCapacity = meetingData.capacity - personsCount;
-          const updatedParticipants = meetingData.Participants + personsCount;
+        if (parseInt(meetingData.capacity, 10) >= personsCount) {
+          const updatedCapacity = (parseInt(meetingData.capacity, 10) - personsCount).toString();
+          const updatedParticipants = (parseInt(meetingData.Participants, 10) + personsCount).toString();
 
           await updateDocument("meetings", data.sectionId, {
             capacity: updatedCapacity,
@@ -144,7 +147,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
   useEffect(() => {
     calculateTotalFee(persons);
 
-    if (capacity !== null && parseInt(persons, 10) > capacity) {
+    if (capacity !== null && parseInt(persons.split(" ")[0], 10) > parseInt(capacity, 10)) {
       setWarning(`Only ${capacity} places left.`);
     } else {
       setWarning("");
@@ -153,7 +156,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
 
   return (
     <div>
-      {/* <ToastContainer /> */}
+      <ToastContainer />
       <form onSubmit={handleSubmit(onSubmit)} className="row">
         <div className="col-lg-6">
           <label className="cs_input_label cs_heading_color">First Name</label>
@@ -220,19 +223,19 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
         )}
         <div className="col-lg-4">
           <label className="cs_input_label cs_heading_color">
-            Select Persons:
+            Select Plan:
           </label>
           <select
             {...register("persons", { required: true })}
             className="cs_form_field p-2 mt-[-10px] mb-[10px]"
           >
             <option value="Online Seminar">Online Seminar</option>
-            <option value="1">1 person</option>
-            <option value="2">2 persons</option>
-            <option value="3">3 persons</option>
-            <option value="4">4 persons</option>
-            <option value="Voucher1">Voucher available for 1 person</option>
-            <option value="Voucher2">Voucher available for 2 persons</option>
+            <option value="1 person">1 person</option>
+            <option value="2 persons">2 persons</option>
+            <option value="3 persons">3 persons</option>
+            <option value="4 persons">4 persons</option>
+            <option value="Voucher for 1 person">Voucher for 1 person</option>
+            <option value="Voucher for 2 persons">Voucher for 2 persons</option>
           </select>
           {errors.persons && (
             <div className="error text-danger">This field is required</div>
