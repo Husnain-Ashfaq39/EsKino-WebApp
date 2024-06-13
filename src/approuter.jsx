@@ -62,6 +62,7 @@ import Policy from "./components/Policy";
 import Settings from "./components/Settings";
 import SubscriberList from "./components/Suscribers";
 import EditCategories from "./components/Gallery/EditCategories";
+import DeletedParticipants from "./components/participent/DeletedParticipant";
 //Accounts
 const Approuter = () => {
   return (
@@ -86,6 +87,7 @@ const Approuter = () => {
 
           <Route path="/contactlist" element={<Contactlist />} />
           <Route path="/suscribers" element={<SubscriberList />} />
+          <Route path="/deleted-participants" element={<DeletedParticipants />} />
 
           {/* Blog */}
 

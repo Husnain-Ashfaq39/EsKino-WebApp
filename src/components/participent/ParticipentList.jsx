@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Table, Modal, Button } from "antd";
+import { Table, Modal, Button, Spin } from "antd";
 import { Link } from "react-router-dom";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { useLocation, useNavigate } from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { imagesend, refreshicon, searchnormal } from "../imagepath";
-import { db } from "../../config/firebase";
-import { getDoc, doc } from "firebase/firestore";
-import { updateDoc } from "firebase/firestore";
 import {
-  deleteDocument,
+  addDocument,
   fetchDocumentsWithQuery,
   getAllDocuments,
+  updateDocument,
+  deleteDocument,
+  getDocument,
 } from "../../services/dbService";
 import { getCurrentUser } from "../../services/authService";
 
@@ -23,10 +23,12 @@ const ParticipantList = () => {
   const navigate = useNavigate();
   const [participentToDele, setParticipentToDele] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false); // Loading state for deletion
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredParticipants, setFilteredParticipants] = useState([]);
 
   const handleDelete = async (participantId) => {
+    setIsDeleting(true); // Set loading state to true
     const participantIndex = participentData.findIndex(
       (p) => p.id === participantId
     );
@@ -37,19 +39,24 @@ const ParticipantList = () => {
     const meetingId = participant.sectionId;
 
     try {
-      const meetingRef = doc(db, "meetings", meetingId);
-      const meetingSnap = await getDoc(meetingRef);
+      const meetingDoc = await getDocument("meetings", participant.sectionId);
 
-      if (meetingSnap.exists()) {
-        const meetingData = meetingSnap.data();
+      if (meetingDoc.exists()) {
+        const meetingData = meetingDoc.data();
         const currentCapacity = parseInt(meetingData.capacity, 10) || 0;
         const updatedCapacity = currentCapacity + numberOfPersons;
         const updatedCapacityStr = updatedCapacity.toString();
 
-        await updateDoc(meetingRef, {
-          capacity: updatedCapacityStr,
+        await updateDocument("meetings", participant.sectionId, { capacity: updatedCapacityStr });
+
+        // Move participant to "Deleted Participants" collection
+        await addDocument("Deleted Participants", {
+          persons: participant.persons,
+          gender: participant.gender,
+          title: meetingData.title,
         });
 
+        // Remove participant from "Participants" collection
         await deleteDocument("participants", participantId);
 
         const updatedParticipants = participentData.filter(
@@ -61,6 +68,8 @@ const ParticipantList = () => {
       }
     } catch (error) {
       navigate("/server-error");
+    } finally {
+      setIsDeleting(false); // Reset loading state
     }
   };
 
@@ -263,6 +272,12 @@ const ParticipantList = () => {
                             >
                               <img src={refreshicon} alt="#" />
                             </Link>
+                            <Link
+                              to="/deleted-participants"
+                              className="btn btn-secondary ms-2"
+                            >
+                              Deleted Participants
+                            </Link>
                           </div>
                         </div>
                       </div>
@@ -270,12 +285,13 @@ const ParticipantList = () => {
                   </div>
                 </div>
                 <div className="card-body">
-                <div className="table-responsive">
-                  <Table
-                    columns={columns}
-                    dataSource={filteredParticipants}
-                    rowKey="id"
-                  /></div>
+                  <div className="table-responsive">
+                    <Table
+                      columns={columns}
+                      dataSource={filteredParticipants}
+                      rowKey="id"
+                    />
+                  </div>
                   {isModalOpen && (
                     <Modal
                       title="Participant Details"
@@ -315,8 +331,7 @@ const ParticipantList = () => {
                       </p>
                       <p>
                         <strong>Gender:</strong> {selectedParticipant.gender}
-                      </p>{" "}
-                      {/* Display Gender here */}
+                      </p>
                     </Modal>
                   )}
 
@@ -341,6 +356,7 @@ const ParticipantList = () => {
                             <Button
                               onClick={() => setIsDeleteModalOpen(false)}
                               className="btn btn-white me-2"
+                              disabled={isDeleting} // Disable button while deleting
                             >
                               Close
                             </Button>
@@ -348,8 +364,15 @@ const ParticipantList = () => {
                               type="button"
                               className="btn btn-danger"
                               onClick={() => handleDelete(participentToDele)}
+                              disabled={isDeleting} // Disable button while deleting
                             >
-                              Delete
+                              {isDeleting ? (
+                                <>
+                                  <Spin size="small" /> 
+                                </>
+                              ) : (
+                                "Delete"
+                              )}
                             </Button>
                           </div>
                         </div>
