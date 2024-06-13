@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Table, Modal, Button, Spin } from "antd";
+import React, { useState, useEffect, useRef } from "react";
+import { Table, Button, Spin } from "antd";
 import { Link } from "react-router-dom";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { useLocation, useNavigate } from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { imagesend, refreshicon, searchnormal } from "../imagepath";
+import { Modal } from "react-responsive-modal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPrint } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
 import {
   addDocument,
   fetchDocumentsWithQuery,
@@ -15,6 +19,44 @@ import {
   getDocument,
 } from "../../services/dbService";
 import { getCurrentUser } from "../../services/authService";
+import 'react-responsive-modal/styles.css';
+
+const ReportContainer = styled.div`
+  padding: 20px;
+  border-radius: 15px;
+  background-color: #fff;
+`;
+
+const ReportHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+`;
+
+const PrintButton = styled(Button)`
+  background-color: #2E7D32;
+  color: #fff;
+  &:hover {
+    background-color: #1B5E20;
+  }
+`;
+
+const StyledModal = styled(Modal)`
+  &.react-responsive-modal-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  &.react-responsive-modal-modal {
+    border-radius: 15px;
+    max-width: 700px;
+    padding: 20px;
+  }
+`;
 
 const ParticipantList = () => {
   const location = useLocation();
@@ -26,6 +68,9 @@ const ParticipantList = () => {
   const [isDeleting, setIsDeleting] = useState(false); // Loading state for deletion
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredParticipants, setFilteredParticipants] = useState([]);
+  const [selectedParticipant, setSelectedParticipant] = useState(null);
+  const [isReportOpen, setIsReportOpen] = useState(false);
+  const printRef = useRef();
 
   const handleDelete = async (participantId) => {
     setIsDeleting(true); // Set loading state to true
@@ -54,7 +99,7 @@ const ParticipantList = () => {
           persons: participant.persons,
           gender: participant.gender,
           title: meetingData.title,
-          sectionId:participant.sectionId,
+          sectionId: participant.sectionId,
         });
 
         // Remove participant from "Participants" collection
@@ -93,6 +138,8 @@ const ParticipantList = () => {
             personNames: doc.data().personNames,
             gender: doc.data().gender,
             sectionId: doc.data().sectionId,
+            plan: doc.data().plan,
+            totalFee: doc.data().totalFee,
           }));
           setParticipantData(loadedParticipants);
         }
@@ -109,6 +156,8 @@ const ParticipantList = () => {
           personNames: doc.data().personNames,
           gender: doc.data().gender,
           sectionId: doc.data().sectionId,
+          plan: doc.data().plan,
+          totalFee: doc.data().totalFee,
         }));
         setParticipantData(loadedParticipants);
       });
@@ -126,20 +175,14 @@ const ParticipantList = () => {
     setFilteredParticipants(filtered);
   }, [searchQuery, participentData]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedParticipant, setSelectedParticipant] = useState({});
+  const handlePrint = () => {
+    const printContent = printRef.current.innerHTML;
+    const originalContent = document.body.innerHTML;
 
-  const showModal = (participant) => {
-    setSelectedParticipant(participant);
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
+    document.body.innerHTML = printContent;
+    window.print();
+    document.body.innerHTML = originalContent;
+    window.location.reload();
   };
 
   const columns = [
@@ -174,7 +217,10 @@ const ParticipantList = () => {
       title: "",
       dataIndex: "actions",
       render: (_, record) => (
-        <Button className="btn btn-primary" onClick={() => showModal(record)}>
+        <Button className="btn btn-primary" onClick={() => {
+          setSelectedParticipant(record);
+          setIsReportOpen(true);
+        }}>
           View Details
         </Button>
       ),
@@ -293,49 +339,32 @@ const ParticipantList = () => {
                       rowKey="id"
                     />
                   </div>
-                  {isModalOpen && (
-                    <Modal
-                      title="Participant Details"
-                      open={isModalOpen}
-                      onOk={handleOk}
-                      onCancel={handleCancel}
-                      footer={[
-                        <Button key="close" onClick={handleCancel}>
-                          Close
-                        </Button>,
-                        <Button key="ok" onClick={handleOk} type="primary">
-                          OK
-                        </Button>,
-                      ]}
-                    >
-                      <p>
-                        <strong>First Name:</strong>{" "}
-                        {selectedParticipant.firstName}
-                      </p>
-                      <p>
-                        <strong>Last Name:</strong>{" "}
-                        {selectedParticipant.lastName}
-                      </p>
-                      <p>
-                        <strong>Email:</strong> {selectedParticipant.email}
-                      </p>
-                      <p>
-                        <strong>Persons:</strong> {selectedParticipant.persons}
-                      </p>
-                      <p>
-                        <strong>Name of Participants:</strong>{" "}
-                        {selectedParticipant.personNames}
-                      </p>
-                      <p>
-                        <strong>Owner Address:</strong>{" "}
-                        {selectedParticipant.address}
-                      </p>
-                      <p>
-                        <strong>Gender:</strong> {selectedParticipant.gender}
-                      </p>
-                    </Modal>
+                  {selectedParticipant && (
+                    <StyledModal open={isReportOpen} onClose={() => setIsReportOpen(false)} center>
+                      <ReportContainer ref={printRef}>
+                        <ReportHeader>
+                          <h2>Participant Report</h2>
+                          <PrintButton
+                            icon={<FontAwesomeIcon icon={faPrint} />}
+                            onClick={handlePrint}
+                          >
+                            Print
+                          </PrintButton>
+                        </ReportHeader>
+                        <div className="report-content">
+                          <p><strong>First Name:</strong> {selectedParticipant.firstName}</p>
+                          <p><strong>Last Name:</strong> {selectedParticipant.lastName}</p>
+                          <p><strong>Email:</strong> {selectedParticipant.email}</p>
+                          <p><strong>Persons:</strong> {selectedParticipant.persons}</p>
+                          <p><strong>Plan:</strong> {selectedParticipant.plan}</p>
+                          <p><strong>Total Fee:</strong> {selectedParticipant.totalFee}</p>
+                          <p><strong>Name of Participants:</strong> {selectedParticipant.personNames}</p>
+                          <p><strong>Owner Address:</strong> {selectedParticipant.address}</p>
+                          <p><strong>Gender:</strong> {selectedParticipant.gender}</p>
+                        </div>
+                      </ReportContainer>
+                    </StyledModal>
                   )}
-
                   <div
                     className={
                       isDeleteModalOpen
