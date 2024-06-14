@@ -37,8 +37,7 @@ const doctors = [
     ],
     currentPositions: [
       "niedergelassener Kinderarzt in einer Kinderarztpraxis in Günzburg, aktuell in Schwerpunktweiterbildung Kinderkardiologie und angeborene Herzfehler",
-      "Vater von zwei Söhnen"
-    ]
+      "Vater von zwei Söhnen"]
   }
 ];
 
@@ -60,20 +59,20 @@ const Doctors = () => {
                 <div style={{padding:'9px'}} className={styles.info}>
                   <h3 className={styles.cardTitle}>{doctor.name}</h3>
                   <h5 className={styles.speciality}>{doctor.speciality}</h5>
-                  <ul className={styles.detailsList} style={{ textAlign: 'left',marginLeft:"2rem"}} >
+                  <ul className={styles.detailsList} style={{ textAlign: 'left',marginLeft:"1rem"}} >
                     {doctor.details.map((detail, i) => (
-                      <li style={{ textAlign: 'left', listStyleType: 'disc',marginLeft:"2rem" }} key={i}>{detail}</li>
+                      <li style={{ textAlign: 'left', listStyleType: 'disc',marginLeft:"1rem" }} key={i}>{detail}</li>
                     ))}
                     <br />
                     <h5>Zusatzqualifikationen</h5>
                     {doctor.additionalQualifications.map((qualification, i) => (
-                      <li style={{ textAlign: 'left', listStyleType: 'disc',marginLeft:"2.3rem" }} key={i}>{qualification}</li>
+                      <li style={{ textAlign: 'left', listStyleType: 'disc',marginLeft:"1rem" }} key={i}>{qualification}</li>
                     ))}
                   </ul>
-                  <ul className={styles.currentPositions} style={{ textAlign: 'left',marginLeft:"2.3rem"}}>
+                  <ul className={styles.currentPositions} style={{ textAlign: 'left',marginLeft:"1rem"}}>
                     <h5>Aktuell</h5>
                     {doctor.currentPositions.map((position, i) => (
-                      <li style={{ textAlign: 'left', listStyleType: 'disc',marginLeft:"2.3rem" }} key={i}>{position}</li>
+                      <li style={{ textAlign: 'left', listStyleType: 'disc',marginLeft:"1rem" }} key={i}>{position}</li>
                     ))}
                   </ul>
                 </div>

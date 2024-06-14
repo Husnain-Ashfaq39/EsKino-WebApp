@@ -207,6 +207,82 @@ const Sidebar = (props) => {
                     </li>
                   </ul>
                 </li>
+
+                {/* Doctors */}
+                <li className="submenu">
+                  <Link
+                    to="#"
+                    id="menu-item4"
+                    onClick={(e) => handleClick(e, "menu-item4", "menu-items4")}
+                  >
+                    <span className="menu-side">
+                      <img src={menuicon04} alt="" />
+                    </span>{" "}
+                    <span>Landing Page</span> <span className="menu-arrow" />
+                  </Link>
+                  <ul style={{ display: "none" }} className="menu-items4">
+                    <li>
+                      <Link
+                        className={
+                          props?.activeClassName === "heroSection"
+                            ? "active"
+                            : ""
+                        }
+                        to="/landingpage/herosection"
+                      >
+                        Hero Section
+                      </Link>
+                    
+                      </li>  
+
+                      {/* Child Emergency */}
+                      <li>
+                        <Link
+                          className={
+                            props?.activeClassName === "shedule-list"
+                              ? "active"
+                              : ""
+                          }
+                          to="/landingpage/childemergencyheader"
+                        >
+                          Child Emergency
+                        </Link>
+                      </li>
+
+                      {/* Course Content */}
+                      <li>
+                        <Link
+                          className={
+                            props?.activeClassName === "shedule-list"
+                              ? "active"
+                              : ""
+                          }
+                          to="/landingpage/coursecontentheading"
+                        >
+                          Course Content
+                        </Link>
+                      </li>
+
+                      {/* Organization Matters*/}
+                      <li>
+                        <Link
+                          className={
+                            props?.activeClassName === "shedule-list"
+                              ? "active"
+                              : ""
+                          }
+                          to="/landingpage/organizationmattersheading"
+                        >
+                          Organization Matters
+                        </Link>
+                      </li>
+                  </ul>
+                </li>
+
+
+
+
+                {/* Landing Page */}
                 <li className="submenu">
                   <Link
                     to="#"

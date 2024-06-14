@@ -63,6 +63,7 @@ import Settings from "./components/Settings";
 import SubscriberList from "./components/Suscribers";
 import EditCategories from "./components/Gallery/EditCategories";
 import DeletedParticipants from "./components/participent/DeletedParticipant";
+import HeaderAndPicture from "./components/DoctorsDashboard/Doctor1/HeaderAndPicture/HeaderAndPicture";
 //Accounts
 const Approuter = () => {
   return (
@@ -109,6 +110,15 @@ const Approuter = () => {
             path="/meetinglist/participantlist/edit"
             element={<EditParticipent />}
           />
+
+          {/* Doctors Cards */}
+           {/* Header And Picture */}
+           <Route path="/doctors/headerandpicture" element={<HeaderAndPicture/>} />
+
+
+
+
+
           {/* Hero Section */}
           <Route path="/landingpage/herosection" element={<HeroSection />} />
           <Route
