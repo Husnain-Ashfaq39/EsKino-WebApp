@@ -8,8 +8,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { db } from "../../config/firebase";
 import { getCurrentUser } from "../../services/authService";
 import {
-  deleteDocument, 
-  getMeetingStatus
+  deleteDocument,
+  getDocument,
+  addDocument,
+  getMeetingStatus,
 } from "../../services/dbService";
 import {
   convertTime,
@@ -30,46 +32,18 @@ const MeetingList = () => {
   const [meetingToDelete, setMeetingToDelete] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const handleDelete = async (meetingId) => {
-    try {
-      const participantQuery = query(
-        collection(db, "participants"),
-        where("sectionId", "==", meetingId)
-      );
-      const participantsSnapshot = await getDocs(participantQuery);
-
-      const deleteParticipantsPromises = participantsSnapshot.docs.map(
-        (participantDoc) => {
-          return deleteDocument("participants", participantDoc.id);
-        }
-      );
-
-      await Promise.all(deleteParticipantsPromises);
-
-      await deleteDocument("meetings", meetingId);
-      setAllMeetings((prevMeetings) =>
-        prevMeetings.filter((meeting) => meeting.id !== meetingId)
-      );
-      setIsDeleteModalOpen(false);
-      toast.success("Meeting deleted successfully");
-    } catch (error) {
-      toast.error("Failed to delete the meeting");
-      navigate("/server-error");
-    }
-  };
-
   const fetchParticipantsSum = async (meetingId) => {
     const participantQuery = query(
       collection(db, "participants"),
       where("sectionId", "==", meetingId)
     );
     const participantsSnapshot = await getDocs(participantQuery);
-  
+
     const totalPersons = participantsSnapshot.docs.reduce((sum, participantDoc) => {
       const data = participantDoc.data();
       return sum + (data.persons ? parseInt(data.persons, 10) : 0);
     }, 0);
-  
+
     return totalPersons;
   };
 
@@ -79,7 +53,7 @@ const MeetingList = () => {
     const meetingsWithCounts = await Promise.all(
       snapshot.docs.map(async (doc) => {
         const participantCount = await fetchParticipantsSum(doc.id);
-        
+
         return {
           id: doc.id,
           Name: doc.data().title,
@@ -144,6 +118,65 @@ const MeetingList = () => {
     return `${day}.${month}.${year}`;
   };
 
+  const handleDeleteMeeting = async (meetingId) => {
+    try {
+      // Fetch participants associated with the meeting
+      const participantQuery = query(
+        collection(db, "participants"),
+        where("sectionId", "==", meetingId)
+      );
+      const participantsSnapshot = await getDocs(participantQuery);
+
+      const participants = participantsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        persons: doc.data().persons,
+        gender: doc.data().gender,
+        sectionId: doc.data().sectionId,
+        totalFee: doc.data().totalFee,
+      }));
+
+      // Move each participant to "Deleted Participants" collection
+      const meetingDoc = await getDocument("meetings", meetingId);
+      const meetingData = meetingDoc.data();
+      const moveParticipantsPromises = participants.map((participant) =>
+        addDocument("Deleted Participants", {
+          persons: participant.persons,
+          gender: participant.gender,
+          title: meetingData.title,
+          sectionId: participant.sectionId,
+          totalFee: participant.totalFee,
+          startDate: meetingData.startDate
+        })
+      );
+
+      await Promise.all(moveParticipantsPromises);
+
+      // Delete participants from the main collection
+      const deleteParticipantsPromises = participants.map((participant) =>
+        deleteDocument("participants", participant.id)
+      );
+
+      await Promise.all(deleteParticipantsPromises);
+
+      // Move meeting to "Meeting Trash" collection
+      await addDocument("Meeting Trash", { ...meetingData, status: 'timeout' });
+
+      // Delete the meeting from the main collection
+      await deleteDocument("meetings", meetingId);
+
+      // Update state
+      setAllMeetings((prevMeetings) =>
+        prevMeetings.filter((meeting) => meeting.id !== meetingId)
+      );
+
+      setIsDeleteModalOpen(false);
+      toast.success("Meeting moved to trash successfully");
+    } catch (error) {
+      toast.error("Failed to delete the meeting");
+      navigate("/server-error");
+    }
+  };
+
   const columns = [
     {
       title: "Name",
@@ -154,10 +187,8 @@ const MeetingList = () => {
         </Link>
       ),
       sorter: (a, b) => a.Name.length - b.Name.length,
-      width: 200, // Added width
-
+      width: 200,
     },
-   
     {
       title: "Status",
       dataIndex: "EndTime",
@@ -179,8 +210,7 @@ const MeetingList = () => {
           </span>
         );
       },
-      width: 100, // Added width
-
+      width: 100,
     },
     {
       title: "Capacity",
@@ -194,7 +224,6 @@ const MeetingList = () => {
       sorter: (a, b) => a.Participants - b.Participants,
       width: 100,
     },
-     
     {
       title: "",
       dataIndex: "actions",
@@ -250,7 +279,7 @@ const MeetingList = () => {
                     setIsDeleteModalOpen(true);
                   }}
                 >
-                  <i className="fa fa-trash-alt m-r-5"></i> Delete
+                  <i className="fa fa-trash-alt m-r-5"></i> Move to Trash
                 </Link>
               </div>
             </div>
@@ -332,6 +361,12 @@ const MeetingList = () => {
                               >
                                 <img src={refreshicon} alt="#" />
                               </Link>
+                              <Link
+                                to="/meeting-trash"
+                                className="btn btn-secondary ms-2"
+                              >
+                                Meeting Trash
+                              </Link>
                             </div>
                           </div>
                         </div>
@@ -342,23 +377,25 @@ const MeetingList = () => {
                     <div className="col-sm-12">
                       <div className="card">
                         <div className="card-body">
-                         <div className="table-responsive"> <Table
-                            columns={columns}
-                            dataSource={filteredMeetings}
-                            rowKey="id"
-                            onRow={(record, rowIndex) => ({
-                              onClick: () => rowClickHandler(record),
-                              onMouseEnter: () => setHoveredRow(rowIndex),
-                              onMouseLeave: () => setHoveredRow(null),
-                              style: {
-                                cursor: "pointer",
-                                backgroundColor:
-                                  hoveredRow === rowIndex
-                                    ? "#f5f5f5"
-                                    : "inherit",
-                              },
-                            })}
-                          /></div>
+                          <div className="table-responsive">
+                            <Table
+                              columns={columns}
+                              dataSource={filteredMeetings}
+                              rowKey="id"
+                              onRow={(record, rowIndex) => ({
+                                onClick: () => rowClickHandler(record),
+                                onMouseEnter: () => setHoveredRow(rowIndex),
+                                onMouseLeave: () => setHoveredRow(null),
+                                style: {
+                                  cursor: "pointer",
+                                  backgroundColor:
+                                    hoveredRow === rowIndex
+                                      ? "#f5f5f5"
+                                      : "inherit",
+                                },
+                              })}
+                            />
+                          </div>
 
                           {isModalOpen && (
                             <Modal
@@ -433,12 +470,12 @@ const MeetingList = () => {
                                     width={50}
                                     height={46}
                                   />
-                                  <h3>Are you sure want to delete this?</h3>
+                                  <h3>
+                                    Are you sure you want to move this meeting to trash?
+                                  </h3>
                                   <div className="m-t-20">
                                     <button
-                                      onClick={() =>
-                                        setIsDeleteModalOpen(false)
-                                      }
+                                      onClick={() => setIsDeleteModalOpen(false)}
                                       className="btn btn-white me-2"
                                     >
                                       Close
@@ -447,10 +484,10 @@ const MeetingList = () => {
                                       type="button"
                                       className="btn btn-danger"
                                       onClick={() => {
-                                        handleDelete(meetingToDelete);
+                                        handleDeleteMeeting(meetingToDelete);
                                       }}
                                     >
-                                      Delete
+                                    Trash
                                     </button>
                                   </div>
                                 </div>

@@ -18,6 +18,7 @@ import DonutChart from "./DonutChart";
 import ParticipantChart from "./ParticipantChart";
 import { getCurrentUser } from "../../../services/authService";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
+
 const Admin_Dashboard = () => {
   const [meetings, setMeetings] = useState([]);
   const [countActive, setCountActive] = useState(0);
@@ -33,18 +34,25 @@ const Admin_Dashboard = () => {
     }
 
     const fetchMeetings = async () => {
-      const querySnapshot = await getAllDocuments("meetings");
-      const loadedMeetings = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        name: doc.data().title,
-        startTime: convertTime(doc.data().startTime),
-        endTime: convertTime(doc.data().endTime),
-        participants: doc.data().Participants,
-        capacity: doc.data().capacity,
-        location: doc.data().streetAddress,
-        startDate: convertTimestamp(doc.data().startDate),
-        endDate: convertTimestamp(doc.data().endDate),
-      }));
+      const meetingsSnapshot = await getAllDocuments("meetings");
+      const trashSnapshot = await getAllDocuments("Meeting Trash");
+
+      const processSnapshot = (snapshot) => {
+        return snapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: doc.data().title,
+          startTime: convertTime(doc.data().startTime),
+          endTime: convertTime(doc.data().endTime),
+          participants: doc.data().Participants,
+          capacity: doc.data().capacity,
+          location: doc.data().streetAddress,
+          startDate: convertTimestamp(doc.data().startDate),
+          endDate: convertTimestamp(doc.data().endDate),
+        }));
+      };
+
+      const loadedMeetings = processSnapshot(meetingsSnapshot);
+      const loadedTrashMeetings = processSnapshot(trashSnapshot);
 
       const activeCount = loadedMeetings.filter(
         (meeting) => getMeetingStatus(meeting) === "Active"
@@ -56,15 +64,18 @@ const Admin_Dashboard = () => {
         (meeting) => getMeetingStatus(meeting) === "Timeout"
       ).length;
 
-      setMeetings(loadedMeetings.slice(0, 4)); // Fetch only the first 4 meetings
+      // Add trash meetings to timeout count
+      const trashTimeoutCount = trashSnapshot.docs.length;
+      setCountTimeout(timeoutCount + trashTimeoutCount);
+
+      setMeetings([...loadedMeetings.slice(0, 4), ...loadedTrashMeetings.slice(0, 4)]); // Fetch only the first 4 meetings from both collections
       setCountActive(activeCount);
       setCountClose(closeCount);
-      setCountTimeout(timeoutCount);
 
       // Calculate total earnings from both participants and deleted participants
       let totalEarnings = 0;
 
-      for (const meeting of loadedMeetings) {
+      for (const meeting of [...loadedMeetings, ...loadedTrashMeetings]) {
         const participantsSnapshot = await fetchDocumentsWithQuery(
           "participants",
           "sectionId",
@@ -105,7 +116,7 @@ const Admin_Dashboard = () => {
       const formattedFirstDay = formatDate(firstDayOfMonth);
       const formattedLastDay = formatDate(lastDayOfMonth);
 
-      const timeoutLatestMonthCount = loadedMeetings.filter((meeting) => {
+      const timeoutLatestMonthCount = [...loadedMeetings, ...loadedTrashMeetings].filter((meeting) => {
         const meetingEndDate = formatDate(new Date(meeting.endDate));
         return (
           getMeetingStatus(meeting) === "Timeout" &&

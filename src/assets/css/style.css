@@ -26,6 +26,12 @@ h6 {
   
   margin-top: 0;
 }
+.fa,
+.fas,
+.far {
+  font-family: "FontAwesome" !important;
+}
+
 
 .h1 {
   font-size: 2.25rem;
@@ -1094,7 +1100,7 @@ textarea.form-control {
   position: absolute;
   right: 25px;
   display: inline-block;
-  font-family: "FontAwesome";
+  font-family: "FontAwesome" !important;
   text-rendering: auto;
   line-height: 40px;
   font-size: 15px;
@@ -3034,12 +3040,12 @@ a.fc-event:not([href]) {
 .fc-toolbar h2 {
   font-size: 18px;
   font-weight: 600;
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", sans-serif ;
   line-height: 30px;
   text-transform: uppercase;
 }
 .fc-day-grid-event .fc-time {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", sans-serif ;
 }
 .fc-day {
   background: #fff;
@@ -3079,7 +3085,7 @@ a.fc-event:not([href]) {
   height: auto !important;
 }
 .fc-text-arrow {
-  font-family: inherit;
+  font-family: inherit ;
   font-size: 16px;
 }
 .fc-state-hover {
@@ -3113,12 +3119,12 @@ a.fc-event:not([href]) {
 .fc-basic-view td.fc-week-number span {
   padding-right: 8px;
   font-weight: 700;
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", sans-serif ;
 }
 .fc-basic-view td.fc-day-number {
   padding-right: 8px;
   font-weight: 700;
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", sans-serif ;
 }
 
 /*-----------------
@@ -3804,7 +3810,7 @@ html.menu-opened body {
 }
 .custom_check .checkmark::after {
   content: "\f00c";
-  font-family: "Font Awesome 5 Free";
+  font-family: "Font Awesome 5 Free" ;
   font-weight: 900;
   position: absolute;
   display: none;
@@ -4544,7 +4550,7 @@ a.status-grey {
   color: #333448;
   content: "\f073";
   display: block;
-  font-family: "Font Awesome 6 Free";
+  font-family: "Font Awesome 6 Free" ;
   font-size: 16px;
   font-weight: 600;
   margin: auto;
@@ -6620,7 +6626,7 @@ blockquote p {
 }
 .faq-tab .panel-title a.collapsed::after {
   content: "\f067";
-  font-family: "Font Awesome 5 Free";
+  font-family: "Font Awesome 5 Free" ;
   position: absolute;
   right: 20px;
   top: 10px;
@@ -6875,7 +6881,7 @@ td.add-remove {
 }
 .faq-tab .panel-title a::after {
   content: "\f068";
-  font-family: "Font Awesome 5 Free";
+  font-family: "Font Awesome 5 Free" ;
   position: absolute;
   right: 20px;
   top: 10px;

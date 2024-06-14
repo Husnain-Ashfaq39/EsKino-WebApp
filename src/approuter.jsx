@@ -14,6 +14,7 @@ import Editblog from "./components/pages/Blog/Editblog";
 import AddMeeting from "./components/meeting/AddMeeting";
 import EditMeeting from "./components/meeting/EditMeeting";
 import MeetingList from "./components/meeting/MeetingList";
+import MeetingTrash from "./components/meeting/MeetingTrash";
 //Participents...
 import ParticipentList from "./components/participent/ParticipentList";
 
@@ -99,6 +100,7 @@ const Approuter = () => {
           <Route path="/meetinglist" element={<MeetingList />} />
           <Route path="/add-meeting" element={<AddMeeting />} />
           <Route path="/editmeeting" element={<EditMeeting />} />
+          <Route path="/meeting-trash" element={<MeetingTrash />} />
 
           {/* Participent */}
           <Route
