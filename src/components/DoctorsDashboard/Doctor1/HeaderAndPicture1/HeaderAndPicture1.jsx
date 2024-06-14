@@ -9,7 +9,8 @@ import { toast, ToastContainer } from "react-toastify";
 import { getCurrentUser } from "../../../../services/authService";
 import { useNavigate } from "react-router-dom";
 
-const HeaderAndPicture = () => {
+
+const HeaderandPicture1 = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,10 +22,10 @@ const HeaderAndPicture = () => {
     if (!getCurrentUser()) {
       navigate('/login');
     }
-    const updateSuccessStatus = sessionStorage.getItem("updateDoctorSuccess");
+    const updateSuccessStatus = sessionStorage.getItem("updateHeaderAndPicture1 ");
     if (updateSuccessStatus) {
       toast.success("Doctor Data Updated Successfully!", { autoClose: 2000 });
-      sessionStorage.removeItem("updateDoctorSuccess");
+      sessionStorage.removeItem("updateHeaderAndPicture1 ");
     }
 
     fetchData();
@@ -34,16 +35,20 @@ const HeaderAndPicture = () => {
     try {
       const data = [];
       const querySnapshot = await getAllDocuments("Doctors");
-      if (querySnapshot.empty) {
-        // If no documents exist, add a dummy document
+      let doctorExists = false;
+      querySnapshot.forEach((doc) => {
+        if (doc.data().doctorID === 1) {
+          data.push({ id: doc.id, ...doc.data() });
+          doctorExists = true;
+        }
+      });
+      if (!doctorExists) {
+        // If no document with doctorID 1 exists, add a dummy document
         await addDummyData();
         // Fetch the data again after adding the dummy document
         await fetchData();
         return;
       }
-      querySnapshot.forEach((doc) => {
-        data.push({ id: doc.id, ...doc.data() });
-      });
       setDataSource(data);
       setLoading(false);
     } catch (error) {
@@ -54,9 +59,10 @@ const HeaderAndPicture = () => {
 
   const addDummyData = async () => {
     const dummyData = {
+      doctorID: 1,
       name: "Dummy Name",
       occupation: "Dummy Occupation",
-      image: "path/to/dummy/image.jpg",
+      image: "Dummy Image",
       introduction: ["Dummy Introduction"],
       zusatzqualifikationen: ["Dummy Qualification"],
       aktuell: ["Dummy Aktuell"]
@@ -142,13 +148,13 @@ const HeaderAndPicture = () => {
             </Link>
             <div className="dropdown-menu dropdown-menu-end">
               <Link
-                to={`/landingpage/editDoctor/${record.id}`}
+                to={`/doctors/headerandpicture1/editheaderandpicture1/${record.id}`}
                 className="dropdown-item"
               >
                 <i className="far fa-edit me-2" />
                 Edit
               </Link>
-              <button
+              {/* <button
                 className="dropdown-item"
                 onClick={() => {
                   setDeleteItemId(record.id);
@@ -156,7 +162,7 @@ const HeaderAndPicture = () => {
                 }}
               >
                 <i className="fa fa-trash-alt m-r-5" /> Delete
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
@@ -170,16 +176,41 @@ const HeaderAndPicture = () => {
       <Sidebar
         id="menu-item4"
         id1="menu-items4"
-        activeClassName="headerAndPicture"
+        activeClassName="headerandpicture1"
       />
       <div className="page-wrapper">
         <div className="content">
+              {/* Page Navbar*/}
+              <div className="settings-menu-links">
+                        <ul className="nav nav-tabs menu-tabs">
+                            <li className="nav-item active">
+                                <Link className="nav-link" to="/doctors/headerandpicture1">
+                                    Name, Occupation & Picture 
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/doctors/introduction1">
+                                    Introduction
+                                </Link>
+                            </li>
+                            <li className="nav-item ">
+                                <Link className="nav-link" to="/doctors/zusatzqualifikationen1">
+                                Zusatzqualifikationen
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/doctors/Aktuell1">
+                                Aktuell
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
           <div className="page-header">
             <div className="row">
               <div className="col-sm-12">
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <Link to="/landingpage/headerandpicture">Landing Page</Link>
+                    <Link to="/doctors/headerandpicture1">Doctor 1</Link>
                   </li>
                   <li className="breadcrumb-item active">
                     <i className="feather-chevron-right">
@@ -238,4 +269,4 @@ const HeaderAndPicture = () => {
   );
 };
 
-export default HeaderAndPicture;
+export default HeaderandPicture1;

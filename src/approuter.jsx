@@ -64,7 +64,18 @@ import Settings from "./components/Settings";
 import SubscriberList from "./components/Suscribers";
 import EditCategories from "./components/Gallery/EditCategories";
 import DeletedParticipants from "./components/participent/DeletedParticipant";
-import HeaderAndPicture from "./components/DoctorsDashboard/Doctor1/HeaderAndPicture/HeaderAndPicture";
+import HeaderandPicture1 from "./components/DoctorsDashboard/Doctor1/HeaderAndPicture1/HeaderAndPicture1";
+import EditHeaderAndPicture from "./components/DoctorsDashboard/Doctor1/HeaderAndPicture1/EditHeaderAndPicture1";
+import EditHeaderAndPicture1 from "./components/DoctorsDashboard/Doctor1/HeaderAndPicture1/EditHeaderAndPicture1";
+import Introduction1 from "./components/DoctorsDashboard/Doctor1/Introduction1/Introduction1";
+import AddIntroduction1 from "./components/DoctorsDashboard/Doctor1/Introduction1/AddIntroduction1";
+import EditIntroduction1 from "./components/DoctorsDashboard/Doctor1/Introduction1/EditIntroduction1";
+import Zusatzqualifikationen1 from "./components/DoctorsDashboard/Doctor1/Zusatzqualifikationen1/Zusatzqualifikationen1";
+import AddZusatzqualifikationen1 from "./components/DoctorsDashboard/Doctor1/Zusatzqualifikationen1/AddZusatzqualifikationen1";
+import EditZusatzqualifikationen1 from "./components/DoctorsDashboard/Doctor1/Zusatzqualifikationen1/EditZusatzqualifikationen1";
+import Aktuell1 from "./components/DoctorsDashboard/Doctor1/Aktuell1/Aktuell1";
+import AddAktuell1 from "./components/DoctorsDashboard/Doctor1/Aktuell1/AddAktuell1";
+import EditAktuell1 from "./components/DoctorsDashboard/Doctor1/Aktuell1/EditAktuell1";
 //Accounts
 const Approuter = () => {
   return (
@@ -115,8 +126,47 @@ const Approuter = () => {
 
           {/* Doctors Cards */}
            {/* Header And Picture */}
-           <Route path="/doctors/headerandpicture" element={<HeaderAndPicture/>} />
+           <Route path="/doctors/headerandpicture1" element={<HeaderandPicture1/>} />
+           <Route
+            path="/doctors/headerandpicture1/editheaderandpicture1/:id"
+            element={<EditHeaderAndPicture1/>}
+          />
 
+          {/* Introduction */}
+          <Route path="/doctors/introduction1" element={<Introduction1/>} />
+          <Route
+            path="/doctors/introduction1/addintroduction1"
+            element={<AddIntroduction1/>}
+          />
+          <Route/>
+          <Route
+            path="/doctors/introduction1/editintroduction1/:id"
+            element={<EditIntroduction1/>}
+          />
+
+          {/* Zusatzqualifikationen */}
+          <Route path="/doctors/zusatzqualifikationen1" element={<Zusatzqualifikationen1/>} />
+          <Route
+            path="/doctors/zusatzqualifikationen1/addzusatzqualifikationen1"
+            element={<AddZusatzqualifikationen1/>}
+          />
+          <Route/>
+          <Route
+            path="/doctors/zusatzqualifikationen1/editzusatzqualifikationen1/:id"
+            element={<EditZusatzqualifikationen1/>}
+          />
+          <Route/>
+
+{/* Aktuell1 */}
+<Route path="/doctors/aktuell1" element={<Aktuell1/>} />
+<Route
+            path="/doctors/aktuell1/addaktuell1"
+            element={<AddAktuell1/>}
+          />
+          <Route
+            path="/doctors/aktuell1/editaktuell1/:id"
+            element={<EditAktuell1/>}
+          />
 
 
 

@@ -47,12 +47,9 @@ export const deleteDocument = (collectionName, id) => {
   return deleteDoc(docRef);
 };
 
-
-
 export const getMeetingStatus = (meeting) => {
   const currentTime = moment();
  
-
   // Check if endDate and endTime are defined
   if (!meeting.endDate || !meeting.endTime) {
     return "Unknown";
@@ -70,7 +67,6 @@ export const getMeetingStatus = (meeting) => {
     `${formattedEndDate} ${meeting.endTime}`,
     "YYYY-MM-DD hh:mm A"
   );
- 
 
   if (currentTime.isAfter(endTime)) {
     return "Timeout";
@@ -95,4 +91,17 @@ export const ensureCategoriesInitialized = async () => {
     );
     await Promise.all(promises);
   }
+};
+
+// New function to get a document by a specific field value
+export const getDocumentByField = async (collectionName, fieldName, value) => {
+  const q = query(
+    collection(db, collectionName),
+    where(fieldName, "==", value)
+  );
+  const querySnapshot = await getDocs(q);
+  if (!querySnapshot.empty) {
+    return querySnapshot.docs[0]; // Assuming you want the first matching document
+  }
+  return null; // Return null if no matching document is found
 };
