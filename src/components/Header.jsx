@@ -3,16 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getCurrentUser, signOutUser } from "../services/authService";
 import {
-  logo,
   baricon,
   baricon1,
-  searchnormal,
-  imguser,
-  noteicon,
-  user06,
-  settingicon01,
-  noteicon1,
-  arrowWhiteSvg,
+  logo
 } from "./imagepath";
 
 const Header = () => {

@@ -60,7 +60,7 @@ const DonutChart = ({ countActive, countClose, countTimeout }) => {
         window.donutChart.destroy();
       }
     };
-  }, [countActive, countClose, countTimeout]); // Ensure the chart updates when prop values change
+  }, [countActive, countClose, countTimeout]); 
 
   return <div id="donut-chart-dash"></div>;
 };

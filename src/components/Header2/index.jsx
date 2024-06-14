@@ -40,7 +40,7 @@ export default function Header2({ logoSrc, variant }) {
     const colSnap = await getAllDocuments("contactInfo");
 
     if (!colSnap.empty) {
-      const docSnap = colSnap.docs[0]; // Get the first document
+      const docSnap = colSnap.docs[0];
       return {
         address: docSnap.data().address,
         phone: docSnap.data().phone,
@@ -96,7 +96,7 @@ export default function Header2({ logoSrc, variant }) {
           mobileToggle ? "cs_mobile_toggle_active" : ""
         } ${variant} ${isSticky ? "cs_sticky_active" : ""}`}
       >
-        <div style={{marginTop:"-10px"}} className={`cs_main_header bg-[${colors.primary}] rounded-bl-full rounded-br-full mx-[-15px] py-0`}>
+        <div style={{marginTop:"-10px"}} className={`cs_main_header bg-[${colors.primary}]   mx-[-15px] py-0`}>
           <div className="container h-20">
             <div className="cs_main_header_in">
               <div className="cs_main_header_left">
@@ -209,7 +209,7 @@ export default function Header2({ logoSrc, variant }) {
               <h3 style={{ marginLeft: "10px", marginTop: "25px" }}>Eskino</h3>
             </div>
             <div className="cs_height_15" />
-            <h3 className="cs_fs_24 cs_semibold mb-0">
+            <h3 className="cs_fs_24 cs_semibold mb-0" style={{fontWeight:"300"}}>
               Your Partner in Health and Wellness
             </h3>
           </div>

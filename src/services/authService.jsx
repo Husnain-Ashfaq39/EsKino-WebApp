@@ -1,6 +1,5 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged,updateProfile } from "firebase/auth";
-import { doc, getDoc, setDoc} from "firebase/firestore"; // Import Firestore functions and database reference
-import { app,db } from '../config/firebase'; // Assuming firebaseConfig is exported from the main Firebase initialization file
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { app } from '../config/firebase'; // Assuming firebaseConfig is exported from the main Firebase initialization file
 
 const auth = getAuth(app);
 

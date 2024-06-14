@@ -8,10 +8,12 @@ import { pageTitle } from '../../helpers/PageTitle';
 import { getDocument, updateDocument, getAllDocuments } from '../../services/dbService';
 import { Timestamp } from 'firebase/firestore';
 import { blogimg2 } from '../imagepath';
+import colors from '../../colorTheme';
 
 export default function BlogDetail() {
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [socialLinks, setSocialLinks] = useState({
     facebook: "",
     instagram: "",
@@ -19,6 +21,17 @@ export default function BlogDetail() {
     twitter: "",
     linkedin: ""
   });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchBlogDetails = async () => {
@@ -81,15 +94,31 @@ export default function BlogDetail() {
     return <div>Loading...</div>;
   }
 
+  const styles = {
+    title: {
+      fontSize: isMobile ? "1.5rem" : "2.5rem",
+      fontWeight: "300",
+    },
+    subTitle: {
+      fontSize: isMobile ? "1rem" : "1.5rem",
+      fontWeight: "300",
+      color: colors.dark
+    },
+    dateAuthor: {
+      fontSize: isMobile ? "0.8rem" : "1rem",
+      fontWeight: "300",
+    }
+  };
+
   return (
     <>
       <Section topMd={170} bottomMd={54} bottomLg={54}>
-       
+        {/* Add any specific content or components for this section if needed */}
       </Section>
       <div className="container">
         <div className="cs_blog_details_info">
           <div className="cs_blog_details_info_left">
-            <div className="cs_blog_details_date">
+            <div className="cs_blog_details_date" style={styles.dateAuthor}>
               {blog.publicationDate} | {blog.author}
             </div>
           </div>
@@ -134,7 +163,7 @@ export default function BlogDetail() {
         <div className="row">
           <div className="col-lg-8">
             <div className="cs_blog_details">
-              <h2>{blog.title}</h2>
+              <h2 className='font-light' style={styles.title}>{blog.title}</h2>
               <div dangerouslySetInnerHTML={{ __html: blog.content }} />
               {/* Other blog details can be rendered here */}
             </div>

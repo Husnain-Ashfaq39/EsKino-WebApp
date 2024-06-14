@@ -64,7 +64,7 @@ const Doctors = () => {
                       <li style={{ textAlign: 'left', listStyleType: 'disc',marginLeft:"1rem" }} key={i}>{detail}</li>
                     ))}
                     <br />
-                    <h5>Zusatzqualifikationen</h5>
+                    <h5 style={{fontSize:"1.2rem" }}>Zusatzqualifikationen</h5>
                     {doctor.additionalQualifications.map((qualification, i) => (
                       <li style={{ textAlign: 'left', listStyleType: 'disc',marginLeft:"1rem" }} key={i}>{qualification}</li>
                     ))}

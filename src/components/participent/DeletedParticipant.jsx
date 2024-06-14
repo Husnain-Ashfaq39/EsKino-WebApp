@@ -6,7 +6,8 @@ import Sidebar from "../Sidebar";
 import { getAllDocuments } from "../../services/dbService";
 import { getCurrentUser } from "../../services/authService";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import { searchnormal, refreshicon } from "../imagepath";
+import { searchnormal } from "../imagepath";
+import { convertTimestamp } from "../../services/general_functions"; // Import the new function to format date
 
 const DeletedParticipants = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const DeletedParticipants = () => {
 
   useEffect(() => {
     if (!getCurrentUser()) {
-      navigate('/login');
+      navigate("/login");
     }
     getAllDocuments("Deleted Participants").then((querySnapshot) => {
       const loadedParticipants = querySnapshot.docs.map((doc) => ({
@@ -26,12 +27,16 @@ const DeletedParticipants = () => {
         persons: doc.data().persons,
         gender: doc.data().gender,
         title: doc.data().title,
-        streetAddress: doc.data().streetAddress,
+        startDate: formatDateWithDots(convertTimestamp(doc.data().startDate)), // Use the new function to format the date
       }));
       setDeletedParticipants(loadedParticipants);
       setFilteredParticipants(loadedParticipants);
     });
   }, []);
+   const formatDateWithDots = (date) => {
+    return date.replace(/\//g, '.');
+  };
+  
 
   useEffect(() => {
     const filtered = deletedParticipants.filter(
@@ -59,9 +64,9 @@ const DeletedParticipants = () => {
       sorter: (a, b) => a.gender.length - b.gender.length,
     },
     {
-      title: "Street Address",
-      dataIndex: "streetAddress",
-      sorter: (a, b) => a.streetAddress.length - b.streetAddress.length,
+      title: "Start Date",
+      dataIndex: "startDate",
+      sorter: (a, b) => new Date(a.startDate) - new Date(b.startDate),
     },
   ];
 
@@ -112,7 +117,6 @@ const DeletedParticipants = () => {
                               </Link>
                             </form>
                           </div>
-                          
                         </div>
                       </div>
                     </div>

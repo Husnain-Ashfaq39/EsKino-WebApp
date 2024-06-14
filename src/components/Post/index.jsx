@@ -70,7 +70,7 @@ const Post = ({ title, thumbUrl, date, btnText, href, socialShare, variant }) =>
               </PostSocial>
             )}
           </PostMeta>
-          <PostTitle className="cs_post_title cs_semibold cs_fs_32">
+          <PostTitle className="cs_post_title cs_semibold cs_fs_32" style={{fontWeight:"300"}}>
             <Link to={href}>{title}</Link>
           </PostTitle>
         </div>
