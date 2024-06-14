@@ -209,7 +209,7 @@ export default function Header2({ logoSrc, variant }) {
               <h3 style={{ marginLeft: "10px", marginTop: "25px" }}>Eskino</h3>
             </div>
             <div className="cs_height_15" />
-            <h3 className="cs_fs_24 cs_semibold mb-0">
+            <h3 className="cs_fs_24 cs_semibold mb-0" style={{fontWeight:"300"}}>
               Your Partner in Health and Wellness
             </h3>
           </div>

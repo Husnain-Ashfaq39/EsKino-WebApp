@@ -9,7 +9,7 @@ export default function OrganizationMatter({ iconSrc, title, subTitle }) {
         </span> */}
         <span className='font-medium'>{title}</span>
       </h2>
-      <p className="m-0 text-center font-normal">{subTitle}</p>
+      <p className="m-0 text-center font-normal" style={{fontSize:'1.1rem'}}>{subTitle}</p>
     </div>
   );
 }

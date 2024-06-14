@@ -44,36 +44,33 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
 
   return (
     <>
-    <section className="cs_hero cs_style_1">
-      <div
-        className="cs_hero_wrap cs_bg_filed"
-        style={{ backgroundColor: colors.primary }}
-      >
-        <div className="container" style={{ position: "relative" }}>
-          <div className="cs_hero_text">
-            <h1 className="cs_hero_title cs_fs_94 text-6xl font-light">
-              {parse(title)}
-            </h1>
-            <p
-              className="cs_hero_subtitle cs_fs_20 cs_heading_color"
-              style={{ color: colors.dark }}
-            >
-              {parse(subTitle)}
-            </p>
+      <section className="cs_hero cs_style_1">
+        <div
+          className="cs_hero_wrap cs_bg_filed"
+          style={{ backgroundColor: colors.primary }}
+        >
+          <div className="container" style={{ position: "relative" }}>
+            <div className="cs_hero_text">
+              <h1 className="cs_hero_title text-6xl font-light" style={{ fontSize: isMobile ? '7vw' : '4vw' }}>
+                {parse(title)}
+              </h1>
+              <p
+                className="cs_hero_subtitle cs_heading_color font-light"
+                style={{ color: colors.dark, fontSize: isMobile ? '4vw' : '2vw' }}
+              >
+                {parse(subTitle)}
+              </p>
+            </div>
+            <img
+              src={imgUrl}
+              alt="Hero"
+              className="cs_hero_img"
+              style={heroImgStyle}
+            />
           </div>
-          <img
-            src={imgUrl}
-            alt="Hero"
-            className="cs_hero_img"
-            style={heroImgStyle}
-          />
         </div>
-      </div>
-      
-    </section>
-    <div>{isMobile ?       <Spacing md="200" lg="180" /> : null
-}</div>
-    
+      </section>
+      <div>{isMobile ? <Spacing md="200" lg="180" /> : null}</div>
     </>
   );
 }

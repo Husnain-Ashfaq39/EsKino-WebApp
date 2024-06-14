@@ -58,22 +58,22 @@ const Doctors = () => {
               <div className={styles.card} key={index}>
                 <img src={doctor.img} alt={doctor.name} />
                 <div style={{padding:'9px'}} className={styles.info}>
-                  <h3 className={styles.cardTitle}>{doctor.name}</h3>
-                  <h5 className={styles.speciality}>{doctor.speciality}</h5>
-                  <ul className={styles.detailsList} style={{ textAlign: 'left',marginLeft:"2rem"}} >
+                  <h3 className={styles.cardTitle} style={{fontSize:"1.2rem"}}>{doctor.name}</h3>
+                  <h5 className={styles.speciality} style={{fontSize:"1rem"}}>{doctor.speciality}</h5>
+                  <ul className={styles.detailsList} style={{ textAlign: 'left',marginLeft:"2rem",fontSize:"1rem"}} >
                     {doctor.details.map((detail, i) => (
-                      <li style={{ textAlign: 'left', listStyleType: 'disc',marginLeft:"2rem" }} key={i}>{detail}</li>
+                      <li style={{ textAlign: 'left', listStyleType: 'disc',marginLeft:"2rem",fontSize:"1rem" }} key={i}>{detail}</li>
                     ))}
                     <br />
-                    <h5>Zusatzqualifikationen</h5>
+                    <h5 style={{fontSize:"1.2rem" }}>Zusatzqualifikationen</h5>
                     {doctor.additionalQualifications.map((qualification, i) => (
-                      <li style={{ textAlign: 'left', listStyleType: 'disc',marginLeft:"2.3rem" }} key={i}>{qualification}</li>
+                      <li style={{ textAlign: 'left', listStyleType: 'disc',marginLeft:"2.3rem",fontSize:"1rem"  }} key={i}>{qualification}</li>
                     ))}
                   </ul>
-                  <ul className={styles.currentPositions} style={{ textAlign: 'left',marginLeft:"2.3rem"}}>
-                    <h5>Aktuell</h5>
+                  <ul className={styles.currentPositions} style={{ textAlign: 'left',marginLeft:"2.3rem",fontSize:"1rem" }}>
+                    <h5 style={{fontSize:"1.2rem" }}>Aktuell</h5>
                     {doctor.currentPositions.map((position, i) => (
-                      <li style={{ textAlign: 'left', listStyleType: 'disc',marginLeft:"2.3rem" }} key={i}>{position}</li>
+                      <li style={{ textAlign: 'left', listStyleType: 'disc',marginLeft:"2.3rem",fontSize:"1rem"  }} key={i}>{position}</li>
                     ))}
                   </ul>
                 </div>
