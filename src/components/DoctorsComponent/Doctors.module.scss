@@ -19,12 +19,10 @@
     margin-bottom: 30px;
 
     .title {
-      font-size: 4vw; // Use viewport width units
-      max-width: 100%;
-      word-wrap: break-word; // Ensure long words wrap
+      font-size: 1.5rem;
 
       @media (min-width: 768px) {
-        font-size: 3.5em;
+        font-size: 3.5rem;
       }
 
       font-weight: 400;
@@ -53,29 +51,29 @@
     border-radius: 15px;
     background: rgba(255, 255, 255, 0.5);
     position: relative;
-    display: flex;
-    justify-content: flex-end;
     transition: 0.4s ease-out;
     box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.5);
     overflow: hidden;
 
-    // 
-    // @media(max-height: 1024px){
-    //   max-width: 50%;
-    //   height: 32rem;
+    @media (max-width: 1024px) {
+      flex: 1 1 calc(50% - 20px);
+      margin: 20px;
+      max-width: 43%;
+      height: 30rem;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.5);
+      position: relative;
+      transition: 0.4s ease-out;
+      box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
 
-
-    // }
-
-    // For devices smaller and equal then L-mobiles
-    @media (max-width: 768px) {
+    @media (max-width: 426px) {
       flex: 1 1 100%;
       max-width: 100%;
       margin: 10px 0;
       height: 82vh;
     }
-
-  
 
     &:hover {
       transform: translateY(-10px);
@@ -116,6 +114,9 @@
     }
 
     .info {
+      position: absolute;
+      top: 0;
+      left: 0;
       z-index: 3;
       color: white;
       opacity: 0;
@@ -124,9 +125,11 @@
       background: rgba(241, 132, 132, 0.9);
       display: flex;
       flex-direction: column;
-      padding: 10px;
-      max-height: 100%; // Ensure it fits within the card height
-      overflow: auto; // Enable scrolling if the content overflows
+      // justify-content: center;
+      padding: 20px;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
 
       @media (max-width: 768px) {
         opacity: 0;
@@ -136,72 +139,57 @@
 
       ul, li {
         color: white;
-        max-width: 100%; // Ensure text wraps within the container
-        word-wrap: break-word; // Ensure long words wrap
+        padding: 0;
+        margin: 0;
+        list-style-type: disc;
       }
 
       h3, h5 {
         color: white;
         font-weight: bold;
-        max-width: 100%;
-        word-wrap: break-word;
+        margin: 5px 0;
       }
 
       h3 {
-
         font-size: 1.6rem;
 
-        @media (max-width: 768px) {
-        margin: 0;
-        font-size: 3.5vh; // Use viewport width units
-        line-height: 4vh;
+        @media (max-width: 1024px) {
+          margin: 3px 0;
+          font-size: 2.3vw;
         }
 
-        // @media (max-width: 1024px) {
-        //   margin: 3px 0;
-        //   font-size: 3vw;
-        // }
+        @media (max-width: 768px) {
+          margin: 3px 0;
+          font-size: 2.5vw;
+        }
 
-        // @media (max-width: 768px) {
-        //   margin: 3px 0;
-        //   font-size: 5vw;
-        //   line-height: 1.3em;
-        // }
-
-        // @media (max-width: 320px) {
-        //   font-size: 3vh;
-        // }
+        @media (max-width: 426px) {
+          font-size: 3.9vh;
+        }
       }
 
       h5 {
-
         font-size: 1.3rem;
 
-        @media (max-width: 768px) {
-        margin: 5px 0;
-        line-height: 2.3vh;
-        font-size: 2.7vh;
+        @media (max-width: 1024px) {
+          font-size: 1.9vw;
+          line-height: 1em;
         }
 
-        // @media (max-width: 1024px) {
-        //   margin: 3px 0;
-        //   font-size: 3vw;
-        //   line-height: 1.2em;
-        // }
+        @media (max-width: 768px) {
+          margin: 3px 0;
+          font-size: 2.2vw;
+          line-height: 1.2em;
+        }
 
-        // @media (max-width: 768px) {
-        //   margin: 3px 0;
-        //   font-size: 4.5vw;
-        //   line-height: 1.2em;
-        // }
 
-        // @media (max-width: 374px) {
-        //   font-size: 2.5vh;
-        // }
+
+        @media (max-width: 426px) {
+          font-size: 3vh;
+        }
       }
 
       ul {
-        list-style: none;
         padding: 0;
         margin: 10px 0;
 
@@ -211,43 +199,29 @@
       }
 
       li {
+        margin: 5px 0;
+        line-height: 1.4rem;
+        font-size: 1.05rem;
 
-line-height: 1.5rem;
-        
-        // For tablets below 
+        @media (max-width: 1024px) {
+          font-size: 1.7vh;
+          line-height: 2.1vh;
+        }
+
         @media (max-width: 768px) {
-          margin: 5px 0;
+          font-size: 2.5vh;
+          line-height: 2.8vh;
+        }
+
+        @media (max-width: 426px) {
+          font-size: 3vh;
+          line-height: 3.1vh;
+        }
+
+        @media (max-width: 320px) {
+          font-size: 2.8vh;
           line-height: 3vh;
-          font-size: 3vh; // Use viewport width units
-          }
-
-        //   // For large mobiles  below
-        // @media (max-width: 768px) {
-        // margin: 5px 0;
-        // line-height: 3.2vh;
-        // font-size: 2.4vh; // Use viewport width units
-        // }
-
-        // @media (max-width: 1024px) {
-        //   margin: 3px 0;
-        //   font-size: 2.5vw;
-        //   line-height: 1.6em;
-        // }
-
-        // @media (max-width: 768px) {
-        //   font-size: 2.3vh;
-        //   line-height: 2.8vh;
-        // }
-
-        // @media (max-width: 374px) {
-        //   font-size: 2.3vh;
-        //   line-height: 2.8vh;
-        // }
-
-        // @media (max-width: 320px) {
-        //   font-size: 2.3vh;
-        //   line-height: 2.8vh;
-        // }
+        }
       }
 
       button {

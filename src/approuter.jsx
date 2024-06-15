@@ -76,6 +76,17 @@ import EditZusatzqualifikationen1 from "./components/DoctorsDashboard/Doctor1/Zu
 import Aktuell1 from "./components/DoctorsDashboard/Doctor1/Aktuell1/Aktuell1";
 import AddAktuell1 from "./components/DoctorsDashboard/Doctor1/Aktuell1/AddAktuell1";
 import EditAktuell1 from "./components/DoctorsDashboard/Doctor1/Aktuell1/EditAktuell1";
+import HeaderandPicture2 from "./components/DoctorsDashboard/Doctor2/HeaderAndPicture2/HeaderAndPicture2";
+import EditHeaderAndPicture2 from "./components/DoctorsDashboard/Doctor2/HeaderAndPicture2/EditHeaderAndPicture2";
+import Introduction2 from "./components/DoctorsDashboard/Doctor2/Introduction2/Introduction2";
+import AddIntroduction2 from "./components/DoctorsDashboard/Doctor2/Introduction2/AddIntroduction2";
+import EditIntroduction2 from "./components/DoctorsDashboard/Doctor2/Introduction2/EditIntroduction2";
+import Zusatzqualifikationen2 from "./components/DoctorsDashboard/Doctor2/Zusatzqualifikationen2/Zusatzqualifikationen2";
+import AddZusatzqualifikationen2 from "./components/DoctorsDashboard/Doctor2/Zusatzqualifikationen2/AddZusatzqualifikationen2";
+import EditZusatzqualifikationen2 from "./components/DoctorsDashboard/Doctor2/Zusatzqualifikationen2/EditZusatzqualifikationen2";
+import Aktuell2 from "./components/DoctorsDashboard/Doctor2/Aktuell2/Aktuell2";
+import AddAktuell2 from "./components/DoctorsDashboard/Doctor2/Aktuell2/AddAktuell2";
+import EditAktuell2 from "./components/DoctorsDashboard/Doctor2/Aktuell2/EditAktuell2";
 //Accounts
 const Approuter = () => {
   return (
@@ -125,14 +136,21 @@ const Approuter = () => {
           />
 
           {/* Doctors Cards */}
-           {/* Header And Picture */}
+           {/* Header And Picture 1*/}
            <Route path="/doctors/headerandpicture1" element={<HeaderandPicture1/>} />
            <Route
             path="/doctors/headerandpicture1/editheaderandpicture1/:id"
             element={<EditHeaderAndPicture1/>}
           />
 
-          {/* Introduction */}
+            {/* Header And Picture 2*/}
+            <Route path="/doctors/headerandpicture2" element={<HeaderandPicture2/>} />
+            <Route
+            path="/doctors/headerandpicture2/editheaderandpicture2/:id"
+            element={<EditHeaderAndPicture2/>}
+          />
+
+          {/* Introduction 1*/}
           <Route path="/doctors/introduction1" element={<Introduction1/>} />
           <Route
             path="/doctors/introduction1/addintroduction1"
@@ -144,7 +162,18 @@ const Approuter = () => {
             element={<EditIntroduction1/>}
           />
 
-          {/* Zusatzqualifikationen */}
+           {/* Introduction 2*/}
+           <Route path="/doctors/introduction2" element={<Introduction2/>} />
+           <Route
+            path="/doctors/introduction2/addintroduction2"
+            element={<AddIntroduction2/>}
+          />
+            <Route
+            path="/doctors/introduction2/editintroduction2/:id"
+            element={<EditIntroduction2/>}
+          />
+
+          {/* Zusatzqualifikationen 2*/}
           <Route path="/doctors/zusatzqualifikationen1" element={<Zusatzqualifikationen1/>} />
           <Route
             path="/doctors/zusatzqualifikationen1/addzusatzqualifikationen1"
@@ -154,6 +183,19 @@ const Approuter = () => {
           <Route
             path="/doctors/zusatzqualifikationen1/editzusatzqualifikationen1/:id"
             element={<EditZusatzqualifikationen1/>}
+          />
+          <Route/>
+
+            {/* Zusatzqualifikationen 2*/}
+            <Route path="/doctors/zusatzqualifikationen2" element={<Zusatzqualifikationen2/>} />
+          <Route
+            path="/doctors/zusatzqualifikationen2/addzusatzqualifikationen2"
+            element={<AddZusatzqualifikationen2/>}
+          />
+          <Route/>
+          <Route
+            path="/doctors/zusatzqualifikationen2/editzusatzqualifikationen2/:id"
+            element={<EditZusatzqualifikationen2/>}
           />
           <Route/>
 
@@ -168,6 +210,18 @@ const Approuter = () => {
             element={<EditAktuell1/>}
           />
 
+          {/* Aktuell1 */}
+<Route path="/doctors/aktuell2" element={<Aktuell2/>} />
+<Route
+            path="/doctors/aktuell2/addaktuell2"
+            element={<AddAktuell2/>}
+          />
+          <Route
+            path="/doctors/aktuell2/editaktuell2/:id"
+            element={<EditAktuell2/>}
+          />
+
+         
 
 
 

@@ -222,6 +222,21 @@ const Sidebar = (props) => {
                   </Link>
                   <ul style={{ display: "none" }} className="menu-itemDoctors">
 
+  {/* Doctor 2 */}
+  <li>
+                        <Link
+                          className={
+                            props?.activeClassName === "shedule-list"
+                              ? "active"
+                              : ""
+                          }
+                          to="/doctors/headerandpicture2"
+                        >
+                          Doctor 1
+                        </Link>
+                      </li>
+
+
                     {/* Doctor 1 */}
                     <li>
                       <Link
@@ -232,22 +247,10 @@ const Sidebar = (props) => {
                         }
                         to="/doctors/headerandpicture1"
                       >
-                        Doctor 1
+                        Doctor 2
                       </Link>
 
-                      {/* Doctor 2 */}
-                      <li>
-                        <Link
-                          className={
-                            props?.activeClassName === "shedule-list"
-                              ? "active"
-                              : ""
-                          }
-                          to="/landingpage/childemergencyheader"
-                        >
-                          Doctor 1
-                        </Link>
-                      </li>
+                    
 
                       
                     </li>
