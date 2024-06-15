@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import SectionHeading from "../SectionHeading";
 import Spacing from "../Spacing";
 import colors from "../../colorTheme";
-import { arrowWhiteSvg } from "../imagepath";
+import { arrowWhiteSvg} from "../imagepath";
 
 export default function IconBoxStyle4({ title, subTitle, description, href }) {
   return (
@@ -16,7 +16,7 @@ export default function IconBoxStyle4({ title, subTitle, description, href }) {
       <Spacing md="27" lg="7" />
       <p className="cs_iconbox_subtitle m-0">{description}</p>
       {href && (
-        <Link to={href} className="cs_iconbox_btn cs_center" style={{background:colors.dark}}>
+        <Link to={href} className="cs_iconbox_btn cs_center" style={{background:colors.primaryBlue}}>
           <img src={arrowWhiteSvg} alt="Icon" />
           <img src={arrowWhiteSvg} alt="Icon" />
         </Link>

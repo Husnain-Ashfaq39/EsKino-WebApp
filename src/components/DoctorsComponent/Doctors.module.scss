@@ -72,7 +72,7 @@
       flex: 1 1 100%;
       max-width: 100%;
       margin: 10px 0;
-      height: 82vh;
+      height: 55vh;
     }
 
     &:hover {
@@ -122,7 +122,7 @@
       opacity: 0;
       transform: translateY(30px);
       transition: 0.5s;
-      background: rgba(241, 132, 132, 0.9);
+      background: rgba(100, 213, 255, 0.8);
       display: flex;
       flex-direction: column;
       // justify-content: center;
@@ -145,13 +145,13 @@
       }
 
       h3, h5 {
-        color: white;
         font-weight: bold;
         margin: 5px 0;
       }
 
       h3 {
-        font-size: 1.6rem;
+
+        font-size: 1.8rem;
 
         @media (max-width: 1024px) {
           margin: 3px 0;
@@ -164,12 +164,14 @@
         }
 
         @media (max-width: 426px) {
-          font-size: 3.9vh;
+          font-size: 2.8vh;
         }
       }
 
       h5 {
-        font-size: 1.3rem;
+        color: black;
+
+        font-size: 1.1rem;
 
         @media (max-width: 1024px) {
           font-size: 1.9vw;
@@ -185,7 +187,7 @@
 
 
         @media (max-width: 426px) {
-          font-size: 3vh;
+          font-size: 2vh;
         }
       }
 
@@ -199,9 +201,11 @@
       }
 
       li {
+        color: black;
+
         margin: 5px 0;
         line-height: 1.4rem;
-        font-size: 1.05rem;
+        font-size: 1.1rem;
 
         @media (max-width: 1024px) {
           font-size: 1.7vh;
@@ -214,14 +218,14 @@
         }
 
         @media (max-width: 426px) {
-          font-size: 3vh;
-          line-height: 3.1vh;
+          font-size: 2vh;
+          line-height: 2.5vh;
         }
 
-        @media (max-width: 320px) {
-          font-size: 2.8vh;
-          line-height: 3vh;
-        }
+        // @media (max-width: 320px) {
+        //   font-size: 2.8vh;
+        //   line-height: 3vh;
+        // }
       }
 
       button {
