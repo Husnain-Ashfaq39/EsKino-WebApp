@@ -17,12 +17,20 @@ const queryClient = new QueryClient();
 
 // Color Theme
 document.documentElement.style.setProperty("--primary-color", colors.primary);
-document.documentElement.style.setProperty("--secondary-color", colors.secondary);
+document.documentElement.style.setProperty(
+  "--secondary-color",
+  colors.secondary
+);
 document.documentElement.style.setProperty("--tertiary-color", colors.tertiary);
 document.documentElement.style.setProperty("--dark-color", colors.dark);
+document.documentElement.style.setProperty("--light-blue", colors.lightBlue);
+document.documentElement.style.setProperty(
+  "--primary-blue",
+  colors.primaryBlue
+);
 
 // Inject global font style
-const globalStyle = document.createElement('style');
+const globalStyle = document.createElement("style");
 globalStyle.innerHTML = `
   * {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;

@@ -56,7 +56,7 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
               </h1>
               <p
                 className="cs_hero_subtitle cs_heading_color font-light"
-                style={{ color: colors.dark, fontSize: isMobile ? '4vw' : '2vw' }}
+                style={{ fontSize: isMobile ? '4vw' : '2vw',fontWeight: 500 }}
               >
                 {parse(subTitle)}
               </p>

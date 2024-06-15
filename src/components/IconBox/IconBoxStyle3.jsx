@@ -23,6 +23,8 @@ export default function IconBoxStyle3({ item, index }) {
   };
 
   return (
+
+    // Color for hover effect is in cs_iconbox cs_style_3
     <div className="cs_iconbox cs_style_3">
       <div className="cs_iconbox_left">
         <div className="cs_center">
@@ -33,9 +35,10 @@ export default function IconBoxStyle3({ item, index }) {
       <div className="cs_iconbox_right">
         <h4 className="cs_iconbox_number font-medium" style={{ color: colors.lightBlue }}>{index}</h4>
         <h2 className="cs_iconbox_title cs_fs_32 font-medium">{CCTitle}</h2>
-        <p className="cs_iconbox_subtitle m-0 font-normal">{CCDescription}</p>
-        <br/>
-        <SectionHeading titleDown={CCQuote} titleDownProps="1px" />
+        <p className="cs_iconbox_subtitle mb-3 font-normal">{CCDescription}</p>
+        {/* <br/> */}
+        {/* <SectionHeading titleDown={CCQuote} titleDownProps="1px" /> */}
+        <p className="italic text-sm">{CCQuote}</p>
       </div>
     </div>
   );

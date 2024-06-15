@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import parse from "html-react-parser";
 import Spacing from "../Spacing";
-import colors from "../../colorTheme";
 
 export default function SectionHeading({
   title = "",
@@ -26,17 +25,17 @@ export default function SectionHeading({
 
   // Styles for larger devices
   const desktopStyles = {
-    titleUp: { fontSize: "0.9rem", color: colors.dark, fontWeight: "300" },
+    titleUp: { fontSize: "0.9rem", fontWeight: "300" },
     title: { fontSize: "3.5rem", fontWeight: "300" },
-    titleDown: { fontSize: "0.9rem", marginTop: "-2.5vw", color: colors.dark, fontWeight: "300" },
-    subTitle: { fontSize: "1.26rem" },
+    titleDown: { fontSize: "0.9rem", marginTop: "-2.5vw",  fontWeight: "500" },
+    subTitle: { fontSize: "1.26rem"},
   };
 
   // Styles for mobile devices
   const mobileStyles = {
-    titleUp: { fontSize: "0.9rem", color: colors.dark, fontWeight: "300" },
+    titleUp: { fontSize: "0.9rem", fontWeight: "300" },
     title: { fontSize: "2rem", fontWeight: "300" },
-    titleDown: { fontSize: "0.9rem", marginTop: "-5vw", color: colors.dark, fontWeight: "300" },
+    titleDown: { fontSize: "0.9rem", marginTop: "-5vw",fontWeight: "300" },
     subTitle: { fontSize: "1.2rem" },
   };
 

@@ -82,25 +82,25 @@ function SessionCard({ limit }) {
           style={{ margin: '10px', marginBottom: '25px', padding: '20px' }}
         >
           <div className="w-72 cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
-            <div className="cs_hero_info_icon cs_center rounded-circle " style={{background: colors.secondary, width: '60px', height: '60px', flexShrink: 0}}>
+            <div className="cs_hero_info_icon cs_center rounded-circle " style={{background: colors.primaryBlue, width: '60px', height: '60px', flexShrink: 0}}>
               <img src={date_timeSvg} alt="Icon" style={{ width: '100%', height: '100%' }} />
             </div>
-            <div className="cs_hero_info_right" style={{ backgroundColor: '#F6EAEB', padding: '10px', borderRadius: '5px' }}>
-              <h3 className="cs_hero_info_title cs_semibold" style={{fontSize:'1.2rem', fontWeight: 'bold', margin: 0 }}>{formatDate(section.startDate)}</h3>
-              <p className="cs_hero_info_subtitle cs_fs_12">{section.startTime} to {section.endTime}</p>
+            <div className="cs_hero_info_right" style={{ padding: '10px', borderRadius: '5px' }}>
+              <h3 className="cs_hero_info_title cs_semibold rounded-l px-2" style={{ backgroundColor:  colors.primaryBlue, fontSize:'1.9rem', fontWeight: 'bold', margin: 0 }}>{formatDate(section.startDate)}</h3>
+              <p className="cs_hero_info_subtitle  pl-4 pt-1 font-semibold text-lg">{section.startTime} bis {section.endTime}</p>
             </div>
           </div>
-          <div className="w-72 cs_hero_info d-flex align-items-center" style={{ marginBottom: '20px' }}>
-            <div className="cs_hero_info_icon cs_center rounded-circle " style={{background: colors.secondary, width: '60px', height: '60px', flexShrink: 0}}>
+          <div className="w-72 cs_hero_info d-flex align-items-center " style={{ marginBottom: '20px' }}>
+            <div className="cs_hero_info_icon cs_center rounded-circle " style={{background: colors.primaryBlue, width: '60px', height: '60px', flexShrink: 0}}>
               <img src={pinSvg} alt="Icon" style={{ width: '100%', height: '100%' }} />
             </div>
-            <div className="cs_hero_info_right">
-              <h3 className="cs_hero_info_title cs_semibold">{section.streetAddress}</h3>
-              <p className="cs_hero_info_subtitle cs_fs_12">Zip Code: {section.zipCode}</p>
+            <div className="cs_hero_info_right ">
+              <h3 className="cs_hero_info_title cs_bold  pl-4">{section.streetAddress}</h3>
+              <p className="cs_hero_info_subtitle cs_fs_12  pl-4">Zip Code: {section.zipCode}</p>
             </div>
           </div>
           {section.capacity === "0" &&
-            <button disabled={true} className='bg-red-500 text-white px-[3.1rem] py-[0.77rem] mx-[1rem] rounded-full flex items-center'>
+            <button disabled={true} className='bg-red-500 text-white px-[3.1rem] py-[0.77rem] m-[27px] mt-2 rounded-full flex items-center'>
               Closed
               <img src={arrowWhiteSvg} alt="Icon" className='w-4 h-4 ml-2' />
             </button>

@@ -18,13 +18,13 @@ export default function Banner({ bgUrl, imgUrl, title, subTitle }) {
   // Styles for larger devices
   const desktopStyles = {
     title: { fontSize: '3.5rem', fontWeight: '300' },
-    subTitle: { fontSize: '1.5rem', fontWeight: '300', color: colors.dark },
+    subTitle: { fontSize: '1.5rem', fontWeight: '300'},
   };
 
   // Styles for mobile devices
   const mobileStyles = {
     title: { fontSize: '2rem', fontWeight: '300' },
-    subTitle: { fontSize: '1rem', fontWeight: '300', color: colors.dark },
+    subTitle: { fontSize: '1rem', fontWeight: '300'},
   };
 
   const styles = isMobile ? mobileStyles : desktopStyles;
@@ -34,7 +34,7 @@ export default function Banner({ bgUrl, imgUrl, title, subTitle }) {
       <div
         className="cs_banner cs_style_1 cs_bg_filed"
         style={{ 
-          background: colors.primary, 
+          background: colors.lightBlue, 
           backgroundSize: 'cover',
         }}
       >

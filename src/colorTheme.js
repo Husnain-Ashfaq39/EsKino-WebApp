@@ -6,7 +6,7 @@ const colors = {
   tertiary: "#ee7272",
   dark: "#a31818",
   lightBlue: " #97ddf6",
-  primaryBlue: "#64d5ff",
+  primaryBlue: "#64D5FF",
   accent: "#8181fe",
 };
 
