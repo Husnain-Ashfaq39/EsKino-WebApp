@@ -131,7 +131,7 @@ export default function Header2({ logoSrc, variant }) {
                     <img src={logoData.logoUrl} alt="Logo" style={styles.logo} />
                   </Link>
                   <Link to="/">
-                    <h2 className="company_name text-4xl font-semibold " style={styles.companyName}>
+                    <h2 className="company_name text-4xl font-semibold pb-2" style={styles.companyName}>
                       Eskino
                     </h2>
                   </Link>
