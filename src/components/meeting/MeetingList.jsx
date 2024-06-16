@@ -1,4 +1,4 @@
-import { Button, Modal, Table } from "antd";
+import { Button, Modal, Table, Spin } from "antd";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
@@ -31,6 +31,7 @@ const MeetingList = () => {
   const [updateTrigger, setUpdateTrigger] = useState(false);
   const [meetingToDelete, setMeetingToDelete] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchParticipantsSum = async (meetingId) => {
     const participantQuery = query(
@@ -119,6 +120,7 @@ const MeetingList = () => {
   };
 
   const handleDeleteMeeting = async (meetingId) => {
+    setIsDeleting(true); // Set loading state to true
     try {
       // Fetch participants associated with the meeting
       const participantQuery = query(
@@ -174,6 +176,8 @@ const MeetingList = () => {
     } catch (error) {
       toast.error("Failed to delete the meeting");
       navigate("/server-error");
+    } finally {
+      setIsDeleting(false); // Reset loading state
     }
   };
 
@@ -477,17 +481,23 @@ const MeetingList = () => {
                                     <button
                                       onClick={() => setIsDeleteModalOpen(false)}
                                       className="btn btn-white me-2"
+                                      disabled={isDeleting}
                                     >
                                       Close
                                     </button>
                                     <button
                                       type="button"
                                       className="btn btn-danger"
-                                      onClick={() => {
-                                        handleDeleteMeeting(meetingToDelete);
-                                      }}
+                                      onClick={() => handleDeleteMeeting(meetingToDelete)}
+                                      disabled={isDeleting}
                                     >
-                                    Trash
+                                      {isDeleting ? (
+                                        <>
+                                          <Spin size="small" />
+                                        </>
+                                      ) : (
+                                        "Trash"
+                                      )}
                                     </button>
                                   </div>
                                 </div>

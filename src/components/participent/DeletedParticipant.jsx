@@ -7,7 +7,7 @@ import { getAllDocuments } from "../../services/dbService";
 import { getCurrentUser } from "../../services/authService";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { searchnormal } from "../imagepath";
-import { convertTimestamp } from "../../services/general_functions"; // Import the new function to format date
+import { convertTimestamp } from "../../services/general_functions"; // Import the function to format date
 
 const DeletedParticipants = () => {
   const navigate = useNavigate();
@@ -27,16 +27,19 @@ const DeletedParticipants = () => {
         persons: doc.data().persons,
         gender: doc.data().gender,
         title: doc.data().title,
-        startDate: formatDateWithDots(convertTimestamp(doc.data().startDate)), // Use the new function to format the date
+        startDate: doc.data().startDate
+          ? formatDateWithDots(convertTimestamp(doc.data().startDate)) 
+          : "", 
       }));
       setDeletedParticipants(loadedParticipants);
       setFilteredParticipants(loadedParticipants);
     });
   }, []);
-   const formatDateWithDots = (date) => {
-    return date.replace(/\//g, '.');
+
+  const formatDateWithDots = (date) => {
+    const dateParts = date.split("/");
+    return `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}`;
   };
-  
 
   useEffect(() => {
     const filtered = deletedParticipants.filter(

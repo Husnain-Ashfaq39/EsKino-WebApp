@@ -65,7 +65,7 @@ const EditCCBody = () => {
         if (file) {
             const toastId = toast.loading("Uploading image...");
             try {
-                const uploadedImageURL = await uploadFile(file, `Images/${file.name}`, (progress) => {
+                const uploadedImageURL = await uploadFile(file, `ccbody/Images/${file.name}`, (progress) => {
                     const percent = Math.round((progress.loaded / progress.total) * 100);
                     toast.update(toastId, { render: `Uploading image... ${percent}%`, type: "info", isLoading: true });
                 });

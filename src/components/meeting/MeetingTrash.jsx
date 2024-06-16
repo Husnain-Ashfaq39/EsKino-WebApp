@@ -1,4 +1,4 @@
-import { Button, Modal, Table } from "antd";
+import { Button, Modal, Table, Spin } from "antd";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { collection, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
@@ -16,6 +16,7 @@ const MeetingTrash = () => {
   const [trashedMeetings, setTrashedMeetings] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [meetingToDelete, setMeetingToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false); // Add state for loading
   const navigate = useNavigate();
 
   const fetchTrashedMeetings = async () => {
@@ -27,15 +28,16 @@ const MeetingTrash = () => {
 
   useEffect(() => {
     if (!getCurrentUser()) {
-      navigate('/login');
+      navigate("/login");
     }
     fetchTrashedMeetings();
   }, [navigate]);
 
   const handlePermanentDelete = async (meetingId) => {
+    setIsDeleting(true); // Set loading state to true
     try {
       console.log(`Attempting to permanently delete meeting with ID: ${meetingId}`);
-      
+
       // Permanently delete the meeting from "Meeting Trash" collection
       await deleteDocument("Meeting Trash", meetingId);
 
@@ -52,6 +54,8 @@ const MeetingTrash = () => {
       console.error(`Failed to delete meeting with ID: ${meetingId}. Error:`, error);
       toast.error("Failed to permanently delete the meeting");
       navigate("/server-error");
+    } finally {
+      setIsDeleting(false); // Reset loading state
     }
   };
 
@@ -204,6 +208,7 @@ const MeetingTrash = () => {
                                     <button
                                       onClick={() => setIsDeleteModalOpen(false)}
                                       className="btn btn-white me-2"
+                                      disabled={isDeleting} // Disable while deleting
                                     >
                                       Close
                                     </button>
@@ -213,8 +218,15 @@ const MeetingTrash = () => {
                                       onClick={() => {
                                         handlePermanentDelete(meetingToDelete);
                                       }}
+                                      disabled={isDeleting} // Disable while deleting
                                     >
-                                       Delete
+                                      {isDeleting ? (
+                                        <>
+                                          <Spin size="small" />
+                                        </>
+                                      ) : (
+                                        "Delete"
+                                      )}
                                     </button>
                                   </div>
                                 </div>

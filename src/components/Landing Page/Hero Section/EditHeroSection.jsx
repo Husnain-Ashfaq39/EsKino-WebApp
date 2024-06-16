@@ -57,7 +57,7 @@ const EditHeroSection = () => {
         if (file) {
             const toastId = toast.loading("Uploading background image...");
             try {
-                const backgroundUrl = await uploadFile(file, `images/${file.name}`, (progress) => {
+                const backgroundUrl = await uploadFile(file, `herosection/images/${file.name}`, (progress) => {
                     const percent = Math.round((progress.loaded / progress.total) * 100);
                     toast.update(toastId, { render: `Uploading background image... ${percent}%`, type: "info", isLoading: true });
                 });

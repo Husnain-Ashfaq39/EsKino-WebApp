@@ -9,8 +9,11 @@ import {
   doctor,
   logout,
   menuicon04,
+  menuicon06,
   menuicon08,
+  menuicon09,
   menuicon10,
+  menuicon11,
   menuicon12,
   menuicon15,
   menuicon16,
@@ -216,7 +219,7 @@ const Sidebar = (props) => {
                     onClick={(e) => handleClick(e, "menu-itemDoctors", "menu-itemDoctors")}
                   >
                     <span className="menu-side">
-                      <img src={menuicon04} alt="" />
+                      <img src={doctor} alt="" />
                     </span>{" "}
                     <span>Doctors</span> <span className="menu-arrow" />
                   </Link>

@@ -24,6 +24,8 @@ const ReportContainer = styled.div`
   padding: 20px;
   border-radius: 15px;
   background-color: #fff;
+  max-width: 700px;
+  margin: 0 auto;
 `;
 
 const ReportHeader = styled.div`
@@ -55,6 +57,12 @@ const StyledModal = styled(Modal)`
     max-width: 700px;
     padding: 20px;
   }
+`;
+
+const ReportContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;
 
 const ParticipantList = () => {
@@ -99,7 +107,8 @@ const ParticipantList = () => {
           title: meetingData.title,
           sectionId: participant.sectionId,
           totalFee:participant.totalFee,
-          streetAddress:meetingData.streetAddress
+          streetAddress:meetingData.streetAddress,
+          startDate:meetingData.startDate
         });
 
         // Remove participant from "Participants" collection
@@ -343,7 +352,7 @@ const ParticipantList = () => {
                     <StyledModal open={isReportOpen} onClose={() => setIsReportOpen(false)} center>
                       <ReportContainer ref={printRef}>
                         <ReportHeader>
-                          <h2>Participant Report</h2>
+                          <h2 className="mr-10">Participant Report</h2>
                           <PrintButton
                             icon={<FontAwesomeIcon icon={faPrint} />}
                             onClick={handlePrint}
@@ -351,7 +360,7 @@ const ParticipantList = () => {
                             Print
                           </PrintButton>
                         </ReportHeader>
-                        <div className="report-content">
+                        <ReportContent className="report-content">
                           <p><strong>First Name:</strong> {selectedParticipant.firstName}</p>
                           <p><strong>Last Name:</strong> {selectedParticipant.lastName}</p>
                           <p><strong>Email:</strong> {selectedParticipant.email}</p>
@@ -361,7 +370,7 @@ const ParticipantList = () => {
                           <p><strong>Name of Participants:</strong> {selectedParticipant.personNames}</p>
                           <p><strong>Owner Address:</strong> {selectedParticipant.address}</p>
                           <p><strong>Gender:</strong> {selectedParticipant.gender}</p>
-                        </div>
+                        </ReportContent>
                       </ReportContainer>
                     </StyledModal>
                   )}
