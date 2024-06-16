@@ -21,7 +21,7 @@ export default function DepartmentSectionStyle1({ sectionTitle, data }) {
     <div className="container">
       <div className="row">
         <div className="col-md-6 col-xl-4">
-          {isMobile && <Spacing md="70" lg="70" />} {/* Apply extra spacing on mobile devices */}
+          {/* {isMobile && <Spacing md="70" lg="70" />}  */}
           <Spacing md="30" lg="10" />
           <SectionHeading title={sectionTitle} />
           <Spacing md="72" lg="50" />
