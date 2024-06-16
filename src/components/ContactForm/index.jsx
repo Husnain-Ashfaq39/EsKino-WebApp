@@ -77,7 +77,13 @@ const ContactForm = () => {
               type="text"
               className="cs_form_field"
               placeholder="555-1234"
-              {...register("phoneNumber", { required: "Phone number is required" })}
+              {...register("phoneNumber", { 
+                required: "Phone number is required",
+                pattern: {
+                  value: /^[0-9]*$/,
+                  message: "Only numbers are allowed"
+                }
+              })}
             />
             {errors.phoneNumber && <p className='text-danger'>{errors.phoneNumber.message}</p>}
             <div className="cs_height_42 cs_height_xl_25" />
