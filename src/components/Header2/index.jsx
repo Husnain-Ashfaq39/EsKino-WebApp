@@ -106,7 +106,7 @@ export default function Header2({ logoSrc, variant }) {
     logo: isMobile ? { width: "30px", height: "auto" } : { width: "45px", height: "auto", marginTop : "4px" },
     menuToggle: isMobile ? { width: "25px", height: "auto" } : { width: "35px", height: "auto" },
     header: isMobile ? { padding: "25px" } : { padding: "20px" },
-    companyName: isMobile ? { fontSize: "1.65rem", marginLeft: "-18px" ,marginTop : "5px"} : { fontSize: "2rem",  marginLeft: "2px" ,marginTop : "30px"},
+    companyName: isMobile ? { fontSize: "1.65rem", marginLeft: "-18px" ,marginTop : "0px"} : { fontSize: "2rem",  marginLeft: "2px" ,marginTop : "30px"},
   };
 
   return (

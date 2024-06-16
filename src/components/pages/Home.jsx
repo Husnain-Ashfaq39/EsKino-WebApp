@@ -251,10 +251,12 @@ export default function Home() {
         bottomLg={140}
         bottomXl={100}
       >
+        <div >
         <FeaturesSection
           sectionTitle={OMHeadData.OMHeadTitle}
           sectionSubtile={OMHeadData.OMHeadDescription}
         />
+        </div>
       </Section>
 
       {/* Doctors Section */}
