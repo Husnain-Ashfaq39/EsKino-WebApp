@@ -26,7 +26,7 @@ export default function SectionHeading({
   // Styles for larger devices
   const desktopStyles = {
     titleUp: { fontSize: "0.9rem", fontWeight: "300" },
-    title: { fontSize: "3.5rem", fontWeight: "300" },
+    title: { fontSize: "3.5rem", fontWeight: "300", textalign: center },
     titleDown: { fontSize: "0.9rem", marginTop: "-2.5vw",  fontWeight: "500" },
     subTitle: { fontSize: "1.26rem"},
   };
