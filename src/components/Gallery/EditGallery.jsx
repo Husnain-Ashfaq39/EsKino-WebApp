@@ -23,7 +23,7 @@ const EditGallery = () => {
 
   useEffect(() => {
     if (!getCurrentUser()) {
-      navigate('/login');
+      navigate("/login");
     }
     fetchGalleryItem();
     fetchCategories();
@@ -75,7 +75,9 @@ const EditGallery = () => {
     if (fileList.length > 0) {
       const file = fileList[0];
       try {
-        imageUrl = await uploadFile(file, `images/${file.name}`);
+        // Ensure the category name is sanitized
+        const sanitizedCategory = category.replace(/[^a-zA-Z0-9-_]/g, "_");
+        imageUrl = await uploadFile(file, `${sanitizedCategory}/${file.name}`);
       } catch (error) {
         message.error("Image upload failed: " + error.message);
         setUploading(false);

@@ -19,7 +19,7 @@ const AddGallery = () => {
 
   useEffect(() => {
     if (!getCurrentUser()) {
-      navigate('/login');
+      navigate("/login");
     }
 
     fetchCategories();
@@ -53,7 +53,9 @@ const AddGallery = () => {
 
     const promises = Array.from(fileList).map((file) => {
       return new Promise((resolve, reject) => {
-        uploadFile(file, `images/${file.name}`)
+        // Ensure the category name is sanitized
+        const sanitizedCategory = category.replace(/[^a-zA-Z0-9-_]/g, "_");
+        uploadFile(file, `${sanitizedCategory}/${file.name}`)
           .then((url) => {
             addDocument("gallery", {
               url,

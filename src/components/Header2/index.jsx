@@ -20,6 +20,8 @@ export default function Header2({ logoSrc, variant }) {
     phone: "",
     email: "",
   });
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
   const {
     data: logoData,
     isLoading,
@@ -56,6 +58,17 @@ export default function Header2({ logoSrc, variant }) {
   };
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
         setIsSticky(true);
@@ -89,6 +102,13 @@ export default function Header2({ logoSrc, variant }) {
     return <div></div>;
   }
 
+  const styles = {
+    logo: isMobile ? { width: "30px", height: "auto" } : { width: "45px", height: "auto", marginTop : "4px" },
+    menuToggle: isMobile ? { width: "25px", height: "auto" } : { width: "35px", height: "auto" },
+    header: isMobile ? { padding: "25px" } : { padding: "20px" },
+    companyName: isMobile ? { fontSize: "1.65rem", marginLeft: "-18px" ,marginTop : "5px"} : { fontSize: "2rem",  marginLeft: "2px" ,marginTop : "30px"},
+  };
+
   return (
     <>
       <header
@@ -96,23 +116,22 @@ export default function Header2({ logoSrc, variant }) {
           mobileToggle ? "cs_mobile_toggle_active" : ""
         } ${variant} ${isSticky ? "cs_sticky_active" : ""}`}
       >
-        <div style={{marginTop:"-10px"}} className={`cs_main_header bg-[${colors.primary}]   mx-[-15px] py-0`}>
+        <div className="mb-10 cs_main_header mx-[-15px] py-0" style={{ ...styles.header, marginTop: "-10px", backgroundColor: colors.primary }}>
           <div className="container h-20">
             <div className="cs_main_header_in">
               <div className="cs_main_header_left">
                 <div
                   style={{
                     display: "flex",
-                    justifyContent: "space-between",
                     alignItems: "center",
-                    marginTop: "-2.5rem",
+                    marginTop: isMobile ? "0" : "-2.5rem",
                   }}
                 >
                   <Link className="cs_site_branding logo_style" to="/">
-                    <img src={logoData.logoUrl} alt="Logo" />
+                    <img src={logoData.logoUrl} alt="Logo" style={styles.logo} />
                   </Link>
                   <Link to="/">
-                    <h2 className="company_name text-4xl font-semibold ">
+                    <h2 className="company_name text-4xl font-semibold " style={styles.companyName}>
                       Eskino
                     </h2>
                   </Link>
@@ -144,7 +163,26 @@ export default function Header2({ logoSrc, variant }) {
                     }
                     onClick={() => setMobileToggle(!mobileToggle)}
                   >
-                    <span></span>
+                    <svg
+                      width={styles.menuToggle.width}
+                      height={styles.menuToggle.height}
+                      viewBox="0 0 35 30"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M0.483887 2.46544C0.483887 1.10383 1.14618 0 1.96315 0H33.5208C34.3377 0 35 1.10383 35 2.46544C35 3.82708 34.3377 4.93088 33.5208 4.93088H1.96315C1.14618 4.93088 0.483887 3.82708 0.483887 2.46544Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M0.483887 14.6694C0.483887 13.3074 1.14618 12.2039 1.96315 12.2039H33.5208C34.3377 12.2039 35 13.3074 35 14.6694C35 16.0309 34.3377 17.1348 33.5208 17.1348H1.96315C1.14618 17.1348 0.483887 16.0309 0.483887 14.6694Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M0.483887 26.6267C0.483887 25.2648 1.14618 24.1613 1.96315 24.1613H33.5208C34.3377 24.1613 35 25.2648 35 26.6267C35 27.9883 34.3377 29.0922 33.5208 29.0922H1.96315C1.14618 29.0922 0.483887 27.9883 0.483887 26.6267Z"
+                        fill="currentColor"
+                      />
+                    </svg>
                   </span>
                 </nav>
               </div>
@@ -157,8 +195,8 @@ export default function Header2({ logoSrc, variant }) {
                     onClick={() => setSideNav(!sideNav)}
                   >
                     <svg
-                      width={35}
-                      height={30}
+                      width={styles.menuToggle.width}
+                      height={styles.menuToggle.height}
                       viewBox="0 0 35 30"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -204,7 +242,7 @@ export default function Header2({ logoSrc, variant }) {
               <img
                 src={logo2Png}
                 alt="Eskino"
-                style={{ width: "50px", height: "auto" }}
+                style={styles.logo}
               />
               <h3 style={{ marginLeft: "10px", marginTop: "25px" }}>Eskino</h3>
             </div>
