@@ -3,10 +3,12 @@ import { getAllDocuments } from '../../services/dbService'; // Import Firestore 
 import styles from './Doctors.module.scss';
 import SectionHeading from '../SectionHeading';
 import Spacing from '../Spacing';
+import { FaEye } from 'react-icons/fa'; // Import the eye icon
 
 const Doctors = () => {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expandedIndex, setExpandedIndex] = useState(null);
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -24,6 +26,10 @@ const Doctors = () => {
     fetchDoctors();
   }, []);
 
+  const handleTap = (index) => {
+    setExpandedIndex(expandedIndex === index ? null : index);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -40,16 +46,24 @@ const Doctors = () => {
 
           <div className={styles.wrapper}>
             {doctors.map((doctor, index) => (
-              <div className={styles.card} key={index}>
+              <div 
+                className={`${styles.card} ${expandedIndex === index ? styles.expanded : ''}`} 
+                key={index}
+                onClick={() => handleTap(index)}
+              >
                 <img src={doctor.image} alt={doctor.name} />
-                <div style={{ padding: '9px' }} className={styles.info}>
+                <div className={styles.cardHeader}>
+                  <FaEye className={styles.eyeIcon} />
+                  <p className={styles.seeMore}>See More</p>
+                  <p className={styles.tapToView}>Tap to view Details</p>
+                </div>
+                <div style={{ padding: '9px' }} className={`${styles.info} ${expandedIndex === index ? styles.expanded : ''}`}>
                   <h3 className={styles.cardTitle}>{doctor.name}</h3>
                   <h5 className={styles.speciality}>{doctor.occupation}</h5>
                   <ul className={styles.detailsList} style={{ textAlign: 'left', marginLeft: "1rem" }}>
                     {doctor.introduction?.map((detail, i) => (
                       <li style={{ textAlign: 'left', listStyleType: 'disc', marginLeft: "1rem" }} key={i}>{detail}</li>
                     ))}
-                    {/* <br /> */}
                     <h5 style={{marginTop: "1rem"}}>Zusatzqualifikationen</h5>
                     {doctor.zusatzqualifikationen?.map((qualification, i) => (
                       <li style={{ textAlign: 'left', listStyleType: 'disc', marginLeft: "1rem" }} key={i}>{qualification}</li>
