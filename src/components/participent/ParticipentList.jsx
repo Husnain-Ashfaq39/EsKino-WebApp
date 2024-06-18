@@ -107,6 +107,8 @@ const ParticipantList = () => {
           totalFee: doc.data().totalFee,
           issueDate: doc.data().issueDate,
           originalPrice: doc.data().originalPrice,
+          dueDate: doc.data().dueDate,
+
         }));
         setParticipantData(loadedParticipants);
       });
@@ -126,7 +128,7 @@ const ParticipantList = () => {
 
   const columns = [
     {
-      title: "Index",
+      title: "#",
       dataIndex: "index",
       key: "index",
     },

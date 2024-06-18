@@ -94,6 +94,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
     data.totalFee = totalFee;
     data.plan = data.persons; // Store the selected plan
     data.issueDate = new Date().toLocaleDateString('en-GB'); // Capture the current date in DD/MM/YYYY format
+    data.dueDate = new Date(new Date().setDate(new Date().getDate() + 15)).toLocaleDateString('en-GB'); // Set due date 15 days from issue date
     data.originalPrice = originalPrice; // Store the original price
     setIsSubmitting(true);
 
