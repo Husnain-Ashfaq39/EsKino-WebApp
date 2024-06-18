@@ -27,9 +27,7 @@ const EditHeaderAndPicture2 = () => {
     const doctorID = 2;
 
     useEffect(() => {
-        if (!getCurrentUser()) {
-            navigate('/login');
-        }
+        
         const fetchDocumentData = async () => {
             try {
                 const documentSnapshot = await getDocumentByField('Doctors', 'doctorID', doctorID);

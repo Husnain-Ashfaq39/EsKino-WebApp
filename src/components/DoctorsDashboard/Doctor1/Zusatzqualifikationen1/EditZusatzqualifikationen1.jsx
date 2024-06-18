@@ -22,9 +22,7 @@ const EditZusatzqualifikationen1 = () => {
     const doctorID = 1;
 
     useEffect(() => {
-        if (!getCurrentUser()) {
-            navigate('/login');
-        }
+       
         const fetchDocumentData = async () => {
             try {
                 const documentSnapshot = await getDocumentByField('Doctors', 'doctorID', doctorID);

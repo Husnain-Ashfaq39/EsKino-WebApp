@@ -3,36 +3,35 @@ import { app } from '../config/firebase'; // Assuming firebaseConfig is exported
 
 const auth = getAuth(app);
 
-export async function registerUser (username,email, password){
+export async function registerUser(username, email, password) {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user=userCredential.user;
+    const user = userCredential.user;
     updateProfile(user, {
         displayName: username
-      }).then(() => {
-        // Profile updated successfully
+    }).then(() => {
         console.log("Display Name updated to:", user.displayName);
-      }).catch((error) => {
-        // An error occurred
+    }).catch((error) => {
         console.error("Error updating display name:", error);
-      });
-    
+    });
+
+    localStorage.setItem("authToken", user.accessToken);
     return userCredential;
 }
 
-
-
-export const signIn = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+export const signIn = async (email, password) => {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    localStorage.setItem("authToken", userCredential.user.accessToken);
+    return userCredential;
 };
 
 export const signOutUser = () => {
+    localStorage.removeItem("authToken");
     return signOut(auth);
 };
 
 export const onAuthChange = (callback) => {
     return onAuthStateChanged(auth, callback);
 };
-
 
 export function getCurrentUser() {
     const user = auth.currentUser;
@@ -44,4 +43,3 @@ export function getCurrentUser() {
         return null; // No user is logged in
     }
 }
-

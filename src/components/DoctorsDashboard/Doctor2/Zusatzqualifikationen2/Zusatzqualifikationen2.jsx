@@ -20,9 +20,7 @@ const Zusatzqualifikationen2 = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate('/login');
-    }
+    
 
     // Add toast
     const addSuccessStatus = sessionStorage.getItem("addZusatzqualifikationen2");

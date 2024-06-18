@@ -15,14 +15,7 @@ const AddAdmin = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  useEffect(() => {
-    if(!getCurrentUser())
-      {
-       navigate('/login');
-      }
-  
-    
-  },[])
+
   
 
   const validate = () => {

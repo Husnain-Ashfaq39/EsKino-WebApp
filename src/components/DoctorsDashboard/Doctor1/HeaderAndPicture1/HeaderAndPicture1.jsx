@@ -19,9 +19,7 @@ const HeaderandPicture1 = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate('/login');
-    }
+    
     const updateSuccessStatus = sessionStorage.getItem("updateHeaderAndPicture1 ");
     if (updateSuccessStatus) {
       toast.success("Doctor Data Updated Successfully!", { autoClose: 2000 });

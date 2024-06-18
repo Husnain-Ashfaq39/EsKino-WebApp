@@ -32,7 +32,8 @@ const Login = () => {
       return;
     }
     try {
-      await signIn(email, password);
+      const userCredential = await signIn(email, password);
+      localStorage.setItem("authToken", userCredential.user.accessToken);
       navigate("/admin-dashboard");
     } catch (error) {
       let errorMessage = "Failed to login";

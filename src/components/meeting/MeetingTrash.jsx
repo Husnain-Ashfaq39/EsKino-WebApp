@@ -17,6 +17,7 @@ const MeetingTrash = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [meetingToDelete, setMeetingToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false); // Add state for loading
+  const [searchTerm, setSearchTerm] = useState(""); // Add state for search term
   const navigate = useNavigate();
 
   const fetchTrashedMeetings = async () => {
@@ -27,9 +28,7 @@ const MeetingTrash = () => {
   };
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate("/login");
-    }
+    
     fetchTrashedMeetings();
   }, [navigate]);
 
@@ -109,6 +108,11 @@ const MeetingTrash = () => {
     },
   ];
 
+  // Filter meetings based on search term
+  const filteredMeetings = trashedMeetings.filter((meeting) =>
+    meeting.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
       <Header />
@@ -148,6 +152,8 @@ const MeetingTrash = () => {
                                   type="text"
                                   className="form-control"
                                   placeholder="Search here"
+                                  value={searchTerm}
+                                  onChange={(e) => setSearchTerm(e.target.value)}
                                 />
                                 <Link className="btn">
                                   <img src={searchnormal} alt="#" />
@@ -175,7 +181,7 @@ const MeetingTrash = () => {
                           <div className="table-responsive">
                             <Table
                               columns={columns}
-                              dataSource={trashedMeetings}
+                              dataSource={filteredMeetings}
                               rowKey="id"
                             />
                           </div>

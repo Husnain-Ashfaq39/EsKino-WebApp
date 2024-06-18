@@ -19,9 +19,7 @@ const HeroSection = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate('/login');
-    }
+    
     const updateSuccessStatus = sessionStorage.getItem("updateHeroSuccess");
     if (updateSuccessStatus) {
       toast.success("Hero Section Updated Successfully!", { autoClose: 2000 });

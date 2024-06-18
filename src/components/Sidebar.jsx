@@ -1,8 +1,6 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import Scrollbars from "react-custom-scrollbars-2";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   blog,
   dashboard,
@@ -19,9 +17,11 @@ import {
   menuicon16,
   patients
 } from "./imagepath";
-
+import { signOutUser } from "../services/authService";
 const Sidebar = (props) => {
   const [sidebar, setSidebar] = useState("");
+  const navigate = useNavigate();
+
   const handleClick = (e, item, item1, item3) => {
     const div = document.querySelector(`#${item}`);
     const ulDiv = document.querySelector(`.${item1}`);
@@ -43,9 +43,16 @@ const Sidebar = (props) => {
   const expandMenu = () => {
     document.body.classList.remove("expand-menu");
   };
+
   const expandMenuOpen = () => {
     document.body.classList.add("expand-menu");
   };
+
+  const handleLogout = async () => {
+    await signOutUser();
+    navigate("/login");
+  };
+
   return (
     <>
       <div className="sidebar" id="sidebar">
@@ -143,6 +150,18 @@ const Sidebar = (props) => {
                         to="/add-meeting"
                       >
                         Add Meeting
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className={
+                          props?.activeClassName === "meeting-trash"
+                            ? "active"
+                            : ""
+                        }
+                        to="/meeting-trash"
+                      >
+                        Trash Meeting
                       </Link>
                     </li>
                   </ul>
@@ -447,7 +466,7 @@ const Sidebar = (props) => {
                 </li>
               </ul>
               <div className="logout-btn">
-                <Link to="/login">
+                <Link to="#" onClick={handleLogout}>
                   <span className="menu-side">
                     <img src={logout} alt="" />
                   </span>{" "}

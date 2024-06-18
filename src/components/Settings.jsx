@@ -47,9 +47,7 @@ const Settings = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate('/login');
-    }
+    
     const fetchContactInfo = async () => {
       try {
         const contactDocs = await getAllDocuments("contactInfo");

@@ -29,9 +29,7 @@ const EditParticipant = () => {
   );
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate("/login");
-    }
+    
     if (participentId) {
       getDocument("participants", participentId)
         .then((docSnap) => {

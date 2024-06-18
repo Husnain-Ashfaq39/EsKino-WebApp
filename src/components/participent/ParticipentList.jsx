@@ -131,9 +131,7 @@ const ParticipantList = () => {
   const [participentData, setParticipantData] = useState([]);
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate('/login');
-    }
+    
     if (meetingId) {
       fetchDocumentsWithQuery("participants", "sectionId", meetingId).then(
         (querySnapshot) => {

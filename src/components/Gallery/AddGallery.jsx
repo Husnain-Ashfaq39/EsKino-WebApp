@@ -18,9 +18,7 @@ const AddGallery = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate("/login");
-    }
+    
 
     fetchCategories();
   }, []);

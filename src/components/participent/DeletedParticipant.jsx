@@ -16,9 +16,7 @@ const DeletedParticipants = () => {
   const [filteredParticipants, setFilteredParticipants] = useState([]);
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate("/login");
-    }
+    
     getAllDocuments("Deleted Participants").then((querySnapshot) => {
       const loadedParticipants = querySnapshot.docs.map((doc) => ({
         id: doc.id,

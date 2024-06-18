@@ -29,9 +29,7 @@ const Admin_Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate("/login");
-    }
+    
 
     const fetchMeetings = async () => {
       const meetingsSnapshot = await getAllDocuments("meetings");

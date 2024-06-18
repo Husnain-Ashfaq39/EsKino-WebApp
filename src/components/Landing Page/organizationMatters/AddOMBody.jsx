@@ -16,13 +16,7 @@ const AddOMBody = () => {
     });
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        if (!getCurrentUser()) {
-          navigate('/login');
-        }
-      
-        
-      }, [])
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });

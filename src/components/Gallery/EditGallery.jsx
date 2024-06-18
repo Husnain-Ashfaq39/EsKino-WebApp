@@ -22,9 +22,7 @@ const EditGallery = () => {
   const [existingImageUrl, setExistingImageUrl] = useState("");
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate("/login");
-    }
+    
     fetchGalleryItem();
     fetchCategories();
   }, []);

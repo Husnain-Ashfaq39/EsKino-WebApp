@@ -72,9 +72,7 @@ const MeetingList = () => {
   };
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate('/login');
-    }
+    
     fetchMeetings();
   }, [updateTrigger]);
 

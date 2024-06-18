@@ -47,10 +47,7 @@ const Contactlist = () => {
   }, []);
 
   useEffect(() => {
-    if(!getCurrentUser())
-      {
-       navigate('/login');
-      }
+   
     if (filter === "all") {
       setFilteredContacts(contacts);
     } else {

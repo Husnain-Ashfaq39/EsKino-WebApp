@@ -20,9 +20,7 @@ const Introduction2 = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate('/login');
-    }
+   
 
     // add toast
     const addSuccessStatus = sessionStorage.getItem("addIntroduction2");

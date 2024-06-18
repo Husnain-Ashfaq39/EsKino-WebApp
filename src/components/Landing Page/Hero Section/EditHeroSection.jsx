@@ -24,9 +24,7 @@ const EditHeroSection = () => {
     });
 
     useEffect(() => {
-        if (!getCurrentUser()) {
-            navigate('/login');
-          }
+       
         const fetchDocumentData = async () => {
             try {
                 const documentSnapshot = await getDocument('HeroSection', id);

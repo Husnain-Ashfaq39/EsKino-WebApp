@@ -19,9 +19,7 @@ const GalleryList = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate('/login');
-    }
+    
     fetchData();
   }, [location.state]); // Fetch data whenever the state changes
 

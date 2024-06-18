@@ -16,9 +16,7 @@ const SubscriberList = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate('/login');
-    }
+    
     const fetchSubscribers = async () => {
       const subscribersRef = collection(db, "subscribers");
       const snapshot = await getDocs(subscribersRef);

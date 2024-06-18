@@ -17,9 +17,7 @@ const EditOMBody = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!getCurrentUser()) {
-            navigate('/login');
-          }
+        
         fetchData();
     }, []);
 

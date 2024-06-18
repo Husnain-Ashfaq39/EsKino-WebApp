@@ -14,11 +14,7 @@ import Sidebar from "../Sidebar";
 const AddMeeting = () => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate("/login");
-    }
-  }, []);
+ 
 
   const {
     register,

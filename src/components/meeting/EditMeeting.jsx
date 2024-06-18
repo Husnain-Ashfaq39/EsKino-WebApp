@@ -29,9 +29,7 @@ const EditMeeting = () => {
   const [meetingData, setMeetingData] = useState(initialMeetingData);
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate("/login");
-    }
+    
     if (id) {
       const docRef = doc(db, "meetings", id);
       getDoc(docRef)
