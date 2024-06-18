@@ -93,6 +93,8 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
     data.sectionId = sectionId;
     data.totalFee = totalFee;
     data.plan = data.persons; // Store the selected plan
+    data.issueDate = new Date().toLocaleDateString('en-GB'); // Capture the current date in DD/MM/YYYY format
+    data.originalPrice = originalPrice; // Store the original price
     setIsSubmitting(true);
 
     try {

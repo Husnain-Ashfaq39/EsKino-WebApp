@@ -31,6 +31,11 @@ h6 {
 .far {
   font-family: "FontAwesome" !important;
 }
+@media print {
+  .no-print {
+    display: none;
+  }
+}
 
 
 .h1 {

@@ -1,19 +1,12 @@
 import { Button, Spin, Table } from "antd";
-import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { getCurrentUser } from "../../services/authService";
-import {
-  addDocument,
-  deleteDocument,
-  fetchDocumentsWithQuery,
-  getAllDocuments,
-  getDocument,
-  updateDocument,
-} from "../../services/dbService";
+import { fetchDocumentsWithQuery, getAllDocuments, getDocument, updateDocument, addDocument, deleteDocument } from "../../services/dbService";
 import Header from "../Header";
-import { imagesend, refreshicon, searchnormal } from "../imagepath";
+import { refreshicon, searchnormal } from "../imagepath";
 import Sidebar from "../Sidebar";
+import { imagesend } from "../imagepath";
+import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 
 const ParticipantList = () => {
   const location = useLocation();
@@ -22,14 +15,13 @@ const ParticipantList = () => {
   const navigate = useNavigate();
   const [participentToDele, setParticipentToDele] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false); 
+  const [isDeleting, setIsDeleting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredParticipants, setFilteredParticipants] = useState([]);
-  const [selectedParticipant, setSelectedParticipant] = useState(null);
-  const [isReportOpen, setIsReportOpen] = useState(false);
+  const [participentData, setParticipantData] = useState([]);
 
   const handleDelete = async (participantId) => {
-    setIsDeleting(true); // Set loading state to true
+    setIsDeleting(true);
     const participantIndex = participentData.findIndex(
       (p) => p.id === participantId
     );
@@ -49,18 +41,16 @@ const ParticipantList = () => {
 
         await updateDocument("meetings", participant.sectionId, { capacity: updatedCapacityStr });
 
-        // Move participant to "Deleted Participants" collection
         await addDocument("Deleted Participants", {
           persons: participant.persons,
           gender: participant.gender,
           title: meetingData.title,
           sectionId: participant.sectionId,
-          totalFee:participant.totalFee,
-          streetAddress:meetingData.streetAddress,
-          startDate:meetingData.startDate
+          totalFee: participant.totalFee,
+          streetAddress: meetingData.streetAddress,
+          startDate: meetingData.startDate
         });
 
-        // Remove participant from "Participants" collection
         await deleteDocument("participants", participantId);
 
         const updatedParticipants = participentData.filter(
@@ -73,18 +63,17 @@ const ParticipantList = () => {
     } catch (error) {
       navigate("/server-error");
     } finally {
-      setIsDeleting(false); // Reset loading state
+      setIsDeleting(false);
     }
   };
-
-  const [participentData, setParticipantData] = useState([]);
 
   useEffect(() => {
     if (meetingId) {
       fetchDocumentsWithQuery("participants", "sectionId", meetingId).then(
         (querySnapshot) => {
-          const loadedParticipants = querySnapshot.docs.map((doc) => ({
+          const loadedParticipants = querySnapshot.docs.map((doc, index) => ({
             id: doc.id,
+            index: index + 1,
             firstName: doc.data().firstName,
             lastName: doc.data().lastName,
             email: doc.data().email,
@@ -95,14 +84,17 @@ const ParticipantList = () => {
             sectionId: doc.data().sectionId,
             plan: doc.data().plan,
             totalFee: doc.data().totalFee,
+            issueDate: doc.data().issueDate,
+            originalPrice: doc.data().originalPrice,
           }));
           setParticipantData(loadedParticipants);
         }
       );
     } else {
       getAllDocuments("participants").then((querySnapshot) => {
-        const loadedParticipants = querySnapshot.docs.map((doc) => ({
+        const loadedParticipants = querySnapshot.docs.map((doc, index) => ({
           id: doc.id,
+          index: index + 1,
           firstName: doc.data().firstName,
           lastName: doc.data().lastName,
           email: doc.data().email,
@@ -113,6 +105,8 @@ const ParticipantList = () => {
           sectionId: doc.data().sectionId,
           plan: doc.data().plan,
           totalFee: doc.data().totalFee,
+          issueDate: doc.data().issueDate,
+          originalPrice: doc.data().originalPrice,
         }));
         setParticipantData(loadedParticipants);
       });
@@ -132,10 +126,9 @@ const ParticipantList = () => {
 
   const columns = [
     {
-      title: "",
-      dataIndex: "sectionId",
-      render: (text) => <Link to="#"></Link>,
-      sorter: (a, b) => a.sectionId.length - b.sectionId.length,
+      title: "Index",
+      dataIndex: "index",
+      key: "index",
     },
     {
       title: "First Name",
@@ -159,11 +152,11 @@ const ParticipantList = () => {
       sorter: (a, b) => a.persons - b.persons,
     },
     {
-      title: "",
+      title: "Actions",
       dataIndex: "actions",
       render: (_, record) => (
         <Button className="btn btn-primary" onClick={() => {
-          navigate(`/participant-report/${record.id}`, { state: { participant: record } });
+          navigate(`/invoice-details/${record.id}`, { state: { participant: record } });
         }}>
           View Details
         </Button>
@@ -304,7 +297,7 @@ const ParticipantList = () => {
                             <Button
                               onClick={() => setIsDeleteModalOpen(false)}
                               className="btn btn-white me-2"
-                              disabled={isDeleting} 
+                              disabled={isDeleting}
                             >
                               Close
                             </Button>
@@ -312,11 +305,11 @@ const ParticipantList = () => {
                               type="button"
                               className="btn btn-danger"
                               onClick={() => handleDelete(participentToDele)}
-                              disabled={isDeleting} 
+                              disabled={isDeleting}
                             >
                               {isDeleting ? (
                                 <>
-                                  <Spin size="small" /> 
+                                  <Spin size="small" />
                                 </>
                               ) : (
                                 "Delete"
