@@ -138,40 +138,10 @@ const handlePrint = async () => {
                           </p>
                         </div>
                       </div>
-                      <div className="col-md-6">
-                        <div className="invoice-info invoice-info2">
-                          <strong className="customer-text-one">Payment Details</strong>
-                          <p className="invoice-details">
-                            Total Fee: €{participant.totalFee} <br />
-                            Plan: {participant.plan}
-                          </p>
-                          <div className="invoice-item-box">
-                            <p>Gender: {participant.gender}</p>
-                            <p className="mb-0">Persons: {participant.persons}</p>
-                          </div>
-                        </div>
-                      </div>
+                      
                     </div>
                   </div>
-                  <div className="invoice-issues-box">
-                    <div className="row">
-                      <div className="col-lg-4 col-md-4">
-                        <div className="invoice-issues-date" style={{  padding: '0.7rem', borderRadius: '10px' }}>
-                          <p>Issue Date: {formatDate(participant.issueDate)}</p>
-                        </div>
-                      </div>
-                      <div className="col-lg-4 col-md-4">
-                        <div className="invoice-issues-date" style={{  padding: '0.7rem', borderRadius: '10px' }}>
-                          <p>Discount: €{discount.toFixed(2)} ({discountPercentage}%)</p>
-                        </div>
-                      </div>
-                      <div className="col-lg-4 col-md-4">
-                        <div className="invoice-issues-date" style={{  padding: '0.7rem', borderRadius: '10px' }}>
-                          <p>Due Amount: €{participant.totalFee} </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  
                   <div className="invoice-item invoice-table-wrap">
                     <div className="row">
                       <div className="col-md-12">
@@ -206,10 +176,7 @@ const handlePrint = async () => {
                         <h6>Note:</h6>
                         <p className="mb-0">Please pay within 15 days.</p>
                       </div>
-                      <div className="invoice-terms">
-                        <h6>Terms and Conditions:</h6>
-                        <p className="mb-0">Enter customer notes or any other details</p>
-                      </div>
+                      
                     </div>
                     <div className="col-lg-6 col-md-6">
                       <div className="invoice-total-card">
