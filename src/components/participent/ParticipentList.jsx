@@ -1,12 +1,7 @@
-import { faPrint } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Spin, Table } from "antd";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import React, { useEffect, useRef, useState } from "react";
-import { Modal } from "react-responsive-modal";
-import 'react-responsive-modal/styles.css';
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { getCurrentUser } from "../../services/authService";
 import {
   addDocument,
@@ -20,51 +15,6 @@ import Header from "../Header";
 import { imagesend, refreshicon, searchnormal } from "../imagepath";
 import Sidebar from "../Sidebar";
 
-const ReportContainer = styled.div`
-  padding: 20px;
-  border-radius: 15px;
-  background-color: #fff;
-  max-width: 700px;
-  margin: 0 auto;
-`;
-
-const ReportHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
-`;
-
-const PrintButton = styled(Button)`
-  background-color: #2E7D32;
-  color: #fff;
-  &:hover {
-    background-color: #1B5E20;
-  }
-`;
-
-const StyledModal = styled(Modal)`
-  &.react-responsive-modal-overlay {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  &.react-responsive-modal-modal {
-    border-radius: 15px;
-    max-width: 700px;
-    padding: 20px;
-  }
-`;
-
-const ReportContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
 const ParticipantList = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -77,7 +27,6 @@ const ParticipantList = () => {
   const [filteredParticipants, setFilteredParticipants] = useState([]);
   const [selectedParticipant, setSelectedParticipant] = useState(null);
   const [isReportOpen, setIsReportOpen] = useState(false);
-  const printRef = useRef();
 
   const handleDelete = async (participantId) => {
     setIsDeleting(true); // Set loading state to true
@@ -131,7 +80,6 @@ const ParticipantList = () => {
   const [participentData, setParticipantData] = useState([]);
 
   useEffect(() => {
-    
     if (meetingId) {
       fetchDocumentsWithQuery("participants", "sectionId", meetingId).then(
         (querySnapshot) => {
@@ -182,16 +130,6 @@ const ParticipantList = () => {
     setFilteredParticipants(filtered);
   }, [searchQuery, participentData]);
 
-  const handlePrint = () => {
-    const printContent = printRef.current.innerHTML;
-    const originalContent = document.body.innerHTML;
-
-    document.body.innerHTML = printContent;
-    window.print();
-    document.body.innerHTML = originalContent;
-    window.location.reload();
-  };
-
   const columns = [
     {
       title: "",
@@ -225,8 +163,7 @@ const ParticipantList = () => {
       dataIndex: "actions",
       render: (_, record) => (
         <Button className="btn btn-primary" onClick={() => {
-          setSelectedParticipant(record);
-          setIsReportOpen(true);
+          navigate(`/participant-report/${record.id}`, { state: { participant: record } });
         }}>
           View Details
         </Button>
@@ -346,32 +283,6 @@ const ParticipantList = () => {
                       rowKey="id"
                     />
                   </div>
-                  {selectedParticipant && (
-                    <StyledModal open={isReportOpen} onClose={() => setIsReportOpen(false)} center>
-                      <ReportContainer ref={printRef}>
-                        <ReportHeader>
-                          <h2 className="mr-10">Participant Report</h2>
-                          <PrintButton
-                            icon={<FontAwesomeIcon icon={faPrint} />}
-                            onClick={handlePrint}
-                          >
-                            Print
-                          </PrintButton>
-                        </ReportHeader>
-                        <ReportContent className="report-content">
-                          <p><strong>First Name:</strong> {selectedParticipant.firstName}</p>
-                          <p><strong>Last Name:</strong> {selectedParticipant.lastName}</p>
-                          <p><strong>Email:</strong> {selectedParticipant.email}</p>
-                          <p><strong>Persons:</strong> {selectedParticipant.persons}</p>
-                          <p><strong>Plan:</strong> {selectedParticipant.plan}</p>
-                          <p><strong>Total Fee:</strong> €{selectedParticipant.totalFee}</p>
-                          <p><strong>Name of Participants:</strong> {selectedParticipant.personNames}</p>
-                          <p><strong>Owner Address:</strong> {selectedParticipant.address}</p>
-                          <p><strong>Gender:</strong> {selectedParticipant.gender}</p>
-                        </ReportContent>
-                      </ReportContainer>
-                    </StyledModal>
-                  )}
                   <div
                     className={
                       isDeleteModalOpen

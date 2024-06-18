@@ -71,6 +71,7 @@ import EditZusatzqualifikationen2 from "./components/DoctorsDashboard/Doctor2/Zu
 import Aktuell2 from "./components/DoctorsDashboard/Doctor2/Aktuell2/Aktuell2";
 import AddAktuell2 from "./components/DoctorsDashboard/Doctor2/Aktuell2/AddAktuell2";
 import EditAktuell2 from "./components/DoctorsDashboard/Doctor2/Aktuell2/EditAktuell2";
+import ParticipantReport from "./components/participent/ParticipantReport";
 
 const ProtectedRoute = ({ element, ...rest }) => {
   const isAuthenticated = !!localStorage.getItem("authToken");
@@ -85,90 +86,274 @@ const Approuter = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
 
-          <Route path="/settings" element={<ProtectedRoute element={<Settings />} />} />
+          <Route
+            path="/settings"
+            element={<ProtectedRoute element={<Settings />} />}
+          />
 
-          <Route path="/changepassword" element={<ProtectedRoute element={<ChangePassword />} />} />
+          <Route
+            path="/changepassword"
+            element={<ProtectedRoute element={<ChangePassword />} />}
+          />
           <Route path="/server-error" element={<ServerError />} />
 
-          <Route path="/gallerylist" element={<ProtectedRoute element={<GalleryList />} />} />
-          <Route path="/gallerylist/add" element={<ProtectedRoute element={<AddGallery />} />} />
-          <Route path="/gallerylist/edit" element={<ProtectedRoute element={<EditGallery />} />} />
-          <Route path="/edit-categories" element={<ProtectedRoute element={<EditCategories />} />} />
+          <Route
+            path="/gallerylist"
+            element={<ProtectedRoute element={<GalleryList />} />}
+          />
+          <Route
+            path="/gallerylist/add"
+            element={<ProtectedRoute element={<AddGallery />} />}
+          />
+          <Route
+            path="/gallerylist/edit"
+            element={<ProtectedRoute element={<EditGallery />} />}
+          />
+          <Route
+            path="/edit-categories"
+            element={<ProtectedRoute element={<EditCategories />} />}
+          />
 
-          <Route path="/contactlist" element={<ProtectedRoute element={<Contactlist />} />} />
-          <Route path="/suscribers" element={<ProtectedRoute element={<SubscriberList />} />} />
+          <Route
+            path="/contactlist"
+            element={<ProtectedRoute element={<Contactlist />} />}
+          />
+          <Route
+            path="/suscribers"
+            element={<ProtectedRoute element={<SubscriberList />} />}
+          />
 
-          <Route path="/addblog" element={<ProtectedRoute element={<Addblog />} />} />
-          <Route path="/editblog/:id" element={<ProtectedRoute element={<Editblog />} />} />
-          <Route path="/blogview" element={<ProtectedRoute element={<BlogView />} />} />
+          <Route
+            path="/addblog"
+            element={<ProtectedRoute element={<Addblog />} />}
+          />
+          <Route
+            path="/editblog/:id"
+            element={<ProtectedRoute element={<Editblog />} />}
+          />
+          <Route
+            path="/blogview"
+            element={<ProtectedRoute element={<BlogView />} />}
+          />
 
-          <Route path="/meetinglist" element={<ProtectedRoute element={<MeetingList />} />} />
-          <Route path="/add-meeting" element={<ProtectedRoute element={<AddMeeting />} />} />
-          <Route path="/editmeeting" element={<ProtectedRoute element={<EditMeeting />} />} />
-          <Route path="/meeting-trash" element={<ProtectedRoute element={<MeetingTrash />} />} />
+          <Route
+            path="/meetinglist"
+            element={<ProtectedRoute element={<MeetingList />} />}
+          />
+          <Route
+            path="/add-meeting"
+            element={<ProtectedRoute element={<AddMeeting />} />}
+          />
+          <Route
+            path="/editmeeting"
+            element={<ProtectedRoute element={<EditMeeting />} />}
+          />
+          <Route
+            path="/meeting-trash"
+            element={<ProtectedRoute element={<MeetingTrash />} />}
+          />
 
-          <Route path="/meetinglist/participantlist" element={<ProtectedRoute element={<ParticipentList />} />} />
-          <Route path="/meetinglist/participantlist/edit" element={<ProtectedRoute element={<EditParticipent />} />} />
-          <Route path="/deleted-participants" element={<ProtectedRoute element={<DeletedParticipants />} />} />
+          <Route
+            path="/meetinglist/participantlist"
+            element={<ProtectedRoute element={<ParticipentList />} />}
+          />
+          <Route
+            path="/meetinglist/participantlist/edit"
+            element={<ProtectedRoute element={<EditParticipent />} />}
+          />
+          <Route
+            path="/deleted-participants"
+            element={<ProtectedRoute element={<DeletedParticipants />} />}
+          />
+          <Route
+            path="/participant-report/:id"
+            element={<ParticipantReport />}
+          />
 
+          <Route
+            path="/doctors/headerandpicture1"
+            element={<ProtectedRoute element={<HeaderandPicture1 />} />}
+          />
+          <Route
+            path="/doctors/headerandpicture1/editheaderandpicture1/:id"
+            element={<ProtectedRoute element={<EditHeaderAndPicture1 />} />}
+          />
 
-          <Route path="/doctors/headerandpicture1" element={<ProtectedRoute element={<HeaderandPicture1 />} />} />
-          <Route path="/doctors/headerandpicture1/editheaderandpicture1/:id" element={<ProtectedRoute element={<EditHeaderAndPicture1 />} />} />
+          <Route
+            path="/doctors/headerandpicture2"
+            element={<ProtectedRoute element={<HeaderandPicture2 />} />}
+          />
+          <Route
+            path="/doctors/headerandpicture2/editheaderandpicture2/:id"
+            element={<ProtectedRoute element={<EditHeaderAndPicture2 />} />}
+          />
 
-          <Route path="/doctors/headerandpicture2" element={<ProtectedRoute element={<HeaderandPicture2 />} />} />
-          <Route path="/doctors/headerandpicture2/editheaderandpicture2/:id" element={<ProtectedRoute element={<EditHeaderAndPicture2 />} />} />
+          <Route
+            path="/doctors/introduction1"
+            element={<ProtectedRoute element={<Introduction1 />} />}
+          />
+          <Route
+            path="/doctors/introduction1/addintroduction1"
+            element={<ProtectedRoute element={<AddIntroduction1 />} />}
+          />
+          <Route
+            path="/doctors/introduction1/editintroduction1/:id"
+            element={<ProtectedRoute element={<EditIntroduction1 />} />}
+          />
 
-          <Route path="/doctors/introduction1" element={<ProtectedRoute element={<Introduction1 />} />} />
-          <Route path="/doctors/introduction1/addintroduction1" element={<ProtectedRoute element={<AddIntroduction1 />} />} />
-          <Route path="/doctors/introduction1/editintroduction1/:id" element={<ProtectedRoute element={<EditIntroduction1 />} />} />
+          <Route
+            path="/doctors/introduction2"
+            element={<ProtectedRoute element={<Introduction2 />} />}
+          />
+          <Route
+            path="/doctors/introduction2/addintroduction2"
+            element={<ProtectedRoute element={<AddIntroduction2 />} />}
+          />
+          <Route
+            path="/doctors/introduction2/editintroduction2/:id"
+            element={<ProtectedRoute element={<EditIntroduction2 />} />}
+          />
 
-          <Route path="/doctors/introduction2" element={<ProtectedRoute element={<Introduction2 />} />} />
-          <Route path="/doctors/introduction2/addintroduction2" element={<ProtectedRoute element={<AddIntroduction2 />} />} />
-          <Route path="/doctors/introduction2/editintroduction2/:id" element={<ProtectedRoute element={<EditIntroduction2 />} />} />
+          <Route
+            path="/doctors/zusatzqualifikationen1"
+            element={<ProtectedRoute element={<Zusatzqualifikationen1 />} />}
+          />
+          <Route
+            path="/doctors/zusatzqualifikationen1/addzusatzqualifikationen1"
+            element={<ProtectedRoute element={<AddZusatzqualifikationen1 />} />}
+          />
+          <Route
+            path="/doctors/zusatzqualifikationen1/editzusatzqualifikationen1/:id"
+            element={
+              <ProtectedRoute element={<EditZusatzqualifikationen1 />} />
+            }
+          />
 
-          <Route path="/doctors/zusatzqualifikationen1" element={<ProtectedRoute element={<Zusatzqualifikationen1 />} />} />
-          <Route path="/doctors/zusatzqualifikationen1/addzusatzqualifikationen1" element={<ProtectedRoute element={<AddZusatzqualifikationen1 />} />} />
-          <Route path="/doctors/zusatzqualifikationen1/editzusatzqualifikationen1/:id" element={<ProtectedRoute element={<EditZusatzqualifikationen1 />} />} />
+          <Route
+            path="/doctors/zusatzqualifikationen2"
+            element={<ProtectedRoute element={<Zusatzqualifikationen2 />} />}
+          />
+          <Route
+            path="/doctors/zusatzqualifikationen2/addzusatzqualifikationen2"
+            element={<ProtectedRoute element={<AddZusatzqualifikationen2 />} />}
+          />
+          <Route
+            path="/doctors/zusatzqualifikationen2/editzusatzqualifikationen2/:id"
+            element={
+              <ProtectedRoute element={<EditZusatzqualifikationen2 />} />
+            }
+          />
 
-          <Route path="/doctors/zusatzqualifikationen2" element={<ProtectedRoute element={<Zusatzqualifikationen2 />} />} />
-          <Route path="/doctors/zusatzqualifikationen2/addzusatzqualifikationen2" element={<ProtectedRoute element={<AddZusatzqualifikationen2 />} />} />
-          <Route path="/doctors/zusatzqualifikationen2/editzusatzqualifikationen2/:id" element={<ProtectedRoute element={<EditZusatzqualifikationen2 />} />} />
+          <Route
+            path="/doctors/aktuell1"
+            element={<ProtectedRoute element={<Aktuell1 />} />}
+          />
+          <Route
+            path="/doctors/aktuell1/addaktuell1"
+            element={<ProtectedRoute element={<AddAktuell1 />} />}
+          />
+          <Route
+            path="/doctors/aktuell1/editaktuell1/:id"
+            element={<ProtectedRoute element={<EditAktuell1 />} />}
+          />
 
-          <Route path="/doctors/aktuell1" element={<ProtectedRoute element={<Aktuell1 />} />} />
-          <Route path="/doctors/aktuell1/addaktuell1" element={<ProtectedRoute element={<AddAktuell1 />} />} />
-          <Route path="/doctors/aktuell1/editaktuell1/:id" element={<ProtectedRoute element={<EditAktuell1 />} />} />
+          <Route
+            path="/doctors/aktuell2"
+            element={<ProtectedRoute element={<Aktuell2 />} />}
+          />
+          <Route
+            path="/doctors/aktuell2/addaktuell2"
+            element={<ProtectedRoute element={<AddAktuell2 />} />}
+          />
+          <Route
+            path="/doctors/aktuell2/editaktuell2/:id"
+            element={<ProtectedRoute element={<EditAktuell2 />} />}
+          />
 
-          <Route path="/doctors/aktuell2" element={<ProtectedRoute element={<Aktuell2 />} />} />
-          <Route path="/doctors/aktuell2/addaktuell2" element={<ProtectedRoute element={<AddAktuell2 />} />} />
-          <Route path="/doctors/aktuell2/editaktuell2/:id" element={<ProtectedRoute element={<EditAktuell2 />} />} />
+          <Route
+            path="/landingpage/herosection"
+            element={<ProtectedRoute element={<HeroSection />} />}
+          />
+          <Route
+            path="/landingpage/editherosection/:id"
+            element={<ProtectedRoute element={<EditHeroSection />} />}
+          />
 
-          <Route path="/landingpage/herosection" element={<ProtectedRoute element={<HeroSection />} />} />
-          <Route path="/landingpage/editherosection/:id" element={<ProtectedRoute element={<EditHeroSection />} />} />
+          <Route
+            path="/landingpage/childemergencyheader"
+            element={<ProtectedRoute element={<CEHeader />} />}
+          />
+          <Route
+            path="/landingpage/editchildemergencyheader/:id"
+            element={<ProtectedRoute element={<EditCEHeader />} />}
+          />
 
-          <Route path="/landingpage/childemergencyheader" element={<ProtectedRoute element={<CEHeader />} />} />
-          <Route path="/landingpage/editchildemergencyheader/:id" element={<ProtectedRoute element={<EditCEHeader />} />} />
+          <Route
+            path="/landingpage/childemergencybody"
+            element={<ProtectedRoute element={<CEBody />} />}
+          />
+          <Route
+            path="/landingpage/childemergencybody/addchildemergencybody"
+            element={<ProtectedRoute element={<AddCEBody />} />}
+          />
+          <Route
+            path="/landingpage/childemergencybody/editchildemergencybody/:id"
+            element={<ProtectedRoute element={<EditCEBody />} />}
+          />
 
-          <Route path="/landingpage/childemergencybody" element={<ProtectedRoute element={<CEBody />} />} />
-          <Route path="/landingpage/childemergencybody/addchildemergencybody" element={<ProtectedRoute element={<AddCEBody />} />} />
-          <Route path="/landingpage/childemergencybody/editchildemergencybody/:id" element={<ProtectedRoute element={<EditCEBody />} />} />
+          <Route
+            path="/landingpage/coursecontentheading"
+            element={<ProtectedRoute element={<CCHeading />} />}
+          />
+          <Route
+            path="/landingpage/coursecontentheading/editcoursecontentheading/:id"
+            element={<ProtectedRoute element={<EditCCHeading />} />}
+          />
 
-          <Route path="/landingpage/coursecontentheading" element={<ProtectedRoute element={<CCHeading />} />} />
-          <Route path="/landingpage/coursecontentheading/editcoursecontentheading/:id" element={<ProtectedRoute element={<EditCCHeading />} />} />
+          <Route
+            path="/landingpage/coursecontentbody"
+            element={<ProtectedRoute element={<CCBody />} />}
+          />
+          <Route
+            path="/landingpage/coursecontentbody/editcoursecontentbody/:id"
+            element={<ProtectedRoute element={<EditCCBody />} />}
+          />
+          <Route
+            path="/landingpage/coursecontentbody/addcoursecontentbody"
+            element={<ProtectedRoute element={<AddCCBody />} />}
+          />
 
-          <Route path="/landingpage/coursecontentbody" element={<ProtectedRoute element={<CCBody />} />} />
-          <Route path="/landingpage/coursecontentbody/editcoursecontentbody/:id" element={<ProtectedRoute element={<EditCCBody />} />} />
-          <Route path="/landingpage/coursecontentbody/addcoursecontentbody" element={<ProtectedRoute element={<AddCCBody />} />} />
+          <Route
+            path="/landingpage/organizationmattersheading"
+            element={<ProtectedRoute element={<OMHeading />} />}
+          />
+          <Route
+            path="/landingpage/organizationmattersheading/editorganizationmattersheading/:id"
+            element={<ProtectedRoute element={<EditOMHeading />} />}
+          />
 
-          <Route path="/landingpage/organizationmattersheading" element={<ProtectedRoute element={<OMHeading />} />} />
-          <Route path="/landingpage/organizationmattersheading/editorganizationmattersheading/:id" element={<ProtectedRoute element={<EditOMHeading />} />} />
+          <Route
+            path="/landingpage/organizationmattersbody"
+            element={<ProtectedRoute element={<OMBody />} />}
+          />
+          <Route
+            path="/landingpage/organizationmattersbody/editorganizationmattersbody/:id"
+            element={<ProtectedRoute element={<EditOMBody />} />}
+          />
+          <Route
+            path="/landingpage/organizationmattersbody/addorganizationmattersbody"
+            element={<ProtectedRoute element={<AddOMBody />} />}
+          />
 
-          <Route path="/landingpage/organizationmattersbody" element={<ProtectedRoute element={<OMBody />} />} />
-          <Route path="/landingpage/organizationmattersbody/editorganizationmattersbody/:id" element={<ProtectedRoute element={<EditOMBody />} />} />
-          <Route path="/landingpage/organizationmattersbody/addorganizationmattersbody" element={<ProtectedRoute element={<AddOMBody />} />} />
+          <Route
+            path="/addadmin"
+            element={<ProtectedRoute element={<AddAdmin />} />}
+          />
 
-          <Route path="/addadmin" element={<ProtectedRoute element={<AddAdmin />} />} />
-
-          <Route path="/admin-dashboard" element={<ProtectedRoute element={<Admin_Dashboard />} />} />
+          <Route
+            path="/admin-dashboard"
+            element={<ProtectedRoute element={<Admin_Dashboard />} />}
+          />
 
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
