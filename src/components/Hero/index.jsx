@@ -53,7 +53,7 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
         maxWidth: "50%",
         height: "auto",
         width: "auto",
-        maxHeight: "850px",
+        maxHeight: "650px",
         objectFit: "contain",
         marginLeft: "10px"
 
@@ -61,20 +61,21 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
 
   const containerStyle = {
     position: "relative",
-    minHeight: isMobile ? "650px" : isTablet ? "50vh" : "0px", // Adjust the height for mobile, tablet, and larger screens
-   
+    minHeight: isMobile ? "650px" : isTablet ? "650px" : "650px", // Adjust the height for mobile, tablet, and larger screens
+    // maxHeight: "100px"
   };
 
   const titleStyle = {
     fontSize: isMobile ? '2rem' : isTablet ? '3rem' : '3rem', // Adjust the font size for mobile, tablet, and larger screens
-    maxWidth: isMobile?"100%":isTablet?"48%": '50%'
+    maxWidth: isMobile?"100%":isTablet?"48%": '50%',
    };
 
   const subTitleStyle = {
     fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.7rem', // Adjust the font size for mobile, tablet, and larger screens
     fontWeight: 500,
     lineHeight: isTablet?"2.3rem": 'normal',
-    maxWidth: isMobile?"100%":isTablet?"48%": '50%'
+    maxWidth: isMobile?"100%":isTablet?"48%": '50%',
+
   };
 
   return (
@@ -86,11 +87,11 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
         >
           <div className="container" style={containerStyle}>
             <div className="cs_hero_text">
-              <h1 className="cs_hero_title text-6xl font-light" style={titleStyle}>
+              <h1 className="cs_hero_title text-6xl font-light text-center" style={titleStyle}>
                 {parse(title)}
               </h1>
               <p
-                className="cs_hero_subtitle cs_heading_color font-light"
+                className="cs_hero_subtitle cs_heading_color font-light text-center"
                 style={subTitleStyle}
               >
                 {parse(subTitle)}
