@@ -86,6 +86,7 @@ const ParticipantList = () => {
             totalFee: doc.data().totalFee,
             issueDate: doc.data().issueDate,
             originalPrice: doc.data().originalPrice,
+            dueDate: doc.data().dueDate,
           }));
           setParticipantData(loadedParticipants);
         }
@@ -108,7 +109,6 @@ const ParticipantList = () => {
           issueDate: doc.data().issueDate,
           originalPrice: doc.data().originalPrice,
           dueDate: doc.data().dueDate,
-
         }));
         setParticipantData(loadedParticipants);
       });
@@ -157,9 +157,12 @@ const ParticipantList = () => {
       title: "Actions",
       dataIndex: "actions",
       render: (_, record) => (
-        <Button className="btn btn-primary" onClick={() => {
-          navigate(`/invoice-details/${record.id}`, { state: { participant: record } });
-        }}>
+        <Button
+          className="btn btn-primary"
+          onClick={() => {
+            navigate(`/invoice-details/${record.id}`, { state: { participant: record } });
+          }}
+        >
           View Details
         </Button>
       ),

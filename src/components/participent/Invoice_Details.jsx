@@ -1,22 +1,101 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { logodark, logo2Png, signature } from "../imagepath";
-import Header from "../Header";
-import Sidebar from "../Sidebar";
-import { getDocument } from "../../services/dbService";
-import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { jsPDF } from "jspdf";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getDocument, fetchDocumentsWithQuery } from "../../services/dbService";
+import Header from "../Header";
+import { logo2Png } from "../imagepath";
+import Sidebar from "../Sidebar";
+import { Skeleton } from "antd"; // Import Ant Design's Skeleton component
+
+const InvoiceSkeleton = () => (
+  <>
+  <Header/>
+  <Sidebar/>
+  <div className="page-wrapper">
+    <div className="content container-fluid">
+      <div className="row justify-content-center">
+        <div className="col-xl-10">
+          <div className="card invoice-info-card">
+            <div className="card-body">
+              <div className="invoice-item invoice-item-one">
+                <div className="row">
+                  <div className="col-md-6">
+                    <Skeleton.Image style={{ width: 35, height: 35 }} />
+                    <Skeleton active paragraph={{ rows: 1 }} />
+                  </div>
+                  <div className="col-md-6">
+                    <Skeleton active paragraph={{ rows: 2 }} />
+                  </div>
+                </div>
+              </div>
+              <div className="invoice-item invoice-item-two">
+                <div className="row">
+                  <div className="col-md-6">
+                    <Skeleton active paragraph={{ rows: 3 }} />
+                  </div>
+                  <div className="col-md-6">
+                    <Skeleton active paragraph={{ rows: 2 }} />
+                  </div>
+                </div>
+              </div>
+              <div className="invoice-item invoice-table-wrap">
+                <Skeleton active paragraph={{ rows: 5 }} />
+              </div>
+              <div className="row align-items-center justify-content-center">
+                <div className="col-lg-6 col-md-6">
+                  <Skeleton active paragraph={{ rows: 2 }} />
+                </div>
+                <div className="col-lg-6 col-md-6">
+                  <Skeleton active paragraph={{ rows: 2 }} />
+                </div>
+              </div>
+              <div className="row justify-content-end mt-4 no-print">
+                <Skeleton.Button active style={{ width: 100, height: 40 }} />
+                <Skeleton.Button active style={{ width: 150, height: 40 }} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </>
+);
 
 const Invoice_Details = () => {
-  const location = useLocation();
+  const { id } = useParams();
   const navigate = useNavigate();
-  const participant = location.state?.participant;
+  const [participant, setParticipant] = useState(null);
   const [companyDetails, setCompanyDetails] = useState(null);
+  const [index, setIndex] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
   const invoiceRef = useRef();
 
   useEffect(() => {
+    const fetchParticipantDetails = async () => {
+      const doc = await getDocument("participants", id);
+      if (doc.exists()) {
+        setParticipant(doc.data());
+
+        // Fetch all participants to determine the index
+        const querySnapshot = await fetchDocumentsWithQuery("participants", "sectionId", doc.data().sectionId);
+        const participants = querySnapshot.docs.map((doc, index) => ({
+          id: doc.id,
+          index: index + 1,
+          ...doc.data(),
+        }));
+        const participantIndex = participants.findIndex(p => p.id === id);
+        if (participantIndex !== -1) {
+          setIndex(participants[participantIndex].index);
+        }
+      } else {
+        console.error("No such participant document!");
+        navigate("/meetinglist/participantlist");
+      }
+      setLoading(false); // Set loading to false after fetching data
+    };
+
     const fetchCompanyDetails = async () => {
       const doc = await getDocument("contactInfo", "XAuOdusdLGAEi4WaM9DT");
       if (doc.exists()) {
@@ -26,24 +105,23 @@ const Invoice_Details = () => {
       }
     };
 
+    fetchParticipantDetails();
     fetchCompanyDetails();
+  }, [id, navigate]);
 
-    if (!participant) {
-      navigate("/meetinglist/participantlist");
-    }
-  }, [participant, navigate]);
+  if (loading) {
+    return <InvoiceSkeleton />;
+  }
 
-  if (!participant || !companyDetails) {
-    return null;
+  if (!participant || !companyDetails || index === null) {
+    return <></>;
   }
 
   const discount = participant.originalPrice - participant.totalFee;
-  const discountPercentage = (
-    (discount / participant.originalPrice) *
-    100
-  ).toFixed(2);
+  const discountPercentage = ((discount / participant.originalPrice) * 100).toFixed(2);
 
   const formatDate = (date) => {
+    if (!date) return ""; // Return an empty string if the date is undefined
     return date.split("/").join(".");
   };
 
@@ -59,9 +137,7 @@ const Invoice_Details = () => {
       printWindow.document.write(
         '<html><head><title>Invoice</title></head><body style="margin: 0;">'
       );
-      printWindow.document.write(
-        '<img src="' + imgData + '" style="width: 100%;">'
-      );
+      printWindow.document.write('<img src="' + imgData + '" style="width: 100%;">');
       printWindow.document.write("</body></html>");
       printWindow.document.close();
       printWindow.focus();
@@ -126,7 +202,7 @@ const Invoice_Details = () => {
                         </div>
                         <div className="invoice-head">
                           <h2>Invoice</h2>
-                          <p>Participant No: {participant.index}</p>
+                          <p>Participant No: {index}</p>
                         </div>
                       </div>
                       <div className="col-md-6">
@@ -164,13 +240,11 @@ const Invoice_Details = () => {
                       <div className="col-md-6">
                         <div className="invoice-info invoice-info2">
                           <p className="invoice-details">
-                            <strong>Invoice Date :  </strong>
-                            <FontAwesomeIcon icon={faCalendarAlt} />{" "}
+                            <strong>Invoice Date : </strong>
                             {formatDate(participant.issueDate)}
                           </p>
                           <p className="invoice-details">
-                            <strong>Due Date :  </strong>
-                            <FontAwesomeIcon icon={faCalendarAlt} />{" "}
+                            <strong>Due Date : </strong>
                             {formatDate(participant.dueDate)}
                           </p>
                         </div>

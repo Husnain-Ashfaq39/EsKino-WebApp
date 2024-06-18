@@ -9,7 +9,7 @@ import {
 } from "../../services/dbService";
 import { arrowWhiteSvg } from "../imagepath";
 import { Link } from "react-router-dom";
-import { convertTimestamp } from "../../services/general_functions"; // Assuming this function exists for timestamp conversion
+import { convertTimestamp } from "../../services/general_functions";
 
 export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }) {
   const {
@@ -24,9 +24,9 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [totalFee, setTotalFee] = useState(0);
   const [originalPrice, setOriginalPrice] = useState(0);
-  const [capacity, setCapacity] = useState(null); // State to store the capacity
-  const [warning, setWarning] = useState(""); // State to store the warning message
-  const [startDate, setStartDate] = useState(null); // State to store the startDate
+  const [capacity, setCapacity] = useState(null);
+  const [warning, setWarning] = useState("");
+  const [startDate, setStartDate] = useState(null);
 
   const calculateTotalFee = (plan) => {
     let fee = 0;
@@ -74,7 +74,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
         if (doc.exists()) {
           const meetingData = doc.data();
           setCapacity(meetingData.capacity);
-          setStartDate(formatDate(convertTimestamp(meetingData.startDate))); // Format the date to DD.MM.YYYY
+          setStartDate(formatDate(convertTimestamp(meetingData.startDate)));
         }
       } catch (error) {
         console.error("Error fetching meeting data: ", error);
@@ -92,10 +92,10 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
   const onSubmit = async (data) => {
     data.sectionId = sectionId;
     data.totalFee = totalFee;
-    data.plan = data.persons; // Store the selected plan
-    data.issueDate = new Date().toLocaleDateString('en-GB'); // Capture the current date in DD/MM/YYYY format
-    data.dueDate = new Date(new Date().setDate(new Date().getDate() + 15)).toLocaleDateString('en-GB'); // Set due date 15 days from issue date
-    data.originalPrice = originalPrice; // Store the original price
+    data.plan = data.persons;
+    data.issueDate = new Date().toLocaleDateString('en-GB');
+    data.dueDate = new Date(new Date().setDate(new Date().getDate() + 15)).toLocaleDateString('en-GB');
+    data.originalPrice = originalPrice;
     setIsSubmitting(true);
 
     try {
@@ -112,7 +112,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
           personsCount = parseInt(data.persons.split(" ")[0], 10);
         }
 
-        data.persons = personsCount; // Update the data to store numerical value
+        data.persons = personsCount;
 
         if (parseInt(meetingData.capacity, 10) >= personsCount) {
           const updatedCapacity = (parseInt(meetingData.capacity, 10) - personsCount).toString();
@@ -124,22 +124,20 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
           });
           await addDocument("participants", data);
           toast.success("Thank you for your binding registration.");
-          onBookingSuccess(); // Fetch updated data after successful booking
-          onClose(); // Close the modal on successful submission
+          onBookingSuccess();
+          onClose();
         } else {
-          toast.error(
-            "Not enough capacity for the requested number of persons."
-          );
-          reset(); // Reset the form on unsuccessful submission
+          toast.error("Not enough capacity for the requested number of persons.");
+          reset();
         }
       } else {
         toast.error("Meeting not found.");
-        reset(); // Reset the form on unsuccessful submission
+        reset();
       }
     } catch (error) {
       console.error("Error handling meeting data: ", error);
       toast.error("Failed to handle meeting data.");
-      reset(); // Reset the form on unsuccessful submission
+      reset();
     } finally {
       setIsSubmitting(false);
     }
@@ -159,7 +157,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
 
   return (
     <div>
-      {/* <ToastContainer /> */}
+      <ToastContainer />
       <form onSubmit={handleSubmit(onSubmit)} className="row">
         <div className="col-lg-6">
           <label className="cs_input_label cs_heading_color">First Name</label>
@@ -200,9 +198,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
             placeholder="example@gmail.com"
           />
           {errors.email && (
-            <div className="error text-danger">
-              {errors.email.message}
-            </div>
+            <div className="error text-danger">{errors.email.message}</div>
           )}
         </div>
         <div className="col-lg-12">
@@ -225,9 +221,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
           </div>
         )}
         <div className="col-lg-4">
-          <label className="cs_input_label cs_heading_color">
-            Select Plan:
-          </label>
+          <label className="cs_input_label cs_heading_color">Select Plan:</label>
           <select
             {...register("persons", { required: true })}
             className="cs_form_field p-2 mt-[-10px] mb-[10px]"
@@ -249,9 +243,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
         </div>
         {!warning && (
           <div className=" col-lg-8 d-flex align-items-end">
-            <label className="cs_input_label cs_heading_color me-2">
-              Total Fee:
-            </label>
+            <label className="cs_input_label cs_heading_color me-2">Total Fee:</label>
             {originalPrice > totalFee && (
               <span
                 style={{
@@ -278,9 +270,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
           </div>
         )}
         <div className="col-lg-12">
-          <label className="cs_input_label cs_heading_color">
-            Name of Persons
-          </label>
+          <label className="cs_input_label cs_heading_color">Name of Persons</label>
           <input
             {...register("personNames", { required: true })}
             type="text"
@@ -292,9 +282,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
           )}
         </div>
         <div className="col-lg-12">
-          <label className="cs_input_label cs_heading_color">
-            Select Option
-          </label>
+          <label className="cs_input_label cs_heading_color">Select Option</label>
           <div className="cs_radio_group">
             <div className="cs_radio_wrap">
               <input

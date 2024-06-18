@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 import { getDocument, updateDocument } from "../../services/dbService";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getCurrentUser } from "../../services/authService";
+import { DatePicker } from "antd"; // Importing DatePicker for date selection
+import moment from "moment"; // Importing moment for date formatting
 
 const EditParticipant = () => {
   const location = useLocation();
@@ -22,6 +23,8 @@ const EditParticipant = () => {
     persons: 0,
     personNames: "",
     gender: "",
+    issueDate: null, // Initial state for issue date
+    dueDate: null, // Initial state for due date
   };
 
   const [participantData, setParticipantData] = useState(
@@ -29,7 +32,6 @@ const EditParticipant = () => {
   );
 
   useEffect(() => {
-    
     if (participentId) {
       getDocument("participants", participentId)
         .then((docSnap) => {
@@ -44,11 +46,13 @@ const EditParticipant = () => {
               personNames: data.personNames || "",
               gender: data.gender || "",
               sectionId: data.sectionId || "",
+              issueDate: data.issueDate ? moment(data.issueDate, "DD/MM/YYYY") : null,
+              dueDate: data.dueDate ? moment(data.dueDate, "DD/MM/YYYY") : null,
             });
           }
         })
         .catch((error) => {
-          console.log();
+          console.log(error);
         });
     }
   }, [participentId]);
@@ -56,7 +60,6 @@ const EditParticipant = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Function to handle input changes
   const handleChange = (e) => {
     setParticipantData({ ...participantData, [e.target.name]: e.target.value });
     if (errors[e.target.name]) {
@@ -64,12 +67,17 @@ const EditParticipant = () => {
     }
   };
 
-  // Function to validate form inputs
+  const handleDateChange = (date, dateString, fieldName) => {
+    setParticipantData({ ...participantData, [fieldName]: date });
+    if (errors[fieldName]) {
+      setErrors({ ...errors, [fieldName]: null });
+    }
+  };
+
   const validateForm = () => {
     let isValid = true;
     let newErrors = {};
 
-    // Required field validation
     const requiredFields = [
       "firstName",
       "lastName",
@@ -78,6 +86,8 @@ const EditParticipant = () => {
       "persons",
       "personNames",
       "gender",
+      "issueDate",
+      "dueDate",
     ];
     requiredFields.forEach((field) => {
       if (!participantData[field]) {
@@ -86,7 +96,6 @@ const EditParticipant = () => {
       }
     });
 
-    // Email format validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (participantData.email && !emailPattern.test(participantData.email)) {
       isValid = false;
@@ -97,32 +106,30 @@ const EditParticipant = () => {
     return isValid;
   };
 
-  // Function to handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       setIsSubmitting(true);
-      // Simulate an API call
       const data = {
         firstName: participantData.firstName,
         lastName: participantData.lastName,
         email: participantData.email,
-        address: participantData.address, // Ensure address is correctly mapped
+        address: participantData.address,
         persons: participantData.persons,
         personNames: participantData.personNames,
         gender: participantData.gender,
+        issueDate: participantData.issueDate ? participantData.issueDate.format("DD/MM/YYYY") : null,
+        dueDate: participantData.dueDate ? participantData.dueDate.format("DD/MM/YYYY") : null,
       };
 
       try {
-        // Update the document
-        updateDocument("participants", participentId, data);
-
+        await updateDocument("participants", participentId, data);
         setIsSubmitting(false);
-
         navigate(
           `/meetinglist/participantlist?meetingid=${participantData.sectionId}&participentid=${participentId}`
         );
       } catch (error) {
+        console.error("Error updating participant data:", error);
         setIsSubmitting(false);
       }
     }
@@ -142,9 +149,7 @@ const EditParticipant = () => {
                     <Link to="/participentlist">Participants</Link>
                   </li>
                   <li className="breadcrumb-item">
-                    <i className="feather-chevron-right">
-                      <FeatherIcon icon="chevron-right" />
-                    </i>
+                    <FeatherIcon icon="chevron-right" />
                   </li>
                   <li className="breadcrumb-item active">Edit Participant</li>
                 </ul>
@@ -156,7 +161,6 @@ const EditParticipant = () => {
               <div className="card">
                 <div className="card-body">
                   <form onSubmit={handleSubmit}>
-                    {/* Form fields */}
                     <div className="form-group">
                       <label>First Name</label>
                       <input
@@ -204,7 +208,7 @@ const EditParticipant = () => {
                     </div>
 
                     <div className="form-group">
-                      <label>Address Owner</label>
+                      <label>Address</label>
                       <input
                         className="form-control"
                         type="text"
@@ -234,6 +238,7 @@ const EditParticipant = () => {
                         </div>
                       )}
                     </div>
+
                     <div className="form-group">
                       <label>Gender</label>
                       <div className="d-flex align-items-center">
@@ -268,6 +273,38 @@ const EditParticipant = () => {
                       </div>
                       {errors.gender && (
                         <div className="error text-danger">{errors.gender}</div>
+                      )}
+                    </div>
+
+                    <div className="form-group">
+                      <label>Issue Date</label>
+                      <DatePicker
+                        className="form-control"
+                        format="DD/MM/YYYY"
+                        value={participantData.issueDate}
+                        onChange={(date, dateString) =>
+                          handleDateChange(date, dateString, "issueDate")
+                        }
+                      />
+                      {errors.issueDate && (
+                        <div className="error text-danger">
+                          {errors.issueDate}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="form-group">
+                      <label>Due Date</label>
+                      <DatePicker
+                        className="form-control"
+                        format="DD/MM/YYYY"
+                        value={participantData.dueDate}
+                        onChange={(date, dateString) =>
+                          handleDateChange(date, dateString, "dueDate")
+                        }
+                      />
+                      {errors.dueDate && (
+                        <div className="error text-danger">{errors.dueDate}</div>
                       )}
                     </div>
 
