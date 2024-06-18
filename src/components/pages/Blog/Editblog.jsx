@@ -22,9 +22,7 @@ const EditBlog = () => {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate('/login');
-    }
+   
 
     const fetchBlog = async () => {
       try {

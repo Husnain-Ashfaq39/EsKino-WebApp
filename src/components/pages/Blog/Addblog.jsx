@@ -19,11 +19,7 @@ const AddBlog = () => {
   const [image, setImage] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate("/login");
-    }
-  }, []);
+
 
   const handleFileChange = (e) => {
     if (e.target.files.length > 0) {

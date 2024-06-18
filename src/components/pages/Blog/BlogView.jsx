@@ -19,9 +19,7 @@ const BlogView = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!getCurrentUser()) {
-      navigate('/login');
-    }
+   
     const fetchBlogs = async () => {
       try {
         const snapshot = await getAllDocuments("blogs"); // Assuming 'blogs' is the collection name

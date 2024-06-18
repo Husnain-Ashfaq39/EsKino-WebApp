@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Table, Button, Checkbox, Modal } from "antd";
 import { MailOutlined } from "@ant-design/icons";
-import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
+import { Button, Checkbox, Modal, Table } from "antd";
+import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { db } from "../config/firebase";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import { useNavigate } from "react-router-dom";
-import { getCurrentUser } from "../services/authService";
 
 const SubscriberList = () => {
   const [subscribers, setSubscribers] = useState([]);

@@ -97,7 +97,6 @@ const Approuter = () => {
 
           <Route path="/contactlist" element={<ProtectedRoute element={<Contactlist />} />} />
           <Route path="/suscribers" element={<ProtectedRoute element={<SubscriberList />} />} />
-          <Route path="/deleted-participants" element={<ProtectedRoute element={<DeletedParticipants />} />} />
 
           <Route path="/addblog" element={<ProtectedRoute element={<Addblog />} />} />
           <Route path="/editblog/:id" element={<ProtectedRoute element={<Editblog />} />} />
@@ -110,6 +109,8 @@ const Approuter = () => {
 
           <Route path="/meetinglist/participantlist" element={<ProtectedRoute element={<ParticipentList />} />} />
           <Route path="/meetinglist/participantlist/edit" element={<ProtectedRoute element={<EditParticipent />} />} />
+          <Route path="/deleted-participants" element={<ProtectedRoute element={<DeletedParticipants />} />} />
+
 
           <Route path="/doctors/headerandpicture1" element={<ProtectedRoute element={<HeaderandPicture1 />} />} />
           <Route path="/doctors/headerandpicture1/editheaderandpicture1/:id" element={<ProtectedRoute element={<EditHeaderAndPicture1 />} />} />
