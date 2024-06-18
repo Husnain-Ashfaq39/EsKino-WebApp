@@ -4,8 +4,8 @@ import { heroBgJpeg, heroImgPng, heroimgPng2 } from "../imagepath";
 import colors from "../../colorTheme";
 
 export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
-  const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 768);
-  const [isTablet, setIsTablet] = React.useState(window.innerWidth > 768 && window.innerWidth <= 1024);
+  const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 630);
+  const [isTablet, setIsTablet] = React.useState(window.innerWidth > 630 && window.innerWidth <= 1024);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -34,7 +34,7 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
     : isTablet
     ? {
         position: "absolute",
-        top: "-9%",
+        top: "0%",
         left: "70%",
         transform: "translateX(-50%)",
         maxWidth: "70%",
@@ -42,10 +42,12 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
         width: "auto",
         maxHeight: "500px",
         objectFit: "contain",
+        marginLeft: "60px"
+
       }
     : {
         position: "absolute",
-        top: "-20%",
+        top: "-15%",
         left: "70%",
         transform: "translateX(-40%)",
         maxWidth: "50%",
@@ -53,20 +55,26 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
         width: "auto",
         maxHeight: "850px",
         objectFit: "contain",
+        marginLeft: "10px"
+
       };
 
   const containerStyle = {
     position: "relative",
-    minHeight: isMobile ? "650px" : isTablet ? "0px" : "450px", // Adjust the height for mobile, tablet, and larger screens
+    minHeight: isMobile ? "650px" : isTablet ? "50vh" : "0px", // Adjust the height for mobile, tablet, and larger screens
+   
   };
 
   const titleStyle = {
-    fontSize: isMobile ? '2rem' : isTablet ? '1.5rem' : '3rem', // Adjust the font size for mobile, tablet, and larger screens
-  };
+    fontSize: isMobile ? '2rem' : isTablet ? '3rem' : '3rem', // Adjust the font size for mobile, tablet, and larger screens
+    maxWidth: isMobile?"100%":isTablet?"48%": '50%'
+   };
 
   const subTitleStyle = {
-    fontSize: isMobile ? '1rem' : isTablet ? '1rem' : '1.7rem', // Adjust the font size for mobile, tablet, and larger screens
+    fontSize: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.7rem', // Adjust the font size for mobile, tablet, and larger screens
     fontWeight: 500,
+    lineHeight: isTablet?"2.3rem": 'normal',
+    maxWidth: isMobile?"100%":isTablet?"48%": '50%'
   };
 
   return (
