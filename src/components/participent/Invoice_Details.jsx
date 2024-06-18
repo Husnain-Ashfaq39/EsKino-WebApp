@@ -174,7 +174,7 @@ const handlePrint = async () => {
                     <div className="col-lg-6 col-md-6">
                       <div className="invoice-terms">
                         <h6>Note:</h6>
-                        <p className="mb-0">Please pay within 15 days.</p>
+                        <p className="mb-0">Please pay within 15 days. Thank you for your business</p>
                       </div>
                       
                     </div>
