@@ -26,7 +26,7 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
         left: "50%",
         transform: "translate(-50%, 0)",
         maxWidth: "100%",
-        maxHeight: "400px",
+        maxHeight: "350px",
         width: "auto",
         height: "auto",
         objectFit: "contain",
@@ -40,7 +40,7 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
         maxWidth: "70%",
         height: "auto",
         width: "auto",
-        maxHeight: "500px",
+        maxHeight: "450px",
         objectFit: "contain",
         marginLeft: "60px"
 
@@ -53,7 +53,7 @@ export default function Hero({ title, subTitle, bgUrl, imgUrl }) {
         maxWidth: "50%",
         height: "auto",
         width: "auto",
-        maxHeight: "650px",
+        maxHeight: "610px",
         objectFit: "contain",
         marginLeft: "10px"
 
