@@ -67,13 +67,15 @@ const AddBlog = () => {
       };
 
       await addDocument("blogs", blogData);
-      toast.success("Blog has been Published. Thank you!");
+      toast.success("Blog has been Published");
       setIsSubmitting(false);
       setFileChosen(false); // Reset file chosen state
       setImage(null); // Reset image state
       if (editorRef.current) {
         editorRef.current.clearEditor();
       }
+      navigate("/blogview");
+
     } catch (error) {
       console.error("Error adding document: ", error);
       toast.error("Error in Publishing blog");
