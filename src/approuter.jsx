@@ -70,6 +70,7 @@ import ParticipentList from "./components/participent/ParticipentList";
 import Policy from "./components/Policy";
 import Settings from "./components/Settings";
 import SubscriberList from "./components/Suscribers";
+import ColorSettings from "./components/ColorSettings/ColorSettings";
 
 const ProtectedRoute = ({ element, ...rest }) => {
   const isAuthenticated = !!localStorage.getItem("authToken");
@@ -110,6 +111,9 @@ const Approuter = () => {
           <Route
             path="/edit-categories"
             element={<ProtectedRoute element={<EditCategories />} />}
+          />
+          <Route path="/color-settings"   element={<ProtectedRoute element={<ColorSettings />} />}
+          
           />
 
           <Route

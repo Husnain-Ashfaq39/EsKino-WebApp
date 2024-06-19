@@ -133,7 +133,7 @@ const Settings = () => {
   return (
     <div>
       <Header />
-      <Sidebar id="menu-item2" activeClassName="settings" />
+      <Sidebar id="menu-item12" activeClassName="settings" />
       <div className="page-wrapper">
         <div className="content">
           <div className="page-header">

@@ -29,7 +29,7 @@
     right: 50px;
     width: 60px;
     height: 200px;
-    background: $accent;
+    background: var(--darkBlue);
     border-radius: 0 0 40px 40px;
     display: flex;
     align-items: flex-end;
@@ -38,7 +38,7 @@
     transition: all 0.3s ease;
     font-size: 20px;
     i {
-      color: $accent;
+      color: var(--darkBlue);
       background-color: #fff;
       height: 50px;
       width: 50px;

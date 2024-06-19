@@ -29,6 +29,11 @@ document.documentElement.style.setProperty(
   colors.primaryBlue
 );
 
+document.documentElement.style.setProperty(
+  "--darkBlue",
+  colors.darkBlue
+);
+
 // Inject global font style
 const globalStyle = document.createElement("style");
 globalStyle.innerHTML = `
