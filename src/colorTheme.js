@@ -1,11 +1,10 @@
-import { db } from './config/firebase'; // Adjust the import according to your project's structure
-import { doc, getDoc } from 'firebase/firestore';
+import { db } from "./config/firebase"; // Adjust the import according to your project's structure
+import { doc, getDoc } from "firebase/firestore";
 
 const defaultColors = {
   primary: "#f6ebeb",
   secondary: "#ffb9b9",
   tertiary: "#ee7272",
-  dark: "#a31818",
   lightBlue: "#97ddf6",
   primaryBlue: "#64D5FF",
   darkBlue: "#2E7DDA",
@@ -21,7 +20,9 @@ const fetchColors = async () => {
     if (docSnap.exists()) {
       colors = docSnap.data();
     } else {
-      console.log("No color settings found in Firestore. Using default colors.");
+      console.log(
+        "No color settings found in Firestore. Using default colors."
+      );
     }
   } catch (error) {
     console.error("Error fetching colors from Firebase:", error);

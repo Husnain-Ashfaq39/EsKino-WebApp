@@ -13,14 +13,28 @@ const defaultColors = {
   primary: "#f6ebeb",
   secondary: "#ffb9b9",
   tertiary: "#ee7272",
-  dark: "#a31818",
   lightBlue: "#97ddf6",
   primaryBlue: "#64D5FF",
   darkBlue: "#2E7DDA",
 };
 
 const formatColorKey = (key) => {
-  return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+  switch (key) {
+    case 'primary':
+      return 'Navbar, Hero Section, Light Shade of Footer';
+    case 'secondary':
+      return 'Moderate Color of Footer';
+    case 'tertiary':
+      return 'Dark Color of Footer';
+    case 'lightBlue':
+      return 'Icons';
+    case 'primaryBlue':
+      return 'Doctor Cards Hover, Banner Section, Icons';
+    case 'darkBlue':
+      return 'Icon';
+    default:
+      return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+  }
 };
 
 const ColorSettings = () => {

@@ -8,6 +8,7 @@ import { footerBg1Svg, footerLogoBgSvg } from "../imagepath";
 import { getAllDocuments } from "../../services/dbService";
 import { useQuery } from "@tanstack/react-query";
 import colors from "../../colorTheme";
+import FooterAndLogoBg from "./FooterAndLogoBg";
 
 const menuDataTwo = [
   { title: "Blog", href: "/blog" },
@@ -16,6 +17,7 @@ const menuDataTwo = [
 ];
 
 export default function Footer() {
+
   const [key, setKey] = useState({ logoUrl: "" });
 
   const {
@@ -39,24 +41,9 @@ export default function Footer() {
 
   return (
     <footer className="cs_footer cs_style_1 cs_heading_color">
-      <div
-        className="cs_footer_logo_wrap"
-        style={{ backgroundImage: `url(${footerBg1Svg})` }}
-      >
-        <div
-          className="cs_footer_brand"
-          style={{ backgroundImage: `url(${footerLogoBgSvg})` }}
-        >
-          <img
-            src={logoData.logoUrl}
-            height={72}
-            width={72}
-            alt="Logo Icon"
-            className="cs_footer_brand_icon"
-          />
-          <h2 className="cs_footer_brand_text">Eskino</h2>
-        </div>
-      </div>
+     
+     <FooterAndLogoBg primaryColor={colors.primary} secondaryColor={colors.secondary} logoUrl={logoData.logoUrl}/>
+
       <div className="cs_footer_main">
         <div className="container">
           <div className="row">
