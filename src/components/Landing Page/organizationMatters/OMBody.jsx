@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Modal, Button } from "antd";
+import { Table, Modal, Button, Spin } from "antd";
 import { Link } from "react-router-dom";
 import { deleteDocument, getAllDocuments } from "../../../services/dbService";
 import FeatherIcon from "feather-icons-react";
@@ -20,6 +20,7 @@ const OMBody = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const updateSuccessStatus = sessionStorage.getItem("updateOMBodySuccess");
@@ -62,6 +63,7 @@ const OMBody = () => {
   };
 
   const handleDelete = async () => {
+    setIsDeleting(true);
     try {
       await deleteDocument("OrganizationMattersBody", deleteItemId);
       setDataSource(dataSource.filter((item) => item.id !== deleteItemId));
@@ -71,6 +73,8 @@ const OMBody = () => {
     } catch (error) {
       console.error("Error deleting item:", error);
       toast.error("Error deleting item: " + error.message, { autoClose: 2000 });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -248,18 +252,20 @@ const OMBody = () => {
         centered
         maskClosable={false}
       >
-        <div className="modal-body text-center">
-          <img src={imagesend} alt="#" width={50} height={46} />
-          <h3>Are you sure you want to delete this item?</h3>
-          <div className="m-t-20">
-            <button className="btn btn-white me-2" onClick={handleCancelDelete}>
-              Cancel
-            </button>
-            <button className="btn btn-danger" onClick={handleDelete}>
-              Delete
-            </button>
+        <Spin spinning={isDeleting}>
+          <div className="modal-body text-center">
+            <img src={imagesend} alt="#" width={50} height={46} />
+            <h3>Are you sure you want to delete this item?</h3>
+            <div className="m-t-20">
+              <button className="btn btn-white me-2" onClick={handleCancelDelete}>
+                Cancel
+              </button>
+              <button className="btn btn-danger" onClick={handleDelete}>
+                Delete
+              </button>
+            </div>
           </div>
-        </div>
+        </Spin>
       </Modal>
       <ToastContainer />
     </>

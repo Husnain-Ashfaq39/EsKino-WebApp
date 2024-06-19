@@ -286,7 +286,7 @@ const Invoice_Details = () => {
                       <div className="invoice-terms">
                         <h6>Note:</h6>
                         <p className="mb-0">
-                          Please pay within 15 days. Thank you for your business
+                          Please pay within 15 days. Thank you for your business.
                         </p>
                       </div>
                     </div>

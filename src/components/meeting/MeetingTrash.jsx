@@ -124,7 +124,7 @@ const MeetingTrash = () => {
               <div className="col-sm-12">
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <Link to="#">Meetings</Link>
+                    <Link to="/meetinglist">Meetings</Link>
                   </li>
                   <li className="breadcrumb-item">
                     <i className="feather-chevron-right">
