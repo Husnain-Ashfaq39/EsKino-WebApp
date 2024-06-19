@@ -27,11 +27,11 @@ const formatColorKey = (key) => {
     case 'tertiary':
       return 'Dark Color of Footer';
     case 'lightBlue':
-      return 'Icons';
+      return 'Light Icons';
     case 'primaryBlue':
       return 'Doctor Cards Hover, Banner Section, Icons';
     case 'darkBlue':
-      return 'Icon';
+      return 'Dark Icon in Gallery';
     default:
       return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
   }
