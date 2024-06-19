@@ -28,6 +28,7 @@
     "moment": "^2.30.1",
     "owl.carousel": "^2.3.4",
     "react": "^18.2.0",
+    "react-color": "^2.19.3",
     "react-countup": "^6.5.0",
     "react-custom-scrollbars-2": "^4.5.0",
     "react-dom": "^18.2.0",
