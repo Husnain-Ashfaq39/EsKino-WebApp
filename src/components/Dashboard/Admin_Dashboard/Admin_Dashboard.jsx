@@ -1,3 +1,4 @@
+import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -16,8 +17,6 @@ import { calendar, empty_wallet, profile_add, scissor } from "../../imagepath";
 import Sidebar from "../../Sidebar";
 import DonutChart from "./DonutChart";
 import ParticipantChart from "./ParticipantChart";
-import { getCurrentUser } from "../../../services/authService";
-import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 
 const Admin_Dashboard = () => {
   const [meetings, setMeetings] = useState([]);

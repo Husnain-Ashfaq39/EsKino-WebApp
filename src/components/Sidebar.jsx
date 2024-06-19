@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Scrollbars from "react-custom-scrollbars-2";
 import { Link, useNavigate } from "react-router-dom";
+import { signOutUser } from "../services/authService";
 import {
   blog,
   dashboard,
   doctor,
   logout,
   menuicon04,
-  menuicon06,
   menuicon08,
-  menuicon09,
   menuicon10,
-  menuicon11,
   menuicon12,
   menuicon15,
   menuicon16,
   patients
 } from "./imagepath";
-import { signOutUser } from "../services/authService";
 const Sidebar = (props) => {
   const [sidebar, setSidebar] = useState("");
   const navigate = useNavigate();

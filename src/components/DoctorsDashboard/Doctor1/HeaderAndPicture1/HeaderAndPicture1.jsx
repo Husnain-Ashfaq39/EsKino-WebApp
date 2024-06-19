@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Table, Modal } from "antd";
+import { Modal, Table } from "antd";
+import FeatherIcon from "feather-icons-react";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import { addDocument, deleteDocument, getAllDocuments } from "../../../../services/dbService"; // Ensure addDocument is imported
 import Header from "../../../Header";
 import Sidebar from "../../../Sidebar";
-import { Link } from "react-router-dom";
-import FeatherIcon from "feather-icons-react";
-import { getAllDocuments, addDocument, deleteDocument } from "../../../../services/dbService"; // Ensure addDocument is imported
-import { toast, ToastContainer } from "react-toastify";
-import { getCurrentUser } from "../../../../services/authService";
-import { useNavigate } from "react-router-dom";
 
 
 const HeaderandPicture1 = () => {

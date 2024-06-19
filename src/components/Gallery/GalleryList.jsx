@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Table, Button } from "antd";
-import { plusicon, refreshicon, searchnormal, imagesend } from "../imagepath";
-import Header from "../Header";
-import Sidebar from "../Sidebar";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Button, Table } from "antd";
 import FeatherIcon from "feather-icons-react";
-import { getAllDocuments, deleteDocument } from "../../services/dbService";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { deleteDocument, getAllDocuments } from "../../services/dbService";
 import { deleteFileFromStorage } from "../../services/storageService";
-import { getCurrentUser } from "../../services/authService";
+import Header from "../Header";
+import { imagesend, plusicon, refreshicon } from "../imagepath";
+import Sidebar from "../Sidebar";
 
 const GalleryList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);

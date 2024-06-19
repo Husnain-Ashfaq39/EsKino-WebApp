@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Table, Modal, Button } from "antd";
-import { Link } from "react-router-dom";
-import { getAllDocuments, getDocumentByField, addDocument, deleteDocument, updateDocument } from "../../../../services/dbService"; // Ensure all necessary functions are imported
+import { Button, Modal, Table } from "antd";
 import FeatherIcon from "feather-icons-react";
-import Header from "../../../Header";
-import Sidebar from "../../../Sidebar";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { getCurrentUser } from "../../../../services/authService";
-import { useNavigate } from "react-router-dom";
-import { imagesend, plusicon, refreshicon } from "../../../imagepath";
 import "react-toastify/dist/ReactToastify.css";
+import { addDocument, getDocumentByField, updateDocument } from "../../../../services/dbService"; // Ensure all necessary functions are imported
+import Header from "../../../Header";
+import { imagesend, plusicon, refreshicon } from "../../../imagepath";
+import Sidebar from "../../../Sidebar";
 
 const Aktuell1 = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);

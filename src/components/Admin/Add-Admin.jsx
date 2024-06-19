@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import FeatherIcon from "feather-icons-react/build/FeatherIcon";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { registerUser } from "../../services/authService";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
-import { Link } from "react-router-dom";
-import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import { registerUser } from "../../services/authService";
-import { getCurrentUser } from "../../services/authService";
-import { useNavigate } from "react-router-dom";
 const AddAdmin = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

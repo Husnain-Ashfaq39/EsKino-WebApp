@@ -1,14 +1,13 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
-import Header from "../Header";
-import Sidebar from "../Sidebar";
-import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button, Select, message } from "antd";
 import FeatherIcon from "feather-icons-react";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { getAllDocuments, getDocument, updateDocument } from "../../services/dbService";
 import { uploadFile } from "../../services/storageService";
-import { getDocument, updateDocument, getAllDocuments } from "../../services/dbService";
-import { getCurrentUser } from "../../services/authService";
+import Header from "../Header";
+import Sidebar from "../Sidebar"
 
 const EditGallery = () => {
   const location = useLocation();

@@ -1,14 +1,13 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
-import Header from "../../../Header";
-import Sidebar from "../../../Sidebar";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { getDocumentByField, updateDocument } from "../../../../services/dbService";
-import { getCurrentUser } from "../../../../services/authService";
+import Header from "../../../Header";
+import Sidebar from "../../../Sidebar";
 
 const EditZusatzqualifikationen1 = () => {
     const { id } = useParams(); // Retrieve the document ID from the URL

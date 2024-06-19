@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Table, Button, Checkbox, Select } from "antd";
 import { MailOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Modal, Select, Table } from "antd";
 import {
   collection,
-  getDocs,
-  doc,
-  updateDoc,
   deleteDoc,
+  doc,
+  getDocs,
+  updateDoc,
 } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { db } from "../../config/firebase";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { imagesend } from "../imagepath";
-import { Modal } from "antd";
-import { getCurrentUser } from "../../services/authService";
-import { useNavigate } from "react-router-dom";
 const { Option } = Select;
 
 const Contactlist = () => {
