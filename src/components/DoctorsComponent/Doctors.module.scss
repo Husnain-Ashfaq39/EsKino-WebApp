@@ -174,7 +174,7 @@
       opacity: 0;
       transform: translateY(30px);
       transition: 0.5s;
-      background: rgba(100, 213, 255, 1);
+      background: var(--primary-blue);
       display: flex;
       flex-direction: column;
       padding: 20px;

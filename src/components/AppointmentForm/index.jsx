@@ -123,7 +123,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
             Participants: updatedParticipants,
           });
           await addDocument("participants", data);
-          toast.success("Thank you for your binding registration.");
+          toast.success("Thank you for registrating.", { autoClose: 2000 });
           onBookingSuccess();
           onClose();
         } else {
