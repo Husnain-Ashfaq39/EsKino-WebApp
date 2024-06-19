@@ -48,7 +48,8 @@ const ParticipantList = () => {
           sectionId: participant.sectionId,
           totalFee: participant.totalFee,
           streetAddress: meetingData.streetAddress,
-          startDate: meetingData.startDate
+          startDate: meetingData.startDate,
+          endDate:meetingData.endDate
         });
 
         await deleteDocument("participants", participantId);

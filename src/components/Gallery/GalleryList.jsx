@@ -2,7 +2,7 @@ import { Button, Table } from "antd";
 import FeatherIcon from "feather-icons-react";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { deleteDocument, getAllDocuments } from "../../services/dbService";
+import { deleteDocument, getAllDocuments, ensureCategoriesInitialized } from "../../services/dbService";
 import { deleteFileFromStorage } from "../../services/storageService";
 import Header from "../Header";
 import { imagesend, plusicon, refreshicon } from "../imagepath";
@@ -18,7 +18,7 @@ const GalleryList = () => {
   const location = useLocation();
 
   useEffect(() => {
-    
+    ensureCategoriesInitialized();
     fetchData();
   }, [location.state]); // Fetch data whenever the state changes
 
@@ -176,15 +176,14 @@ const GalleryList = () => {
                               >
                                 <img src={refreshicon} alt="#" />
                               </Link>
-                              
                             </div>
                             <Link
-                                to="/edit-categories"
-                                className="btn btn-primary ms-2"
-                                state={{ from: "gallerylist" }}
-                              >
-                                Edit Categories
-                              </Link>
+                              to="/edit-categories"
+                              className="btn btn-primary ms-2"
+                              state={{ from: "gallerylist" }}
+                            >
+                              Edit Categories
+                            </Link>
                           </div>
                         </div>
                       </div>

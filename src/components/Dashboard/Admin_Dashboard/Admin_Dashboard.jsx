@@ -28,8 +28,6 @@ const Admin_Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    
-
     const fetchMeetings = async () => {
       const meetingsSnapshot = await getAllDocuments("meetings");
       const trashSnapshot = await getAllDocuments("Meeting Trash");
@@ -72,29 +70,19 @@ const Admin_Dashboard = () => {
       // Calculate total earnings from both participants and deleted participants
       let totalEarnings = 0;
 
-      for (const meeting of [...loadedMeetings, ...loadedTrashMeetings]) {
-        const participantsSnapshot = await fetchDocumentsWithQuery(
-          "participants",
-          "sectionId",
-          meeting.id
-        );
-        const participants = participantsSnapshot.docs.map((doc) => doc.data());
+      const participantsSnapshot = await getAllDocuments("participants");
+      const participants = participantsSnapshot.docs.map((doc) => doc.data());
 
-        participants.forEach((participant) => {
-          totalEarnings += participant.totalFee || 0;
-        });
+      participants.forEach((participant) => {
+        totalEarnings += participant.totalFee || 0;
+      });
 
-        const deletedParticipantsSnapshot = await fetchDocumentsWithQuery(
-          "Deleted Participants",
-          "sectionId",
-          meeting.id
-        );
-        const deletedParticipants = deletedParticipantsSnapshot.docs.map((doc) => doc.data());
+      const deletedParticipantsSnapshot = await getAllDocuments("Deleted Participants");
+      const deletedParticipants = deletedParticipantsSnapshot.docs.map((doc) => doc.data());
 
-        deletedParticipants.forEach((participant) => {
-          totalEarnings += participant.totalFee || 0;
-        });
-      }
+      deletedParticipants.forEach((participant) => {
+        totalEarnings += participant.totalFee || 0;
+      });
 
       setTotalEarning(totalEarnings);
 
