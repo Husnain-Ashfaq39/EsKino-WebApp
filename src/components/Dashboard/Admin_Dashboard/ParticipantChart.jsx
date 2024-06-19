@@ -26,44 +26,37 @@ const ParticipantChart = () => {
       const deletedParticipantsQuery = query(collection(db, "Deleted Participants"));
       const deletedParticipantsSnapshot = await getDocs(deletedParticipantsQuery);
 
-      // Create a map of meeting IDs to participant counts
-      const meetingParticipantsMap = {};
-      participantsSnapshot.forEach((doc) => {
-        const participantData = doc.data();
-        const sectionId = participantData.sectionId;
-        const persons = parseInt(participantData.persons, 10) || 0;
-
-        if (!meetingParticipantsMap[sectionId]) {
-          meetingParticipantsMap[sectionId] = 0;
-        }
-
-        meetingParticipantsMap[sectionId] += persons;
-      });
-
-      // Include deleted participants in the count
-      deletedParticipantsSnapshot.forEach((doc) => {
-        const participantData = doc.data();
-        const sectionId = participantData.sectionId;
-        const persons = parseInt(participantData.persons, 10) || 0;
-
-        if (!meetingParticipantsMap[sectionId]) {
-          meetingParticipantsMap[sectionId] = 0;
-        }
-
-        meetingParticipantsMap[sectionId] += persons;
-      });
-
       const data = Array(12).fill(0);
 
-      // Map meeting IDs to their end month and sum participants
+      // Map meetings to their end month
+      const meetingEndMonths = {};
       meetingsSnapshot.forEach((doc) => {
         const meetingData = doc.data();
         const endDate = meetingData.endDate.toDate();
         const monthIndex = moment(endDate).month(); // Get the month index (0-11)
         const meetingId = doc.id;
+        meetingEndMonths[meetingId] = monthIndex;
+      });
 
-        const participants = meetingParticipantsMap[meetingId] || 0;
-        data[monthIndex] += participants;
+      // Sum participants for each month based on sectionId (meeting ID)
+      participantsSnapshot.forEach((doc) => {
+        const participantData = doc.data();
+        const sectionId = participantData.sectionId;
+        const persons = parseInt(participantData.persons, 10) || 0;
+
+        if (meetingEndMonths[sectionId] !== undefined) {
+          data[meetingEndMonths[sectionId]] += persons;
+        }
+      });
+
+      // Sum deleted participants for each month based on startDate and endDate
+      deletedParticipantsSnapshot.forEach((doc) => {
+        const participantData = doc.data();
+        const persons = parseInt(participantData.persons, 10) || 0;
+        const endDate = participantData.endDate.toDate();
+        const monthIndex = moment(endDate).month(); // Get the month index (0-11)
+
+        data[monthIndex] += persons;
       });
 
       // Adjust the order of data to start from the current month and go back one year

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   addDocument,
@@ -157,7 +157,6 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
 
   return (
     <div>
-      <ToastContainer />
       <form onSubmit={handleSubmit(onSubmit)} className="row">
         <div className="col-lg-6">
           <label className="cs_input_label cs_heading_color">First Name</label>

@@ -16,7 +16,7 @@ const defaultColors = {
   dark: "#a31818",
   lightBlue: "#97ddf6",
   primaryBlue: "#64D5FF",
-  accent: "#8181fe",
+  darkBlue: "#2E7DDA",
 };
 
 const formatColorKey = (key) => {
@@ -145,7 +145,17 @@ const ColorSettings = () => {
         <div className="content">
           <div className="page-header mb-4">
             <div className="flex items-center">
-              
+              <div className="w-full">
+                <ul className="breadcrumb flex items-center space-x-2">
+                  <li className="breadcrumb-item">
+                    <a href="#">Dashboard</a>
+                  </li>
+                  <li className="breadcrumb-item">
+                    <i className="feather-chevron-right"></i>
+                  </li>
+                  <li className="breadcrumb-item active">Color Settings</li>
+                </ul>
+              </div>
             </div>
           </div>
           <div className="flex flex-wrap -mx-2">

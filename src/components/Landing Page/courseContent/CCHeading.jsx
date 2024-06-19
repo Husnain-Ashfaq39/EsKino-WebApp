@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
 import { imagesend, plusicon, refreshicon, searchnormal } from '../../imagepath';
 import { onShowSizeChange, itemRender } from '../../Pagination';
-import { getAllDocuments, addDocument, deleteDocument } from '../../../services/dbService'; // Ensure addDocument is imported
+import { getAllDocuments, addDocument, deleteDocument } from '../../../services/dbService';
 import { toast, ToastContainer } from 'react-toastify';
 
 const CCHeading = () => {
@@ -31,9 +31,7 @@ const CCHeading = () => {
             setLoading(true);
             const querySnapshot = await getAllDocuments('CourseContentHeading');
             if (querySnapshot.empty) {
-                // If no documents exist, add a dummy document
                 await addDummyData();
-                // Fetch the data again after adding the dummy document
                 await fetchData();
                 return;
             }
@@ -48,10 +46,8 @@ const CCHeading = () => {
 
     const addDummyData = async () => {
         const dummyData = {
-            CCHeadImage: "path/to/dummy/image.jpg",
             CCHeadTitle: "Dummy Title",
             CCHeadSubtitle: "Dummy Subtitle",
-            CCHeadDescription: "This is a dummy description for the Course Content Heading."
         };
         try {
             await addDocument('CourseContentHeading', dummyData);
@@ -78,20 +74,6 @@ const CCHeading = () => {
             render: (text, record, index) => index + 1
         },
         {
-            title: "Image",
-            dataIndex: "CCHeadImage",
-            key: "image",
-            render: (text, record) => (
-                <div style={{ width: "100px", height: "50px", overflow: "hidden", borderRadius: "8px" }}>
-                    <img
-                        src={record.CCHeadImage}
-                        alt="Image"
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    />
-                </div>
-            )
-        },
-        {
             title: "Title",
             dataIndex: "CCHeadTitle",
             key: "title",
@@ -101,12 +83,6 @@ const CCHeading = () => {
             title: "Subtitle",
             dataIndex: "CCHeadSubtitle",
             key: "subtitle",
-            render: (text) => <div className={text.length > 20 ? "multiline-text" : ""}>{text}</div>
-        },
-        {
-            title: "Description",
-            dataIndex: "CCHeadDescription",
-            key: "description",
             render: (text) => <div className={text.length > 20 ? "multiline-text" : ""}>{text}</div>
         },
         {
@@ -129,9 +105,6 @@ const CCHeading = () => {
                                     <i className="far fa-edit me-2" />
                                     Edit
                                 </Link>
-                                {/* <Link className="dropdown-item" to="#" onClick={() => showDeleteModal(record.id)}>
-                                    <i className="fa fa-trash-alt m-r-5"></i> Delete
-                                </Link> */}
                             </div>
                         </div>
                     </div>
@@ -141,7 +114,7 @@ const CCHeading = () => {
     ];
 
     const handleRefresh = () => {
-        fetchData(); // Refresh data from Firebase
+        fetchData();
     };
 
     const showDeleteModal = () => {
@@ -155,7 +128,7 @@ const CCHeading = () => {
     const handleDelete = async () => {
         try {
             await Promise.all(selectedRowKeys.map(id => deleteDocument('CourseContentHeading', id)));
-            fetchData(); // Refresh data after deletion
+            fetchData();
             setSelectedRowKeys([]);
             hideDeleteModal();
         } catch (error) {

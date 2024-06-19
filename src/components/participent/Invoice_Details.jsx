@@ -2,7 +2,7 @@ import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getDocument, fetchDocumentsWithQuery } from "../../services/dbService";
+import { getDocument, getAllDocuments, fetchDocumentsWithQuery } from "../../services/dbService";
 import Header from "../Header";
 import { logo2Png } from "../imagepath";
 import Sidebar from "../Sidebar";
@@ -10,56 +10,56 @@ import { Skeleton } from "antd"; // Import Ant Design's Skeleton component
 
 const InvoiceSkeleton = () => (
   <>
-  <Header/>
-  <Sidebar/>
-  <div className="page-wrapper">
-    <div className="content container-fluid">
-      <div className="row justify-content-center">
-        <div className="col-xl-10">
-          <div className="card invoice-info-card">
-            <div className="card-body">
-              <div className="invoice-item invoice-item-one">
-                <div className="row">
-                  <div className="col-md-6">
-                    <Skeleton.Image style={{ width: 35, height: 35 }} />
-                    <Skeleton active paragraph={{ rows: 1 }} />
+    <Header />
+    <Sidebar />
+    <div className="page-wrapper">
+      <div className="content container-fluid">
+        <div className="row justify-content-center">
+          <div className="col-xl-10">
+            <div className="card invoice-info-card">
+              <div className="card-body">
+                <div className="invoice-item invoice-item-one">
+                  <div className="row">
+                    <div className="col-md-6">
+                      <Skeleton.Image style={{ width: 35, height: 35 }} />
+                      <Skeleton active paragraph={{ rows: 1 }} />
+                    </div>
+                    <div className="col-md-6">
+                      <Skeleton active paragraph={{ rows: 2 }} />
+                    </div>
                   </div>
-                  <div className="col-md-6">
+                </div>
+                <div className="invoice-item invoice-item-two">
+                  <div className="row">
+                    <div className="col-md-6">
+                      <Skeleton active paragraph={{ rows: 3 }} />
+                    </div>
+                    <div className="col-md-6">
+                      <Skeleton active paragraph={{ rows: 2 }} />
+                    </div>
+                  </div>
+                </div>
+                <div className="invoice-item invoice-table-wrap">
+                  <Skeleton active paragraph={{ rows: 5 }} />
+                </div>
+                <div className="row align-items-center justify-content-center">
+                  <div className="col-lg-6 col-md-6">
+                    <Skeleton active paragraph={{ rows: 2 }} />
+                  </div>
+                  <div className="col-lg-6 col-md-6">
                     <Skeleton active paragraph={{ rows: 2 }} />
                   </div>
                 </div>
-              </div>
-              <div className="invoice-item invoice-item-two">
-                <div className="row">
-                  <div className="col-md-6">
-                    <Skeleton active paragraph={{ rows: 3 }} />
-                  </div>
-                  <div className="col-md-6">
-                    <Skeleton active paragraph={{ rows: 2 }} />
-                  </div>
+                <div className="row justify-content-end mt-4 no-print">
+                  <Skeleton.Button active style={{ width: 100, height: 40 }} />
+                  <Skeleton.Button active style={{ width: 150, height: 40 }} />
                 </div>
-              </div>
-              <div className="invoice-item invoice-table-wrap">
-                <Skeleton active paragraph={{ rows: 5 }} />
-              </div>
-              <div className="row align-items-center justify-content-center">
-                <div className="col-lg-6 col-md-6">
-                  <Skeleton active paragraph={{ rows: 2 }} />
-                </div>
-                <div className="col-lg-6 col-md-6">
-                  <Skeleton active paragraph={{ rows: 2 }} />
-                </div>
-              </div>
-              <div className="row justify-content-end mt-4 no-print">
-                <Skeleton.Button active style={{ width: 100, height: 40 }} />
-                <Skeleton.Button active style={{ width: 150, height: 40 }} />
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   </>
 );
 
@@ -97,11 +97,12 @@ const Invoice_Details = () => {
     };
 
     const fetchCompanyDetails = async () => {
-      const doc = await getDocument("contactInfo", "XAuOdusdLGAEi4WaM9DT");
-      if (doc.exists()) {
-        setCompanyDetails(doc.data());
+      const querySnapshot = await getAllDocuments("contactInfo");
+      if (!querySnapshot.empty) {
+        const firstDoc = querySnapshot.docs[0];
+        setCompanyDetails(firstDoc.data());
       } else {
-        console.error("No such document!");
+        console.error("No company details document found!");
       }
     };
 

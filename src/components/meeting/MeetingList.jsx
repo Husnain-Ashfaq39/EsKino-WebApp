@@ -145,7 +145,9 @@ const MeetingList = () => {
           title: meetingData.title,
           sectionId: participant.sectionId,
           totalFee: participant.totalFee,
-          startDate: meetingData.startDate
+          streetAddress: meetingData.streetAddress,
+          startDate: meetingData.startDate,
+          endDate:meetingData.endDate
         })
       );
 

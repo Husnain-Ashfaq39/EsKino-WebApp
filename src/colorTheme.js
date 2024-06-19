@@ -8,7 +8,7 @@ const defaultColors = {
   dark: "#a31818",
   lightBlue: "#97ddf6",
   primaryBlue: "#64D5FF",
-  accent: "#8181fe",
+  darkBlue: "#2E7DDA",
 };
 
 let colors = { ...defaultColors };

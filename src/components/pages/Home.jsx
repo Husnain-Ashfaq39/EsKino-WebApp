@@ -202,11 +202,11 @@ export default function Home() {
     fetchBlogData();
   }, []);
 
-  if (heroLoading || CEHeaderLoading || CEBodyLoading || CCHeadLoading) {
+  if (heroLoading || CEHeaderLoading || CEBodyLoading || CCHeadLoading || OMHeadLoading || CCBodyLoading) {
     return <Preloader />;
   }
 
-  if (heroError || CEHeaderError || CEBodyError || CCHeadError) {
+  if (heroError || CEHeaderError || CEBodyError || CCHeadError || OMHeadError || CCBodyError) {
     return <div />;
   }
 

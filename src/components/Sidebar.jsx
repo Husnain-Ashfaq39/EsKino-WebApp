@@ -72,7 +72,7 @@ const Sidebar = (props) => {
               onMouseOver={expandMenuOpen}
             >
               <ul>
-                <li className="menu-title">Main</li>
+                <li className="menu-title"></li>
                 <li className="submenu">
                   <Link
                     to="#"
