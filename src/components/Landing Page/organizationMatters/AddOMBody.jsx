@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../../Header';
 import Sidebar from '../../Sidebar';
 import { Link, useNavigate } from 'react-router-dom';
-import { addDocument } from '../../../services/dbService'; // Import Firestore services
+import { addDocument, getAllDocuments } from '../../../services/dbService'; // Import Firestore services
 import FeatherIcon from 'feather-icons-react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getCurrentUser } from '../../../services/authService';
-import { useEffect } from'react';
+
 const AddOMBody = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -15,7 +14,22 @@ const AddOMBody = () => {
         description: ''
     });
     const [loading, setLoading] = useState(false);
+    const [numOrder, setNumOrder] = useState(0);
 
+    useEffect(() => {
+        const fetchNumOrder = async () => {
+            try {
+                const querySnapshot = await getAllDocuments('OrganizationMattersBody');
+                setNumOrder(querySnapshot.docs.length + 1); // Correctly setting the next order number
+          
+            } catch (error) {
+                toast.error("Failed to fetch documents count: " + error.message, { autoClose: 2000 });
+            }
+        };
+    
+        fetchNumOrder();
+    }, []);
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,9 +40,10 @@ const AddOMBody = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            await addDocument('OrganizationMattersBody', { // Add document to collection
+            await addDocument('OrganizationMattersBody', {
+                numOrder: numOrder, // Add numOrder field with current count              
                 OMBodyTitle: formData.title,
-                OMBodyDescription: formData.description
+                OMBodyDescription: formData.description,
             });
             sessionStorage.setItem('addOMBodySuccess', 'true');
             navigate("/landingpage/organizationmattersbody");
@@ -37,8 +52,6 @@ const AddOMBody = () => {
             setLoading(false);
         }
     };
-   
-    
 
     return (
         <div>
@@ -51,7 +64,6 @@ const AddOMBody = () => {
             <>
                 <div className="page-wrapper">
                     <div className="content">
-                        {/* Page Header */}
                         <div className="page-header">
                             <div className="row">
                                 <div className="col-sm-12">
@@ -77,7 +89,6 @@ const AddOMBody = () => {
                                 </div>
                             </div>
                         </div>
-                        {/* /Page Header */}
                         <div className="row">
                             <div className="col-sm-12">
                                 <div className="card">

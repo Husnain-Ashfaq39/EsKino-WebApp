@@ -76,8 +76,12 @@ export default function Home() {
           title: doc.data().CEBodyTitle,
           subTitle: doc.data().CEBodySubtitle,
           description: doc.data().CEBodyDescription,
+          numOrder: doc.data().numOrder,
           href: "#",
         }));
+        
+                // Sort data by numOrder in ascending order
+                data.sort((a, b) => a.numOrder - b.numOrder); // Added sorting logic based on numOrder
         return data;
       }),
   });

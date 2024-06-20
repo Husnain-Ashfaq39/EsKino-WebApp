@@ -11,7 +11,6 @@ export default function OrganizationMattersSection({
   sectionSubtile,
   data,
 }) {
-  // Organization Matters Heading useQuery
   const [OMBodyDataKey, setOMBodyDataKey] = useState([]);
 
   const {
@@ -25,9 +24,13 @@ export default function OrganizationMattersSection({
         const data = querySnapshot.docs.map((doc) => ({
           OMBodyTitle: doc.data().OMBodyTitle,
           OMBodyDescription: doc.data().OMBodyDescription,
+          numOrder: doc.data().numOrder, // Make sure to extract numOrder
         }));
-        setOMBodyDataKey(data);
 
+        // Sort data by numOrder in ascending order
+        data.sort((a, b) => a.numOrder - b.numOrder); // Added sorting logic based on numOrder
+
+        setOMBodyDataKey(data);
         return data;
       }),
   });

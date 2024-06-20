@@ -27,8 +27,11 @@ export default function WebCourseContent({
           CCDescription: doc.data().CCDescription,
           CCQuote: doc.data().CCQuote,
           CCImage: doc.data().CCImage,
+          numOrder: doc.data().numOrder
         }));
 
+                // Sort data by numOrder in ascending order
+                data.sort((a, b) => a.numOrder - b.numOrder); // Added sorting logic based on numOrder
         setCCBodyDataKey(data);
         return data;
       }),

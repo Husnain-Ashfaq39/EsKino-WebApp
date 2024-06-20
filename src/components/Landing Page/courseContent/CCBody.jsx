@@ -43,6 +43,8 @@ const CCBody = () => {
         id: doc.id,
         ...doc.data(),
       }));
+      // Sort data by numOrder in ascending order
+data.sort((a, b) => a.numOrder - b.numOrder); // Added code to sort data by numOrder
       setDataSource(data);
       setLoading(false);
     } catch (error) {

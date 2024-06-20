@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import { uploadFile } from "../../../services/storageService"; // Import Storage service
-import { addDocument } from "../../../services/dbService"; // Import Firestore service
+import { addDocument,getAllDocuments } from "../../../services/dbService"; // Import Firestore service
 import { toast, ToastContainer } from "react-toastify"; // Import toast notifications
 import FeatherIcon from "feather-icons-react";
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,6 +16,22 @@ const AddCCBody = () => {
     const [image, setImage] = useState(null);
     const [imageUrl, setImageUrl] = useState("");
     const [loading, setLoading] = useState(false);
+    const [numOrder, setNumOrder] = useState(0);
+
+    useEffect(() => {
+        const fetchNumOrder = async () => {
+            try {
+                const querySnapshot = await getAllDocuments('CourseContentBody');
+                setNumOrder(querySnapshot.docs.length + 1); // Correctly setting the next order number
+          
+            } catch (error) {
+                toast.error("Failed to fetch documents count: " + error.message, { autoClose: 2000 });
+            }
+        };
+    
+        fetchNumOrder();
+    }, []);
+
 
     const loadFile = async (event) => {
         const file = event.target.files[0];
@@ -45,6 +61,7 @@ const AddCCBody = () => {
         try {
             // Store data in Firestore
             await addDocument('CourseContentBody', {
+                numOrder: numOrder, // Add numOrder field with current count              
                 CCTitle: title,
                 CCQuote: quote,
                 CCDescription: description,
