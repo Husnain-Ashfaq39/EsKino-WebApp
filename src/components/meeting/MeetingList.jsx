@@ -133,6 +133,8 @@ const MeetingList = () => {
         gender: doc.data().gender,
         sectionId: doc.data().sectionId,
         totalFee: doc.data().totalFee,
+        issueDate: doc.data().issueDate 
+
       }));
 
       // Move each participant to "Deleted Participants" collection
@@ -147,7 +149,8 @@ const MeetingList = () => {
           totalFee: participant.totalFee,
           streetAddress: meetingData.streetAddress,
           startDate: meetingData.startDate,
-          endDate:meetingData.endDate
+          endDate:meetingData.endDate,
+          issueDate:participant.issueDate
         })
       );
 
@@ -175,7 +178,7 @@ const MeetingList = () => {
       toast.success("Meeting moved to trash successfully");
     } catch (error) {
       toast.error("Failed to delete the meeting");
-      navigate("/server-error");
+       navigate("/server-error");
     } finally {
       setIsDeleting(false); // Reset loading state
     }

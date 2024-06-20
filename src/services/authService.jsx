@@ -9,9 +9,7 @@ export async function registerUser(username, email, password) {
     updateProfile(user, {
         displayName: username
     }).then(() => {
-        console.log("Display Name updated to:", user.displayName);
     }).catch((error) => {
-        console.error("Error updating display name:", error);
     });
 
     localStorage.setItem("authToken", user.accessToken);
@@ -36,10 +34,8 @@ export const onAuthChange = (callback) => {
 export function getCurrentUser() {
     const user = auth.currentUser;
     if (user) {
-        console.log("Current logged-in user:", user);
         return user; // Returns user object if logged in
     } else {
-        console.log("No user is currently logged in.");
         return null; // No user is logged in
     }
 }
