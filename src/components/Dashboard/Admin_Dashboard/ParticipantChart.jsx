@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ApexCharts from "apexcharts";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, getDocs } from "firebase/firestore";
 import moment from "moment";
 import { db } from "../../../config/firebase";
 
@@ -10,13 +10,6 @@ const ParticipantChart = () => {
   useEffect(() => {
     const fetchChartData = async () => {
       const oneYearAgo = moment().subtract(1, "year").startOf("month").toDate();
-
-      // Fetch all meetings ending within the past year
-      const meetingsQuery = query(
-        collection(db, "meetings"),
-        where("endDate", ">=", oneYearAgo)
-      );
-      const meetingsSnapshot = await getDocs(meetingsQuery);
 
       // Fetch all participants
       const participantsQuery = query(collection(db, "participants"));
@@ -28,33 +21,22 @@ const ParticipantChart = () => {
 
       const data = Array(12).fill(0);
 
-      // Map meetings to their end month
-      const meetingEndMonths = {};
-      meetingsSnapshot.forEach((doc) => {
-        const meetingData = doc.data();
-        const endDate = meetingData.endDate.toDate();
-        const monthIndex = moment(endDate).month(); // Get the month index (0-11)
-        const meetingId = doc.id;
-        meetingEndMonths[meetingId] = monthIndex;
-      });
-
-      // Sum participants for each month based on sectionId (meeting ID)
+      // Sum participants for each month based on issueDate
       participantsSnapshot.forEach((doc) => {
         const participantData = doc.data();
-        const sectionId = participantData.sectionId;
+        const issueDate = moment(participantData.issueDate, "DD/MM/YYYY").toDate(); // Convert string to date
+        const monthIndex = moment(issueDate).month(); // Get the month index (0-11)
         const persons = parseInt(participantData.persons, 10) || 0;
 
-        if (meetingEndMonths[sectionId] !== undefined) {
-          data[meetingEndMonths[sectionId]] += persons;
-        }
+        data[monthIndex] += persons;
       });
 
-      // Sum deleted participants for each month based on startDate and endDate
+      // Sum deleted participants for each month based on issueDate
       deletedParticipantsSnapshot.forEach((doc) => {
         const participantData = doc.data();
+        const issueDate = moment(participantData.issueDate, "DD/MM/YYYY").toDate(); // Convert string to date
+        const monthIndex = moment(issueDate).month(); // Get the month index (0-11)
         const persons = parseInt(participantData.persons, 10) || 0;
-        const endDate = participantData.endDate.toDate();
-        const monthIndex = moment(endDate).month(); // Get the month index (0-11)
 
         data[monthIndex] += persons;
       });
