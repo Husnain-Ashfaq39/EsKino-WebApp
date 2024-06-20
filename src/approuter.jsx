@@ -168,10 +168,7 @@ const Approuter = () => {
             element={<ProtectedRoute element={<DeletedParticipants />} />}
           />
         
-        <Route path="/invoice-details/:id" element={<Invoice_Details />} />
-
-          
-
+        <Route path="/invoice-details/:id"  element={<ProtectedRoute element={<Invoice_Details />} />} />
           <Route
             path="/doctors/headerandpicture1"
             element={<ProtectedRoute element={<HeaderandPicture1 />} />}

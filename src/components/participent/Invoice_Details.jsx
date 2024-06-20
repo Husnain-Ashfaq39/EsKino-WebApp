@@ -7,6 +7,8 @@ import Header from "../Header";
 import { logo2Png } from "../imagepath";
 import Sidebar from "../Sidebar";
 import { Skeleton } from "antd"; // Import Ant Design's Skeleton component
+import { toast, ToastContainer } from "react-toastify"; // Import ToastContainer and toast
+import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS
 
 const InvoiceSkeleton = () => (
   <>
@@ -103,6 +105,8 @@ const Invoice_Details = () => {
         setCompanyDetails(firstDoc.data());
       } else {
         console.error("No company details document found!");
+        toast.error("Please add company contact details first!"); 
+        navigate("/meetinglist"); 
       }
     };
 
@@ -175,6 +179,7 @@ const Invoice_Details = () => {
     <>
       <Header />
       <Sidebar id="menu-item2" activeClassName="participant-list" />
+      <ToastContainer /> {/* Add ToastContainer */}
       <div className="page-wrapper">
         <div className="content container-fluid">
           <div className="row justify-content-center">

@@ -49,8 +49,8 @@ const ParticipantList = () => {
           totalFee: participant.totalFee,
           streetAddress: meetingData.streetAddress,
           startDate: meetingData.startDate,
-          endDate:meetingData.endDate,
-          issueDate:participant.issueDate
+          endDate: meetingData.endDate,
+          issueDate: participant.issueDate
         });
 
         await deleteDocument("participants", participantId);
@@ -120,10 +120,9 @@ const ParticipantList = () => {
   useEffect(() => {
     const filtered = participentData.filter(
       (participant) =>
-        participant.firstName
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
-        participant.lastName.toLowerCase().includes(searchQuery.toLowerCase())
+        participant.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        participant.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        participant.index.toString().includes(searchQuery)
     );
     setFilteredParticipants(filtered);
   }, [searchQuery, participentData]);

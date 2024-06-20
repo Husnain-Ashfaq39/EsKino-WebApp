@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import SectionHeading from "../components/SectionHeading/index"
 import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "../services/authService";
+
 const Settings = () => {
   const {
     register: registerContact,
@@ -47,7 +48,6 @@ const Settings = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    
     const fetchContactInfo = async () => {
       try {
         const contactDocs = await getAllDocuments("contactInfo");
@@ -58,6 +58,18 @@ const Settings = () => {
           setValueContact("address", data.address);
           setValueContact("phone", data.phone);
           setValueContact("email", data.email);
+        } else {
+          // Set default dummy values and store them in Firebase
+          const dummyData = {
+            address: "1234 Default St.",
+            phone: "123-456-7890",
+            email: "default@example.com",
+          };
+          const docRef = await addDocument("contactInfo", dummyData);
+          setContactDocId(docRef.id);
+          setValueContact("address", dummyData.address);
+          setValueContact("phone", dummyData.phone);
+          setValueContact("email", dummyData.email);
         }
       } catch (error) {
         console.error("Error fetching contact info: ", error);
@@ -156,15 +168,18 @@ const Settings = () => {
           <div className="row">
             <div className="col-12">
               <form onSubmit={handleSubmitContact(onSubmitContactInfo)}>
-                
-                <h2 className="cs_section_title cs_fs_32 m-0 text-2xl font-semibold mb-3">Contact Information</h2>
+                <h2 className="cs_section_title cs_fs_32 m-0 text-2xl font-semibold mb-3">
+                  Contact Information
+                </h2>
                 <div className="form-group">
                   <label className="text-dark">
                     Address <span className="login-danger">*</span>
                   </label>
                   <input
                     className="form-control"
-                    {...registerContact("address", { required: "This field is required" })}
+                    {...registerContact("address", {
+                      required: "This field is required",
+                    })}
                   />
                   {errorsContact.address && (
                     <div className="error text-danger">
@@ -178,7 +193,9 @@ const Settings = () => {
                   </label>
                   <input
                     className="form-control"
-                    {...registerContact("phone", { required: "This field is required" })}
+                    {...registerContact("phone", {
+                      required: "This field is required",
+                    })}
                   />
                   {errorsContact.phone && (
                     <div className="error text-danger">
@@ -193,7 +210,9 @@ const Settings = () => {
                   <input
                     className="form-control"
                     type="email"
-                    {...registerContact("email", { required: "This field is required" })}
+                    {...registerContact("email", {
+                      required: "This field is required",
+                    })}
                   />
                   {errorsContact.email && (
                     <div className="error text-danger">
@@ -207,54 +226,48 @@ const Settings = () => {
                     className="btn btn-primary submit-form me-2"
                     disabled={submittingContact}
                   >
-                    {submittingContact ? "Submitting..." : "Save Contact Info"}
+                    {submittingContact
+                      ? "Submitting..."
+                      : "Save Contact Info"}
                   </button>
                 </div>
               </form>
             </div>
             <div className="col-12">
               <form onSubmit={handleSubmitSocial(onSubmitSocialLinks)}>
-                <h2 className="cs_section_title cs_fs_32 m-0 text-2xl font-semibold mb-3">Social Media Links</h2>
+                <h2 className="cs_section_title cs_fs_32 m-0 text-2xl font-semibold mb-3">
+                  Social Media Links
+                </h2>
                 <div className="form-group">
-                  <label className="text-dark">
-                    Facebook
-                  </label>
+                  <label className="text-dark">Facebook</label>
                   <input
                     className="form-control"
                     {...registerSocial("facebook")}
                   />
                 </div>
                 <div className="form-group">
-                  <label className="text-dark">
-                    YouTube
-                  </label>
+                  <label className="text-dark">YouTube</label>
                   <input
                     className="form-control"
                     {...registerSocial("youtube")}
                   />
                 </div>
                 <div className="form-group">
-                  <label className="text-dark">
-                    Twitter
-                  </label>
+                  <label className="text-dark">Twitter</label>
                   <input
                     className="form-control"
                     {...registerSocial("twitter")}
                   />
                 </div>
                 <div className="form-group">
-                  <label className="text-dark">
-                    LinkedIn
-                  </label>
+                  <label className="text-dark">LinkedIn</label>
                   <input
                     className="form-control"
                     {...registerSocial("linkedin")}
                   />
                 </div>
                 <div className="form-group">
-                  <label className="text-dark">
-                    Instagram
-                  </label>
+                  <label className="text-dark">Instagram</label>
                   <input
                     className="form-control"
                     {...registerSocial("instagram")}
