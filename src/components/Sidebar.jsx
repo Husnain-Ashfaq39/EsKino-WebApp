@@ -209,7 +209,7 @@ const Sidebar = (props) => {
                     onClick={(e) => handleClick(e, "menu-item3", "menu-items3")}
                   >
                     <span className="menu-side">
-                      <img src={menuicon08} alt="" />
+                      <img src={doctor} alt="" />
                     </span>{" "}
                     <span> Admin </span> <span className="menu-arrow" />
                   </Link>
@@ -235,11 +235,25 @@ const Sidebar = (props) => {
                     onClick={(e) => handleClick(e, "menu-itemDoctors", "menu-itemDoctors")}
                   >
                     <span className="menu-side">
-                      <img src={doctor} alt="" />
+                      <img src={menuicon08} alt="" />
                     </span>{" "}
                     <span>Doctors</span> <span className="menu-arrow" />
                   </Link>
                   <ul style={{ display: "none" }} className="menu-itemDoctors">
+{/* Doctor Header */}
+<li>
+                        <Link
+                          className={
+                            props?.activeClassName === "shedule-list"
+                              ? "active"
+                              : ""
+                          }
+                          to="/doctors/doctorsheader"
+                        >
+                          Doctors Header
+                        </Link>
+                      </li>
+
 
   {/* Doctor 2 */}
   <li>
@@ -287,7 +301,7 @@ const Sidebar = (props) => {
                     onClick={(e) => handleClick(e, "menu-item4", "menu-items4")}
                   >
                     <span className="menu-side">
-                      <img src={menuicon04} alt="" />
+                      <img src={blog} alt="" />
                     </span>{" "}
                     <span>Landing Page</span> <span className="menu-arrow" />
                   </Link>
@@ -349,6 +363,17 @@ const Sidebar = (props) => {
                   </ul>
                 </li>
 
+                {/* About Us */}
+                {/* <li className="submenu">
+                  <Link to="/aboutus" id="menu-item11">
+                    <span className="menu-side">
+                      <img src={blog} alt="" />
+                    </span>{" "}
+                    <span>About Us</span>
+                  </Link>
+                </li> */}
+
+{/* Gallery */}
                 <li className="submenu">
                   <Link
                     to="#"

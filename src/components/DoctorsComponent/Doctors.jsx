@@ -5,7 +5,7 @@ import SectionHeading from '../SectionHeading';
 import Spacing from '../Spacing';
 import { FaHandPointer } from 'react-icons/fa'; // Import the hand pointer icon
 
-const Doctors = () => {
+const Doctors = ({title,subtitle}) => {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -39,8 +39,8 @@ const Doctors = () => {
       <div className={styles.doctors}>
         <div className={styles.container}>
           <SectionHeading 
-            title='Über Uns' 
-            subTitle='Geleitet werden die Seminare von Susanne Nusser und Stephan Schwarz, beide Fachärzte für Kinder- und Jugendmedizin mit mehrjähriger Klinikerfahrung, die aber beide auch die Elternperspektive gut kennen.'
+            title={title} 
+            subTitle={subtitle}
           />
           <Spacing md="72" lg="50" />
 

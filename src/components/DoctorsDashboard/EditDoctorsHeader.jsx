@@ -1,36 +1,27 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import Header from "../../../Header";
-import Sidebar from "../../../Sidebar";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import Header from "../Header";
+import Sidebar from "../Sidebar";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { getDocumentByField, updateDocument } from "../../../../services/dbService";
-import { uploadFile } from "../../../../services/storageService"; // Ensure correct import
-import ImageUpload from "../../../ImageUpload"; // Import the ImageUpload component
-import { getCurrentUser } from "../../../../services/authService";
+import { getDocument, updateDocument } from "../../services/dbService";
 
-const EditHeaderAndPicture2 = () => {
+const EditDoctorsHeader = () => {
     const { id } = useParams(); // Retrieve the document ID from the URL
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
-        name: "",
-        occupation: "",
-        image: "",
-        introduction: [],
-        zusatzqualifikationen: [],
-        aktuell: []
+        title: "",
+        subtitle: "",
     });
-    const doctorID = 2;
 
     useEffect(() => {
-        
         const fetchDocumentData = async () => {
             try {
-                const documentSnapshot = await getDocumentByField('Doctors', 'doctorID', doctorID);
+                const documentSnapshot = await getDocument('doctorsHeader', id);
                 if (documentSnapshot.exists()) {
                     const documentData = documentSnapshot.data();
                     setFormData(documentData);
@@ -43,7 +34,7 @@ const EditHeaderAndPicture2 = () => {
         };
 
         fetchDocumentData();
-    }, [doctorID]);
+    }, [id]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -53,33 +44,13 @@ const EditHeaderAndPicture2 = () => {
         }));
     };
 
-    const handleImageLoad = async (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const toastId = toast.loading("Uploading image...");
-            try {
-                const imageUrl = await uploadFile(file, `doctor2/${file.name}`, (progress) => {
-                    const percent = Math.round((progress.loaded / progress.total) * 100);
-                    toast.update(toastId, { render: `Uploading image... ${percent}%`, type: "info", isLoading: true });
-                });
-                setFormData((prevData) => ({
-                    ...prevData,
-                    image: imageUrl,
-                }));
-                toast.update(toastId, { render: "Image uploaded successfully!", type: "success", isLoading: false, autoClose: 1000 });
-            } catch (error) {
-                toast.update(toastId, { render: "Image upload failed: " + error.message, type: "error", isLoading: false, autoClose: 2000 });
-            }
-        }
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            await updateDocument('Doctors', id, formData);
-            sessionStorage.setItem("updateHeaderAndPicture2", 'true');
-            navigate("/doctors/headerandpicture2");
+            await updateDocument('doctorsHeader', id, formData);
+            sessionStorage.setItem("updateDoctorsSuccess", 'true');
+            navigate("/doctors/doctorsheader");
         } catch (error) {
             toast.error('Error updating document: ' + error.message);
         } finally {
@@ -93,7 +64,7 @@ const EditHeaderAndPicture2 = () => {
             <Sidebar
                 id="menu-item4"
                 id1="menu-items4"
-                activeClassName="edit-headerAndPicture"
+                activeClassName="edit-doctorsHeader"
             />
             <div className="page-wrapper">
                 <div className="content">
@@ -102,7 +73,7 @@ const EditHeaderAndPicture2 = () => {
                             <div className="col-sm-12">
                                 <ul className="breadcrumb">
                                     <li className="breadcrumb-item">
-                                        <Link to="/landingpage/headerandpicture">Landing Page </Link>
+                                        <Link to="/doctors/doctorsheader">Doctors Page</Link>
                                     </li>
                                     <li className="breadcrumb-item">
                                         <i className="feather-chevron-right">
@@ -110,14 +81,14 @@ const EditHeaderAndPicture2 = () => {
                                         </i>
                                     </li>
                                     <li className="breadcrumb-item active">
-                                        <Link to="/landingpage/headerandpicture">Header and Picture</Link>
+                                        <Link to="/doctors/doctorsheader">Doctors Header</Link>
                                     </li>
                                     <li className="breadcrumb-item">
                                         <i className="feather-chevron-right">
                                             <FeatherIcon icon="chevron-right" />
                                         </i>
                                     </li>
-                                    <li className="breadcrumb-item active">Edit Header and Picture</li>
+                                    <li className="breadcrumb-item active">Edit Doctors Header</li>
                                 </ul>
                             </div>
                         </div>
@@ -130,39 +101,36 @@ const EditHeaderAndPicture2 = () => {
                                         <div className="row">
                                             <div className="col-12">
                                                 <div className="form-heading">
-                                                    <h4>Edit Header and Picture</h4>
+                                                    <h4>Edit Doctors Header</h4>
                                                 </div>
                                             </div>
-                                            {/* Name */}
+                                            {/* Title */}
                                             <div className="col-12 col-md-6 col-xl-6">
                                                 <div className="form-group local-forms">
-                                                    <label>Name <span className="login-danger">*</span></label>
+                                                    <label>Title <span className="login-danger">*</span></label>
                                                     <input
                                                         className="form-control"
                                                         type="text"
-                                                        name="name"
-                                                        value={formData.name}
+                                                        name="title"
+                                                        value={formData.title}
                                                         onChange={handleChange}
                                                     />
                                                 </div>
                                             </div>
 
-                                            {/* Occupation */}
+                                            {/* Subtitle */}
                                             <div className="col-12 col-md-6 col-xl-6">
                                                 <div className="form-group local-forms">
-                                                    <label>Occupation <span className="login-danger">*</span></label>
+                                                    <label>Subtitle <span className="login-danger">*</span></label>
                                                     <input
                                                         className="form-control"
                                                         type="text"
-                                                        name="occupation"
-                                                        value={formData.occupation}
+                                                        name="subtitle"
+                                                        value={formData.subtitle}
                                                         onChange={handleChange}
                                                     />
                                                 </div>
                                             </div>
-
-                                            {/* Image Input */}
-                                            <ImageUpload id="image" src={formData.image} loadFile={handleImageLoad} imageName="Image" />
 
                                             {/* Submit/Cancel Button */}
                                             <div className="col-12">
@@ -177,7 +145,7 @@ const EditHeaderAndPicture2 = () => {
                                                     <button
                                                         type="button"
                                                         className="btn btn-primary cancel-form"
-                                                        onClick={() => navigate("/doctors/headerandpicture2")}
+                                                        onClick={() => navigate("/doctors/doctorsheader")}
                                                     >
                                                         Cancel
                                                     </button>
@@ -196,4 +164,4 @@ const EditHeaderAndPicture2 = () => {
     );
 };
 
-export default EditHeaderAndPicture2;
+export default EditDoctorsHeader;

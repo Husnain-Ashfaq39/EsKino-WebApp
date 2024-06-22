@@ -35,11 +35,16 @@ const Header = () => {
     navigate("/login");
   };
 
+  const handleLogoutonLogo = async () => {
+    await signOutUser();
+    navigate("/");
+  };
+
   return (
     <div className="main-wrapper">
       <div className="header">
         <div className="header-left">
-          <Link to="/" className="logo">
+          <Link className="logo" onClick={handleLogoutonLogo}>
             <img src={logo} width={35} height={35} alt="" /> <span>Eskino</span>
           </Link>
         </div>
