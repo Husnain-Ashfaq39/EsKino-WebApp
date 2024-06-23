@@ -124,6 +124,8 @@ const Invoice_Details = () => {
 
   const discount = participant.originalPrice - participant.totalFee;
   const discountPercentage = ((discount / participant.originalPrice) * 100).toFixed(2);
+  const gstAmount = participant.totalFee * 0.19;
+  const totalWithGst = participant.totalFee + gstAmount;
 
   const formatDate = (date) => {
     if (!date) return ""; // Return an empty string if the date is undefined
@@ -306,13 +308,17 @@ const Invoice_Details = () => {
                             <p>
                               Discount <span>- €{discount.toFixed(2)}</span>
                             </p>
+                            <p >
+                              GST (19%) <span>+ €{gstAmount.toFixed(2)}</span>
+                            </p>
                             <p className="mb-0">
                               Sub total <span>€{participant.totalFee}</span>
                             </p>
+                            
                           </div>
                           <div className="invoice-total-footer">
                             <h4>
-                              Total Amount <span>€{participant.totalFee}</span>
+                              Total Amount <span>€{totalWithGst.toFixed(2)}</span>
                             </h4>
                           </div>
                         </div>
