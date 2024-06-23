@@ -40,7 +40,7 @@ const AddCCBody = () => {
             const toastId = toast.loading("Uploading image...");
             try {
                 setLoading(true);
-                const uploadedImageURL = await uploadFile(file, `Images/${file.name}`, (progress) => {
+                const uploadedImageURL = await uploadFile(file, `ccbody/Images/${file.name}`, (progress) => {
                     toast.update(toastId, { render: `Uploading image...`, type: "info", isLoading: true });
                 });
                 setImageUrl(uploadedImageURL);
