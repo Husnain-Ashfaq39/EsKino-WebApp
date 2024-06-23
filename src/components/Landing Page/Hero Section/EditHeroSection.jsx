@@ -10,10 +10,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getDocument, updateDocument } from "../../../services/dbService";
 import { uploadFile, deleteFileFromStorage } from "../../../services/storageService"; // Ensure correct import
 import ImageUpload from "../ImageUpload"; // Import the ImageUpload component
-import { getCurrentUser } from "../../../services/authService";
+import { Form } from "antd";
 
 const EditHeroSection = () => {
-    const { id } = useParams(); // Retrieve the document ID from the URL
+    const { id } = useParams();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -21,16 +21,18 @@ const EditHeroSection = () => {
         heroSubtitle: "",
         heroBackground: "",
         heroLogo: "",
+        newHeroBackground: "", // State to handle new background image URL
+        newHeroLogo: "", // State to handle new logo image URL
     });
 
     useEffect(() => {
-       
         const fetchDocumentData = async () => {
             try {
                 const documentSnapshot = await getDocument('HeroSection', id);
                 if (documentSnapshot.exists()) {
                     const documentData = documentSnapshot.data();
                     setFormData(documentData);
+
                 } else {
                     console.error('Document does not exist');
                 }
@@ -61,7 +63,7 @@ const EditHeroSection = () => {
                 });
                 setFormData((prevData) => ({
                     ...prevData,
-                    heroBackground: backgroundUrl,
+                    newHeroBackground: backgroundUrl,
                 }));
                 toast.update(toastId, { render: "Background image uploaded successfully!", type: "success", isLoading: false, autoClose: 1000 });
             } catch (error) {
@@ -81,7 +83,7 @@ const EditHeroSection = () => {
                 });
                 setFormData((prevData) => ({
                     ...prevData,
-                    heroLogo: logoUrl,
+                    newHeroLogo: logoUrl,
                 }));
                 toast.update(toastId, { render: "Logo image uploaded successfully!", type: "success", isLoading: false, autoClose: 1000 });
             } catch (error) {
@@ -94,7 +96,21 @@ const EditHeroSection = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            await updateDocument('HeroSection', id, formData);
+            // Delete old images if new ones are uploaded
+            if (formData.newHeroBackground && formData.heroBackground !== formData.newHeroBackground) {
+                await deleteFileFromStorage(formData.heroBackground);
+                // setFormData((prevData)=>({...prevData, heroBackground:Form.newHeroBackground}))
+            }
+            if (formData.newHeroLogo && formData.heroLogo !== formData.newHeroLogo) {
+                await deleteFileFromStorage(formData.heroLogo);
+                // setFormData((prevData)=>({...prevData, heroLogo: formData.newHeroLogo}))
+            }
+            await updateDocument('HeroSection', id, {
+                heroTitle: formData.heroTitle,
+                heroSubtitle: formData.heroSubtitle,
+                heroBackground: formData.newHeroBackground || formData.heroBackground,
+                heroLogo: formData.newHeroLogo || formData.heroLogo,
+            });
             sessionStorage.setItem("updateHeroSuccess", 'true');
             navigate("/landingpage/herosection");
         } catch (error) {
@@ -103,6 +119,7 @@ const EditHeroSection = () => {
             setLoading(false);
         }
     };
+
 
     return (
         <div>

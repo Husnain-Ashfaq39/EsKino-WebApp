@@ -162,7 +162,7 @@ const HeroSection = () => {
                 <i className="far fa-edit me-2" />
                 Edit
               </Link>
-              <button
+              {/* <button
                 className="dropdown-item"
                 onClick={() => {
                   setDeleteItemId(record.id);
@@ -170,7 +170,7 @@ const HeroSection = () => {
                 }}
               >
                 <i className="fa fa-trash-alt m-r-5" /> Delete
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
