@@ -3,9 +3,9 @@ import { getAllDocuments } from '../../services/dbService'; // Import Firestore 
 import styles from './Doctors.module.scss';
 import SectionHeading from '../SectionHeading';
 import Spacing from '../Spacing';
-import { FaEye } from 'react-icons/fa'; // Import the eye icon
+import { FaHandPointer } from 'react-icons/fa'; // Import the hand pointer icon
 
-const Doctors = () => {
+const Doctors = ({title,subtitle}) => {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -39,8 +39,8 @@ const Doctors = () => {
       <div className={styles.doctors}>
         <div className={styles.container}>
           <SectionHeading 
-            title='Über Uns' 
-            subTitle='Geleitet werden die Seminare von Susanne Nusser und Stephan Schwarz, beide Fachärzte für Kinder- und Jugendmedizin mit mehrjähriger Klinikerfahrung, die aber beide auch die Elternperspektive gut kennen.'
+            title={title} 
+            subTitle={subtitle}
           />
           <Spacing md="72" lg="50" />
 
@@ -53,9 +53,7 @@ const Doctors = () => {
               >
                 <img src={doctor.image} alt={doctor.name} />
                 <div className={styles.cardHeader}>
-                  <FaEye className={styles.eyeIcon} />
-                  <p className={styles.seeMore}>See More</p>
-                  <p className={styles.tapToView}>Tap to view Details</p>
+                  <FaHandPointer className={styles.handIcon} />
                 </div>
                 <div style={{ padding: '9px' }} className={`${styles.info} ${expandedIndex === index ? styles.expanded : ''}`}>
                   <h3 className={styles.cardTitle}>{doctor.name}</h3>
@@ -64,7 +62,7 @@ const Doctors = () => {
                     {doctor.introduction?.map((detail, i) => (
                       <li style={{ textAlign: 'left', listStyleType: 'disc', marginLeft: "1rem" }} key={i}>{detail}</li>
                     ))}
-                    <h5 style={{marginTop: "1rem"}}>Zusatzqualifikationen</h5>
+                      <h5 style={{marginTop: "1rem"}}>Zusatzqualifikationen</h5>
                     {doctor.zusatzqualifikationen?.map((qualification, i) => (
                       <li style={{ textAlign: 'left', listStyleType: 'disc', marginLeft: "1rem" }} key={i}>{qualification}</li>
                     ))}

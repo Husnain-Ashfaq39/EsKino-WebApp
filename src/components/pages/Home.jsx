@@ -144,6 +144,24 @@ export default function Home() {
       }),
   });
 
+  // Doctors Header useQuery
+const {
+  data: doctorsHeaderData,
+  isLoading: doctorsHeaderLoading,
+  error: doctorsHeaderError,
+} = useQuery({
+  queryKey: ["doctorsHeader"],
+  queryFn: () =>
+    getAllDocuments("doctorsHeader").then((querySnapshot) => {
+      const data = querySnapshot.docs.map((doc) => ({
+        title: doc.data().title,
+        subTitle: doc.data().subtitle,
+      }));
+      return data[0];  // Assuming you want to fetch the first document's data
+    }),
+});
+
+
   useEffect(() => {
     pageTitle("Home");
 
@@ -206,7 +224,7 @@ export default function Home() {
     fetchBlogData();
   }, []);
 
-  if (heroLoading || CEHeaderLoading || CEBodyLoading || CCHeadLoading || OMHeadLoading || CCBodyLoading) {
+  if (heroLoading || CEHeaderLoading || CEBodyLoading || CCHeadLoading || OMHeadLoading || CCBodyLoading ||doctorsHeaderLoading) {
     return <Preloader />;
   }
 
@@ -264,22 +282,23 @@ export default function Home() {
       </Section>
 
       {/* Doctors Section */}
-      <Doctors />
+      <Doctors title={doctorsHeaderData.title} subtitle={doctorsHeaderData.subTitle}/>
       <Spacing md="182" lg="150" />
 
       {/* Training session */}
       <div
         className="container cs_hero cs_style_1"
-        style={{ height: "auto", important: "height", marginBottom: "200px" }}
+        style={{ height: "auto", important: "height", marginBottom: "50px" }}
       >
         <SectionHeading title="Upcoming Training Sessions" center={true} />
         <Spacing md="72" lg="50" />
+
         {/* Render your training session component here */}
         <SessionCard />
       </div>
 
       {/* About Section */}
-      <Section>
+      {/* <Section>
         <AboutSection
           imgUrl={about_img}
           spiningImgUrl={aboutMiniSvg}
@@ -295,10 +314,10 @@ export default function Home() {
           ]}
         />
       </Section>
-      <Spacing md="182" lg="150" />
+      <Spacing md="182" lg="150" /> */}
 
       {/* Banner Section */}
-      <Spacing md="165" lg="125" />
+      {/* <Spacing md="165" lg="125" />
       <Section>
         <Banner
           // bgUrl={ctaBgSvg}
@@ -306,7 +325,7 @@ export default function Home() {
           title="Emergency Aid Made Easy for Parents"
           subTitle="Equipping parents with essential skills for child emergency response, ensuring confident and effective action in critical situations."
         />
-      </Section>
+      </Section> */}
 
       {/* Gallery Section */}
       <Gallery />

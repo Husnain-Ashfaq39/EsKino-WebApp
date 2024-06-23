@@ -9,7 +9,7 @@ import { getDocumentByField, updateDocument } from "../../../../services/dbServi
 import { uploadFile } from "../../../../services/storageService"; // Ensure correct import
 import Header from "../../../Header";
 import Sidebar from "../../../Sidebar";
-import ImageUpload from "../../ImageUpload"; // Import the ImageUpload component
+import ImageUpload from "../../../ImageUpload"; // Import the ImageUpload component
 
 const EditHeaderAndPicture1 = () => {
     const { id } = useParams(); // Retrieve the document ID from the URL

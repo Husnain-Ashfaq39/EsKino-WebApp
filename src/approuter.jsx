@@ -71,6 +71,10 @@ import Policy from "./components/Policy";
 import Settings from "./components/Settings";
 import SubscriberList from "./components/Suscribers";
 import ColorSettings from "./components/ColorSettings/ColorSettings";
+import DoctorsHeader from "./components/DoctorsDashboard/DoctorHeader";
+import EditDoctorsHeader from "./components/DoctorsDashboard/EditDoctorsHeader";
+// import AboutUs from "./components/AdminAboutUs/AboutUs";
+// import EditAboutUs from "./components/AdminAboutUs/EditAboutUs";
 
 const ProtectedRoute = ({ element, ...rest }) => {
   const isAuthenticated = !!localStorage.getItem("authToken");
@@ -173,6 +177,29 @@ const Approuter = () => {
             path="/doctors/headerandpicture1"
             element={<ProtectedRoute element={<HeaderandPicture1 />} />}
           />
+{/* About Us */}
+{/* <Route
+            path="/aboutus"
+            element={<ProtectedRoute element={<AboutUs/>} />}
+          />
+
+<Route
+            path="/aboutus/editaboutus/:id"
+            element={<ProtectedRoute element={<EditAboutUs/>} />}
+          /> */}
+
+
+{/* Doctors Section */}
+<Route
+            path="/doctors/doctorsheader"
+            element={<ProtectedRoute element={<DoctorsHeader/>} />}
+          />
+
+<Route
+            path="/doctors/doctorsheader/editdoctorsheader/:id"
+            element={<ProtectedRoute element={<EditDoctorsHeader/>} />}
+          />
+
           <Route
             path="/doctors/headerandpicture1/editheaderandpicture1/:id"
             element={<ProtectedRoute element={<EditHeaderAndPicture1 />} />}

@@ -1,7 +1,7 @@
 import React from "react";
 import FeatherIcon from "feather-icons-react";
 import { useEffect } from "react";
-import { getCurrentUser } from "../../services/authService";
+import { getCurrentUser } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 
 const ImageUpload = ({ id, src, loadFile, imageName }) => {
