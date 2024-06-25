@@ -5,6 +5,7 @@ import Sidebar from "../../Sidebar";
 import { Link, useLocation } from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { getAllDocuments, deleteDocument } from "../../../services/dbService"; // Import the Firestore service to fetch documents
+import { deleteFileFromStorage } from "../../../services/storageService"; // Import to delete images from Firebase storage
 import {
   imagesend,
   plusicon,
@@ -43,8 +44,7 @@ const CCBody = () => {
         id: doc.id,
         ...doc.data(),
       }));
-      // Sort data by numOrder in ascending order
-data.sort((a, b) => a.numOrder - b.numOrder); // Added code to sort data by numOrder
+      data.sort((a, b) => a.numOrder - b.numOrder); // Added code to sort data by numOrder
       setDataSource(data);
       setLoading(false);
     } catch (error) {
@@ -53,8 +53,31 @@ data.sort((a, b) => a.numOrder - b.numOrder); // Added code to sort data by numO
     }
   };
 
-  const onSelectChange = (selectedRowKeys) => {
-    // Not needed for delete operation
+  const handleDelete = async () => {
+    try {
+      const selectedRecord = dataSource.find(record => record.id === selectedRecordId);
+      if (selectedRecord && selectedRecord.CCImage) {
+        // Delete image from Firebase storage if it exists
+        console.log(selectedRecord)
+        await deleteFileFromStorage(selectedRecord.CCImage);
+      }
+      await deleteDocument("CourseContentBody", selectedRecordId); // Delete the document from Firestore
+      toast.success("Course Content body deleted successfully!", { autoClose: 2000 });
+      fetchData(); // Refresh data after deletion
+      setSelectedRecordId(null);
+      hideDeleteModal();
+    } catch (error) {
+      console.error("Error deleting document and image:", error);
+    }
+  };
+
+  const showDeleteModal = (id) => {
+    setSelectedRecordId(id);
+    setDeleteModalVisible(true);
+  };
+
+  const hideDeleteModal = () => {
+    setDeleteModalVisible(false);
   };
 
   const columns = [
@@ -147,27 +170,6 @@ data.sort((a, b) => a.numOrder - b.numOrder); // Added code to sort data by numO
     fetchData(); // Refresh data from Firebase
   };
 
-  const showDeleteModal = (id) => {
-    setSelectedRecordId(id);
-    setDeleteModalVisible(true);
-  };
-
-  const hideDeleteModal = () => {
-    setDeleteModalVisible(false);
-  };
-
-  const handleDelete = async () => {
-    try {
-      await deleteDocument("CourseContentBody", selectedRecordId);
-
-      fetchData(); // Refresh data after deletion
-      setSelectedRecordId(null);
-      hideDeleteModal();
-    } catch (error) {
-      console.error("Error deleting document:", error);
-    }
-  };
-
   return (
     <>
       <Header />
@@ -200,8 +202,6 @@ data.sort((a, b) => a.numOrder - b.numOrder); // Added code to sort data by numO
                 </li>
               </ul>
             </div>
-
-            {/* Page Header */}
             <div className="page-header">
               <div className="row">
                 <div className="col-sm-12">
@@ -221,12 +221,10 @@ data.sort((a, b) => a.numOrder - b.numOrder); // Added code to sort data by numO
                 </div>
               </div>
             </div>
-            {/* /Page Header */}
             <div className="row">
               <div className="col-sm-12">
                 <div className="card card-table show-entire">
                   <div className="card-body">
-                    {/* Table Header */}
                     <div className="page-table-header mb-2">
                       <div className="row align-items-center">
                         <div className="col">
@@ -253,7 +251,6 @@ data.sort((a, b) => a.numOrder - b.numOrder); // Added code to sort data by numO
                         </div>
                       </div>
                     </div>
-                    {/* /Table Header */}
                     <div className="table-responsive doctor-list">
                       <Table
                         loading={loading}
