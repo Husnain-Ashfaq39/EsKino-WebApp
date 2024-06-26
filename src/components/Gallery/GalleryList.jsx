@@ -49,7 +49,12 @@ const GalleryList = () => {
           (item) => item.id === deleteItemId
         );
         await deleteDocument("gallery", deleteItemId);
-        await deleteFileFromStorage(itemToDelete.url);
+        try {
+          await deleteFileFromStorage(itemToDelete.url);
+        } catch (error) {
+          console.warn("Previous image not found, skipping deletion.");
+        }
+      
         setIsDeleteModalOpen(false);
         setDeleteItemId(null);
         setSelectedRowKeys([]);

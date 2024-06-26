@@ -75,9 +75,13 @@ const EditHeaderAndPicture2 = () => {
         e.preventDefault();
         setLoading(true);
 
-        // If a new image was uploaded and it's different from the existing one, delete the old image.
-        if (newImageUrl && newImageUrl !== formData.image) {
-            await deleteFileFromStorage(formData.image);
+         // Delete the old image if a new one was uploaded and it's different from the existing one
+         if (newImageUrl && newImageUrl !== formData.image) {
+            try {
+                await deleteFileFromStorage(formData.image);
+            } catch (error) {
+                console.warn("Previous image not found, skipping deletion.");
+            }
         }
 
         try {
@@ -85,6 +89,7 @@ const EditHeaderAndPicture2 = () => {
                 ...formData,
                 image: newImageUrl || formData.image // Use the new image URL if available
             });
+            
             sessionStorage.setItem("updateHeaderAndPicture2", 'true');
             navigate("/doctors/headerandpicture2");
         } catch (error) {

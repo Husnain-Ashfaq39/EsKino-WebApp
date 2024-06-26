@@ -77,7 +77,11 @@ const EditHeaderAndPicture1 = () => {
         
         // Delete the old image if a new one was uploaded and it's different from the existing one
         if (newImageUrl && newImageUrl !== formData.image) {
-            await deleteFileFromStorage(formData.image);
+            try {
+                await deleteFileFromStorage(formData.image);
+            } catch (error) {
+                console.warn("Previous image not found, skipping deletion.");
+            }
         }
 
         try {
@@ -85,6 +89,7 @@ const EditHeaderAndPicture1 = () => {
                 ...formData,
                 image: newImageUrl || formData.image // Use the new image URL if available
             });
+            
             sessionStorage.setItem("updateHeaderAndPicture1", 'true');
             navigate("/doctors/headerandpicture1");
         } catch (error) {

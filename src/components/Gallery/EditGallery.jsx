@@ -7,7 +7,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getAllDocuments, getDocument, updateDocument } from "../../services/dbService";
 import { uploadFile, deleteFileFromStorage } from "../../services/storageService";
 import Header from "../Header";
-import Sidebar from "../Sidebar"
+import Sidebar from "../Sidebar";
 
 const EditGallery = () => {
   const location = useLocation();
@@ -84,7 +84,11 @@ const EditGallery = () => {
     }
 
     if (existingImageUrl && imageUrl !== existingImageUrl) {
-      await deleteFileFromStorage(existingImageUrl); // Delete the old image from storage
+      try {
+        await deleteFileFromStorage(existingImageUrl); // Delete the old image from storage
+      } catch (error) {
+        console.warn("Previous image not found, skipping deletion.");
+      }
     }
 
     try {
@@ -101,7 +105,6 @@ const EditGallery = () => {
       setUploading(false);
     }
   };
-
 
   return (
     <div>

@@ -79,7 +79,11 @@ const EditBlog = () => {
       };
 
       if (newImageUrl !== oldImageUrl) {
-        await deleteFileFromStorage(oldImageUrl); // Delete the old image if a new one was uploaded
+        try {
+          await deleteFileFromStorage(oldImageUrl); // Delete the old image if a new one was uploaded
+        } catch (error) {
+          console.warn("Previous image not found, skipping deletion.");
+        }
       }
 
       await updateDocument("blogs", id, blogData);

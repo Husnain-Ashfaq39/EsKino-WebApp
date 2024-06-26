@@ -86,7 +86,11 @@ const BlogView = () => {
       const blogToDeleteData = blogs.find((blog) => blog.id === blogToDelete);
       await deleteDocument("blogs", blogToDelete);
       if (blogToDeleteData.imageUrl) {
-        await deleteFileFromStorage(blogToDeleteData.imageUrl);
+        try {
+          await deleteFileFromStorage(blogToDeleteData.imageUrl);
+        } catch (error) {
+          console.warn("Previous image not found, skipping deletion.");
+        }
       }
       setBlogs((prevBlogs) =>
         prevBlogs.filter((blog) => blog.id !== blogToDelete)

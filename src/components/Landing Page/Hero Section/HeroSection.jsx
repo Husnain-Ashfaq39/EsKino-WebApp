@@ -55,8 +55,8 @@ const HeroSection = () => {
     const dummyData = {
       heroTitle: "Dummy Title",
       heroSubtitle: "Dummy Subtitle",
-      heroBackground: "path/to/dummy/background.jpg",
-      heroLogo: "path/to/dummy/logo.jpg",
+      heroBackground: "",
+      heroLogo: "",
     };
     try {
       await addDocument("HeroSection", dummyData);

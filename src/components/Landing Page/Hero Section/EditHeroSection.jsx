@@ -10,7 +10,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getDocument, updateDocument } from "../../../services/dbService";
 import { uploadFile, deleteFileFromStorage } from "../../../services/storageService"; // Ensure correct import
 import ImageUpload from "../ImageUpload"; // Import the ImageUpload component
-import { Form } from "antd";
 
 const EditHeroSection = () => {
     const { id } = useParams();
@@ -32,7 +31,6 @@ const EditHeroSection = () => {
                 if (documentSnapshot.exists()) {
                     const documentData = documentSnapshot.data();
                     setFormData(documentData);
-
                 } else {
                     console.error('Document does not exist');
                 }
@@ -98,12 +96,18 @@ const EditHeroSection = () => {
         try {
             // Delete old images if new ones are uploaded
             if (formData.newHeroBackground && formData.heroBackground !== formData.newHeroBackground) {
-                await deleteFileFromStorage(formData.heroBackground);
-                // setFormData((prevData)=>({...prevData, heroBackground:Form.newHeroBackground}))
+                try {
+                    await deleteFileFromStorage(formData.heroBackground);
+                } catch (error) {
+                    console.warn("Previous background image not found, skipping deletion.");
+                }
             }
             if (formData.newHeroLogo && formData.heroLogo !== formData.newHeroLogo) {
-                await deleteFileFromStorage(formData.heroLogo);
-                // setFormData((prevData)=>({...prevData, heroLogo: formData.newHeroLogo}))
+                try {
+                    await deleteFileFromStorage(formData.heroLogo);
+                } catch (error) {
+                    console.warn("Previous logo image not found, skipping deletion.");
+                }
             }
             await updateDocument('HeroSection', id, {
                 heroTitle: formData.heroTitle,
@@ -119,7 +123,6 @@ const EditHeroSection = () => {
             setLoading(false);
         }
     };
-
 
     return (
         <div>
