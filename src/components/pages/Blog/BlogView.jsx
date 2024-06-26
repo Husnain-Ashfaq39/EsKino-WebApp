@@ -235,7 +235,7 @@ const BlogView = () => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-body text-center">
-                <img className="ml-[210px]" src={imagesend} alt="#" width={50} height={46} />
+                {/* <img className="ml-[210px]" src={imagesend} alt="#" width={50} height={46} /> */}
                 <h3>Are you sure you want to delete this blog?</h3>
                 <div className="m-t-20">
                   <Button

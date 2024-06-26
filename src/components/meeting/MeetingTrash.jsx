@@ -201,12 +201,12 @@ const MeetingTrash = () => {
                             <div className="modal-dialog modal-dialog-centered">
                               <div className="modal-content">
                                 <div className="modal-body text-center">
-                                  <img
+                                  {/* <img
                                     src={imagesend}
                                     alt="#"
                                     width={50}
                                     height={46}
-                                  />
+                                  /> */}
                                   <h3>
                                     Are you sure you want to permanently delete this meeting?
                                   </h3>

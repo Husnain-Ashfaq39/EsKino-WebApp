@@ -262,9 +262,11 @@ const Introduction2 = () => {
         footer={null}
         centered
         maskClosable={false}
+        closable={false}
+
       >
         <div className="modal-body text-center">
-          <img src={imagesend} alt="#" width={50} height={46} />
+          {/* <img src={imagesend} alt="#" width={50} height={46} /> */}
           <h3>Are you sure you want to delete this item?</h3>
           <div className="m-t-20">
             <button className="btn btn-white me-2" onClick={handleCancelDelete}>

@@ -282,7 +282,7 @@ const Contactlist = () => {
                     <div className="modal-dialog modal-dialog-centered">
                       <div className="modal-content">
                         <div className="modal-body text-center">
-                          <img src={imagesend} alt="#" width={50} height={46} />
+                          {/* <img src={imagesend} alt="#" width={50} height={46} /> */}
                           <h3>
                             Are you sure you want to delete{" "}
                             {deleteType === "selected"
