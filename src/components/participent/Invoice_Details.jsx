@@ -312,7 +312,7 @@ const Invoice_Details = () => {
                               GST (19%) <span>+ €{gstAmount.toFixed(2)}</span>
                             </p>
                             <p className="mb-0">
-                              Sub total <span>€{participant.totalFee}</span>
+                              Sub total <span>€{participant.totalFee+gstAmount}</span>
                             </p>
                             
                           </div>
