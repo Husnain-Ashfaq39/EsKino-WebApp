@@ -486,14 +486,7 @@ const Sidebar = (props) => {
                     <span>Settings</span>
                   </Link>
                 </li>
-                <li className="submenu">
-                  <Link to="/color-settings" id="menu-item12">
-                    <span className="menu-side">
-                      <img src={menuicon15} alt="" />
-                    </span>{" "}
-                    <span>Colours Settings</span>
-                  </Link>
-                </li>
+                
               </ul>
               <div className="logout-btn">
                 <Link to="#" onClick={handleLogout}>

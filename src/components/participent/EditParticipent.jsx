@@ -5,7 +5,9 @@ import { Link } from "react-router-dom";
 import { getDocument, updateDocument } from "../../services/dbService";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { useLocation, useNavigate } from "react-router-dom";
-import { DatePicker } from "antd"; // Importing DatePicker for date selection
+import { DatePicker, Modal } from "antd"; // Importing Modal
+import { toast, ToastContainer } from "react-toastify"; // Importing ToastContainer and toast
+import 'react-toastify/dist/ReactToastify.css'; // Importing react-toastify CSS
 import moment from "moment"; // Importing moment for date formatting
 
 const EditParticipant = () => {
@@ -25,11 +27,13 @@ const EditParticipant = () => {
     gender: "",
     issueDate: null, // Initial state for issue date
     dueDate: null, // Initial state for due date
+    note: "Please pay within 15 days. Thank you for your business.", // Default note
   };
 
-  const [participantData, setParticipantData] = useState(
-    initialParticipentData
-  );
+  const [participantData, setParticipantData] = useState(initialParticipentData);
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false); // State for modal visibility
 
   useEffect(() => {
     if (participentId) {
@@ -48,6 +52,7 @@ const EditParticipant = () => {
               sectionId: data.sectionId || "",
               issueDate: data.issueDate ? moment(data.issueDate, "DD/MM/YYYY") : null,
               dueDate: data.dueDate ? moment(data.dueDate, "DD/MM/YYYY") : null,
+              note: data.note || "Please pay within 15 days. Thank you for your business.",
             });
           }
         })
@@ -56,9 +61,6 @@ const EditParticipant = () => {
         });
     }
   }, [participentId]);
-
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setParticipantData({ ...participantData, [e.target.name]: e.target.value });
@@ -88,6 +90,7 @@ const EditParticipant = () => {
       "gender",
       "issueDate",
       "dueDate",
+      "note",
     ];
     requiredFields.forEach((field) => {
       if (!participantData[field]) {
@@ -106,33 +109,48 @@ const EditParticipant = () => {
     return isValid;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      setIsSubmitting(true);
-      const data = {
-        firstName: participantData.firstName,
-        lastName: participantData.lastName,
-        email: participantData.email,
-        address: participantData.address,
-        persons: participantData.persons,
-        personNames: participantData.personNames,
-        gender: participantData.gender,
-        issueDate: participantData.issueDate ? participantData.issueDate.format("DD/MM/YYYY") : null,
-        dueDate: participantData.dueDate ? participantData.dueDate.format("DD/MM/YYYY") : null,
-      };
-
-      try {
-        await updateDocument("participants", participentId, data);
-        setIsSubmitting(false);
-        navigate(
-          `/meetinglist/participantlist?meetingid=${participantData.sectionId}&participentid=${participentId}`
-        );
-      } catch (error) {
-        console.error("Error updating participant data:", error);
-        setIsSubmitting(false);
-      }
+      setIsModalVisible(true); // Show confirmation modal
     }
+  };
+
+  const handleModalOk = async () => {
+    setIsSubmitting(true);
+    const data = {
+      firstName: participantData.firstName,
+      lastName: participantData.lastName,
+      email: participantData.email,
+      address: participantData.address,
+      persons: participantData.persons,
+      personNames: participantData.personNames,
+      gender: participantData.gender,
+      issueDate: participantData.issueDate ? participantData.issueDate.format("DD/MM/YYYY") : null,
+      dueDate: participantData.dueDate ? participantData.dueDate.format("DD/MM/YYYY") : null,
+      note: participantData.note,
+    };
+
+    try {
+      await updateDocument("participants", participentId, data);
+      setIsSubmitting(false);
+      setIsModalVisible(false);
+      navigate(`/meetinglist/participantlist?meetingid=${participantData.sectionId}`, {
+        state: { showSuccessToast: true }
+      });
+    } catch (error) {
+      console.error("Error updating participant data:", error);
+      setIsSubmitting(false);
+      toast.error('There was an error updating the participant data.');
+      setIsModalVisible(false);
+    }
+  };
+
+  const handleModalCancel = () => {
+    setIsModalVisible(false);
+    navigate(`/meetinglist/participantlist?meetingid=${participantData.sectionId}`, {
+      state: { showCancelToast: true }
+    });
   };
 
   return (
@@ -308,6 +326,19 @@ const EditParticipant = () => {
                       )}
                     </div>
 
+                    <div className="form-group">
+                      <label>Note</label>
+                      <textarea
+                        className="form-control"
+                        name="note"
+                        value={participantData.note}
+                        onChange={handleChange}
+                      />
+                      {errors.note && (
+                        <div className="error text-danger">{errors.note}</div>
+                      )}
+                    </div>
+
                     <button
                       type="submit"
                       className="btn btn-primary"
@@ -316,6 +347,16 @@ const EditParticipant = () => {
                       {isSubmitting ? "Submitting..." : "Submit"}
                     </button>
                   </form>
+                  <Modal
+                    title="Confirm Update"
+                    visible={isModalVisible}
+                    onOk={handleModalOk}
+                    onCancel={handleModalCancel}
+                    okButtonProps={{ loading: isSubmitting }}
+                  >
+                    <p>Are you sure you want to update the participant data?</p>
+                  </Modal>
+                  <ToastContainer />
                 </div>
               </div>
             </div>

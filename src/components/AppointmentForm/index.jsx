@@ -96,6 +96,7 @@ export default function AppointmentForm({ sectionId, onClose, onBookingSuccess }
     data.issueDate = new Date().toLocaleDateString('en-GB');
     data.dueDate = new Date(new Date().setDate(new Date().getDate() + 15)).toLocaleDateString('en-GB');
     data.originalPrice = originalPrice;
+    data.note = "Please pay within 15 days. Thank you for your business."; // Default note
     setIsSubmitting(true);
 
     try {
