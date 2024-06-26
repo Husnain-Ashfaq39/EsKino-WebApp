@@ -167,7 +167,7 @@ const CEBody = () => {
       <Sidebar
         id="menu-item4"
         id1="menu-items4"
-        activeClassName="appoinment-list"
+        activeClassName="childEmergency"
       />
       <div className="page-wrapper">
         <div className="content">

@@ -160,9 +160,9 @@ const Aktuell2 = () => {
     <>
       <Header />
       <Sidebar
-        id="menu-item4"
-        id1="menu-items4"
-        activeClassName="aktuell2"
+        id="doctorCard"
+        id1="doctorCards"
+        activeClassName="doctor2"
       />
       <div className="page-wrapper">
         <div className="content">

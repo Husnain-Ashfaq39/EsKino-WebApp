@@ -59,7 +59,8 @@ const EditCCHeading = () => {
       <Sidebar
         id="menu-item4"
         id1="menu-items4"
-        activeClassName="edit-heroSection"
+        activeClassName="courseContent"
+
       />
       <div className="page-wrapper">
         <div className="content">

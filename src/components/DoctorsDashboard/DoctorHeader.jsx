@@ -147,9 +147,9 @@ const DoctorsHeader = () => {
     <>
       <Header />
       <Sidebar
-        id="menu-item4"
-        id1="menu-items4"
-        activeClassName="doctorsHeader"
+        id="doctorCard"
+        id1="doctorCards"
+        activeClassName="doctorHeader"
       />
       <div className="page-wrapper">
         <div className="content">

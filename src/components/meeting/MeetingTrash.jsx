@@ -116,7 +116,7 @@ const MeetingTrash = () => {
   return (
     <>
       <Header />
-      <Sidebar id="menu-item1" id2="menu-item1" activeClassName="meeting-trash" />
+      <Sidebar id="meeting" id1="meetings"  activeClassName="meetingTrash" />
       <div className="page-wrapper">
         <div className="content">
           <div className="page-header">

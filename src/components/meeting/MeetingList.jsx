@@ -305,9 +305,8 @@ const MeetingList = () => {
     <>
       <Header />
       <Sidebar
-        id="menu-item1"
-        id2="menu-item1"
-        activeClassName="meeting-list"
+        id="meeting" id1="meetings"
+        activeClassName="meetingList"
       />
       <div className="page-wrapper">
         <div className="content">

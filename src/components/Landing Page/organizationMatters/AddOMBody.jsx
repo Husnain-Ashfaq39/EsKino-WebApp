@@ -59,7 +59,7 @@ const AddOMBody = () => {
             <Sidebar
                 id="menu-item4"
                 id1="menu-items4"
-                activeClassName="add-appoinment"
+                activeClassName="organizationMatters"
             />
             <>
                 <div className="page-wrapper">

@@ -172,7 +172,8 @@ const CCBody = () => {
       <Sidebar
         id="menu-item4"
         id1="menu-items4"
-        activeClassName="appoinment-list"
+        activeClassName="courseContent"
+
       />
       <>
         <div className="page-wrapper">

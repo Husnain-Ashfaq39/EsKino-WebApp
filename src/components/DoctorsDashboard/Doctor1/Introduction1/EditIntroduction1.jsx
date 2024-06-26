@@ -72,9 +72,9 @@ const EditIntroduction1 = () => {
         <div>
             <Header />
             <Sidebar
-                id="menu-item4"
-                id1="menu-items4"
-                activeClassName="edit-introduction1"
+                id="doctorCard"
+                id1="doctorCards"
+                activeClassName="doctor1"
             />
             <div className="page-wrapper">
                 <div className="content">

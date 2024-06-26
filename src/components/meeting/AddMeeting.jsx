@@ -137,7 +137,7 @@ const AddMeeting = () => {
   return (
     <div>
       <Header />
-      <Sidebar id="menu-item2" activeClassName="add-meeting" />
+      <Sidebar id="meeting" id1="meetings"  activeClassName="addMeeting" />
       <div className="page-wrapper">
         <div className="content">
           <div className="page-header">

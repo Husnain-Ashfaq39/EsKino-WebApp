@@ -74,7 +74,7 @@ const DeletedParticipants = () => {
   return (
     <>
       <Header />
-      <Sidebar id="menu-item2" activeClassName="deleted-participants" />
+      <Sidebar id="participant" id1="participants" activeClassName="deletedParticipants" />
       <div className="page-wrapper">
         <div className="content">
           <div className="page-header">

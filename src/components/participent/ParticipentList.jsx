@@ -225,7 +225,7 @@ const ParticipantList = () => {
   return (
     <>
       <Header />
-      <Sidebar id="menu-item2" activeClassName="participant-list" />
+      <Sidebar id="participant" id1="participants" activeClassName="participantList" />
       <div className="page-wrapper">
         <div className="content">
           <div className="page-header">

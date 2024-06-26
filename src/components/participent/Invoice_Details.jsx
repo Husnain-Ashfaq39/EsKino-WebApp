@@ -180,7 +180,7 @@ const Invoice_Details = () => {
   return (
     <>
       <Header />
-      <Sidebar id="menu-item2" activeClassName="participant-list" />
+      <Sidebar id="participant" id1="participants" activeClassName="participantList" />
       <ToastContainer /> {/* Add ToastContainer */}
       <div className="page-wrapper">
         <div className="content container-fluid">

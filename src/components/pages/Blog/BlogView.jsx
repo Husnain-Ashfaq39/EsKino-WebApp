@@ -115,7 +115,7 @@ const BlogView = () => {
         <Sidebar
           id="menu-item11"
           id1="menu-items11"
-          activeClassName="blog-grid"
+          activeClassName="blog-view"
         />
         {/* Sidebar */}
         {/* Page Wrapper */}

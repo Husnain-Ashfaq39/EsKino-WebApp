@@ -134,7 +134,7 @@ const EditHeroSection = () => {
             <Sidebar
                 id="menu-item4"
                 id1="menu-items4"
-                activeClassName="edit-heroSection"
+                activeClassName="heroSection"
             />
             <div className="page-wrapper">
                 <div className="content">
