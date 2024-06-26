@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Table, Modal, Button, Spin } from "antd";
+import { Table, Button, Spin } from "antd";
 import { Link } from "react-router-dom";
 import { getAllDocuments, addDocument, deleteDocument } from "../../../services/dbService"; 
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
-import { imagesend, plusicon, refreshicon, searchnormal } from "../../imagepath";
+import { imagesend, plusicon, refreshicon } from "../../imagepath";
 import { onShowSizeChange, itemRender } from "../../Pagination";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -48,7 +48,7 @@ const CEBody = () => {
       const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       
       // Sort data by numOrder in ascending order
-data.sort((a, b) => a.numOrder - b.numOrder); // Added code to sort data by numOrder
+      data.sort((a, b) => a.numOrder - b.numOrder);
       setDataSource(data);
       setLoading(false);
     } catch (error) {
@@ -260,28 +260,44 @@ data.sort((a, b) => a.numOrder - b.numOrder); // Added code to sort data by numO
           </div>
         </div>
       </div>
-      <Modal
-        visible={deleteModalVisible}
-        onCancel={handleCancelDelete}
-        footer={null}
-        centered
-        maskClosable={false}
-      >
-        <Spin spinning={isDeleting}>
-          <div className="modal-body text-center">
-            <img src={imagesend} alt="#" width={50} height={46} />
-            <h3>Are you sure you want to delete this item?</h3>
-            <div className="m-t-20">
-              <button className="btn btn-white me-2" onClick={handleCancelDelete}>
-                Cancel
-              </button>
-              <button className="btn btn-danger" onClick={handleDelete}>
-                Delete
-              </button>
+      {deleteModalVisible && (
+        <div
+          className={
+            deleteModalVisible
+              ? "modal fade show delete-modal"
+              : "modal fade delete-modal"
+          }
+          style={{
+            display: deleteModalVisible ? "block" : "none",
+            backgroundColor: "rgba(0,0,0,0.5)",
+          }}
+          role="dialog"
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-body text-center">
+                <img className="ml-[210px]" src={imagesend} alt="#" width={50} height={46} />
+                <h3>Are you sure you want to delete this item?</h3>
+                <div className="m-t-20">
+                  <Button
+                    onClick={handleCancelDelete}
+                    className="btn btn-white me-2 pt-1"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="button"
+                    className="btn btn-danger pt-1"
+                    onClick={handleDelete}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
-        </Spin>
-      </Modal>
+        </div>
+      )}
       <ToastContainer />
     </>
   );

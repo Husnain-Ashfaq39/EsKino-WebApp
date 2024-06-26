@@ -5,7 +5,7 @@ import FeatherIcon from "feather-icons-react";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getAllDocuments, getDocument, updateDocument } from "../../services/dbService";
-import { uploadFile } from "../../services/storageService";
+import { uploadFile, deleteFileFromStorage } from "../../services/storageService";
 import Header from "../Header";
 import Sidebar from "../Sidebar"
 
@@ -19,9 +19,9 @@ const EditGallery = () => {
   const [categories, setCategories] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [existingImageUrl, setExistingImageUrl] = useState("");
+  const [newImageUrl, setNewImageUrl] = useState(""); // State for storing new image URL
 
   useEffect(() => {
-    
     fetchGalleryItem();
     fetchCategories();
   }, []);
@@ -75,11 +75,16 @@ const EditGallery = () => {
         // Ensure the category name is sanitized
         const sanitizedCategory = category.replace(/[^a-zA-Z0-9-_]/g, "_");
         imageUrl = await uploadFile(file, `${sanitizedCategory}/${file.name}`);
+        setNewImageUrl(imageUrl); // Set new image URL state
       } catch (error) {
         message.error("Image upload failed: " + error.message);
         setUploading(false);
         return;
       }
+    }
+
+    if (existingImageUrl && imageUrl !== existingImageUrl) {
+      await deleteFileFromStorage(existingImageUrl); // Delete the old image from storage
     }
 
     try {
@@ -96,6 +101,7 @@ const EditGallery = () => {
       setUploading(false);
     }
   };
+
 
   return (
     <div>

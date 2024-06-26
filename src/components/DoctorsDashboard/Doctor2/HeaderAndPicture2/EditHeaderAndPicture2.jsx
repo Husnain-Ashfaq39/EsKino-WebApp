@@ -7,7 +7,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { getDocumentByField, updateDocument } from "../../../../services/dbService";
+import { getDocumentByField, updateDocument} from "../../../../services/dbService";
+import {deleteFileFromStorage } from "../../../../services/storageService";
 import { uploadFile } from "../../../../services/storageService"; // Ensure correct import
 import ImageUpload from "../../../ImageUpload"; // Import the ImageUpload component
 import { getCurrentUser } from "../../../../services/authService";
@@ -25,9 +26,9 @@ const EditHeaderAndPicture2 = () => {
         aktuell: []
     });
     const doctorID = 2;
+    const [newImageUrl, setNewImageUrl] = useState(""); // State for storing new image URL
 
     useEffect(() => {
-        
         const fetchDocumentData = async () => {
             try {
                 const documentSnapshot = await getDocumentByField('Doctors', 'doctorID', doctorID);
@@ -62,10 +63,7 @@ const EditHeaderAndPicture2 = () => {
                     const percent = Math.round((progress.loaded / progress.total) * 100);
                     toast.update(toastId, { render: `Uploading image... ${percent}%`, type: "info", isLoading: true });
                 });
-                setFormData((prevData) => ({
-                    ...prevData,
-                    image: imageUrl,
-                }));
+                setNewImageUrl(imageUrl);
                 toast.update(toastId, { render: "Image uploaded successfully!", type: "success", isLoading: false, autoClose: 1000 });
             } catch (error) {
                 toast.update(toastId, { render: "Image upload failed: " + error.message, type: "error", isLoading: false, autoClose: 2000 });
@@ -76,8 +74,17 @@ const EditHeaderAndPicture2 = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+
+        // If a new image was uploaded and it's different from the existing one, delete the old image.
+        if (newImageUrl && newImageUrl !== formData.image) {
+            await deleteFileFromStorage(formData.image);
+        }
+
         try {
-            await updateDocument('Doctors', id, formData);
+            await updateDocument('Doctors', id, {
+                ...formData,
+                image: newImageUrl || formData.image // Use the new image URL if available
+            });
             sessionStorage.setItem("updateHeaderAndPicture2", 'true');
             navigate("/doctors/headerandpicture2");
         } catch (error) {

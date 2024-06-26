@@ -1,13 +1,16 @@
+/* eslint-disable react/jsx-no-duplicate-props */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
-import { imagesend } from "../../imagepath";
-import { getDocument, updateDocument } from "../../../services/dbService";
-import ImageUpload from "../ImageUpload"; // Import the ImageUpload component
-import { uploadFile } from "../../../services/storageService";
 import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { getDocument, updateDocument } from "../../../services/dbService";
+import { uploadFile, deleteFileFromStorage } from "../../../services/storageService";
+import ImageUpload from "../ImageUpload"; // Import the ImageUpload component
+
 const EditCCBody = () => {
     const { id } = useParams(); // Retrieve the document ID from the URL
     const navigate = useNavigate();
@@ -17,6 +20,7 @@ const EditCCBody = () => {
         CCQuote: "",
         CCDescription: "",
         CCImage: "",
+        newCCImage: "", // State to handle new image URL
     });
 
     useEffect(() => {
@@ -45,38 +49,46 @@ const EditCCBody = () => {
         }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            setLoading(true);
-            await updateDocument('CourseContentBody', id, formData);
-            sessionStorage.setItem('updateCCBodySuccess', 'true'); // Set update flag
-            navigate("/landingpage/coursecontentbody");
-        } catch (error) {
-            toast.error("Error updating document: " + error.message, { autoClose: 2000 });
-            console.error('Error updating document:', error);
-        }
-        setLoading(false);
-    };
-
-    const loadFile = async (event) => {
+    const handleImageLoad = async (event) => {
         const file = event.target.files[0];
-
         if (file) {
             const toastId = toast.loading("Uploading image...");
             try {
-                const uploadedImageURL = await uploadFile(file, `ccbody/Images/${file.name}`, (progress) => {
+                const uploadedImageURL = await uploadFile(file, `ccbody/images/${file.name}`, (progress) => {
                     const percent = Math.round((progress.loaded / progress.total) * 100);
                     toast.update(toastId, { render: `Uploading image... ${percent}%`, type: "info", isLoading: true });
                 });
                 setFormData((prevData) => ({
                     ...prevData,
-                    CCImage: uploadedImageURL
+                    newCCImage: uploadedImageURL
                 }));
                 toast.update(toastId, { render: "Image uploaded successfully!", type: "success", isLoading: false, autoClose: 2000 });
             } catch (error) {
                 toast.update(toastId, { render: "Image upload failed: " + error.message, type: "error", isLoading: false, autoClose: 2000 });
             }
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            // Delete old image if a new one is uploaded
+            if (formData.newCCImage && formData.CCImage !== formData.newCCImage) {
+                await deleteFileFromStorage(formData.CCImage);
+            }
+            await updateDocument('CourseContentBody', id, {
+                CCTitle: formData.CCTitle,
+                CCQuote: formData.CCQuote,
+                CCDescription: formData.CCDescription,
+                CCImage: formData.newCCImage || formData.CCImage,
+            });
+            sessionStorage.setItem('updateCCBodySuccess', 'true'); // Set update flag
+            navigate("/landingpage/coursecontentbody");
+        } catch (error) {
+            toast.error("Error updating document: " + error.message, { autoClose: 2000 });
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -126,7 +138,7 @@ const EditCCBody = () => {
                                                     <h4>Edit Course Content Body</h4>
                                                 </div>
                                             </div>
-                                            {/* Title */}
+                                            {/* Title, Quote, Description */}
                                             <div className="col-12 col-md-6 col-xl-6">
                                                 <div className="form-group local-forms">
                                                     <label>Title <span className="login-danger">*</span></label>
@@ -139,8 +151,6 @@ const EditCCBody = () => {
                                                     />
                                                 </div>
                                             </div>
-
-                                            {/* Quote */}
                                             <div className="col-12 col-md-6 col-xl-6">
                                                 <div className="form-group local-forms">
                                                     <label>Quote <span className="login-danger">*</span></label>
@@ -153,9 +163,7 @@ const EditCCBody = () => {
                                                     />
                                                 </div>
                                             </div>
-
-                                            {/* Description */}
-                                            <div className="col-12 col-sm-12">
+                                            <div className="col-12">
                                                 <div className="form-group local-forms">
                                                     <label>Description <span className="login-danger">*</span></label>
                                                     <textarea
@@ -167,10 +175,8 @@ const EditCCBody = () => {
                                                     />
                                                 </div>
                                             </div>
-
                                             {/* Image Upload Component */}
-                                            <ImageUpload id="image" src={formData.CCImage} loadFile={loadFile} imageName="Image" />
-
+                                            <ImageUpload id="image" src={formData.CCImage} loadFile={handleImageLoad} imageName="Image" />
                                             {/* Submit/Cancel Button */}
                                             <div className="col-12">
                                                 <div className="doctor-submit text-end">

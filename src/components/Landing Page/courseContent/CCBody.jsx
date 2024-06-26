@@ -3,17 +3,14 @@ import { Table, Modal } from "antd";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
 import { Link, useLocation } from "react-router-dom";
+import {Button } from "antd";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { getAllDocuments, deleteDocument } from "../../../services/dbService"; // Import the Firestore service to fetch documents
 import { deleteFileFromStorage } from "../../../services/storageService"; // Import to delete images from Firebase storage
-import {
-  imagesend,
-  plusicon,
-  refreshicon,
-  searchnormal,
-} from "../../imagepath";
+import { imagesend, plusicon, refreshicon } from "../../imagepath";
 import { onShowSizeChange, itemRender } from "../../Pagination";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CCBody = () => {
   const [dataSource, setDataSource] = useState([]);
@@ -55,10 +52,9 @@ const CCBody = () => {
 
   const handleDelete = async () => {
     try {
-      const selectedRecord = dataSource.find(record => record.id === selectedRecordId);
+      const selectedRecord = dataSource.find((record) => record.id === selectedRecordId);
       if (selectedRecord && selectedRecord.CCImage) {
         // Delete image from Firebase storage if it exists
-        console.log(selectedRecord)
         await deleteFileFromStorage(selectedRecord.CCImage);
       }
       await deleteDocument("CourseContentBody", selectedRecordId); // Delete the document from Firestore
@@ -273,16 +269,44 @@ const CCBody = () => {
           </div>
         </div>
       </>
-      <Modal
-        title="Delete Content"
-        visible={deleteModalVisible}
-        onOk={handleDelete}
-        onCancel={hideDeleteModal}
-        okText="Delete"
-        cancelText="Cancel"
-      >
-        <p>Are you sure you want to delete the selected content?</p>
-      </Modal>
+      {deleteModalVisible && (
+        <div
+          className={
+            deleteModalVisible
+              ? "modal fade show delete-modal"
+              : "modal fade delete-modal"
+          }
+          style={{
+            display: deleteModalVisible ? "block" : "none",
+            backgroundColor: "rgba(0,0,0,0.5)",
+          }}
+          role="dialog"
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-body text-center">
+                <img className="ml-[210px]" src={imagesend} alt="#" width={50} height={46} />
+                <h3>Are you sure you want to delete this course content?</h3>
+                <div className="m-t-20">
+                  <Button
+                    onClick={hideDeleteModal}
+                    className="btn btn-white me-2 pt-1"
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    type="button"
+                    className="btn btn-danger pt-1"
+                    onClick={handleDelete}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <ToastContainer />
     </>
   );

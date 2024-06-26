@@ -224,18 +224,18 @@ const GalleryList = () => {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-body text-center">
-              <img src={imagesend} alt="#" width={50} height={46} />
+              <img className="ml-[210px]" src={imagesend} alt="#" width={50} height={46} />
               <h3>Are you sure you want to delete this image?</h3>
               <div className="m-t-20">
                 <Button
                   onClick={handleCancelDelete}
-                  className="btn btn-white me-2"
+                  className="btn btn-white me-2 pt-1"
                 >
                   Close
                 </Button>
                 <Button
                   type="button"
-                  className="btn btn-danger"
+                  className="btn btn-danger pt-1"
                   onClick={handleDelete}
                 >
                   Delete

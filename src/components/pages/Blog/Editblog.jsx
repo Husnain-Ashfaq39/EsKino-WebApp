@@ -5,7 +5,8 @@ import TextEditor from "../../TextEditor";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import { getDocument, updateDocument } from "../../../services/dbService";
+import { getDocument, updateDocument} from "../../../services/dbService";
+import { deleteFileFromStorage } from "../../../services/storageService";
 import { uploadFile } from "../../../services/storageService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,10 +21,9 @@ const EditBlog = () => {
   const [fileChosen, setFileChosen] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [image, setImage] = useState(null);
+  const [oldImageUrl, setOldImageUrl] = useState("");
 
   useEffect(() => {
-   
-
     const fetchBlog = async () => {
       try {
         const doc = await getDocument("blogs", id);
@@ -33,6 +33,7 @@ const EditBlog = () => {
           setValue("author", data.author);
           setValue("tags", data.tags.join(","));
           setImageUrl(data.imageUrl); // Set the image URL from the document data
+          setOldImageUrl(data.imageUrl); // Save the old image URL for later deletion
           if (editorRef.current && data.content) {
             editorRef.current.setEditorContent(data.content);
           }
@@ -51,10 +52,10 @@ const EditBlog = () => {
   const onSubmit = async (data) => {
     try {
       setIsSubmitting(true);
-      let newimageUrl = imageUrl;
+      let newImageUrl = imageUrl;
       if (image) {
         const imagePath = `blog-images/${image.name}`;
-        newimageUrl = await uploadFile(image, imagePath);
+        newImageUrl = await uploadFile(image, imagePath);
       }
 
       const content = await new Promise((resolve) => {
@@ -73,9 +74,13 @@ const EditBlog = () => {
         author: data.author,
         tags: data.tags.split(","),
         content,
-        imageUrl: newimageUrl, // Use the new or existing image URL
+        imageUrl: newImageUrl, // Use the new or existing image URL
         publicationDate: new Date(),
       };
+
+      if (newImageUrl !== oldImageUrl) {
+        await deleteFileFromStorage(oldImageUrl); // Delete the old image if a new one was uploaded
+      }
 
       await updateDocument("blogs", id, blogData);
       toast.success("Blog has been updated. Thank you!");
