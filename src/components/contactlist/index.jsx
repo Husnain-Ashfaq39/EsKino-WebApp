@@ -1,5 +1,5 @@
 import { MailOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Modal, Select, Table } from "antd";
+import { Button, Checkbox, Modal, Select, Spin, Table } from "antd";
 import {
   collection,
   deleteDoc,
@@ -24,7 +24,9 @@ const Contactlist = () => {
   const [selectedContacts, setSelectedContacts] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteType, setDeleteType] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false); // State for delete process
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchContacts = async () => {
       const contactsRef = collection(db, "contacts");
@@ -45,7 +47,6 @@ const Contactlist = () => {
   }, []);
 
   useEffect(() => {
-   
     if (filter === "all") {
       setFilteredContacts(contacts);
     } else {
@@ -103,28 +104,35 @@ const Contactlist = () => {
   };
 
   const confirmDelete = async () => {
-    if (deleteType === "selected") {
-      const promises = selectedContacts.map((id) =>
-        deleteDoc(doc(db, "contacts", id))
-      );
-      await Promise.all(promises);
-      setContacts(
-        contacts.filter((contact) => !selectedContacts.includes(contact.id))
-      );
-      setSelectedContacts([]);
-    } else if (deleteType === "allRead") {
-      const readContacts = contacts
-        .filter((contact) => contact.read)
-        .map((contact) => contact.id);
-      const promises = readContacts.map((id) =>
-        deleteDoc(doc(db, "contacts", id))
-      );
-      await Promise.all(promises);
-      setContacts(
-        contacts.filter((contact) => !readContacts.includes(contact.id))
-      );
+    setIsDeleting(true); // Start delete process
+    try {
+      if (deleteType === "selected") {
+        const promises = selectedContacts.map((id) =>
+          deleteDoc(doc(db, "contacts", id))
+        );
+        await Promise.all(promises);
+        setContacts(
+          contacts.filter((contact) => !selectedContacts.includes(contact.id))
+        );
+        setSelectedContacts([]);
+      } else if (deleteType === "allRead") {
+        const readContacts = contacts
+          .filter((contact) => contact.read)
+          .map((contact) => contact.id);
+        const promises = readContacts.map((id) =>
+          deleteDoc(doc(db, "contacts", id))
+        );
+        await Promise.all(promises);
+        setContacts(
+          contacts.filter((contact) => !readContacts.includes(contact.id))
+        );
+      }
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error("Error deleting contacts:", error);
+    } finally {
+      setIsDeleting(false); // End delete process
     }
-    setIsDeleteModalOpen(false);
   };
 
   const cancelDelete = () => {
@@ -220,7 +228,11 @@ const Contactlist = () => {
                     }}
                     onClick={handleDeleteSelected}
                   >
-                    Delete
+                    {isDeleting ? (
+                      <Spin size="small" />
+                    ) : (
+                      "Delete"
+                    )}
                   </Button>
                 )}
               </div>
@@ -230,12 +242,9 @@ const Contactlist = () => {
             <div className="col-sm-12">
               <div className="card">
                 <div className="card-body">
-                <div className="table-responsive">
-                  <Table
-                    columns={columns}
-                    dataSource={filteredContacts}
-                    rowKey="id"
-                  /></div>
+                  <div className="table-responsive">
+                    <Table columns={columns} dataSource={filteredContacts} rowKey="id" />
+                  </div>
                   {isModalOpen && (
                     <Modal
                       title="Contact Message"
@@ -292,7 +301,11 @@ const Contactlist = () => {
                               className="btn btn-danger"
                               onClick={confirmDelete}
                             >
-                              Delete
+                              {isDeleting ? (
+                                <Spin size="small" />
+                              ) : (
+                                "Delete"
+                              )}
                             </Button>
                           </div>
                         </div>
