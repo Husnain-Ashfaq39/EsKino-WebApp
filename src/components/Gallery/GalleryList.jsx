@@ -1,4 +1,4 @@
-import { Button, Table } from "antd";
+import { Button, Table, Spin } from "antd";
 import FeatherIcon from "feather-icons-react";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ const GalleryList = () => {
   const [loading, setLoading] = useState(true);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
+  const [deleting, setDeleting] = useState(false); // State to track deletion process
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -45,6 +46,7 @@ const GalleryList = () => {
   const handleDelete = async () => {
     if (deleteItemId) {
       try {
+        setDeleting(true); // Set deleting to true to show spinner
         const itemToDelete = dataSource.find(
           (item) => item.id === deleteItemId
         );
@@ -56,6 +58,8 @@ const GalleryList = () => {
         fetchData();
       } catch (error) {
         console.error("Error deleting document:", error);
+      } finally {
+        setDeleting(false); // Reset deleting state after operation
       }
     }
   };
@@ -224,7 +228,13 @@ const GalleryList = () => {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-body text-center">
-              <img className="ml-[210px]" src={imagesend} alt="#" width={50} height={46} />
+              <img
+                className="ml-[210px]"
+                src={imagesend}
+                alt="#"
+                width={50}
+                height={46}
+              />
               <h3>Are you sure you want to delete this image?</h3>
               <div className="m-t-20">
                 <Button
@@ -237,8 +247,9 @@ const GalleryList = () => {
                   type="button"
                   className="btn btn-danger pt-1"
                   onClick={handleDelete}
+                  disabled={deleting} // Disable the button when deleting
                 >
-                  Delete
+                  {deleting ? <Spin /> : "Delete"} {/* Show spinner while deleting */}
                 </Button>
               </div>
             </div>
