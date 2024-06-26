@@ -229,13 +229,13 @@ const GalleryList = () => {
               <div className="m-t-20">
                 <Button
                   onClick={handleCancelDelete}
-                  className="btn btn-white me-2"
+                  className="btn btn-white me-2 p-0"
                 >
                   Close
                 </Button>
                 <Button
                   type="button"
-                  className="btn btn-danger"
+                  className="btn btn-danger p-0"
                   onClick={handleDelete}
                 >
                   Delete

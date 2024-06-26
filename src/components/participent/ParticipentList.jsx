@@ -316,14 +316,14 @@ const ParticipantList = () => {
                           <div className="m-t-20">
                             <Button
                               onClick={() => setIsDeleteModalOpen(false)}
-                              className="btn btn-white me-2"
+                              className="btn btn-white me-2 p-0"
                               disabled={isDeleting}
                             >
                               Close
                             </Button>
                             <Button
                               type="button"
-                              className="btn btn-danger"
+                              className="btn btn-danger p-0"
                               onClick={() => handleDelete(participentToDele)}
                               disabled={isDeleting}
                             >
