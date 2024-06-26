@@ -143,13 +143,13 @@ export default function Header2({ logoSrc, variant }) {
                     }`}
                   >
                     <li>
-                      <Link to="/">Home</Link>
+                      <Link to="/" onClick={() => setMobileToggle(!mobileToggle)}>Home</Link>
                     </li>
                     <li>
-                      <Link to="/blog">Our Blogs</Link>
+                      <Link to="/blog" onClick={() => setMobileToggle(!mobileToggle)}>Our Blogs</Link>
                     </li>
                     <li>
-                      <Link to="/contact">Contact</Link>
+                      <Link to="/contact" onClick={() => setMobileToggle(!mobileToggle)}>Contact</Link>
                     </li>
                     <li>
                       <Link to="/login">Login</Link>
