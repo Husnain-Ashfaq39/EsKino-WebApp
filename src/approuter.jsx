@@ -70,7 +70,6 @@ import ParticipentList from "./components/participent/ParticipentList";
 import Policy from "./components/Policy";
 import Settings from "./components/Settings";
 import SubscriberList from "./components/Suscribers";
-import ColorSettings from "./components/ColorSettings/ColorSettings";
 import DoctorsHeader from "./components/DoctorsDashboard/DoctorHeader";
 import EditDoctorsHeader from "./components/DoctorsDashboard/EditDoctorsHeader";
 // import AboutUs from "./components/AdminAboutUs/AboutUs";
@@ -116,9 +115,7 @@ const Approuter = () => {
             path="/edit-categories"
             element={<ProtectedRoute element={<EditCategories />} />}
           />
-          <Route path="/color-settings"   element={<ProtectedRoute element={<ColorSettings />} />}
           
-          />
 
           <Route
             path="/contactlist"

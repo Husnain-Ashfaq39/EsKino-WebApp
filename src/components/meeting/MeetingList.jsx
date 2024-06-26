@@ -483,14 +483,14 @@ const MeetingList = () => {
                                   <div className="m-t-20">
                                     <button
                                       onClick={() => setIsDeleteModalOpen(false)}
-                                      className="btn btn-white me-2"
+                                      className="btn btn-white me-2 p-1"
                                       disabled={isDeleting}
                                     >
                                       Close
                                     </button>
                                     <button
                                       type="button"
-                                      className="btn btn-danger"
+                                      className="btn btn-danger p-1"
                                       onClick={() => handleDeleteMeeting(meetingToDelete)}
                                       disabled={isDeleting}
                                     >

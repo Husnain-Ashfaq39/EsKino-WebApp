@@ -294,7 +294,7 @@ const Invoice_Details = () => {
                       <div className="invoice-terms">
                         <h6>Note:</h6>
                         <p className="mb-0">
-                          Please pay within 15 days. Thank you for your business.
+                          {participant.note} {/* Display the note */}
                         </p>
                       </div>
                     </div>
@@ -312,7 +312,7 @@ const Invoice_Details = () => {
                               GST (19%) <span>+ €{gstAmount.toFixed(2)}</span>
                             </p>
                             <p className="mb-0">
-                              Sub total <span>€{participant.totalFee}</span>
+                              Sub total <span>€{participant.totalFee+gstAmount}</span>
                             </p>
                             
                           </div>

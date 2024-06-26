@@ -1,24 +1,39 @@
-import { Button, Spin, Table } from "antd";
 import React, { useEffect, useState } from "react";
+import { Button, Spin, Table } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchDocumentsWithQuery, getAllDocuments, getDocument, updateDocument, addDocument, deleteDocument } from "../../services/dbService";
 import Header from "../Header";
-import { refreshicon, searchnormal } from "../imagepath";
 import Sidebar from "../Sidebar";
-import { imagesend } from "../imagepath";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
+import { toast, ToastContainer } from "react-toastify"; // Importing ToastContainer and toast
+import 'react-toastify/dist/ReactToastify.css'; // Importing react-toastify CSS
+import { searchnormal,refreshicon } from "../imagepath";
 
 const ParticipantList = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const meetingId = searchParams.get("meetingid");
-  const navigate = useNavigate();
+
   const [participentToDele, setParticipentToDele] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredParticipants, setFilteredParticipants] = useState([]);
   const [participentData, setParticipantData] = useState([]);
+
+  useEffect(() => {
+    if (location.state?.showSuccessToast) {
+      toast.success('Participant data updated successfully.');
+      // Clear the state to avoid showing the toast again on page refresh
+      navigate(location.pathname, { replace: true });
+    }
+    if (location.state?.showCancelToast) {
+      toast.info('Update operation was cancelled.');
+      // Clear the state to avoid showing the toast again on page refresh
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location.state, navigate]);
 
   const handleDelete = async (participantId) => {
     setIsDeleting(true);
@@ -188,7 +203,7 @@ const ParticipantList = () => {
                 to={`/meetinglist/participantlist/edit?meetingid=${record.sectionId}&participentid=${record.id}`}
               >
                 <i className="far fa-edit me-2" />
-                Edit
+                Edit Invoice
               </Link>
               <Link
                 className="dropdown-item"
@@ -297,19 +312,18 @@ const ParticipantList = () => {
                     <div className="modal-dialog modal-dialog-centered">
                       <div className="modal-content">
                         <div className="modal-body text-center">
-                          <img src={imagesend} alt="#" width={50} height={46} />
                           <h3>Are you sure want to delete this participant?</h3>
                           <div className="m-t-20">
                             <Button
                               onClick={() => setIsDeleteModalOpen(false)}
-                              className="btn btn-white me-2"
+                              className="btn btn-white me-2 p-0"
                               disabled={isDeleting}
                             >
                               Close
                             </Button>
                             <Button
                               type="button"
-                              className="btn btn-danger"
+                              className="btn btn-danger p-0"
                               onClick={() => handleDelete(participentToDele)}
                               disabled={isDeleting}
                             >
@@ -326,6 +340,7 @@ const ParticipantList = () => {
                       </div>
                     </div>
                   </div>
+                  <ToastContainer />
                 </div>
              </div>
             </div>
