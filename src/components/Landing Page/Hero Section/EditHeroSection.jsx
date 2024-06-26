@@ -30,7 +30,11 @@ const EditHeroSection = () => {
                 const documentSnapshot = await getDocument('HeroSection', id);
                 if (documentSnapshot.exists()) {
                     const documentData = documentSnapshot.data();
-                    setFormData(documentData);
+                    setFormData({
+                        ...documentData,
+                        newHeroBackground: documentData.heroBackground,
+                        newHeroLogo: documentData.heroLogo,
+                    });
                 } else {
                     console.error('Document does not exist');
                 }
@@ -199,10 +203,10 @@ const EditHeroSection = () => {
                                             </div>
 
                                             {/* Background Image Input */}
-                                            <ImageUpload id="background" src={formData.heroBackground} loadFile={handleBackgroundImageLoad} imageName="Background Image" />
+                                            <ImageUpload id="background" src={formData.newHeroBackground} loadFile={handleBackgroundImageLoad} imageName="Background Image" />
 
                                             {/* Logo Input */}
-                                            <ImageUpload id="logo" src={formData.heroLogo} loadFile={handleLogoLoad} imageName="Logo" />
+                                            <ImageUpload id="logo" src={formData.newHeroLogo} loadFile={handleLogoLoad} imageName="Logo" />
 
                                             {/* Submit/Cancel Button */}
                                             <div className="col-12">

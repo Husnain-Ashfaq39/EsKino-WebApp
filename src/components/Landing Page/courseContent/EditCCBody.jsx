@@ -29,7 +29,12 @@ const EditCCBody = () => {
                 const documentSnapshot = await getDocument('CourseContentBody', id);
                 if (documentSnapshot.exists()) {
                     const documentData = documentSnapshot.data();
-                    setFormData(documentData);
+                    setFormData({
+                        ...documentData,
+                        newCCImage: documentData.CCImage
+                    });
+                   
+                    
                 } else {
                     console.error('Document does not exist');
                 }
@@ -176,7 +181,7 @@ const EditCCBody = () => {
                                                 </div>
                                             </div>
                                             {/* Image Upload Component */}
-                                            <ImageUpload id="image" src={formData.CCImage} loadFile={handleImageLoad} imageName="Image" />
+                                            <ImageUpload id="image" src={formData.newCCImage} loadFile={handleImageLoad} imageName="Image" />
                                             {/* Submit/Cancel Button */}
                                             <div className="col-12">
                                                 <div className="doctor-submit text-end">

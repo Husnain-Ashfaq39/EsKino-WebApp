@@ -7,7 +7,6 @@ import {
   dashboard,
   doctor,
   logout,
-  menuicon04,
   menuicon08,
   menuicon10,
   menuicon12,
@@ -15,11 +14,12 @@ import {
   menuicon16,
   patients
 } from "./imagepath";
+
 const Sidebar = (props) => {
   const [sidebar, setSidebar] = useState("");
   const navigate = useNavigate();
 
-  const handleClick = (e, item, item1, item3) => {
+  const handleClick = (e, item, item1) => {
     const div = document.querySelector(`#${item}`);
     const ulDiv = document.querySelector(`.${item1}`);
     e?.target?.className
@@ -35,7 +35,7 @@ const Sidebar = (props) => {
       const ele = document.getElementById(`${props?.id}`);
       handleClick(ele, props?.id, props?.id1);
     }
-  }, []);
+  }, [props?.id, props?.id1]);
 
   const expandMenu = () => {
     document.body.classList.remove("expand-menu");
@@ -72,14 +72,13 @@ const Sidebar = (props) => {
               onMouseOver={expandMenuOpen}
             >
               <ul>
+                {/* Dashboard */}
                 <li className="menu-title"></li>
                 <li className="submenu">
                   <Link
                     to="#"
                     id="menu-item"
-                    onClick={(e) => {
-                      handleClick(e, "menu-item", "menu-items");
-                    }}
+                    onClick={(e) => handleClick(e, "menu-item", "menu-items")}
                   >
                     <span className="menu-side">
                       <img src={dashboard} alt="" />
@@ -93,8 +92,7 @@ const Sidebar = (props) => {
                         }
                         to="/admin-dashboard"
                       >
-                        {" "}
-                        Dashboard{" "}
+                        Dashboard
                       </Link>
                     </span>
                   </Link>
@@ -105,18 +103,17 @@ const Sidebar = (props) => {
                     className="menu-items"
                   ></ul>
                 </li>
+
+                {/* Meetings */}
                 <li className="submenu">
                   <Link
                     to="#"
                     id="menu-item1"
-                    onClick={(e) => {
-                      // setSidebar('Doctors')
-                      handleClick(e, "menu-item1", "menu-items1");
-                    }}
+                    onClick={(e) => handleClick(e, "menu-item1", "menu-items1")}
                   >
                     <span className="menu-side">
                       <img src={doctor} alt="" />
-                    </span>{" "}
+                    </span>
                     <span> Meetings </span> <span className="menu-arrow" />
                   </Link>
                   <ul
@@ -163,6 +160,8 @@ const Sidebar = (props) => {
                     </li>
                   </ul>
                 </li>
+
+                {/* Participants */}
                 <li className="submenu">
                   <Link
                     to="#"
@@ -171,8 +170,8 @@ const Sidebar = (props) => {
                   >
                     <span className="menu-side">
                       <img src={patients} alt="" />
-                    </span>{" "}
-                    <span>Participant </span> <span className="menu-arrow" />
+                    </span>
+                    <span> Participant </span> <span className="menu-arrow" />
                   </Link>
                   <ul style={{ display: "none" }} className="menu-items2">
                     <li>
@@ -199,9 +198,10 @@ const Sidebar = (props) => {
                         Deleted Participants
                       </Link>
                     </li>
-                    
                   </ul>
                 </li>
+
+                {/* Admin */}
                 <li className="submenu">
                   <Link
                     to="#"
@@ -210,7 +210,7 @@ const Sidebar = (props) => {
                   >
                     <span className="menu-side">
                       <img src={doctor} alt="" />
-                    </span>{" "}
+                    </span>
                     <span> Admin </span> <span className="menu-arrow" />
                   </Link>
                   <ul style={{ display: "none" }} className="menu-items3">
@@ -232,7 +232,9 @@ const Sidebar = (props) => {
                   <Link
                     to="#"
                     id="menu-itemDoctors"
-                    onClick={(e) => handleClick(e, "menu-itemDoctors", "menu-itemDoctors")}
+                    onClick={(e) =>
+                      handleClick(e, "menu-itemDoctors", "menu-itemDoctors")
+                    }
                   >
                     <span className="menu-side">
                       <img src={menuicon08} alt="" />
@@ -240,58 +242,43 @@ const Sidebar = (props) => {
                     <span>Doctors</span> <span className="menu-arrow" />
                   </Link>
                   <ul style={{ display: "none" }} className="menu-itemDoctors">
-{/* Doctor Header */}
-<li>
-                        <Link
-                          className={
-                            props?.activeClassName === "shedule-list"
-                              ? "active"
-                              : ""
-                          }
-                          to="/doctors/doctorsheader"
-                        >
-                          Doctors Header
-                        </Link>
-                      </li>
+                    {/* Doctor Header */}
+                    <li>
+                      <Link
+                        className={
+                          props?.activeClassName === "shedule-list" ? "active" : ""
+                        }
+                        to="/doctors/doctorsheader"
+                      >
+                        Doctors Header
+                      </Link>
+                    </li>
 
-
-  {/* Doctor 2 */}
-  <li>
-                        <Link
-                          className={
-                            props?.activeClassName === "shedule-list"
-                              ? "active"
-                              : ""
-                          }
-                          to="/doctors/headerandpicture2"
-                        >
-                          Doctor 1
-                        </Link>
-                      </li>
-
+                    {/* Doctor 2 */}
+                    <li>
+                      <Link
+                        className={
+                          props?.activeClassName === "shedule-list" ? "active" : ""
+                        }
+                        to="/doctors/headerandpicture2"
+                      >
+                        Doctor 1
+                      </Link>
+                    </li>
 
                     {/* Doctor 1 */}
                     <li>
                       <Link
                         className={
-                          props?.activeClassName === "heroSection"
-                            ? "active"
-                            : ""
+                          props?.activeClassName === "heroSection" ? "active" : ""
                         }
                         to="/doctors/headerandpicture1"
                       >
                         Doctor 2
                       </Link>
-
-                    
-
-                      
                     </li>
                   </ul>
                 </li>
-
-
-
 
                 {/* Landing Page */}
                 <li className="submenu">
@@ -317,63 +304,53 @@ const Sidebar = (props) => {
                       >
                         Hero Section
                       </Link>
+                    </li>
 
-                      {/* Child Emergency */}
-                      <li>
-                        <Link
-                          className={
-                            props?.activeClassName === "shedule-list"
-                              ? "active"
-                              : ""
-                          }
-                          to="/landingpage/childemergencyheader"
-                        >
-                          Child Emergency
-                        </Link>
-                      </li>
+                    {/* Child Emergency */}
+                    <li>
+                      <Link
+                        className={
+                          props?.activeClassName === "shedule-list"
+                            ? "active"
+                            : ""
+                        }
+                        to="/landingpage/childemergencyheader"
+                      >
+                        Child Emergency
+                      </Link>
+                    </li>
 
-                      {/* Course Content */}
-                      <li>
-                        <Link
-                          className={
-                            props?.activeClassName === "shedule-list"
-                              ? "active"
-                              : ""
-                          }
-                          to="/landingpage/coursecontentheading"
-                        >
-                          Course Content
-                        </Link>
-                      </li>
+                    {/* Course Content */}
+                    <li>
+                      <Link
+                        className={
+                          props?.activeClassName === "shedule-list"
+                            ? "active"
+                            : ""
+                        }
+                        to="/landingpage/coursecontentheading"
+                      >
+                        Course Content
+                      </Link>
+                    </li>
 
-                      {/* Organization Matters*/}
-                      <li>
-                        <Link
-                          className={
-                            props?.activeClassName === "shedule-list"
-                              ? "active"
-                              : ""
-                          }
-                          to="/landingpage/organizationmattersheading"
-                        >
-                          Organization Matters
-                        </Link>
-                      </li>
+                    {/* Organization Matters */}
+                    <li>
+                      <Link
+                        className={
+                          props?.activeClassName === "shedule-list"
+                            ? "active"
+                            : ""
+                        }
+                        to="/landingpage/organizationmattersheading"
+                      >
+                        Organization Matters
+                      </Link>
                     </li>
                   </ul>
                 </li>
 
-                {/* About Us */}
-                {/* <li className="submenu">
-                  <Link to="/aboutus" id="menu-item11">
-                    <span className="menu-side">
-                      <img src={blog} alt="" />
-                    </span>{" "}
-                    <span>About Us</span>
-                  </Link>
-                </li> */}
-
-{/* Gallery */}
+                {/* Gallery */}
                 <li className="submenu">
                   <Link
                     to="#"
@@ -389,50 +366,48 @@ const Sidebar = (props) => {
                     <li>
                       <Link
                         className={
-                          props?.activeClassName === "gallerylist"
-                            ? "active"
-                            : ""
+                          props?.activeClassName === "gallerylist" ? "active" : ""
                         }
                         to="/gallerylist"
                       >
                         Gallery List
                       </Link>
+                    </li>
 
-                      {/* Child Emergency */}
-                      <li>
-                        <Link
-                          className={
-                            props?.activeClassName === "addgallery"
-                              ? "active"
-                              : ""
-                          }
-                          to="/gallerylist/add"
-                        >
-                          Add Image
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          className={
-                            props?.activeClassName === "editcategories"
-                              ? "active"
-                              : ""
-                          }
-                          to="/edit-categories"
-                        >
-                          Edit Categories
-                        </Link>
-                      </li>
+                    {/* Add Image */}
+                    <li>
+                      <Link
+                        className={
+                          props?.activeClassName === "addgallery" ? "active" : ""
+                        }
+                        to="/gallerylist/add"
+                      >
+                        Add Image
+                      </Link>
+                    </li>
+
+                    {/* Edit Categories */}
+                    <li>
+                      <Link
+                        className={
+                          props?.activeClassName === "editcategories"
+                            ? "active"
+                            : ""
+                        }
+                        to="/edit-categories"
+                      >
+                        Edit Categories
+                      </Link>
                     </li>
                   </ul>
                 </li>
+
+                {/* Blog */}
                 <li className="submenu">
                   <Link
                     to="#"
                     id="menu-item11"
-                    onClick={(e) =>
-                      handleClick(e, "menu-item11", "menu-items11")
-                    }
+                    onClick={(e) => handleClick(e, "menu-item11", "menu-items11")}
                   >
                     <span className="menu-side">
                       <img src={blog} alt="" />
@@ -462,6 +437,8 @@ const Sidebar = (props) => {
                     </li>
                   </ul>
                 </li>
+
+                {/* Contacts */}
                 <li className="submenu">
                   <Link to="/contactlist" id="menu-item11">
                     <span className="menu-side">
@@ -470,6 +447,8 @@ const Sidebar = (props) => {
                     <span>Contacts</span>
                   </Link>
                 </li>
+
+                {/* Suscribers */}
                 <li className="submenu">
                   <Link to="/suscribers" id="menu-item11">
                     <span className="menu-side">
@@ -478,6 +457,8 @@ const Sidebar = (props) => {
                     <span>Suscribers</span>
                   </Link>
                 </li>
+
+                {/* Settings */}
                 <li className="submenu">
                   <Link to="/settings" id="menu-item12">
                     <span className="menu-side">
@@ -486,8 +467,8 @@ const Sidebar = (props) => {
                     <span>Settings</span>
                   </Link>
                 </li>
-                
               </ul>
+
               <div className="logout-btn">
                 <Link to="#" onClick={handleLogout}>
                   <span className="menu-side">
@@ -503,4 +484,5 @@ const Sidebar = (props) => {
     </>
   );
 };
+
 export default Sidebar;
