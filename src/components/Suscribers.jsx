@@ -1,5 +1,5 @@
-import { MailOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Modal, Table } from "antd";
+import { MailOutlined, LoadingOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Modal, Spin, Table } from "antd";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,9 +13,10 @@ const SubscriberList = () => {
   const [selectedSubscriber, setSelectedSubscriber] = useState({});
   const [selectedSubscribers, setSelectedSubscribers] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // State for loading indicator
   const navigate = useNavigate();
+
   useEffect(() => {
-    
     const fetchSubscribers = async () => {
       const subscribersRef = collection(db, "subscribers");
       const snapshot = await getDocs(subscribersRef);
@@ -69,6 +70,7 @@ const SubscriberList = () => {
   };
 
   const confirmDelete = async () => {
+    setIsLoading(true); // Start loading
     const promises = selectedSubscribers.map((id) =>
       deleteDoc(doc(db, "subscribers", id))
     );
@@ -79,6 +81,7 @@ const SubscriberList = () => {
       )
     );
     setSelectedSubscribers([]);
+    setIsLoading(false); // Stop loading
     setIsDeleteModalOpen(false);
   };
 
@@ -149,7 +152,11 @@ const SubscriberList = () => {
                       }}
                       onClick={handleDeleteSelected}
                     >
-                      Delete
+                      {isLoading ? (
+                        <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+                      ) : (
+                        "Delete"
+                      )}
                     </Button>
                     <Button
                       type="primary"
@@ -168,12 +175,13 @@ const SubscriberList = () => {
             <div className="col-sm-12">
               <div className="card">
                 <div className="card-body">
-                <div className="table-responsive">
-                  <Table
-                    columns={columns}
-                    dataSource={subscribers}
-                    rowKey="id"
-                  /></div>
+                  <div className="table-responsive">
+                    <Table
+                      columns={columns}
+                      dataSource={subscribers}
+                      rowKey="id"
+                    />
+                  </div>
                   {isModalOpen && (
                     <Modal
                       title="Reply to Subscriber"
@@ -228,7 +236,11 @@ const SubscriberList = () => {
                               className="btn btn-danger p-0"
                               onClick={confirmDelete}
                             >
-                              Delete
+                              {isLoading ? (
+                                <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+                              ) : (
+                                "Delete"
+                              )}
                             </Button>
                           </div>
                         </div>

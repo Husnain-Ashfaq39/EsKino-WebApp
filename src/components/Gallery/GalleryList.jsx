@@ -14,15 +14,14 @@ const GalleryList = () => {
   const [loading, setLoading] = useState(true);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
-  const [deleting, setDeleting] = useState(false); // State to track deletion process
+  const [deleting, setDeleting] = useState(false); 
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     ensureCategoriesInitialized();
     fetchData();
-  }, [location.state]); // Fetch data whenever the state changes
-
+  }, [location.state]); 
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -233,13 +232,6 @@ const GalleryList = () => {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-body text-center">
-              {/* <img
-                className="ml-[210px]"
-                src={imagesend}
-                alt="#"
-                width={50}
-                height={46}
-              /> */}
               <h3>Are you sure you want to delete this image?</h3>
               <div className="m-t-20">
                 <Button
@@ -252,7 +244,7 @@ const GalleryList = () => {
                   type="button"
                   className="btn btn-danger pt-1"
                   onClick={handleDelete}
-                  disabled={deleting} // Disable the button when deleting
+                  disabled={deleting} 
                 >
                   {deleting ? <Spin /> : "Delete"} {/* Show spinner while deleting */}
                 </Button>
