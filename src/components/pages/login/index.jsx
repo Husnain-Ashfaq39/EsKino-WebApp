@@ -10,8 +10,8 @@ import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("husnain@gmail.com");
+  const [password, setPassword] = useState("123123");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [captchaValue, setCaptchaValue] = useState(null);
   const navigate = useNavigate();
